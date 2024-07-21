@@ -1,0 +1,125 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# environment variables file
+.env
+.env*.local
+variable.json
+
+# build
+build
+.next
+dist
+out
+*/bundle.*
+
+# OS X
+.DS_Store
+.DS_store
+.AppleDouble
+.LSOverride
+Icon
+.Spotlight-V100
+.Trashes
+._*
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Packages
+*.7z
+*.csv
+*.dat
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.seed
+*.so
+*.swo
+*.swp
+*.swn
+*.swm
+*.out
+*.pid
+*.pid.*
+
+# databases
+database*
+*.sql
+*.sqlite
+*.sqlite3
+
+# Misc.
+*#
+ssl
+.idea
+nbproject
+public/uploads/*
+!public/uploads/.gitkeep
+*.pem
+
+# Node.js, Dependency directories & Logs
+lib-cov
+lcov.info
+pids
+logs
+.tmp
+*.log*
+results
+node_modules
+.node_history
+bower_components
+.pnp*
+.npm
+.yarn-integrity
+jspm_packages/
+
+# Tests
+testApp
+coverage
+.nyc_output
+
+# Strapi
+license.txt
+exports
+*.cache
+.strapi-updater.json
+
+# vercel
+.vercel
+
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# node-waf configuration
+.lock-wscript
+
+# TypeScript v1 declaration files
+typings/
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
