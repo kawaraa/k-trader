@@ -159,12 +159,12 @@ const calculateRSI = (prices, period = 14) => {
 const tradingBot = async () => {
   try {
     // https://api.kraken.com/0/public/Ticker?pair=ETHEUR
-    let currentPricesResponse = await krakenApi(`/Ticker?pair=${pair}`);
-    const currentPrice = parseFloat(currentPricesResponse[pair].c[0]); // Current price (last trade)
+    // let currentPricesResponse = await krakenApi(`/Ticker?pair=${pair}`);
+    // const currentPrice2 = parseFloat(currentPricesResponse[pair].c[0]); // Current price (last trade)
 
     let prices = await krakenApi(`/OHLC?pair=${pair}&interval=1`);
     prices = prices[pair].map((candle) => parseFloat(candle[4])); // Closing prices
-    const currentPrice2 = prices[prices.length - 1];
+    const currentPrice = prices[prices.length - 1];
     const previousPrice = prices[prices.length - 1 - 5]; // The price 5 mins ago
 
     const shortEMA = calculateEMA(prices.slice(-21), 10); // Last 9 periods
@@ -183,13 +183,31 @@ const tradingBot = async () => {
     // console.log("closedOrders:", closedOrders.closed);
 
     console.log("Price 5 mins ago: ", previousPrice);
-    console.log("Current price: ", currentPrice, " Or ", currentPrice2);
+    console.log("Current price: ", currentPrice);
     console.log("Percentage change in the last 5 mins: ", percentageChange);
     console.log(`Short EMA: ${shortEMA}, Long EMA: ${longEMA}, RSI: ${rsi}`);
 
     if (rsi <= 10 && percentageChange <= -allowedPercentageChange) {
-      // && +balance.ZEUR > 0
       console.log("Suggest buying crypto because the price rose / increased");
+
+      // if (+balance.ZEUR > 0) {
+      //   // Buy here
+      //   const data = JSON.stringify({
+      //     type: "buy",
+      //     ordertype: "market",
+      //     pair: "XETHZEUR",
+      //     volume: ethOderVolume,
+      //   });
+
+      //   const order = await krakenPrivateApi("AddOrder", data);
+      //   addOrder({
+      //     id: order.id,
+      //     exchangeRate: order.price,
+      //     volume: order.volume,
+      //     volumePrice: order.price * ethOderVolume,
+      //   });
+      // }
+
       addOrder({
         id: crypto.randomUUID(),
         exchangeRate: currentPrice,
@@ -197,10 +215,27 @@ const tradingBot = async () => {
         volumePrice: currentPrice * ethOderVolume,
       });
     } else if (rsi > 70 && percentageChange >= allowedPercentageChange) {
-      // && +balance.XETH > 0
       console.log("Suggest selling crypto because the price dropped");
+
+      // if (+balance.XETH > 0) {
+      //   // Sell these order back
+      //   const orders = getOrdersByExchangeRate(currentPrice);
+      //   await Promise.all(
+      //     orders.map(async (o) => {
+      //       const data = JSON.stringify({
+      //         type: "sell",
+      //         ordertype: "market",
+      //         pair: "XETHZEUR",
+      //         volume: o.volume,
+      //       });
+
+      //       await krakenPrivateApi("AddOrder", data);
+      //       removeOrders([o]);
+      //     })
+      //   );
+      // }
+
       const orders = getOrdersByExchangeRate(currentPrice);
-      // Sell these order back
       const gains = orders.reduce(
         (total, order) => total + (currentRate * order.volume - order.volumePrice),
         0
@@ -211,19 +246,15 @@ const tradingBot = async () => {
       console.log("Suggest waiting for the price to change");
     }
     console.log(`\n`);
-
-    // const data = JSON.stringify({
-    //   type: "buy",
-    //   ordertype: "market",
-    //   pair: "XETHZEUR",
-    //   volume: ethOderVolume,
-    // });
-
-    // const order = await krakenPrivateApi("AddOrder", data);
   } catch (error) {
     console.error("Error running bot:", error);
   }
 };
+
+tradingBot();
+setInterval(tradingBot, 60000 * 10);
+
+/* ========== Old code ========== */
 
 // class OrdersQueue {
 //   constructor() {
@@ -281,5 +312,3 @@ const tradingBot = async () => {
 // trader.start();
 
 // setInterval(trader.start, 60000 * 5);
-tradingBot();
-setInterval(tradingBot, 60000 * 10);
