@@ -49,7 +49,7 @@ function removeOrders(orderId) {
 function getOrdersLowerThanCurrentPrice(currentPrice) {
   let orders = loadState();
   return orders.filter(
-    (order) => allowedPercentageChange < calculatePercentageChange(currentPrice, order.price)
+    (order) => allowedPercentageChange <= calculatePercentageChange(currentPrice, order.price)
   );
 }
 
@@ -149,35 +149,69 @@ const calculateRSI = (prices, period = 14) => {
 
 const tradingBot = async () => {
   try {
-    let prices = await krakenApi(`/OHLC?pair=${pair}&interval=15`);
-    prices = prices[pair].map((candle) => parseFloat(candle[4])); // Closing prices
-    const currentPrice = prices[prices.length - 1];
-    const previousPrice = prices[prices.length - 1 - 5]; // The price 5 mins ago
+    // Current price (last trade) => https://api.kraken.com/0/public/Ticker?pair=ETHEUR
+    const currentPrice = parseFloat((await krakenApi(`/Ticker?pair=${pair}`))[pair].c[0]);
+    let prices = (await krakenApi(`/OHLC?pair=${pair}&interval=15`))[pair];
+    prices = prices.slice(prices.length - 18, prices.length - 2).map((candle) => parseFloat(candle[4]));
+    // candle[4] is the Closing prices
+    const previousPrice = prices[prices.length - 1]; // The price 5 mins ago
 
-    const shortEMA = calculateEMA(prices.slice(-21), 10); // Last 9 periods
-    const longEMA = calculateEMA(prices.slice(-21), 22); // Last 21 periods
-    const rsi = calculateRSI(prices.slice(-14)); // Last 14 periods
+    const shortEMA = calculateEMA(prices, 8); // Last 9 periods
+    const longEMA = calculateEMA(prices, 16); // Last 21 periods
+    const rsi = calculateRSI(prices); // Last 14 periods
 
     // Get current balance
     const balance = await krakenPrivateApi("Balance");
-    console.log("Current balance:", balance);
+    console.log("Current balance, EUR: ", +balance.ZEUR, ", ETH: ", +balance.XETH);
     console.log(`Short EMA: ${shortEMA}, Long EMA: ${longEMA}, RSI: ${rsi}`);
-    console.log("Price 5 mins ago: ", previousPrice);
     console.log("Current price: ", currentPrice);
 
     // function findPriceWithinTimeFrame(timeIndex) {}
+    const priceChanges = { lowest: { price: 0, minsAgo: 0 }, highest: { price: 0, minsAgo: 0 } };
     let droppedPrice = false;
-    let limit = prices.length - 16;
-    for (let i = prices.length - 1; limit <= i; i--) {
-      if (calculatePercentageChange(currentPrice, prices[i])) {
+    for (let i = prices.length - 1; 0 <= i; i--) {
+      // Testing
+      const priceChange = calculatePercentageChange(currentPrice, prices[i]);
+      if (!priceChanges.highest.change || -priceChange > priceChanges.highest.change) {
+        priceChanges.highest.price = prices[i];
+        priceChanges.highest.change = -priceChange;
+        priceChanges.highest.minsAgo += 1;
+      } else if (!priceChanges.lowest.change || -priceChange < priceChanges.lowest.change) {
+        priceChanges.lowest.price = prices[i];
+        priceChanges.lowest.change = -priceChange;
+        priceChanges.lowest.minsAgo += 1;
+      }
+
+      if (calculatePercentageChange(currentPrice, prices[i]) <= -allowedPercentageChange) {
         droppedPrice = true;
-        i = limit - 1;
         console.log(
-          "Percentage change in the last 5 mins: ",
+          `Price Percentage change in the last ${(prices.length - i) * 15} mins: `,
           calculatePercentageChange(currentPrice, previousPrice)
         );
+
+        i - 1;
       }
     }
+
+    // Testing
+    console.log(
+      "Highest price: ",
+      priceChanges.highest.price,
+      " - ",
+      priceChanges.highest.minsAgo,
+      " mins ago - ",
+      +priceChanges.highest.change,
+      "%"
+    );
+    console.log(
+      "Lowest price: ",
+      priceChanges.lowest.price,
+      " - ",
+      priceChanges.lowest.minsAgo,
+      " mins ago - ",
+      priceChanges.lowest.change,
+      "%"
+    );
 
     if (rsi <= 10 && droppedPrice) {
       console.log("Suggest buying crypto because the price dropped");
@@ -190,6 +224,7 @@ const tradingBot = async () => {
         addOrder({ id: txid, price: +descr.price, volume: vol_exec, cost: +cost + +fee });
       }
 
+      // Testing
       console.log(
         "new_oder: ",
         currentPrice,
@@ -213,6 +248,7 @@ const tradingBot = async () => {
         }
       }
 
+      // Testing
       const gains = orders.reduce(
         (total, order) => total + (currentPrice * order.volume - order.volumePrice),
         0
@@ -220,7 +256,7 @@ const tradingBot = async () => {
       console.log("gains: ", gains);
       orders.map(removeOrders);
     } else {
-      console.log("Suggest waiting for the price to change");
+      console.log("Suggest waiting for the price to change...");
     }
 
     console.log(`\n`);
@@ -252,10 +288,6 @@ setInterval(tradingBot, 60000 * 30); // Every 30 mins
 //   // route: AssetPairs / OHLC`
 //   return `/0/public/${route}?pair=${pair}&interval=${interval}`;
 // };
-
-// https://api.kraken.com/0/public/Ticker?pair=ETHEUR
-// let currentPricesResponse = await krakenApi(`/Ticker?pair=${pair}`);
-// const currentPrice2 = parseFloat(currentPricesResponse[pair].c[0]); // Current price (last trade)
 
 /* ===== Oder data ===== */
 // const orderId = "O5UIYW-ZEABL-H6Q6KW"; // OESOIN-P3SS6-EVZR3L, O5UIYW-ZEABL-H6Q6KW
