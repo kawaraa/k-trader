@@ -170,18 +170,6 @@ const tradingBot = async () => {
     const priceChanges = { lowest: { price: 0, minsAgo: 0 }, highest: { price: 0, minsAgo: 0 } };
     let droppedPrice = false;
     for (let i = prices.length - 1; 0 <= i; i--) {
-      // Testing
-      const priceChange = calculatePercentageChange(currentPrice, prices[i]);
-      if (!priceChanges.highest.change || -priceChange > priceChanges.highest.change) {
-        priceChanges.highest.price = prices[i];
-        priceChanges.highest.change = -priceChange;
-        priceChanges.highest.minsAgo += 1;
-      } else if (!priceChanges.lowest.change || -priceChange < priceChanges.lowest.change) {
-        priceChanges.lowest.price = prices[i];
-        priceChanges.lowest.change = -priceChange;
-        priceChanges.lowest.minsAgo += 1;
-      }
-
       if (calculatePercentageChange(currentPrice, prices[i]) <= -allowedPercentageChange) {
         droppedPrice = true;
         console.log(
@@ -190,6 +178,18 @@ const tradingBot = async () => {
         );
 
         i - 1;
+      }
+
+      // Testing
+      const priceChange = calculatePercentageChange(currentPrice, prices[i]);
+      if (!priceChanges.highest.change || -priceChange > priceChanges.highest.change) {
+        priceChanges.highest.price = prices[i];
+        priceChanges.highest.change = -priceChange;
+        priceChanges.highest.minsAgo = (prices.length - 1 - i) * 15;
+      } else if (!priceChanges.lowest.change || -priceChange < priceChanges.lowest.change) {
+        priceChanges.lowest.price = prices[i];
+        priceChanges.lowest.change = -priceChange;
+        priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 15;
       }
     }
 
