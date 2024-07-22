@@ -1,15 +1,30 @@
+/*
+This strategy based on 30 mins interval and checking the last 4 hours on every 15 mins change:
+1. Buy if price 1, 2, or 3 up to 16 drops 1.5% 
+2. Sell if current price is 1.5% higher than the order price 
+*/
+
 const fs = require("fs");
 const crypto = require("crypto");
 const credentials = require("./variable.json");
 
 // Replace with your Kraken API key and secret
-const allowedPercentageChange = 0.5;
-const ethOderVolume = "0.0028"; // "0.003"
+const allowedPercentageChange = 1.5;
+const cryptoTradingAmount = "0.0028"; // "0.003"
 const ORDERS_FILE_PATH = "database.json";
 const pair = "ETH/EUR";
 const API_URL = "https://api.kraken.com";
 const API_KEY = credentials.apiKey;
 const API_SECRET = credentials.privateKey;
+
+class Order {
+  constructor(type, tradingType, pair, volume) {
+    this.type = type;
+    this.ordertype = tradingType;
+    this.pair = volume ? pair : "XETHZEUR";
+    this.volume = volume;
+  }
+}
 
 // Function to load the state from a JSON file
 function loadState() {
@@ -28,14 +43,13 @@ function addOrder(order) {
   orders.push(order);
   updateState(orders);
 }
-function removeOrders(orderIds) {
-  let orders = loadState();
-  updateState(orders.filter((order) => !orderIds.includes(order.id)));
+function removeOrders(orderId) {
+  updateState(loadState().filter((order) => order.id !== orderId));
 }
-function getOrdersByExchangeRate(currentRate) {
+function getOrdersLowerThanCurrentPrice(currentPrice) {
   let orders = loadState();
   return orders.filter(
-    (order) => allowedPercentageChange < calculatePercentageChange(currentRate, order.exchangeRate)
+    (order) => allowedPercentageChange < calculatePercentageChange(currentPrice, order.price)
   );
 }
 
@@ -43,24 +57,12 @@ function getOrdersByExchangeRate(currentRate) {
 function getKrakenSignature(urlPath, data, secret) {
   if (typeof data != "object") throw new Error("Invalid data type");
 
-  const encoded = data.nonce + JSON.stringify(data);
-
-  const sha256Hash = crypto.createHash("sha256").update(encoded).digest();
-  const message = urlPath + sha256Hash.toString("binary");
-  const secretBuffer = Buffer.from(secret, "base64");
-  const hmac = crypto.createHmac("sha512", secretBuffer);
-  hmac.update(message, "binary");
-  const signature = hmac.digest("base64");
+  const secret_buffer = Buffer.from(secret, "base64");
+  const hash = crypto.createHash("sha256");
+  const hmac = crypto.createHmac("sha512", secret_buffer);
+  const hash_digest = hash.update(data.nonce + JSON.stringify(data)).digest("binary");
+  const signature = hmac.update(urlPath + hash_digest, "binary").digest("base64");
   return signature;
-
-  // const message = JSON.stringify(data);
-  // const secret_buffer = Buffer.from(secret, "base64");
-  // const hash = crypto.createHash("sha256");
-  // const hmac = crypto.createHmac("sha512", secret_buffer);
-  // const hash_digest = hash.update(data.nonce + message).digest("binary");
-  // const hmac_digest = hmac.update(urlPath + hash_digest, "binary").digest("base64");
-
-  // return hmac_digest;
 }
 
 const checkError = (res) => {
@@ -115,14 +117,6 @@ function calculateProfit(currentPrice, orderPrice, cryptoVolume) {
   return profit;
 }
 
-// "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
-// const getPairData = (route = "OHLC", pair = "eth/eur", interval = 5) => {
-//   // route: AssetPairs / OHLC`
-//   return `/0/public/${route}?pair=${pair}&interval=${interval}`;
-// };
-
-// https://api.kraken.com/0/public/AssetPairs?pair=eth/eur
-
 // Function to calculate EMA (Exponential Moving Average)
 // Note: EMA is a type of moving average that gives more weight to recent prices, making it more responsive to recent price changes compared to a simple moving average.
 const calculateEMA = (prices, period) => {
@@ -130,13 +124,10 @@ const calculateEMA = (prices, period) => {
   return prices.reduce((acc, price, index) => (index === 0 ? price : price * k + acc * (1 - k)), 0); // First EMA value is the first price
 };
 
-// Function to calculate RSI (Relative Strength Index)
-
-// Note:
-// When RSI rise means the market is moving upward, and prices are likely to keep rising. It indicates strong buying interest and positive market sentiment.
+// Function to calculate RSI (Relative Strength Index):
+// 1. When RSI rise means the market is moving upward, and prices are likely to keep rising. It indicates strong buying interest and positive market sentiment.
 // When the RSI is very low, suggesting that the asset is likely in oversold conditions, which could indicate a potential buying opportunity if the price stabilizes.
-
-// The 30 to 70 range for RSI is commonly used because:
+// 2. The 30 to 70 range for RSI is commonly used because:
 // RSI above 70: Often indicates the asset is overbought and might be due for a pullback.
 // RSI below 30: Typically signals that the asset is oversold and might be due for a rebound.
 // These thresholds help identify potential reversal points in market trends.
@@ -158,11 +149,7 @@ const calculateRSI = (prices, period = 14) => {
 
 const tradingBot = async () => {
   try {
-    // https://api.kraken.com/0/public/Ticker?pair=ETHEUR
-    // let currentPricesResponse = await krakenApi(`/Ticker?pair=${pair}`);
-    // const currentPrice2 = parseFloat(currentPricesResponse[pair].c[0]); // Current price (last trade)
-
-    let prices = await krakenApi(`/OHLC?pair=${pair}&interval=1`);
+    let prices = await krakenApi(`/OHLC?pair=${pair}&interval=15`);
     prices = prices[pair].map((candle) => parseFloat(candle[4])); // Closing prices
     const currentPrice = prices[prices.length - 1];
     const previousPrice = prices[prices.length - 1 - 5]; // The price 5 mins ago
@@ -170,81 +157,72 @@ const tradingBot = async () => {
     const shortEMA = calculateEMA(prices.slice(-21), 10); // Last 9 periods
     const longEMA = calculateEMA(prices.slice(-21), 22); // Last 21 periods
     const rsi = calculateRSI(prices.slice(-14)); // Last 14 periods
-    const percentageChange = calculatePercentageChange(currentPrice, previousPrice);
 
     // Get current balance
-    // const balance = await krakenPrivateApi("Balance");
-    // console.log("Current balance:", balance);
-
-    // const openOrders = await krakenPrivateApi("OpenOrders");
-    // console.log("openOrders:", openOrders.open);
-
-    // const closedOrders = await krakenPrivateApi("ClosedOrders");
-    // console.log("closedOrders:", closedOrders.closed);
-
+    const balance = await krakenPrivateApi("Balance");
+    console.log("Current balance:", balance);
+    console.log(`Short EMA: ${shortEMA}, Long EMA: ${longEMA}, RSI: ${rsi}`);
     console.log("Price 5 mins ago: ", previousPrice);
     console.log("Current price: ", currentPrice);
-    console.log("Percentage change in the last 5 mins: ", percentageChange);
-    console.log(`Short EMA: ${shortEMA}, Long EMA: ${longEMA}, RSI: ${rsi}`);
 
-    if (rsi <= 10 && percentageChange <= -allowedPercentageChange) {
-      console.log("Suggest buying crypto because the price rose / increased");
+    // function findPriceWithinTimeFrame(timeIndex) {}
+    let droppedPrice = false;
+    let limit = prices.length - 16;
+    for (let i = prices.length - 1; limit <= i; i--) {
+      if (calculatePercentageChange(currentPrice, prices[i])) {
+        droppedPrice = true;
+        i = limit - 1;
+        console.log(
+          "Percentage change in the last 5 mins: ",
+          calculatePercentageChange(currentPrice, previousPrice)
+        );
+      }
+    }
 
-      // if (+balance.ZEUR > 0) {
-      //   // Buy here
-      //   const data = JSON.stringify({
-      //     type: "buy",
-      //     ordertype: "market",
-      //     pair: "XETHZEUR",
-      //     volume: ethOderVolume,
-      //   });
+    if (rsi <= 10 && droppedPrice) {
+      console.log("Suggest buying crypto because the price dropped");
 
-      //   const order = await krakenPrivateApi("AddOrder", data);
-      //   addOrder({
-      //     id: order.id,
-      //     exchangeRate: order.price,
-      //     volume: order.volume,
-      //     volumePrice: order.price * ethOderVolume,
-      //   });
-      // }
+      if (+balance.ZEUR > 0) {
+        // Buy here
+        const data = JSON.stringify(new Order("buy", "market", cryptoTradingAmount));
+        const { txid } = await krakenPrivateApi("AddOrder", data);
+        const { vol_exec, cost, fee, descr } = await krakenPrivateApi("QueryOrders", { txid });
+        addOrder({ id: txid, price: +descr.price, volume: vol_exec, cost: +cost + +fee });
+      }
 
-      addOrder({
-        id: crypto.randomUUID(),
-        exchangeRate: currentPrice,
-        volume: ethOderVolume,
-        volumePrice: currentPrice * ethOderVolume,
-      });
-    } else if (rsi > 70 && percentageChange >= allowedPercentageChange) {
-      console.log("Suggest selling crypto because the price dropped");
+      console.log(
+        "new_oder: ",
+        currentPrice,
+        "price: ",
+        cryptoTradingAmount,
+        "cost: ",
+        (currentPrice * cryptoTradingAmount * 100) / 0.4
+      );
+    }
 
-      // if (+balance.XETH > 0) {
-      //   // Sell these order back
-      //   const orders = getOrdersByExchangeRate(currentPrice);
-      //   await Promise.all(
-      //     orders.map(async (o) => {
-      //       const data = JSON.stringify({
-      //         type: "sell",
-      //         ordertype: "market",
-      //         pair: "XETHZEUR",
-      //         volume: o.volume,
-      //       });
+    const orders = getOrdersLowerThanCurrentPrice(currentPrice);
 
-      //       await krakenPrivateApi("AddOrder", data);
-      //       removeOrders([o]);
-      //     })
-      //   );
-      // }
+    if (rsi > 70 && orders[0]) {
+      console.log("Suggest selling crypto because the price rose / increased");
 
-      const orders = getOrdersByExchangeRate(currentPrice);
+      if (+balance.XETH > 0) {
+        // Sell these order back
+        for (const { id, volume } of orders) {
+          await krakenPrivateApi("AddOrder", JSON.stringify(new Order("sell", "market", volume)));
+          removeOrders({ id });
+        }
+      }
+
       const gains = orders.reduce(
-        (total, order) => total + (currentRate * order.volume - order.volumePrice),
+        (total, order) => total + (currentPrice * order.volume - order.volumePrice),
         0
       );
       console.log("gains: ", gains);
-      removeOrders(orders.map((o) => o.id));
+      orders.map(removeOrders);
     } else {
       console.log("Suggest waiting for the price to change");
     }
+
     console.log(`\n`);
   } catch (error) {
     console.error("Error running bot:", error);
@@ -252,10 +230,52 @@ const tradingBot = async () => {
 };
 
 tradingBot();
-setInterval(tradingBot, 60000 * 10);
+setInterval(tradingBot, 60000 * 30); // Every 30 mins
 
 /* ========== Old code ========== */
 
+/* ===== Delete this when place oder works fine ===== */
+// const encoded = data.nonce + JSON.stringify(data);
+// const sha256Hash = crypto.createHash("sha256").update(encoded).digest();
+// const message = urlPath + sha256Hash.toString("binary");
+// const secretBuffer = Buffer.from(secret, "base64");
+// const hmac = crypto.createHmac("sha512", secretBuffer);
+// hmac.update(message, "binary");
+// const signature = hmac.digest("base64");
+// return signature;
+
+/* ===== Prices data ===== */
+// https://api.kraken.com/0/public/AssetPairs?pair=eth/eur&interval=15
+// https://api.kraken.com/0/public/OHLC?pair=eth/eur&interval=15
+// "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
+// const getPairData = (route = "OHLC", pair = "eth/eur", interval = 5) => {
+//   // route: AssetPairs / OHLC`
+//   return `/0/public/${route}?pair=${pair}&interval=${interval}`;
+// };
+
+// https://api.kraken.com/0/public/Ticker?pair=ETHEUR
+// let currentPricesResponse = await krakenApi(`/Ticker?pair=${pair}`);
+// const currentPrice2 = parseFloat(currentPricesResponse[pair].c[0]); // Current price (last trade)
+
+/* ===== Oder data ===== */
+// const orderId = "O5UIYW-ZEABL-H6Q6KW"; // OESOIN-P3SS6-EVZR3L, O5UIYW-ZEABL-H6Q6KW
+// const order = (await krakenPrivateApi("QueryOrders", { txid: orderId }))[orderId];
+// console.log("Pair: ", order.descr.pair);
+// console.log("Type: ", order.descr.type);
+// console.log("Status: ", order.status);
+// console.log("Price: ", +order.price); // the exchange price rate in selected currency
+// console.log("Volume: ", +order.vol_exec); // Cryptocurrency volume
+// console.log("Cost: ", +order.cost); // The cost paid in selected currency
+// console.log("Paid Volume: ", +order.vol); // The volume that is paid, could be EUR or Cryptocurrency
+// console.log("Fee: ", +order.fee); // The fee in selected currency
+
+// const openOrders = await krakenPrivateApi("OpenOrders");
+// console.log("openOrders:", openOrders.open);
+
+// const closedOrders = await krakenPrivateApi("ClosedOrders");
+// console.log("closedOrders:", closedOrders.closed);
+
+/* ===== Other code ===== */
 // class OrdersQueue {
 //   constructor() {
 //     if (OrdersQueue.instance) return OrdersQueue.instance;
