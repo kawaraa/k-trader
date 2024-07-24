@@ -1,5 +1,5 @@
 /*
-This strategy based on 30 mins interval and checking the last 4 hours on every 15 mins change:
+This strategy based on 5 mins interval and checking the last 4 hours on every 5 mins change:
 1. Buy if price 1, 2, or 3 up to 16 drops 1.5% 
 2. Sell if current price is 1.5% higher than the order price 
 */
@@ -9,7 +9,7 @@ const crypto = require("crypto");
 const credentials = require("./variable.json");
 
 // Replace with your Kraken API key and secret
-const allowedPercentageChange = 1.5;
+const allowedPercentageChange = 1.4;
 const cryptoTradingAmount = "0.0028"; // "0.003"
 const ORDERS_FILE_PATH = "database.json";
 const pair = "ETH/EUR";
@@ -104,7 +104,6 @@ function calculatePercentageChange(currentPrice, pastPrice, returnString) {
   const change = (((currentPrice - pastPrice) / pastPrice) * 100).toFixed(2);
   return !returnString ? change : `The price ${change < 0 ? "drops" : "increases"} ${change}%`;
 }
-
 function calculateEarnings(currentPrice, previousPrice, investedAmount) {
   const investedAmountIncludedProfit = (investedAmount / previousPrice) * currentPrice;
   const earnings = investedAmountIncludedProfit - investedAmount;
@@ -151,14 +150,13 @@ const tradingBot = async () => {
   try {
     // Current price (last trade) => https://api.kraken.com/0/public/Ticker?pair=ETHEUR
     const currentPrice = parseFloat((await krakenApi(`/Ticker?pair=${pair}`))[pair].c[0]);
-    let prices = (await krakenApi(`/OHLC?pair=${pair}&interval=15`))[pair];
-    prices = prices.slice(prices.length - 18, prices.length - 2).map((candle) => parseFloat(candle[4]));
+    let prices = (await krakenApi(`/OHLC?pair=${pair}&interval=5`))[pair];
+    prices = prices.slice(prices.length - 48, prices.length - 2).map((candle) => parseFloat(candle[4]));
     // candle[4] is the Closing prices
-    const previousPrice = prices[prices.length - 1]; // The price 5 mins ago
 
-    const shortEMA = calculateEMA(prices, 8); // Last 9 periods
-    const longEMA = calculateEMA(prices, 16); // Last 21 periods
-    const rsi = calculateRSI(prices); // Last 14 periods
+    const shortEMA = calculateEMA(prices, 9); // was Last 9 periods
+    const longEMA = calculateEMA(prices, 21); // was Last 21 periods
+    const rsi = calculateRSI(prices.slice(-14)); // was Last 14 periods
 
     // Get current balance
     const balance = await krakenPrivateApi("Balance");
@@ -169,27 +167,29 @@ const tradingBot = async () => {
     // function findPriceWithinTimeFrame(timeIndex) {}
     const priceChanges = { lowest: { price: 0, minsAgo: 0 }, highest: { price: 0, minsAgo: 0 } };
     let droppedPrice = false;
+
     for (let i = prices.length - 1; 0 <= i; i--) {
-      if (calculatePercentageChange(currentPrice, prices[i]) <= -allowedPercentageChange) {
-        droppedPrice = true;
-        console.log(
-          `Price Percentage change in the last ${(prices.length - i) * 15} mins: `,
-          calculatePercentageChange(currentPrice, previousPrice)
-        );
-
-        i - 1;
-      }
-
       // Testing
       const priceChange = calculatePercentageChange(currentPrice, prices[i]);
-      if (!priceChanges.highest.change || -priceChange > priceChanges.highest.change) {
+
+      if ((!priceChanges.highest.change && +priceChange < 0) || +priceChange < +priceChanges.highest.change) {
         priceChanges.highest.price = prices[i];
-        priceChanges.highest.change = -priceChange;
-        priceChanges.highest.minsAgo = (prices.length - 1 - i) * 15;
-      } else if (!priceChanges.lowest.change || -priceChange < priceChanges.lowest.change) {
+        priceChanges.highest.change = priceChange;
+        priceChanges.highest.minsAgo = (prices.length - 1 - i) * 5;
+      } else if (
+        (!priceChanges.lowest.change && +priceChange > 0) ||
+        +priceChange > +priceChanges.lowest.change
+      ) {
         priceChanges.lowest.price = prices[i];
-        priceChanges.lowest.change = -priceChange;
-        priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 15;
+        priceChanges.lowest.change = priceChange;
+        priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 5;
+      }
+
+      if (priceChange <= -allowedPercentageChange) {
+        droppedPrice = true;
+        console.log("Price drops", priceChange, `% since ${(prices.length - i) * 5} mins`);
+
+        i - 1;
       }
     }
 
@@ -199,21 +199,17 @@ const tradingBot = async () => {
       priceChanges.highest.price,
       " - ",
       priceChanges.highest.minsAgo,
-      " mins ago - ",
-      +priceChanges.highest.change,
-      "%"
+      `mins ago - ${priceChanges.highest.change}%`
     );
     console.log(
       "Lowest price: ",
       priceChanges.lowest.price,
       " - ",
       priceChanges.lowest.minsAgo,
-      " mins ago - ",
-      priceChanges.lowest.change,
-      "%"
+      `mins ago - ${priceChanges.lowest.change}%`
     );
 
-    if (rsi <= 10 && droppedPrice) {
+    if (rsi <= 30 && droppedPrice) {
       console.log("Suggest buying crypto because the price dropped");
 
       if (+balance.ZEUR > 0) {
@@ -223,16 +219,6 @@ const tradingBot = async () => {
         const { vol_exec, cost, fee, descr } = await krakenPrivateApi("QueryOrders", { txid });
         addOrder({ id: txid, price: +descr.price, volume: vol_exec, cost: +cost + +fee });
       }
-
-      // Testing
-      console.log(
-        "new_oder: ",
-        currentPrice,
-        "price: ",
-        cryptoTradingAmount,
-        "cost: ",
-        (currentPrice * cryptoTradingAmount * 100) / 0.4
-      );
     }
 
     const orders = getOrdersLowerThanCurrentPrice(currentPrice);
@@ -243,6 +229,7 @@ const tradingBot = async () => {
       if (+balance.XETH > 0) {
         // Sell these order back
         for (const { id, volume } of orders) {
+          if (id == "test") continue; // Testing
           await krakenPrivateApi("AddOrder", JSON.stringify(new Order("sell", "market", volume)));
           removeOrders({ id });
         }
@@ -255,7 +242,9 @@ const tradingBot = async () => {
       );
       console.log("gains: ", gains);
       orders.map(removeOrders);
-    } else {
+    }
+
+    if (!(rsi <= 30 && droppedPrice) && !(rsi > 70 && orders[0])) {
       console.log("Suggest waiting for the price to change...");
     }
 
@@ -263,10 +252,11 @@ const tradingBot = async () => {
   } catch (error) {
     console.error("Error running bot:", error);
   }
+
+  setTimeout(tradingBot, 60000 * (Math.round(Math.random() * 3) + 2)); // Every 3, 4 or 5 mins
 };
 
 tradingBot();
-setInterval(tradingBot, 60000 * 30); // Every 30 mins
 
 /* ========== Old code ========== */
 
@@ -281,8 +271,8 @@ setInterval(tradingBot, 60000 * 30); // Every 30 mins
 // return signature;
 
 /* ===== Prices data ===== */
-// https://api.kraken.com/0/public/AssetPairs?pair=eth/eur&interval=15
-// https://api.kraken.com/0/public/OHLC?pair=eth/eur&interval=15
+// https://api.kraken.com/0/public/AssetPairs?pair=eth/eur&interval=5
+// https://api.kraken.com/0/public/OHLC?pair=eth/eur&interval=5
 // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
 // const getPairData = (route = "OHLC", pair = "eth/eur", interval = 5) => {
 //   // route: AssetPairs / OHLC`
@@ -362,5 +352,4 @@ setInterval(tradingBot, 60000 * 30); // Every 30 mins
 
 // const trader = new TradingBot();
 // trader.start();
-
 // setInterval(trader.start, 60000 * 5);
