@@ -14,7 +14,7 @@ const credentials = require("./variable.json");
 
 // Replace with your Kraken API key and secret
 const allowedPercentageChange = 1.4; // percentageMargin
-const cryptoTradingAmount = "0.0028"; // "0.003"
+const cryptoTradingAmount = 0.0028; // 0.003
 const ORDERS_FILE_PATH = "database.json";
 const pair = "ETH/EUR";
 const API_URL = "https://api.kraken.com";
@@ -26,7 +26,7 @@ class Order {
   constructor(type, tradingType, pair, volume) {
     this.type = type;
     this.ordertype = tradingType;
-    this.pair = volume ? pair : "XETHZEUR";
+    this.pair = pair;
     this.volume = volume;
   }
 }
@@ -68,16 +68,6 @@ function getKrakenSignature(urlPath, data, secret) {
   const hash_digest = hash.update(data.nonce + JSON.stringify(data)).digest("binary");
   const signature = hmac.update(urlPath + hash_digest, "binary").digest("base64");
   return signature;
-
-  /* ===== Delete this when place oder works fine ===== */
-  // const encoded = data.nonce + JSON.stringify(data);
-  // const sha256Hash = crypto.createHash("sha256").update(encoded).digest();
-  // const message = urlPath + sha256Hash.toString("binary");
-  // const secretBuffer = Buffer.from(secret, "base64");
-  // const hmac = crypto.createHmac("sha512", secretBuffer);
-  // hmac.update(message, "binary");
-  // const signature = hmac.digest("base64");
-  // return signature;
 }
 
 const checkError = (res) => {
@@ -233,12 +223,11 @@ const tradingBot = async () => {
 
       if (balance.ZEUR > 0) {
         // Buy here
-        const amount = Math.min(
-          cryptoTradingAmount,
-          (balance.ZEUR - (balance.ZEUR / 100) * 0.4) / currentPrice
-        );
-        const data = new Order("buy", "market", amount);
-        const { txid } = await krakenPrivateApi("AddOrder", data);
+        const amount =
+          Math.min(cryptoTradingAmount, (balance.ZEUR - (balance.ZEUR / 100) * 0.4) / currentPrice) + "";
+        const data = new Order("buy", "market", "XETHZEUR", amount);
+
+        const txid = (await krakenPrivateApi("AddOrder", data)).txid[0];
         const { vol_exec, cost, fee, descr } = await krakenPrivateApi("QueryOrders", { txid });
         addOrder(txid, +descr.price, +vol_exec, +cost + +fee);
       }
@@ -258,7 +247,10 @@ const tradingBot = async () => {
       if (balance.XETH > 0 && orders[0]) {
         // Sell these order back
         for (const { id, volume } of orders) {
-          await krakenPrivateApi("AddOrder", new Order("sell", "market", Math.min(volume, balance.XETH)));
+          await krakenPrivateApi(
+            "AddOrder",
+            new Order("sell", "market", "XETHZEUR", Math.min(volume, balance.XETH) + "")
+          );
           removeOrders({ id });
         }
       }
