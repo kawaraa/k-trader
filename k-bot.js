@@ -1,7 +1,11 @@
 /*
 This strategy based on 5 to 8 mins interval and checking the last 4 hours on every 5 mins change:
 1. Buy if price 1, 2, or 3 up to 24 drops 1.5% 
-2. Sell if current price is 1.5% higher than the order price 
+2. Sell if current price is 1.5% higher than the order price
+
+Recommendation:
+- if it's daily trading strategy, buy when the current price is 1.5% lower then any price in the last 4 hours
+- if it's monthly trading strategy, buy when the current price is 1.5% lower then the average price in the last 5 days
 */
 
 const fs = require("fs");
@@ -39,9 +43,9 @@ function loadState() {
 function updateState(state) {
   fs.writeFileSync(ORDERS_FILE_PATH, JSON.stringify(state, null, 2));
 }
-function addOrder(order) {
+function addOrder(id, price, volume, cost, timeStamp = new Date()) {
   let orders = loadState();
-  orders.push(order);
+  orders.push({ id, price, volume, cost, timeStamp });
   updateState(orders);
 }
 function removeOrders(orderId) {
@@ -179,15 +183,12 @@ const tradingBot = async () => {
     console.log("Current balance => EUR: ", balance.ZEUR, "ETH: ", balance.XETH);
     console.log(`Short EMA: ${shortEMA} - `, `Long EMA: ${longEMA} - `, `RSI: ${rsi}`);
 
-    // function findPriceWithinTimeFrame(timeIndex) {}
+    // Testing
     const priceChanges = {
       lowest: { price: 0, minsAgo: 0, change: 0 },
       highest: { price: 0, minsAgo: 0, change: 0 },
     };
-    let droppedPrice = false;
-
     for (let i = prices.length - 1; 0 <= i; i--) {
-      // Testing
       const priceChange = calculatePercentageChange(currentPrice, prices[i]);
 
       if (+priceChange < +priceChanges.highest.change) {
@@ -199,16 +200,7 @@ const tradingBot = async () => {
         priceChanges.lowest.change = priceChange;
         priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 5;
       }
-
-      if (priceChange <= -allowedPercentageChange) {
-        droppedPrice = true;
-        console.log("Price drops", priceChange, `% since ${(prices.length - i) * 5} mins`);
-
-        i = -1;
-      }
     }
-
-    // Testing
     console.log(
       `Highest price "${priceChanges.highest.minsAgo}" mins ago:`,
       priceChanges.highest.price,
@@ -226,24 +218,44 @@ const tradingBot = async () => {
       `${priceChanges.lowest.change}%`
     );
 
+    let droppedPrice = false;
+    for (let i = prices.length - 1; 0 <= i; i--) {
+      const priceChange = calculatePercentageChange(currentPrice, prices[i]);
+      if (priceChange <= -allowedPercentageChange) {
+        droppedPrice = true;
+        console.log("Price drops", priceChange, `% since ${(prices.length - i) * 5} mins`);
+        i = -1;
+      }
+    }
+
     if (rsi <= 30 && droppedPrice) {
       console.log("Suggest buying crypto because the price dropped");
 
       if (balance.ZEUR > 0) {
         // Buy here
-        const data = new Order("buy", "market", cryptoTradingAmount);
+        const amount = Math.min(
+          cryptoTradingAmount,
+          (balance.ZEUR - (balance.ZEUR / 100) * 0.4) / currentPrice
+        );
+        const data = new Order("buy", "market", amount);
         const { txid } = await krakenPrivateApi("AddOrder", data);
         const { vol_exec, cost, fee, descr } = await krakenPrivateApi("QueryOrders", { txid });
-        addOrder({ id: txid, price: +descr.price, volume: +vol_exec, cost: +cost + +fee });
+        addOrder(txid, +descr.price, +vol_exec, +cost + +fee);
       }
     }
 
-    const orders = getOrdersLowerThanCurrentPrice(currentPrice);
+    let orders = getOrdersLowerThanCurrentPrice(currentPrice);
 
-    if (rsi > 70 && orders[0]) {
+    if (rsi > 70) {
       console.log("Suggest selling crypto because the price rose / increased");
 
-      if (balance.XETH > 0) {
+      // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
+      if (priceChanges.highest.price <= currentPrice || 0 <= priceChanges.highest.change) {
+        const period = minMs * 60 * 24 * 4;
+        orders = orders.concat(loadState().filter((o) => period <= Date.now() - Date.parse(o.timeStamp)));
+      }
+
+      if (balance.XETH > 0 && orders[0]) {
         // Sell these order back
         for (const { id, volume } of orders) {
           await krakenPrivateApi("AddOrder", new Order("sell", "market", Math.min(volume, balance.XETH)));
