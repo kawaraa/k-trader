@@ -16,6 +16,7 @@ const pair = "ETH/EUR";
 const API_URL = "https://api.kraken.com";
 const API_KEY = credentials.apiKey;
 const API_SECRET = credentials.privateKey;
+const minMs = 60000;
 
 class Order {
   constructor(type, tradingType, pair, volume) {
@@ -63,12 +64,26 @@ function getKrakenSignature(urlPath, data, secret) {
   const hash_digest = hash.update(data.nonce + JSON.stringify(data)).digest("binary");
   const signature = hmac.update(urlPath + hash_digest, "binary").digest("base64");
   return signature;
+
+  /* ===== Delete this when place oder works fine ===== */
+  // const encoded = data.nonce + JSON.stringify(data);
+  // const sha256Hash = crypto.createHash("sha256").update(encoded).digest();
+  // const message = urlPath + sha256Hash.toString("binary");
+  // const secretBuffer = Buffer.from(secret, "base64");
+  // const hmac = crypto.createHmac("sha512", secretBuffer);
+  // hmac.update(message, "binary");
+  // const signature = hmac.digest("base64");
+  // return signature;
 }
 
 const checkError = (res) => {
   if (!res.error[0]) return res.result;
   else throw new Error(res.error.reduce((acc, err) => acc + "\n" + err, ""));
 };
+function parseNumbers(data) {
+  for (const key in data) data[key] = +data[key];
+  return data;
+}
 
 function krakenApi(path, options) {
   return fetch(`${API_URL}/0/public${path}`, options)
@@ -120,7 +135,8 @@ function calculateProfit(currentPrice, orderPrice, cryptoVolume) {
 // Note: EMA is a type of moving average that gives more weight to recent prices, making it more responsive to recent price changes compared to a simple moving average.
 const calculateEMA = (prices, period) => {
   const k = 2 / period;
-  return prices.reduce((acc, price, index) => (index === 0 ? price : price * k + acc * (1 - k)), 0); // First EMA value is the first price
+  return parseInt(prices.reduce((acc, p, i) => (i === 0 ? p : p * k + acc * (1 - k)), 0));
+  // First EMA value is the current price
 };
 
 // Function to calculate RSI (Relative Strength Index):
@@ -143,7 +159,7 @@ const calculateRSI = (prices, period = 14) => {
   const averageGain = gains / period;
   const averageLoss = losses / period;
   const rs = averageGain / averageLoss;
-  return 100 - 100 / (1 + rs);
+  return parseInt(100 - 100 / (1 + rs));
 };
 
 const tradingBot = async () => {
@@ -159,27 +175,26 @@ const tradingBot = async () => {
     const rsi = calculateRSI(prices.slice(-14)); // was Last 14 periods
 
     // Get current balance
-    const balance = await krakenPrivateApi("Balance");
-    console.log("Current balance, EUR: ", +balance.ZEUR, ", ETH: ", +balance.XETH);
-    console.log(`Short EMA: ${shortEMA}, Long EMA: ${longEMA}, RSI: ${rsi}`);
-    console.log("Current price: ", currentPrice);
+    const balance = parseNumbers(await krakenPrivateApi("Balance"));
+    console.log("Current balance => EUR: ", balance.ZEUR, "ETH: ", balance.XETH);
+    console.log(`Short EMA: ${shortEMA} - `, `Long EMA: ${longEMA} - `, `RSI: ${rsi}`);
 
     // function findPriceWithinTimeFrame(timeIndex) {}
-    const priceChanges = { lowest: { price: 0, minsAgo: 0 }, highest: { price: 0, minsAgo: 0 } };
+    const priceChanges = {
+      lowest: { price: 0, minsAgo: 0, change: 0 },
+      highest: { price: 0, minsAgo: 0, change: 0 },
+    };
     let droppedPrice = false;
 
     for (let i = prices.length - 1; 0 <= i; i--) {
       // Testing
       const priceChange = calculatePercentageChange(currentPrice, prices[i]);
 
-      if ((!priceChanges.highest.change && +priceChange < 0) || +priceChange < +priceChanges.highest.change) {
+      if (+priceChange < +priceChanges.highest.change) {
         priceChanges.highest.price = prices[i];
         priceChanges.highest.change = priceChange;
         priceChanges.highest.minsAgo = (prices.length - 1 - i) * 5;
-      } else if (
-        (!priceChanges.lowest.change && +priceChange > 0) ||
-        +priceChange > +priceChanges.lowest.change
-      ) {
+      } else if (+priceChange > +priceChanges.lowest.change) {
         priceChanges.lowest.price = prices[i];
         priceChanges.lowest.change = priceChange;
         priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 5;
@@ -189,35 +204,37 @@ const tradingBot = async () => {
         droppedPrice = true;
         console.log("Price drops", priceChange, `% since ${(prices.length - i) * 5} mins`);
 
-        i - 1;
+        i = -1;
       }
     }
 
     // Testing
     console.log(
-      "Highest price: ",
+      `Highest price "${priceChanges.highest.minsAgo}" mins ago:`,
       priceChanges.highest.price,
-      " - ",
-      priceChanges.highest.minsAgo,
-      `mins ago - ${priceChanges.highest.change}%`
+      "=>",
+      currentPrice,
+      "=>",
+      `${priceChanges.highest.change}%`
     );
     console.log(
-      "Lowest price: ",
+      `Lowest price "${priceChanges.lowest.minsAgo}" mins ago:`,
       priceChanges.lowest.price,
-      " - ",
-      priceChanges.lowest.minsAgo,
-      `mins ago - ${priceChanges.lowest.change}%`
+      "=>",
+      currentPrice,
+      "=>",
+      `${priceChanges.lowest.change}%`
     );
 
     if (rsi <= 30 && droppedPrice) {
       console.log("Suggest buying crypto because the price dropped");
 
-      if (+balance.ZEUR > 0) {
+      if (balance.ZEUR > 0) {
         // Buy here
-        const data = JSON.stringify(new Order("buy", "market", cryptoTradingAmount));
+        const data = new Order("buy", "market", cryptoTradingAmount);
         const { txid } = await krakenPrivateApi("AddOrder", data);
         const { vol_exec, cost, fee, descr } = await krakenPrivateApi("QueryOrders", { txid });
-        addOrder({ id: txid, price: +descr.price, volume: vol_exec, cost: +cost + +fee });
+        addOrder({ id: txid, price: +descr.price, volume: +vol_exec, cost: +cost + +fee });
       }
     }
 
@@ -226,22 +243,13 @@ const tradingBot = async () => {
     if (rsi > 70 && orders[0]) {
       console.log("Suggest selling crypto because the price rose / increased");
 
-      if (+balance.XETH > 0) {
+      if (balance.XETH > 0) {
         // Sell these order back
         for (const { id, volume } of orders) {
-          if (id == "test") continue; // Testing
-          await krakenPrivateApi("AddOrder", JSON.stringify(new Order("sell", "market", volume)));
+          await krakenPrivateApi("AddOrder", new Order("sell", "market", Math.min(volume, balance.XETH)));
           removeOrders({ id });
         }
       }
-
-      // Testing
-      const gains = orders.reduce(
-        (total, order) => total + (currentPrice * order.volume - order.volumePrice),
-        0
-      );
-      console.log("gains: ", gains);
-      orders.map(removeOrders);
     }
 
     if (!(rsi <= 30 && droppedPrice) && !(rsi > 70 && orders[0])) {
@@ -253,22 +261,17 @@ const tradingBot = async () => {
     console.error("Error running bot:", error);
   }
 
-  setTimeout(tradingBot, 60000 * (Math.round(Math.random() * 3) + 2)); // Every 3, 4 or 5 mins
+  setTimeout(tradingBot, minMs * (Math.round(Math.random() * 3) + 2)); // Every 3, 4 or 5 mins
 };
 
 tradingBot();
 
 /* ========== Old code ========== */
 
-/* ===== Delete this when place oder works fine ===== */
-// const encoded = data.nonce + JSON.stringify(data);
-// const sha256Hash = crypto.createHash("sha256").update(encoded).digest();
-// const message = urlPath + sha256Hash.toString("binary");
-// const secretBuffer = Buffer.from(secret, "base64");
-// const hmac = crypto.createHmac("sha512", secretBuffer);
-// hmac.update(message, "binary");
-// const signature = hmac.digest("base64");
-// return signature;
+// // Testing
+// const gains = orders.reduce((total, o) => total + (currentPrice * o.volume - o.cost), 0);
+// console.log("gains: ", gains);
+// orders.map(removeOrders);
 
 /* ===== Prices data ===== */
 // https://api.kraken.com/0/public/AssetPairs?pair=eth/eur&interval=5
