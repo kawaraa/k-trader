@@ -1,6 +1,6 @@
 /*
-This strategy based on 5 mins interval and checking the last 4 hours on every 5 mins change:
-1. Buy if price 1, 2, or 3 up to 16 drops 1.5% 
+This strategy based on 5 to 8 mins interval and checking the last 4 hours on every 5 mins change:
+1. Buy if price 1, 2, or 3 up to 24 drops 1.5% 
 2. Sell if current price is 1.5% higher than the order price 
 */
 
@@ -9,7 +9,7 @@ const crypto = require("crypto");
 const credentials = require("./variable.json");
 
 // Replace with your Kraken API key and secret
-const allowedPercentageChange = 1.4;
+const allowedPercentageChange = 1.4; // percentageMargin
 const cryptoTradingAmount = "0.0028"; // "0.003"
 const ORDERS_FILE_PATH = "database.json";
 const pair = "ETH/EUR";
@@ -261,7 +261,7 @@ const tradingBot = async () => {
     console.error("Error running bot:", error);
   }
 
-  setTimeout(tradingBot, minMs * (Math.round(Math.random() * 3) + 2)); // Every 3, 4 or 5 mins
+  setTimeout(tradingBot, minMs * (Math.round(Math.random() * 3) + 4)); // Every 5, 6 or 8 mins
 };
 
 tradingBot();
