@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/kawaraa/cryptocurrency/issues"
   },
-  "homepage": "https://github.com/kawaraa/cryptocurrency#readme"
+  "homepage": "https://github.com/kawaraa/cryptocurrency#readme",
+  "dependencies": {
+    "k-utilities": "^1.4.3"
+  }
 }

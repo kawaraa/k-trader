@@ -17,7 +17,7 @@ export default class OrderState {
     writeFileSync(this.filePath, JSON.stringify(state, null, 2));
   }
   getOrders(cb) {
-    const orders = OrderState.loadFile();
+    const orders = this.#loadFile();
     if (cb) orders.filter(cb);
   }
   addOrder(id, price, volume, cost, timeStamp = new Date()) {

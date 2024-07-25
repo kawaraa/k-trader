@@ -13,7 +13,7 @@ export default class Kraken {
   // Helper function to generate API signature
   #getSignature(urlPath, data) {
     if (typeof data != "object") throw new Error("Invalid data type");
-    const secret_buffer = Buffer.from(this.apiSecret, "base64");
+    const secret_buffer = Buffer.from(this.#apiSecret, "base64");
     const hash = createHash("sha256");
     const hmac = createHmac("sha512", secret_buffer);
     const hash_digest = hash.update(data.nonce + JSON.stringify(data)).digest("binary");
@@ -27,7 +27,7 @@ export default class Kraken {
 
   // Function to make calls to public API
   publicApi(path, options) {
-    return fetch(`${this.apiUrl}/0/public${path}`, options)
+    return fetch(`${this.#apiUrl}/0/public${path}`, options)
       .then((res) => res.json())
       .then(this.#checkError);
   }
@@ -37,11 +37,11 @@ export default class Kraken {
     data.nonce = Date.now() * 1000;
     const body = JSON.stringify(data);
 
-    return fetch(`${this.apiUrl}${path}`, {
+    return fetch(`${this.#apiUrl}${path}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "API-Key": this.apiKey,
+        "API-Key": this.#apiKey,
         "API-Sign": this.#getSignature(path, data),
       },
       method: "POST",
@@ -49,5 +49,12 @@ export default class Kraken {
     })
       .then((res) => res.json())
       .then(this.#checkError);
+  }
+
+  async getPrices(pair, periodPerMins, interval = 5) {
+    const prices = (await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}`))[pair];
+    return prices
+      .slice(prices.length - periodPerMins / interval, prices.length - 2)
+      .map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
   }
 }
