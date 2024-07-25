@@ -1,0 +1,20 @@
+{
+  "name": "cryptocurrency",
+  "version": "1.0.0",
+  "author": "Kawara",
+  "description": "Cryptocurrency Trading Bots",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kawaraa/cryptocurrency.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kawaraa/cryptocurrency/issues"
+  },
+  "homepage": "https://github.com/kawaraa/cryptocurrency#readme"
+}
