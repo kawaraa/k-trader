@@ -18,7 +18,7 @@ export default class OrderState {
   }
   getOrders(cb) {
     const orders = this.#loadFile();
-    if (cb) orders.filter(cb);
+    return !cb ? orders : orders.filter(cb);
   }
   addOrder(id, price, volume, cost, timeStamp = new Date()) {
     const orders = this.#loadFile();

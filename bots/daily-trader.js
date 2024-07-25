@@ -10,18 +10,14 @@ Recommendation:
 
 import Kraken from "../exchange-providers/kraken.js";
 import { Logger } from "k-utilities";
-import { calculateRSI, calculatePercentageChange } from "../trend-analysis.js";
+import { calculateRSI, simpleMovingAverage, calculatePercentageChange } from "../trend-analysis.js";
 import credentials from "../variable.json" assert { type: "json" };
 import OrderState from "../state/order-state.js";
-
-const allowedPercentageChange = 1.4; // percentageMargin
-const cryptoTradingAmount = 0.0028; // 0.003
-const pair = "ETH/EUR";
-const minMs = 60000;
 
 const kraken = new Kraken(credentials);
 const orderState = new OrderState("orders.json");
 const logger = new Logger("Daily-trader", true);
+const minMs = 60000;
 
 class Order {
   constructor(type, tradingType, pair, volume) {
@@ -38,17 +34,28 @@ function parseNumbers(data) {
 }
 
 export default class DailyTrader {
+  #pair;
+  #pricePercentageChange;
+  #tradingAmount;
+  constructor(pair, allowedPercentageChange, cryptoTradingAmount) {
+    this.#pair = pair;
+    this.#pricePercentageChange = allowedPercentageChange; // percentageMargin
+    this.#tradingAmount = cryptoTradingAmount;
+  }
+
   async start() {
     try {
       // Current price (last trade) => https://api.kraken.com/0/public/Ticker?pair=ETHEUR
-      const currentPrice = parseFloat((await kraken.publicApi(`/Ticker?pair=${pair}`))[pair].c[0]);
-      const prices = await kraken.getPrices(pair, 60 * 4);
-      const rsi = calculateRSI(prices, 24); // was Last 14 periods
+      const currentPrice = parseFloat(
+        (await kraken.publicApi(`/Ticker?pair=${this.#pair}`))[this.#pair].c[0]
+      );
+      const prices = await kraken.getPrices(this.#pair, 60 * 4);
+      const rsi = calculateRSI(prices);
 
       // Get current balance
       const balance = parseNumbers(await kraken.privateApi("Balance"));
       logger.info("Current balance => EUR: ", balance.ZEUR, "ETH: ", balance.XETH);
-      logger.info(`RSI: ${rsi}`);
+      logger.info(`RSI: ${rsi}`, `SMA Decision: ${simpleMovingAverage(prices, 10)}`);
 
       // Testing
       const priceChanges = {
@@ -88,7 +95,7 @@ export default class DailyTrader {
       let droppedPrice = false;
       for (let i = prices.length - 1; 0 <= i; i--) {
         const priceChange = calculatePercentageChange(currentPrice, prices[i]);
-        if (priceChange <= -allowedPercentageChange) {
+        if (priceChange <= -this.#pricePercentageChange) {
           droppedPrice = true;
           logger.info("Price drops", priceChange, `% since ${(prices.length - i) * 5} mins`);
           i = -1;
@@ -99,7 +106,7 @@ export default class DailyTrader {
         logger.info("Suggest buying crypto because the price dropped");
 
         const amount = Math.min(
-          cryptoTradingAmount,
+          this.#tradingAmount,
           (balance.ZEUR - (balance.ZEUR / 100) * 0.4) / currentPrice
         ).toFixed(4);
 
@@ -110,13 +117,16 @@ export default class DailyTrader {
 
           const txid = (await kraken.privateApi("AddOrder", data)).txid[0];
           const { vol_exec, cost, fee, descr } = await kraken.privateApi("QueryOrders", { txid });
-          addOrder(txid, +descr.price, +vol_exec, +cost + +fee);
+          /* ===== Oder data ===== */
+          // const orderId = "O5UIYW-ZEABL-H6Q6KW"; // OESOIN-P3SS6-EVZR3L, O5UIYW-ZEABL-H6Q6KW
+          // const order = (await kraken.privateApi("QueryOrders", { txid: orderId }))[orderId];
+          orderState.addOrder(txid, +descr.price, +vol_exec, +cost + +fee);
         }
       }
 
-      // Get Orders that have price Lower Than the Current Pric
+      // Get Orders that have price Lower Than the Current Price
       let orders = orderState.getOrders(
-        (order) => allowedPercentageChange <= calculatePercentageChange(currentPrice, order.price)
+        (order) => this.#pricePercentageChange <= calculatePercentageChange(currentPrice, order.price)
       );
 
       if (70 <= rsi) {
@@ -135,7 +145,7 @@ export default class DailyTrader {
               "AddOrder",
               new Order("sell", "market", "XETHZEUR", Math.min(volume, balance.XETH) + "")
             );
-            removeOrders({ id });
+            orderState.removeOrders({ id });
           }
         }
       }
@@ -144,21 +154,16 @@ export default class DailyTrader {
         logger.info("Suggest waiting for the price to change...");
       }
 
-      logger.info(`\n`);
+      console.log(`\n`);
     } catch (error) {
       logger.error("Error running bot:", error);
     }
 
-    setTimeout(this.start, minMs * (Math.round(Math.random() * 3) + 4)); // Every 5, 6 or 8 mins
+    setTimeout(() => this.start(), minMs * (Math.round(Math.random() * 3) + 4)); // Every 5, 6 or 8 mins
   }
 }
 
 /* ========== Old code ========== */
-
-// // Testing
-// const gains = orders.reduce((total, o) => total + (currentPrice * o.volume - o.cost), 0);
-// logger.info("gains: ", gains);
-// orders.map(removeOrders);
 
 /* ===== Prices data ===== */
 // https://api.kraken.com/0/public/AssetPairs?pair=eth/eur&interval=5
@@ -169,77 +174,8 @@ export default class DailyTrader {
 //   return `/0/public/${route}?pair=${pair}&interval=${interval}`;
 // };
 
-/* ===== Oder data ===== */
-// const orderId = "O5UIYW-ZEABL-H6Q6KW"; // OESOIN-P3SS6-EVZR3L, O5UIYW-ZEABL-H6Q6KW
-// const order = (await kraken.privateApi("QueryOrders", { txid: orderId }))[orderId];
-// logger.info("Pair: ", order.descr.pair);
-// logger.info("Type: ", order.descr.type);
-// logger.info("Status: ", order.status);
-// logger.info("Price: ", +order.price); // the exchange price rate in selected currency
-// logger.info("Volume: ", +order.vol_exec); // Cryptocurrency volume
-// logger.info("Cost: ", +order.cost); // The cost paid in selected currency
-// logger.info("Paid Volume: ", +order.vol); // The volume that is paid, could be EUR or Cryptocurrency
-// logger.info("Fee: ", +order.fee); // The fee in selected currency
-
+/* ===== Order data ===== */
 // const openOrders = await kraken.privateApi("OpenOrders");
-// logger.info("openOrders:", openOrders.open);
-
+// console.log("openOrders:", openOrders.open);
 // const closedOrders = await kraken.privateApi("ClosedOrders");
-// logger.info("closedOrders:", closedOrders.closed);
-
-/* ===== Other code ===== */
-// class OrdersQueue {
-//   constructor() {
-//     if (OrdersQueue.instance) return OrdersQueue.instance;
-//     OrdersQueue.instance = this;
-
-//     this.orders = [];
-//     this.fileName = "orders.json";
-//   }
-//   updateOrdersFile(fileContent) {
-//     const content = fileContent || JSON.parse(readFileSync(__dirname + this.name));
-//   }
-
-//   add() {}
-//   remove() {}
-// }
-
-// class TradingBot {
-//   constructor(percentageChange = 0.5, availableCashPercentage = 100) {
-//     if (TradingBot.instance) return TradingBot.instance;
-//     TradingBot.instance = this;
-
-//     this.orders = new OrdersQueue();
-//     this.entryPrice = 0;
-//     this.availableCashPercentage = availableCashPercentage;
-//     this.allowedPercentageChange = percentageChange;
-//     this.previousPrice = 0;
-//     this.apiCounter = 15; // Initialize with maximum allowed API counter
-//     this.lastApiCall = Date.now(); // Track the last API call time
-//     this.initializeState();
-//   }
-
-//   initializeState() {
-//     this.entryPrice = 0; // 1. Get available cash, USD / EUR balance
-//     this.previousPrice = 0; // 2. Get the price 5 or 10 mins ago
-//   }
-
-//   async ss() {
-//     try {
-//       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-//       const changePercent = calculatePercentageChange(currentPrice, this.previousPrice);
-//       if (changePercent > this.allowedPercentageChange) {
-//         const amount = (this.availableCashPercentage / this.entryPrice) * 100;
-//         // Buy using this "amount"
-//       } else if (changePercent < this.allowedPercentageChange) {
-//       }
-
-//       // 3. If the price change is greater then current, Buy, else
-//     } catch (error) {}
-//   }
-// }
-
-// const trader = new TradingBot();
-// trader.start();
-// setInterval(trader.start, 60000 * 5);
+// console.log("closedOrders:", closedOrders.closed);
