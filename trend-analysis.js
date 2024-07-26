@@ -50,7 +50,7 @@ export function simpleMovingAverage(prices, period) {
 // - When RSI rise means the market is moving upward, and prices are likely to keep rising. It indicates strong buying interest and positive market sentiment.
 // - When the RSI is very low, suggesting that the asset is likely in oversold conditions, which could indicate a potential buying opportunity if the price stabilizes.
 
-export const calculateRSI = (prices, period = 14) => {
+export function calculateRSI(prices, period = 14) {
   if (prices.length < period) throw new Error("Not enough data to calculate RSI.");
   // The 14-period setting for the RSI was recommended by J. Welles Wilder, the developer of the RSI, in his book "New Concepts in Technical Trading Systems." This default period is widely used because it has been found to provide a good balance between responsiveness and reliability in identifying overbought and oversold conditions across various markets.
 
@@ -89,14 +89,38 @@ export const calculateRSI = (prices, period = 14) => {
   // - The 30 to 70 range for RSI is commonly used because:
   // 1. RSI above 70: Often indicates the asset is overbought and might be due for a pullback.
   // 2. RSI below 30: Typically signals that the asset is oversold and might be due for a rebound.
-};
+}
+
+export function findHighLowPriceChanges(prices, currentPrice) {
+  // const sortedPrices = prices.sorted();
+  // const lowestChange = calculatePercentageChange(currentPrice, sortedPrices[0]);
+  // const highestChange = calculatePercentageChange(currentPrice, sortedPrices[sortedPrices.length - 1]);
+
+  const priceChanges = {
+    lowest: { price: currentPrice, minsAgo: 0, percent: 0 },
+    highest: { price: currentPrice, minsAgo: 0, percent: 0 },
+  };
+  for (let i = prices.length - 1; 0 <= i; i--) {
+    if (priceChanges.highest.price < prices[i]) {
+      priceChanges.highest.price = prices[i];
+      priceChanges.highest.minsAgo = (prices.length - 1 - i) * 5;
+    } else if (priceChanges.lowest.price > prices[i]) {
+      priceChanges.lowest.price = prices[i];
+      priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 5;
+    }
+  }
+  priceChanges.highest.percent = calculatePercentageChange(currentPrice, priceChanges.highest.price);
+  priceChanges.lowest.percent = calculatePercentageChange(currentPrice, priceChanges.lowest.price);
+  return priceChanges;
+}
 
 export function calculateAveragePrice(prices, percentageChange) {
   if (prices.length === 0) throw new Error("Price list cannot be empty.");
   const total = prices.reduce((sum, price) => sum + price, 0);
-  const averagePrice = total / prices.length;
+  const averagePrice = +(total / prices.length).toFixed(2);
   if (!percentageChange) return averagePrice;
-  const change = calculatePercentageChange(prices[prices.length - 1], calculateAveragePrice(prices));
+
+  const change = calculatePercentageChange(prices[prices.length - 1], averagePrice);
   if (percentageChange <= change) return "sell";
   else if (change <= -percentageChange) return "buy";
   return "hold";
@@ -106,7 +130,7 @@ export function calculatePercentageChange(currentPrice, pastPrice, returnString)
   if (!(pastPrice >= 0 || currentPrice >= 0)) {
     throw new Error(`"currentPrice" and "pastPrice" values must be integer greater than zero.`);
   }
-  const change = (((currentPrice - pastPrice) / pastPrice) * 100).toFixed(2);
+  const change = +(((currentPrice - pastPrice) / pastPrice) * 100).toFixed(2);
   return !returnString ? change : `The price ${change < 0 ? "drops" : "increases"} ${change}%`;
 }
 
@@ -132,3 +156,20 @@ export function calculateProfit(currentPrice, orderPrice, cryptoVolume) {
 // console.log(`Linear Regression Decision: ${linearRegression(prices)}\n`);
 // console.log(`SMA Decision: ${simpleMovingAverage(prices, 10)}`);
 // console.log(`Average Price Decision: ${calculateAveragePrice(prices, 1.5)}`);
+
+// const changes = findHighLowPriceChanges(prices, prices[prices.length - 1]);
+
+// console.log(
+//   `Highest price:`,
+//   changes.highest.price,
+//   `- "${changes.highest.minsAgo}" mins ago -`,
+//   " Change: ",
+//   `${changes.highest.percent}%`
+// );
+// console.log(
+//   `Lowest price:`,
+//   changes.lowest.price,
+//   `- "${changes.lowest.minsAgo}" mins ago -`,
+//   " Change: ",
+//   `${changes.lowest.percent}%`
+// );

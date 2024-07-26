@@ -10,7 +10,12 @@ Recommendation:
 
 import Kraken from "../exchange-providers/kraken.js";
 import { Logger } from "k-utilities";
-import { calculateRSI, simpleMovingAverage, calculatePercentageChange } from "../trend-analysis.js";
+import {
+  calculateRSI,
+  calculatePercentageChange,
+  calculateAveragePrice,
+  findHighLowPriceChanges,
+} from "../trend-analysis.js";
 import credentials from "../variable.json" assert { type: "json" };
 import OrderState from "../state/order-state.js";
 
@@ -43,7 +48,7 @@ export default class DailyTrader {
     this.#tradingAmount = cryptoTradingAmount;
   }
 
-  async start() {
+  async start(period = 4) {
     try {
       // Current price (last trade) => https://api.kraken.com/0/public/Ticker?pair=ETHEUR
       const currentPrice = parseFloat(
@@ -51,58 +56,37 @@ export default class DailyTrader {
       );
       const prices = await kraken.getPrices(this.#pair, 60 * 4);
       const rsi = calculateRSI(prices);
+      const decision = calculateAveragePrice(prices, this.#pricePercentageChange);
+
+      // Testing Starts
 
       // Get current balance
       const balance = parseNumbers(await kraken.privateApi("Balance"));
+      const averagePrice = calculateAveragePrice(prices);
+      const changes = findHighLowPriceChanges(prices, currentPrice);
+      // const droppedPrice = changes.highest.percent <= -this.#pricePercentageChange;
+
       logger.info("Current balance => EUR: ", balance.ZEUR, "ETH: ", balance.XETH);
-      logger.info(`RSI: ${rsi}`, `SMA Decision: ${simpleMovingAverage(prices, 10)}`);
-
-      // Testing
-      const priceChanges = {
-        lowest: { price: 0, minsAgo: 0, change: 0 },
-        highest: { price: 0, minsAgo: 0, change: 0 },
-      };
-      for (let i = prices.length - 1; 0 <= i; i--) {
-        const priceChange = calculatePercentageChange(currentPrice, prices[i]);
-
-        if (+priceChange < +priceChanges.highest.change) {
-          priceChanges.highest.price = prices[i];
-          priceChanges.highest.change = priceChange;
-          priceChanges.highest.minsAgo = (prices.length - 1 - i) * 5;
-        } else if (+priceChange > +priceChanges.lowest.change) {
-          priceChanges.lowest.price = prices[i];
-          priceChanges.lowest.change = priceChange;
-          priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 5;
-        }
-      }
       logger.info(
-        `Highest price "${priceChanges.highest.minsAgo}" mins ago:`,
-        priceChanges.highest.price,
-        "=>",
+        `RSI: ${rsi} - Average:`,
+        averagePrice,
+        "Current:",
         currentPrice,
-        "=>",
-        `${priceChanges.highest.change}%`
-      );
-      logger.info(
-        `Lowest price "${priceChanges.lowest.minsAgo}" mins ago:`,
-        priceChanges.lowest.price,
-        "=>",
-        currentPrice,
-        "=>",
-        `${priceChanges.lowest.change}%`
+        `change: "${calculatePercentageChange(currentPrice, calculateAveragePrice(prices))}" => ${decision}`
       );
 
-      let droppedPrice = false;
-      for (let i = prices.length - 1; 0 <= i; i--) {
-        const priceChange = calculatePercentageChange(currentPrice, prices[i]);
-        if (priceChange <= -this.#pricePercentageChange) {
-          droppedPrice = true;
-          logger.info("Price drops", priceChange, `% since ${(prices.length - i) * 5} mins`);
-          i = -1;
-        }
-      }
+      logger.info(
+        `Highest:`,
+        changes.highest.price,
+        `=> ${changes.highest.percent}% - "${changes.highest.minsAgo}" mins ago <|>`,
+        `Lowest:`,
+        changes.lowest.price,
+        `=> ${changes.lowest.percent}% - "${changes.lowest.minsAgo}" mins ago`
+      );
+      // Testing Ends
 
-      if (rsi <= 35 && droppedPrice) {
+      // if (rsi <= 35 && droppedPrice) {
+      if (decision == "buy") {
         logger.info("Suggest buying crypto because the price dropped");
 
         const amount = Math.min(
@@ -135,7 +119,7 @@ export default class DailyTrader {
         // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
         if (priceChanges.highest.price <= currentPrice || 0 <= priceChanges.highest.change) {
           const period = minMs * 60 * 24 * 4;
-          orders = orders.concat(loadState().filter((o) => period <= Date.now() - Date.parse(o.timeStamp)));
+          orders = orders.concat(orderState.getOrders((o) => period <= Date.now() - Date.parse(o.timeStamp)));
         }
 
         if (balance.XETH > 0 && orders[0]) {
@@ -150,16 +134,15 @@ export default class DailyTrader {
         }
       }
 
-      if (!(rsi <= 30 && droppedPrice) && !(rsi > 70 && orders[0])) {
-        logger.info("Suggest waiting for the price to change...");
-      }
+      if (!(decision == "buy") && !(70 <= rsi)) logger.info("Suggest waiting for the price to change...");
 
       console.log(`\n`);
     } catch (error) {
       logger.error("Error running bot:", error);
     }
 
-    setTimeout(() => this.start(), minMs * (Math.round(Math.random() * 3) + 4)); // Every 5, 6 or 8 mins
+    setTimeout(() => this.start(), minMs * (Math.round(Math.random() * 3) + period));
+    // Every 5, 6 or 8 mins
   }
 }
 
