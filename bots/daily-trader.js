@@ -72,16 +72,16 @@ export default class DailyTrader {
         averagePrice,
         "Current:",
         currentPrice,
-        `change: "${calculatePercentageChange(currentPrice, calculateAveragePrice(prices))}" => ${decision}`
+        `change: "${calculatePercentageChange(currentPrice, calculateAveragePrice(prices))}%" => ${decision}`
       );
 
       logger.info(
         `Highest:`,
         changes.highest.price,
-        `=> ${changes.highest.percent}% - "${changes.highest.minsAgo}" mins ago <|>`,
+        `=> ${changes.highest.percent}% - ${changes.highest.minsAgo}mins ago <|>`,
         `Lowest:`,
         changes.lowest.price,
-        `=> ${changes.lowest.percent}% - "${changes.lowest.minsAgo}" mins ago`
+        `=> ${changes.lowest.percent}% - ${changes.lowest.minsAgo}mins ago`
       );
       // Testing Ends
 
@@ -89,7 +89,7 @@ export default class DailyTrader {
       if (decision == "buy") {
         logger.info("Suggest buying crypto because the price dropped");
 
-        const amount = Math.min(
+        const amount = +Math.min(
           this.#tradingAmount,
           (balance.ZEUR - (balance.ZEUR / 100) * 0.4) / currentPrice
         ).toFixed(4);

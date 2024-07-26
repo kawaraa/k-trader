@@ -137,7 +137,7 @@ export function calculatePercentageChange(currentPrice, pastPrice, returnString)
 export function calculateEarnings(currentPrice, previousPrice, investedAmount) {
   const investedAmountIncludedProfit = (investedAmount / previousPrice) * currentPrice;
   const earnings = investedAmountIncludedProfit - investedAmount;
-  return earnings.toFixed(2);
+  return +earnings.toFixed(2);
 }
 
 export function calculateProfit(currentPrice, orderPrice, cryptoVolume) {
