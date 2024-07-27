@@ -1,4 +1,4 @@
-const DailyTrader = require("./daily-trader");
+const DailyTrader = require("./src/daily-trader");
 const traderName = process.argv[2]; // btc, eth, sol
 // const strategy = process.argv[3]; // average-price or highest-price
 // const pair = process.argv[4]; // BTC/EUR, ETH/EUR, SOL/EUR
