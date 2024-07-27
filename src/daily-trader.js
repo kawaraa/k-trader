@@ -13,7 +13,7 @@ const { Logger } = require("k-utilities");
 const analyzer = require("./trend-analysis.js");
 const OrderState = require("./order-state.js");
 const { parseNumbers, minMs } = require("./utilities.js");
-const kraken = new Kraken(require("./.env.json"));
+const kraken = new Kraken(require("../.env.json"));
 const currencyBalance = { btc: "XXBT", eth: "XETH", sol: "SOL" };
 
 class Order {
