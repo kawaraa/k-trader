@@ -1,5 +1,5 @@
 // Linear Regression Analysis method is used to analyze a series of price data for a cryptocurrency or other asset to determine the trend direction. is generally more suited for long-term trading.
-export function linearRegression(prices) {
+function linearRegression(prices) {
   const n = prices.length;
   let sumX = 0,
     sumY = 0,
@@ -24,7 +24,7 @@ export function linearRegression(prices) {
 // 1. Day Traders: Might use shorter periods like 5 or 10 to capture quick market movements.
 // 2. Swing Traders: Might prefer periods like 20 or 50 to identify intermediate trends.
 // 3. Long-Term Investors: Might use periods like 100 or 200 to focus on long-term trends.
-export function simpleMovingAverage(prices, period) {
+function simpleMovingAverage(prices, period) {
   if (period < 1 || period > prices.length) {
     throw new Error("Invalid period. Must be between 1 and the length of the prices array.");
   }
@@ -50,7 +50,7 @@ export function simpleMovingAverage(prices, period) {
 // - When RSI rise means the market is moving upward, and prices are likely to keep rising. It indicates strong buying interest and positive market sentiment.
 // - When the RSI is very low, suggesting that the asset is likely in oversold conditions, which could indicate a potential buying opportunity if the price stabilizes.
 
-export function calculateRSI(prices, period = 14) {
+function calculateRSI(prices, period = 14) {
   if (prices.length < period) throw new Error("Not enough data to calculate RSI.");
   // The 14-period setting for the RSI was recommended by J. Welles Wilder, the developer of the RSI, in his book "New Concepts in Technical Trading Systems." This default period is widely used because it has been found to provide a good balance between responsiveness and reliability in identifying overbought and oversold conditions across various markets.
 
@@ -91,7 +91,7 @@ export function calculateRSI(prices, period = 14) {
   // 2. RSI below 30: Typically signals that the asset is oversold and might be due for a rebound.
 }
 
-export function findHighLowPriceChanges(prices, currentPrice) {
+function findHighLowPriceChanges(prices, currentPrice) {
   // const sortedPrices = prices.sorted();
   // const lowestChange = calculatePercentageChange(currentPrice, sortedPrices[0]);
   // const highestChange = calculatePercentageChange(currentPrice, sortedPrices[sortedPrices.length - 1]);
@@ -114,7 +114,7 @@ export function findHighLowPriceChanges(prices, currentPrice) {
   return priceChanges;
 }
 
-export function calculateAveragePrice(prices, percentageChange) {
+function calculateAveragePrice(prices, percentageChange) {
   if (prices.length === 0) throw new Error("Price list cannot be empty.");
   const total = prices.reduce((sum, price) => sum + price, 0);
   const averagePrice = +(total / prices.length).toFixed(2);
@@ -126,7 +126,7 @@ export function calculateAveragePrice(prices, percentageChange) {
   return "hold";
 }
 
-export function calculatePercentageChange(currentPrice, pastPrice, returnString) {
+function calculatePercentageChange(currentPrice, pastPrice, returnString) {
   if (!(pastPrice >= 0 || currentPrice >= 0)) {
     throw new Error(`"currentPrice" and "pastPrice" values must be integer greater than zero.`);
   }
@@ -134,18 +134,29 @@ export function calculatePercentageChange(currentPrice, pastPrice, returnString)
   return !returnString ? change : `The price ${change < 0 ? "drops" : "increases"} ${change}%`;
 }
 
-export function calculateEarnings(currentPrice, previousPrice, investedAmount) {
+function calculateEarnings(currentPrice, previousPrice, investedAmount) {
   const investedAmountIncludedProfit = (investedAmount / previousPrice) * currentPrice;
   const earnings = investedAmountIncludedProfit - investedAmount;
   return +earnings.toFixed(2);
 }
 
-export function calculateProfit(currentPrice, orderPrice, cryptoVolume) {
+function calculateProfit(currentPrice, orderPrice, cryptoVolume) {
   const cost = orderPrice * cryptoVolume;
   const revenue = currentPrice * cryptoVolume;
   const profit = revenue - cost;
   return profit;
 }
+
+module.exports = {
+  linearRegression,
+  simpleMovingAverage,
+  calculateRSI,
+  findHighLowPriceChanges,
+  calculateAveragePrice,
+  calculatePercentageChange,
+  calculateEarnings,
+  calculateProfit,
+};
 
 // Example usage:
 // const prices = [

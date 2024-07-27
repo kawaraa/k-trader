@@ -1,3 +1,11 @@
+const minMs = 60000;
+
+function parseNumbers(data) {
+  if (Array.isArray(data)) return data.map((n) => +n);
+  for (const key in data) data[key] = +data[key];
+  return data;
+}
+
 async function waitForApiLimit(lastApiCall, lastApiCall) {
   let elapsedTime = (Date.now() - lastApiCall) / 1000;
   apiCounter += elapsedTime * 0.33; // Increment counter based on elapsed time
@@ -13,3 +21,5 @@ async function waitForApiLimit(lastApiCall, lastApiCall) {
   lastApiCall = Date.now();
   return { apiCounter, lastApiCall };
 }
+
+module.exports = { minMs, parseNumbers, waitForApiLimit };

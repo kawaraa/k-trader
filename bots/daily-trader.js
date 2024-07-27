@@ -8,41 +8,32 @@ Recommendation:
 - if it's monthly trading strategy, buy when the current price is 1.5% lower then the average price in the last 5 days
 */
 
-import Kraken from "../exchange-providers/kraken.js";
-import { Logger } from "k-utilities";
-import {
-  calculateRSI,
-  calculatePercentageChange,
-  calculateAveragePrice,
-  findHighLowPriceChanges,
-} from "../trend-analysis.js";
-import credentials from "../variable.json" assert { type: "json" };
-import OrderState from "../state/order-state.js";
-
-const kraken = new Kraken(credentials);
-const orderState = new OrderState("orders.json");
-const logger = new Logger("Daily-trader", true);
-const minMs = 60000;
+const Kraken = require("../exchange-providers/kraken.js");
+const { Logger } = require("k-utilities");
+const analyzer = require("../trend-analysis.js");
+const OrderState = require("../state/order-state.js");
+const { parseNumbers, minMs } = require("../services/utilities.js");
+const kraken = new Kraken(require("../variable.json"));
+const currencyBalance = { btc: "XXBT", eth: "XETH", sol: "SOL" };
 
 class Order {
   constructor(type, tradingType, pair, volume) {
     this.type = type;
     this.ordertype = tradingType;
-    this.pair = pair;
+    this.pair = pair.replace("/", "");
     this.volume = volume;
   }
 }
 
-function parseNumbers(data) {
-  for (const key in data) data[key] = +data[key];
-  return data;
-}
-
-export default class DailyTrader {
+module.exports = class DailyTrader {
   #pair;
   #pricePercentageChange;
   #tradingAmount;
-  constructor(pair, allowedPercentageChange, cryptoTradingAmount) {
+  constructor(name, strategy, pair, allowedPercentageChange, cryptoTradingAmount) {
+    this.name = name;
+    this.strategy = strategy;
+    this.logger = new Logger(name + "-daily-trader", true);
+    this.orderState = new OrderState(`${name}-orders.json`);
     this.#pair = pair;
     this.#pricePercentageChange = allowedPercentageChange; // percentageMargin
     this.#tradingAmount = cryptoTradingAmount;
@@ -50,101 +41,110 @@ export default class DailyTrader {
 
   async start(period = 4) {
     try {
+      // Get current balance
+      const balance = parseNumbers(await kraken.privateApi("Balance"));
+      const availableEuro = balance.ZEUR;
+      const availableCrypto = balance[currencyBalance[this.name]];
+
       // Current price (last trade) => https://api.kraken.com/0/public/Ticker?pair=ETHEUR
       const currentPrice = parseFloat(
         (await kraken.publicApi(`/Ticker?pair=${this.#pair}`))[this.#pair].c[0]
       );
       const prices = await kraken.getPrices(this.#pair, 60 * 4);
-      const rsi = calculateRSI(prices);
-      const decision = calculateAveragePrice(prices, this.#pricePercentageChange);
+
+      const rsi = analyzer.calculateRSI(prices);
+      const changes = analyzer.findHighLowPriceChanges(prices, currentPrice);
+
+      let decision = "hold";
+      if (this.strategy == "average-price") {
+        decision = analyzer.calculateAveragePrice(prices, this.#pricePercentageChange);
+      } else if (this.strategy == "highest-price") {
+        // const droppedPrice = changes.highest.percent <= -this.#pricePercentageChange;
+        if (changes.highest.percent <= -this.#pricePercentageChange) decision = "buy";
+        if (this.#pricePercentageChange <= changes.lowest.percent) decision = "sell";
+      }
 
       // Testing Starts
-
-      // Get current balance
-      const balance = parseNumbers(await kraken.privateApi("Balance"));
-      const averagePrice = calculateAveragePrice(prices);
-      const changes = findHighLowPriceChanges(prices, currentPrice);
-      // const droppedPrice = changes.highest.percent <= -this.#pricePercentageChange;
-
-      logger.info("Current balance => EUR: ", balance.ZEUR, "ETH: ", balance.XETH);
-      logger.info(
+      this.logger.info("Current balance => eur: ", availableEuro, `${this.name}: `, availableCrypto);
+      this.logger.info(
         `RSI: ${rsi} - Average:`,
-        averagePrice,
+        analyzer.calculateAveragePrice(prices),
         "Current:",
         currentPrice,
-        `change: "${calculatePercentageChange(currentPrice, calculateAveragePrice(prices))}%" => ${decision}`
+        `change: "${analyzer.calculatePercentageChange(
+          currentPrice,
+          analyzer.calculateAveragePrice(prices)
+        )}%" => ${decision}`
       );
 
-      logger.info(
-        `Highest:`,
-        changes.highest.price,
-        `=> ${changes.highest.percent}% - ${changes.highest.minsAgo}mins ago <|>`,
+      this.logger.info(
         `Lowest:`,
         changes.lowest.price,
-        `=> ${changes.lowest.percent}% - ${changes.lowest.minsAgo}mins ago`
+        `=> ${changes.lowest.percent}% - ${changes.lowest.minsAgo}mins ago <|>`,
+        `Highest:`,
+        changes.highest.price,
+        `=> ${changes.highest.percent}% - ${changes.highest.minsAgo}mins ago`
       );
       // Testing Ends
 
-      // if (rsi <= 35 && droppedPrice) {
-      if (decision == "buy") {
-        logger.info("Suggest buying crypto because the price dropped");
+      if (decision == "buy" && rsi <= 35) {
+        this.logger.info("Suggest buying crypto because the price dropped");
 
+        // calculates the amount of a cryptocurrency that can be purchased given current balance in fiat money and the price of the cryptocurrency.
         const amount = +Math.min(
           this.#tradingAmount,
-          (balance.ZEUR - (balance.ZEUR / 100) * 0.4) / currentPrice
+          (availableEuro - (availableEuro / 100) * 0.4) / currentPrice
         ).toFixed(4);
 
-        if (balance.ZEUR > 0 && amount > 0.001) {
-          // Buy here, "0.001" is the minimum accepted crypto amount in Kraken
-
-          const data = new Order("buy", "market", "XETHZEUR", amount + "");
-
+        if (availableEuro > 0 && amount > 0) {
+          // Buy here
+          const data = new Order("buy", "market", this.#pair, amount + "");
           const txid = (await kraken.privateApi("AddOrder", data)).txid[0];
           const { vol_exec, cost, fee, descr } = await kraken.privateApi("QueryOrders", { txid });
-          /* ===== Oder data ===== */
-          // const orderId = "O5UIYW-ZEABL-H6Q6KW"; // OESOIN-P3SS6-EVZR3L, O5UIYW-ZEABL-H6Q6KW
-          // const order = (await kraken.privateApi("QueryOrders", { txid: orderId }))[orderId];
-          orderState.addOrder(txid, +descr.price, +vol_exec, +cost + +fee);
+          this.orderState.addOrder(txid, +descr.price, +vol_exec, +cost + +fee);
         }
       }
 
       // Get Orders that have price Lower Than the Current Price
-      let orders = orderState.getOrders(
-        (order) => this.#pricePercentageChange <= calculatePercentageChange(currentPrice, order.price)
+      let orders = this.orderState.getOrders(
+        (order) =>
+          this.#pricePercentageChange <= analyzer.calculatePercentageChange(currentPrice, order.price)
       );
 
       if (70 <= rsi) {
-        logger.info("Suggest selling crypto because the price rose / increased");
+        this.logger.info("Suggest selling crypto because the price rose / increased");
 
         // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
-        if (priceChanges.highest.price <= currentPrice || 0 <= priceChanges.highest.change) {
+        if (changes.highest.price <= currentPrice || 0 <= changes.highest.change) {
           const period = minMs * 60 * 24 * 4;
-          orders = orders.concat(orderState.getOrders((o) => period <= Date.now() - Date.parse(o.timeStamp)));
+          orders = orders.concat(
+            this.orderState.getOrders((o) => period <= Date.now() - Date.parse(o.timeStamp))
+          );
         }
 
-        if (balance.XETH > 0 && orders[0]) {
+        if (availableCrypto > 0 && orders[0]) {
           // Sell these order back
           for (const { id, volume } of orders) {
             await kraken.privateApi(
               "AddOrder",
-              new Order("sell", "market", "XETHZEUR", Math.min(volume, balance.XETH) + "")
+              new Order("sell", "market", this.#pair, Math.min(volume, availableCrypto) + "")
             );
-            orderState.removeOrders({ id });
+            this.orderState.removeOrders({ id });
           }
         }
       }
 
-      if (!(decision == "buy") && !(70 <= rsi)) logger.info("Suggest waiting for the price to change...");
-
-      console.log(`\n`);
+      if (!(decision == "buy" && rsi <= 35) && !(70 <= rsi)) {
+        this.logger.info("Suggest waiting for the price to change...");
+      }
     } catch (error) {
-      logger.error("Error running bot:", error);
+      this.logger.error("Error running bot:", error);
     }
 
+    console.log(`\n`);
     setTimeout(() => this.start(), minMs * (Math.round(Math.random() * 3) + period));
-    // Every 5, 6 or 8 mins
   }
-}
+};
 
 /* ========== Old code ========== */
 

@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from "node:fs";
+const { readFileSync, writeFileSync } = require("node:fs");
 
-export default class OrderState {
+module.exports = class OrderState {
   constructor(filePath) {
     this.filePath = filePath;
   }
@@ -29,4 +29,4 @@ export default class OrderState {
     if (!Array.isArray(orderIds)) orderIds = [orderIds];
     this.#updateFile(this.#loadFile().filter((order) => !orderIds.includes(order.id)));
   }
-}
+};

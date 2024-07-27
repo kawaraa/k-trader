@@ -1,7 +1,6 @@
-import { createHash, createHmac } from "node:crypto";
-// const { createHash, createHmac } = await import("node:crypto");
+const { createHash, createHmac } = require("node:crypto");
 
-export default class Kraken {
+module.exports = class Kraken {
   #apiUrl;
   #apiKey;
   #apiSecret;
@@ -57,4 +56,4 @@ export default class Kraken {
       .slice(prices.length - periodPerMins / interval, prices.length - 2)
       .map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
   }
-}
+};

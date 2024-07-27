@@ -4,10 +4,12 @@
   "author": "Kawara",
   "description": "Cryptocurrency Trading Bots",
   "main": "main.js",
-  "type": "module",
   "scripts": {
     "start": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "k-utilities": "^1.4.5"
   },
   "repository": {
     "type": "git",
@@ -17,8 +19,5 @@
   "bugs": {
     "url": "https://github.com/kawaraa/cryptocurrency/issues"
   },
-  "homepage": "https://github.com/kawaraa/cryptocurrency#readme",
-  "dependencies": {
-    "k-utilities": "^1.4.3"
-  }
+  "homepage": "https://github.com/kawaraa/cryptocurrency#readme"
 }
