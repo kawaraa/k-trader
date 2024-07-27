@@ -50,14 +50,14 @@ module.exports = class DailyTrader {
       const currentPrice = parseFloat(
         (await kraken.publicApi(`/Ticker?pair=${this.#pair}`))[this.#pair].c[0]
       );
-      const prices = await kraken.getPrices(this.#pair, 60 * 4);
+      const prices = await kraken.getPrices(this.#pair, 60 * 4, 5); // the last 4 hours
 
       const rsi = analyzer.calculateRSI(prices);
-      const changes = analyzer.findHighLowPriceChanges(prices, currentPrice);
+      const changes = analyzer.findHighLowPriceChanges(prices.slice(-120), currentPrice); // the last 2 hours
 
       let decision = "hold";
       if (this.strategy == "average-price") {
-        decision = analyzer.calculateAveragePrice(prices, this.#pricePercentageChange);
+        decision = analyzer.calculateAveragePrice(prices, this.#pricePercentageChange, currentPrice);
       } else if (this.strategy == "highest-price") {
         // const droppedPrice = changes.highest.percent <= -this.#pricePercentageChange;
         if (changes.highest.percent <= -this.#pricePercentageChange) decision = "buy";
