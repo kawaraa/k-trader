@@ -8,12 +8,12 @@ Recommendation:
 - if it's monthly trading strategy, buy when the current price is 1.5% lower then the average price in the last 5 days
 */
 
-const Kraken = require("../exchange-providers/kraken.js");
+const Kraken = require("./kraken.js");
 const { Logger } = require("k-utilities");
-const analyzer = require("../trend-analysis.js");
-const OrderState = require("../state/order-state.js");
-const { parseNumbers, minMs } = require("../services/utilities.js");
-const kraken = new Kraken(require("../variable.json"));
+const analyzer = require("./trend-analysis.js");
+const OrderState = require("./order-state.js");
+const { parseNumbers, minMs } = require("./utilities.js");
+const kraken = new Kraken(require("./.env.json"));
 const currencyBalance = { btc: "XXBT", eth: "XETH", sol: "SOL" };
 
 class Order {

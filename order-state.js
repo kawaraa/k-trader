@@ -2,7 +2,7 @@ const { readFileSync, writeFileSync } = require("node:fs");
 
 module.exports = class OrderState {
   constructor(filePath) {
-    this.filePath = filePath;
+    this.filePath = `database/${filePath}`;
   }
   // Function to load the state from a JSON file
   #loadFile() {
