@@ -6,6 +6,10 @@ function parseNumbers(data) {
   return data;
 }
 
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function waitForApiLimit(lastApiCall, lastApiCall) {
   let elapsedTime = (Date.now() - lastApiCall) / 1000;
   apiCounter += elapsedTime * 0.33; // Increment counter based on elapsed time
@@ -22,4 +26,4 @@ async function waitForApiLimit(lastApiCall, lastApiCall) {
   return { apiCounter, lastApiCall };
 }
 
-module.exports = { minMs, parseNumbers, waitForApiLimit };
+module.exports = { minMs, parseNumbers, waitForApiLimit, delay };

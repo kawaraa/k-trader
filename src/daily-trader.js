@@ -27,7 +27,7 @@ class Order {
 
 module.exports = class DailyTrader {
   #pair;
-  #pricePercentageChange;
+  #pricePercentageThreshold;
   #tradingAmount;
   constructor(name, strategy, pair, allowedPercentageChange, cryptoTradingAmount) {
     this.name = name;
@@ -35,7 +35,7 @@ module.exports = class DailyTrader {
     this.logger = new Logger(name + "-daily-trader", true);
     this.orderState = new OrderState(`${name}-orders.json`);
     this.#pair = pair;
-    this.#pricePercentageChange = allowedPercentageChange; // percentageMargin
+    this.#pricePercentageThreshold = allowedPercentageChange; // percentageMargin
     this.#tradingAmount = cryptoTradingAmount;
   }
 
@@ -50,18 +50,18 @@ module.exports = class DailyTrader {
       const currentPrice = parseFloat(
         (await kraken.publicApi(`/Ticker?pair=${this.#pair}`))[this.#pair].c[0]
       );
-      const prices = await kraken.getPrices(this.#pair, 60 * 4, 5); // the last 4 hours
+      const prices = await kraken.getPrices(this.#pair).slice(-240); // since 4 hours
 
       const rsi = analyzer.calculateRSI(prices);
-      const changes = analyzer.findHighLowPriceChanges(prices.slice(-120), currentPrice); // the last 2 hours
+      const changes = analyzer.findHighLowPriceChanges(prices.slice(-120), currentPrice); // last 2 hours
 
       let decision = "hold";
       if (this.strategy == "average-price") {
-        decision = analyzer.calculateAveragePrice(prices, this.#pricePercentageChange, currentPrice);
+        decision = analyzer.calculateAveragePrice(prices, this.#pricePercentageThreshold, currentPrice);
       } else if (this.strategy == "highest-price") {
-        // const droppedPrice = changes.highest.percent <= -this.#pricePercentageChange;
-        if (changes.highest.percent <= -this.#pricePercentageChange) decision = "buy";
-        if (this.#pricePercentageChange <= changes.lowest.percent) decision = "sell";
+        // const droppedPrice = changes.highest.percent <= -this.#pricePercentageThreshold;
+        if (changes.highest.percent <= -this.#pricePercentageThreshold) decision = "buy";
+        if (this.#pricePercentageThreshold <= changes.lowest.percent) decision = "sell";
       }
 
       // Testing Starts
@@ -96,24 +96,24 @@ module.exports = class DailyTrader {
           (availableEuro - (availableEuro / 100) * 0.4) / currentPrice
         ).toFixed(4);
 
-        if (availableEuro > 0 && amount > 0) {
+        if (availableEuro > 0 && amount > this.#tradingAmount / 2) {
           // Buy here
           const data = new Order("buy", "market", this.#pair, amount + "");
           const txid = (await kraken.privateApi("AddOrder", data)).txid[0];
-          const { vol_exec, cost, fee, descr } = await kraken.privateApi("QueryOrders", { txid });
-          this.orderState.addOrder(txid, +descr.price, +vol_exec, +cost + +fee);
+          const { vol_exec, cost, fee, price } = (await kraken.privateApi("QueryOrders", { txid }))[txid];
+          this.orderState.addOrder(txid, +price, +vol_exec, +cost + +fee);
+          this.logger.warn(`Bought crypto with order ID "${txid}"`);
         }
       }
 
       // Get Orders that have price Lower Than the Current Price
       let orders = this.orderState.getOrders(
         (order) =>
-          this.#pricePercentageChange <= analyzer.calculatePercentageChange(currentPrice, order.price)
+          this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(currentPrice, order.price)
       );
 
       if (70 <= rsi) {
         this.logger.info("Suggest selling crypto because the price rose / increased");
-
         // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
         if (changes.highest.price <= currentPrice || 0 <= changes.highest.change) {
           const period = minMs * 60 * 24 * 4;
@@ -121,16 +121,17 @@ module.exports = class DailyTrader {
             this.orderState.getOrders((o) => period <= Date.now() - Date.parse(o.timeStamp))
           );
         }
+      }
 
-        if (availableCrypto > 0 && orders[0]) {
-          // Sell these order back
-          for (const { id, volume } of orders) {
-            await kraken.privateApi(
-              "AddOrder",
-              new Order("sell", "market", this.#pair, Math.min(volume, availableCrypto) + "")
-            );
-            this.orderState.removeOrders({ id });
-          }
+      if (availableCrypto > 0 && orders[0]) {
+        // Sell these order back
+        for (const { id, volume } of orders) {
+          await kraken.privateApi(
+            "AddOrder",
+            new Order("sell", "market", this.#pair, Math.min(volume, availableCrypto) + "")
+          );
+          this.orderState.removeOrders([id]);
+          this.logger.warn(`Sold crypto with order ID "${id}"`);
         }
       }
 

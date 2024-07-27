@@ -134,6 +134,23 @@ function calculatePercentageChange(currentPrice, pastPrice, returnString) {
   return !returnString ? change : `The price ${change < 0 ? "drops" : "increases"} ${change}%`;
 }
 
+function countPercentageChange(prices, percentageThreshold) {
+  const changes = [];
+  let picePointer = prices[0];
+
+  for (let i = 1; i < prices.length; i++) {
+    const change = calculatePercentageChange(picePointer, prices[i]);
+    if (percentageThreshold <= change) {
+      changes.push(change);
+      picePointer = prices[i];
+    } else if (change <= -percentageThreshold) {
+      changes.push(change);
+      picePointer = prices[i];
+    }
+  }
+  return changes;
+}
+
 function calculateEarnings(currentPrice, previousPrice, investedAmount) {
   const investedAmountIncludedProfit = (investedAmount / previousPrice) * currentPrice;
   const earnings = investedAmountIncludedProfit - investedAmount;
@@ -154,6 +171,7 @@ module.exports = {
   findHighLowPriceChanges,
   calculateAveragePrice,
   calculatePercentageChange,
+  countPercentageChange,
   calculateEarnings,
   calculateProfit,
 };

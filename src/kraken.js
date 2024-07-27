@@ -50,10 +50,11 @@ module.exports = class Kraken {
       .then(this.#checkError);
   }
 
-  async getPrices(pair, periodPerMins, interval = 5) {
-    const prices = (await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}`))[pair];
-    return prices
-      .slice(prices.length - periodPerMins / interval, prices.length - 2)
-      .map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
+  async getPrices(pair, interval = 5, timestamp) {
+    let since = !timestamp ? "" : `&since=${timestamp}`;
+    let prices = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}${since}`);
+    prices = prices[Object.keys(prices)[0]];
+    prices.pop();
+    return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
   }
 };
