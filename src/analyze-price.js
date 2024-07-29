@@ -2,6 +2,7 @@ const { readdirSync, readFileSync, writeFileSync } = require("node:fs");
 const { randomUUID } = require("node:crypto");
 
 const analyzer = require("./trend-analysis.js");
+const DailyTrader = require("./daily-trader.js");
 const folderPath = `${process.cwd()}/data`;
 const monthDays = 30;
 const eurAmount = 10;
@@ -20,10 +21,15 @@ async function getAverageChanges() {
     const prices = JSON.parse(readFileSync(`${folderPath}/${file}`, "utf8")).last30DaysPrices;
     const numberOfDailyPrices = Math.ceil(prices.length / monthDays);
     const tradingAmount = +(eurAmount / prices[0]).toFixed(4);
-    const crypto = file.replace(".json", "");
+    const pair = file.replace(".json", "");
+    const crypto = pair.replace("");
     let orders = [];
     // const changes = [];
     console.log("Balance => Eur:", eurBalance, "- Crypto:", cryptoBalance);
+
+    const btcTrader = new DailyTrader(crypto, kraken, "average-price", pair, 1.5, 10);
+    // const trader = new DailyTrader(, strategy, pair, pricePercentageThreshold, cryptoTradingAmount);
+    // trader.start(timeInterval);
 
     for (const i in prices) {
       if (i < oscillatorOffset) continue;
@@ -94,7 +100,7 @@ async function getAverageChanges() {
           Math.min(volume, cryptoBalance);
           eurBalance += cost;
           cryptoBalance -= tradingAmount;
-          orders = removeOrders(orders, id);
+          orders = removeOrder(orders, id);
           // console.warn(`Sold "${crypto}" crypto`);
         }
       }
@@ -112,7 +118,7 @@ async function getAverageChanges() {
 function addOrder(orders, id, price, volume, cost) {
   orders.push({ id, price, volume, cost });
 }
-function removeOrders(orders, id) {
+function removeOrder(orders, id) {
   return orders.filter((o) => o.id != id);
 }
 

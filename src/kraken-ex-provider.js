@@ -1,4 +1,5 @@
 const { createHash, createHmac } = require("node:crypto");
+const { parseNumbers } = require("./utilities.js");
 
 module.exports = class Kraken {
   #apiUrl;
@@ -50,12 +51,30 @@ module.exports = class Kraken {
       .then(this.#checkError);
   }
 
-  async getPrices(pair, interval = 5, timestamp = "") {
+  async balance(pair) {
+    const curMap = { BTC: "XXBT", ETH: "XETH", SOL: "SOL" };
+    const balance = parseNumbers(await this.privateApi("Balance"));
+    return { eur: +balance.ZEUR, crypto: +(balance[pair] || balance[curMap[pair.replace("EUR", "")]]) };
+  }
+  async currentPrice(pair) {
+    const data = await this.publicApi(`/Ticker?pair=${pair}`);
+    return parseFloat(data[Object.keys(data)[0]].c[0]);
+  }
+  async pricesData(pair, interval = 5, timestamp = "") {
     const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${timestamp}`);
     return data[Object.keys(data)[0]];
   }
-  cleanPrices(prices) {
+  async prices(pair) {
+    const prices = await this.pricesData(pair);
     prices.pop();
     return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
+  }
+  async createOrder(type, ordertype, pair, volume) {
+    volume += "";
+    return (await kraken.privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
+  }
+  async getOrder(orderId) {
+    const o = (await kraken.privateApi("QueryOrders", { txid: orderId }))[orderId];
+    return { id: orderId, price: +o.price, volume: +o.vol_exec, cost: +cost + +fee };
   }
 };

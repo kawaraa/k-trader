@@ -1,5 +1,3 @@
-const minMs = 60000;
-
 function parseNumbers(data) {
   if (Array.isArray(data)) return data.map((n) => +n);
   for (const key in data) data[key] = +data[key];
@@ -8,6 +6,11 @@ function parseNumbers(data) {
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function dateToString(date = new Date(), seconds) {
+  const unWantedChar = seconds ? -5 : -8;
+  return new Date(date).toISOString().slice(0, unWantedChar).replace("T", " ");
 }
 
 async function waitForApiLimit(lastApiCall, lastApiCall) {
@@ -26,4 +29,4 @@ async function waitForApiLimit(lastApiCall, lastApiCall) {
   return { apiCounter, lastApiCall };
 }
 
-module.exports = { minMs, parseNumbers, waitForApiLimit, delay };
+module.exports = { parseNumbers, dateToString, waitForApiLimit, delay };

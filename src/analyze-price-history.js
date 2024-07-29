@@ -1,7 +1,7 @@
 const { readFileSync, appendFileSync, writeFileSync } = require("node:fs");
 
 const cryptocurrencies = require("../data/cryptocurrencies.json");
-const Kraken = require("./kraken.js");
+const Kraken = require("./kraken-ex-provider.js");
 const analyzer = require("./trend-analysis.js");
 const { delay } = require("./utilities.js");
 const kraken = new Kraken(require("../.env.json"));
