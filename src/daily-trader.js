@@ -32,7 +32,7 @@ module.exports = class DailyTrader {
   constructor(name, strategy, pair, allowedPercentageChange, cryptoTradingAmount) {
     this.name = name;
     this.strategy = strategy;
-    this.logger = new Logger(name + "-daily-trader", true);
+    this.logger = new Logger(name, true); // + "-daily-trader"
     this.orderState = new OrderState(`${name}-orders.json`);
     this.#pair = pair;
     this.#pricePercentageThreshold = allowedPercentageChange; // percentageMargin
@@ -46,44 +46,40 @@ module.exports = class DailyTrader {
       const availableEuro = balance.ZEUR;
       const availableCrypto = balance[currencyBalance[this.name]];
 
-      // Current price (last trade) => https://api.kraken.com/0/public/Ticker?pair=ETHEUR
       const currentPrice = parseFloat(
         (await kraken.publicApi(`/Ticker?pair=${this.#pair}`))[this.#pair].c[0]
       );
-      const prices = await kraken.getPrices(this.#pair).slice(-240); // since 4 hours
+      const prices = kraken.cleanPrices(await kraken.getPrices(this.#pair)).slice(-96); // since 8 hours
 
       const rsi = analyzer.calculateRSI(prices);
-      const changes = analyzer.findHighLowPriceChanges(prices.slice(-120), currentPrice); // last 2 hours
+      const sortedPrices = prices.slice(-24).sort(); // last 2 hours
+      const highestPrice = sortedPrices[sortedPrices.length - 1];
+      const lowestChange = analyzer.calculatePercentageChange(currentPrice, sortedPrices[0]);
+      const highestChange = analyzer.calculatePercentageChange(currentPrice, highestPrice);
 
       let decision = "hold";
       if (this.strategy == "average-price") {
-        decision = analyzer.calculateAveragePrice(prices, this.#pricePercentageThreshold, currentPrice);
+        decision = analyzer.calculateAveragePrice(prices, currentPrice, this.#pricePercentageThreshold);
       } else if (this.strategy == "highest-price") {
-        // const droppedPrice = changes.highest.percent <= -this.#pricePercentageThreshold;
-        if (changes.highest.percent <= -this.#pricePercentageThreshold) decision = "buy";
-        if (this.#pricePercentageThreshold <= changes.lowest.percent) decision = "sell";
+        if (highestChange <= -this.#pricePercentageThreshold) decision = "buy";
+        if (this.#pricePercentageThreshold <= lowestChange) decision = "sell";
       }
 
       // Testing Starts
+      const averagePrice = analyzer.calculateAveragePrice(prices);
       this.logger.info("Current balance => eur: ", availableEuro, `${this.name}: `, availableCrypto);
       this.logger.info(
-        `RSI: ${rsi} - Average:`,
-        analyzer.calculateAveragePrice(prices),
-        "Current:",
+        `RSI: ${rsi} - Current:`,
         currentPrice,
-        `change: "${analyzer.calculatePercentageChange(
-          currentPrice,
-          analyzer.calculateAveragePrice(prices)
-        )}%" => ${decision}`
-      );
-
-      this.logger.info(
-        `Lowest:`,
-        changes.lowest.price,
-        `=> ${changes.lowest.percent}% - ${changes.lowest.minsAgo}mins ago <|>`,
-        `Highest:`,
-        changes.highest.price,
-        `=> ${changes.highest.percent}% - ${changes.highest.minsAgo}mins ago`
+        `=> ${decision}`,
+        "- Lowest:",
+        sortedPrices[0],
+        "- Average:",
+        averagePrice,
+        `${analyzer.calculatePercentageChange(currentPrice, averagePrice)}%`,
+        "- Highest:",
+        sortedPrices[sortedPrices.length - 1],
+        `${highestChange}%`
       );
       // Testing Ends
 
@@ -113,14 +109,12 @@ module.exports = class DailyTrader {
       );
 
       if (70 <= rsi) {
-        this.logger.info("Suggest selling crypto because the price rose / increased");
-        // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
-        if (changes.highest.price <= currentPrice || 0 <= changes.highest.change) {
-          const period = minMs * 60 * 24 * 4;
-          orders = orders.concat(
-            this.orderState.getOrders((o) => period <= Date.now() - Date.parse(o.timeStamp))
-          );
-        }
+        // this.logger.info("Suggest selling crypto because the price rose / increased");
+        // // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
+        // if (highestPrice <= currentPrice || 0 <= highestChange) {
+        //   const check = (o) => minMs * 60 * 24 * 4 <= Date.now() - Date.parse(o.timeStamp);
+        //   orders = orders.concat(this.orderState.getOrders(check));
+        // }
       }
 
       if (availableCrypto > 0 && orders[0]) {
@@ -142,7 +136,7 @@ module.exports = class DailyTrader {
       this.logger.error("Error running bot:", error);
     }
 
-    console.log(`\n`);
+    // console.log(`\n`);
     setTimeout(() => this.start(), minMs * (Math.round(Math.random() * 3) + period));
   }
 };

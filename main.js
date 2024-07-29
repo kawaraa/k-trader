@@ -11,15 +11,15 @@ const traderName = process.argv[2]; // btc, eth, sol
 
 switch (traderName) {
   case "btc":
-    const btcTrader = new DailyTrader("btc", "average-price", "BTC/EUR", 1.4, 0.00016);
+    const btcTrader = new DailyTrader("btc", "average-price", "BTC/EUR", 1.5, 0.00016);
     btcTrader.start(7);
     break;
   case "eth":
-    const ethTrader = new DailyTrader("eth", "average-price", "ETH/EUR", 1.2, 0.0028); // 0.003
+    const ethTrader = new DailyTrader("eth", "average-price", "ETH/EUR", 1.4, 0.003);
     ethTrader.start(4);
     break;
   case "sol":
-    const solTrader = new DailyTrader("sol", "highest-price", "SOL/EUR", 1.2, 0.059);
+    const solTrader = new DailyTrader("sol", "highest-price", "SOL/EUR", 1.4, 0.059);
     solTrader.start(3);
     break;
   default:
