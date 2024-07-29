@@ -22,23 +22,23 @@ module.exports = class DailyTrader {
     this.name = name;
     this.ex = exchangeProvider;
     this.strategy = strategy;
-    this.logger = new Logger(name, true); // + "-daily-trader"
+    this.logger = new Logger(name || pair, true); // + "-daily-trader"
     this.state = new TradingState(`${name}-state.json`);
     this.#pair = pair;
     this.#pricePercentageThreshold = allowedPercentageChange; // percentageMargin
     this.#investedCapital = investingAmount; // investing Amount that will be used every time to by crypto
     this.#tradingAmount = 0; // cryptoTradingAmount
-    this.decision = "hold";
   }
 
-  async start(period = 4) {
+  async start(period) {
     try {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const currentPrice = await this.ex.currentPrice(this.#pair);
       const allPrices = await this.ex.prices(this.#pair); // For the last 2.5 days
       const prices = allPrices.slice(-144); // The last 12 hours
       this.#tradingAmount = +(this.#investedCapital / currentPrice).toFixed(4);
-      let currentStrategy = this.strategy;
+      let decision = "hold";
+      let currentStrategy = null; // This will pause buying in case there is a sudden significant rise in the price
 
       // Safety Check
       const sorted = prices.toSorted();
@@ -47,19 +47,21 @@ module.exports = class DailyTrader {
       const [low, high, time] = this.state.getSpike();
 
       if (this.#pricePercentageThreshold * 2 <= trendChange) {
-        // Lock the decision to "hold" when there is a sudden significant rise in the price
-        currentStrategy = "unknown";
         if (highest == 0) this.state.updateSpike(sorted[0], highest);
         else if (high < highest) this.state.updateSpike(low, highest);
-        this.logger.warn("The price is experiencing a significant increase");
       } else if (analyzer.calculatePercentageChange(currentPrice, low) <= this.#pricePercentageThreshold) {
-        // Unlock the decision when the current price is close to the low price in last two days
+        // Resume buying when the current price is close to the low price in last two days
         currentStrategy = this.strategy;
         this.state.updateSpike(0, 0);
-      } else if (Date.pars(time) < Date.now() - limitDaysMs) {
-        // Or unlock the decision when it passes two days
+        this.logger.warn("Resumed buying: The price returned to it's 'original' state");
+      } else if (Date.parse(time) < Date.now() - limitDaysMs) {
+        // Or resume buying when the price spike passes two days
         currentStrategy = "average-price";
         this.state.updateSpike(0, 0);
+        this.logger.warn("Resumed buying: The price stabilized on 'high' state");
+      }
+      if (!currentStrategy) {
+        this.logger.warn("Paused buying: The price is experiencing a significant increase");
       }
 
       const rsi = analyzer.calculateRSI(prices);
@@ -69,17 +71,17 @@ module.exports = class DailyTrader {
       const highestChange = analyzer.calculatePercentageChange(currentPrice, highestPrice);
 
       if (currentStrategy == "average-price") {
-        this.decision = analyzer.calculateAveragePrice(prices, currentPrice, this.#pricePercentageThreshold);
+        decision = analyzer.calculateAveragePrice(prices, currentPrice, this.#pricePercentageThreshold);
       } else if (currentStrategy == "highest-price") {
-        if (highestChange <= -this.#pricePercentageThreshold) this.decision = "buy";
-        if (this.#pricePercentageThreshold <= lowestChange) this.decision = "sell";
+        if (highestChange <= -this.#pricePercentageThreshold) decision = "buy";
+        if (this.#pricePercentageThreshold <= lowestChange) decision = "sell";
       }
 
       // Testing Starts
       const averagePrice = analyzer.calculateAveragePrice(prices);
       this.logger.info("Current balance => eur:", balance.eur, ` <|>  ${this.name}:`, balance.crypto);
       this.logger.info(
-        `RSI: ${rsi} => ${this.decision}`,
+        `RSI: ${rsi} => ${decision}`,
         "- Current:",
         currentPrice,
         "- Lowest:",
@@ -93,21 +95,21 @@ module.exports = class DailyTrader {
       );
       // Testing Ends
 
-      if (rsi < 30 && this.decision == "buy") {
-        this.logger.info("Suggest buying crypto because the price dropped");
+      if (rsi < 30 && decision == "buy") {
+        this.logger.warn("Suggest buying: the price dropped");
 
-        // calculates the amount of a cryptocurrency that can be purchased given current balance in fiat money and the price of the cryptocurrency.
+        // calculates the amount of a cryptocurrency that can be purchased given current balance in EUR and the price of the cryptocurrency.
         const remainingAmount = +(Math.min(this.#investedCapital, balance.eur) / currentPrice).toFixed(4);
 
         if (balance.eur > 0 && remainingAmount > this.#tradingAmount / 2) {
-          // Buy here
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, amount);
           const order = await this.ex.getOrder(orderId);
           this.state.addOrder(order);
           this.logger.warn(`Bought crypto with order ID "${order.id}"`);
         }
+        //
       } else if (70 < rsi) {
-        this.logger.info("Suggest selling crypto because the price rose / increased");
+        this.logger.warn("Suggest selling: the price rose / increased");
         // Get Orders that have price Lower Than the Current Price
         let orders = this.state.getOrder(
           (order) =>
@@ -120,7 +122,6 @@ module.exports = class DailyTrader {
         //   orders = orders.concat(this.state.getOrder(check));
         // }
 
-        // Sell the found orders
         if (balance.crypto > 0 && orders[0]) {
           for (const { id, volume } of orders) {
             await this.ex.createOrder("sell", "market", this.#pair, Math.min(volume, balance.crypto));
@@ -135,23 +136,6 @@ module.exports = class DailyTrader {
       this.logger.error("Error running bot:", error);
     }
 
-    setTimeout(() => this.start(), 60000 * (Math.round(Math.random() * 3) + period));
+    if (period) setTimeout(() => this.start(), 60000 * (Math.round(Math.random() * 3) + period));
   }
 };
-
-/* ========== Old code ========== */
-
-/* ===== Prices data ===== */
-// https://api.kraken.com/0/public/AssetPairs?pair=eth/eur&interval=5
-// https://api.kraken.com/0/public/OHLC?pair=eth/eur&interval=5
-// "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
-// const getPairData = (route = "OHLC", pair = "eth/eur", interval = 5) => {
-//   // route: AssetPairs / OHLC`
-//   return `/0/public/${route}?pair=${pair}&interval=${interval}`;
-// };
-
-/* ===== Order data ===== */
-// const openOrders = await kraken.privateApi("OpenOrders");
-// console.log("openOrders:", openOrders.open);
-// const closedOrders = await kraken.privateApi("ClosedOrders");
-// console.log("closedOrders:", closedOrders.closed);

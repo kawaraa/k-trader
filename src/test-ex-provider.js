@@ -1,20 +1,49 @@
-// balance, currentPrice, allPrices, createOrder, getOrder
+const { randomUUID } = require("node:crypto");
 
-module.exports = class Kraken {
-  constructor(credentials) {
-    this.#apiUrl = "https://api.kraken.com";
-    this.#apiKey = credentials.apiKey;
-    this.#apiSecret = credentials.privateKey;
+module.exports = class TestExchangeProvider {
+  constructor(balance, prices, oscillatorOffset) {
+    this.currentBalance = balance;
+    this.allPrices = prices;
+    this.currentPriceIndex = oscillatorOffset;
+    this.oscillatorOffset = oscillatorOffset;
   }
 
-  balance(path, options) {}
-  currentPrice(path, data = {}) {}
-  pricesData(pair, interval = 5, timestamp = "") {}
-  prices(pair) {}
-  createOrder(tradingType, orderType, pair, volume) {
-    const order = new Order(tradingType, orderType, pair, volume);
+  balance() {
+    return this.currentBalance;
   }
-  getOrder(orderId) {}
+  currentPrice() {
+    this.currentPriceIndex += 1;
+    return this.allPrices[this.currentPriceIndex];
+  }
+  prices() {
+    return this.allPrices.slice(
+      this.currentPriceIndex - Math.min(144, this.oscillatorOffset),
+      this.currentPriceIndex
+    );
+  }
+  createOrder(tradingType, b, c, amount) {
+    const cost = amount / this.allPrices[this.currentPriceIndex];
+    const fee = (cost * 0.4) / 100;
+    this.lastOrder = {
+      id: randomUUID(),
+      price: this.currentBalance[this.currentPriceIndex],
+      volume: amount,
+      cost: cost + fee,
+    };
+
+    if (tradingType == "buy") {
+      this.currentBalance.eur -= this.lastOrder.cost;
+      this.currentBalance.crypto += amount;
+    } else {
+      this.currentBalance.eur += this.lastOrder.cost;
+      this.currentBalance.crypto -= amount;
+    }
+
+    return this.lastOrder.id;
+  }
+  getOrder(orderId) {
+    return this.lastOrder;
+  }
 };
 
 class Order {

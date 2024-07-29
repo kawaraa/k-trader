@@ -1,7 +1,7 @@
-const Kraken = require("./src/kraken-ex-provider.js");
+const KrakenExchangeProvider = require("./src/kraken-ex-provider.js");
 const DailyTrader = require("./src/daily-trader");
 
-const kraken = new Kraken(require("./.env.json"));
+const kraken = new KrakenExchangeProvider(require("./.env.json"));
 
 const pair = process.argv[2]; // BTCEUR, ETHEUR, SOLEUR
 const traderName = pair.replace("EUR", ""); // btc, eth, sol etc
@@ -19,13 +19,13 @@ switch (traderName) {
     btcTrader.start(7);
     break;
   case "ETH":
-    const ethTrader = new DailyTrader("eth", kraken, "ETHEUR", "average-price", 1.4, 10);
+    const ethTrader = new DailyTrader("eth", kraken, "ETHEUR", "average-price", 1.5, 10);
     ethTrader.start(4);
     break;
   case "SOL":
-    const solTrader = new DailyTrader("sol", kraken, "SOLEUR", "highest-price", 1.4, 10);
+    const solTrader = new DailyTrader("sol", kraken, "SOLEUR", "highest-price", 1.5, 10);
     solTrader.start(3);
     break;
   default:
-    console.log(`"${trader}" is not a valid trader name!`);
+    console.log(`"${traderName}" is not a valid trader name!`);
 }

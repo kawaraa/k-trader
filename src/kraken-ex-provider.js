@@ -1,10 +1,11 @@
 const { createHash, createHmac } = require("node:crypto");
 const { parseNumbers } = require("./utilities.js");
 
-module.exports = class Kraken {
+module.exports = class KrakenExchangeProvider {
   #apiUrl;
   #apiKey;
   #apiSecret;
+
   constructor(credentials) {
     this.#apiUrl = "https://api.kraken.com";
     this.#apiKey = credentials.apiKey;
@@ -24,15 +25,8 @@ module.exports = class Kraken {
     if (!res.error[0]) return res.result;
     else throw new Error(res.error.reduce((acc, err) => acc + "\n" + err, ""));
   }
-
-  // Function to make calls to public API
-  publicApi(path, options) {
-    return fetch(`${this.#apiUrl}/0/public${path}`, options)
-      .then((res) => res.json())
-      .then(this.#checkError);
-  }
   // Function to make calls to private API
-  async privateApi(path, data = {}) {
+  #privateApi(path, data = {}) {
     path = `/0/private/${path}`;
     data.nonce = Date.now() * 1000;
     const body = JSON.stringify(data);
@@ -50,10 +44,16 @@ module.exports = class Kraken {
       .then((res) => res.json())
       .then(this.#checkError);
   }
+  // Function to make calls to public API
+  publicApi(path, options) {
+    return fetch(`${this.#apiUrl}/0/public${path}`, options)
+      .then((res) => res.json())
+      .then(this.#checkError);
+  }
 
   async balance(pair) {
     const curMap = { BTC: "XXBT", ETH: "XETH", SOL: "SOL" };
-    const balance = parseNumbers(await this.privateApi("Balance"));
+    const balance = parseNumbers(await this.#privateApi("Balance"));
     return { eur: +balance.ZEUR, crypto: +(balance[pair] || balance[curMap[pair.replace("EUR", "")]]) };
   }
   async currentPrice(pair) {
@@ -63,6 +63,7 @@ module.exports = class Kraken {
   async pricesData(pair, interval = 5, timestamp = "") {
     const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${timestamp}`);
     return data[Object.keys(data)[0]];
+    // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
   }
   async prices(pair) {
     const prices = await this.pricesData(pair);
@@ -71,10 +72,14 @@ module.exports = class Kraken {
   }
   async createOrder(type, ordertype, pair, volume) {
     volume += "";
-    return (await kraken.privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
+    return (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
   }
   async getOrder(orderId) {
-    const o = (await kraken.privateApi("QueryOrders", { txid: orderId }))[orderId];
+    const o = (await this.#privateApi("QueryOrders", { txid: orderId }))[orderId];
     return { id: orderId, price: +o.price, volume: +o.vol_exec, cost: +cost + +fee };
+  }
+  async getOpenClosedOrders(state) {
+    if (state == "open") return (await this.#privateApi("OpenOrders")).open;
+    else (await this.#privateApi("ClosedOrders")).closed;
   }
 };

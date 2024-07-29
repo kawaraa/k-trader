@@ -36,11 +36,11 @@ module.exports = class TradingState {
   }
   updateSpike(lowPrice, heighPrice, time = dateToString()) {
     const state = this.#loadFile();
-    state.spike = `${lowPrice}:${heighPrice}:${time}`;
+    state.spike = `${lowPrice}_${heighPrice}_${time}`;
     this.#updateFile(state);
   }
   getSpike() {
-    let [low, high, time] = this.#loadFile().spike.split(":");
+    let [low, high, time] = this.#loadFile().spike.split("_");
     low = Number.isNaN(+low) ? 0 : +low;
     high = Number.isNaN(+high) ? 0 : +high;
     return [low, high, time || ""];
