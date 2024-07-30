@@ -117,7 +117,7 @@ function findHighLowPriceChanges(prices, currentPrice) {
 function calculateAveragePrice(prices, currentPrice, percentageChange) {
   if (prices.length === 0) throw new Error("Price list cannot be empty.");
   const total = prices.reduce((sum, price) => sum + price, 0);
-  const averagePrice = +(total / prices.length).toFixed(2);
+  const averagePrice = +(total / prices.length).toFixed(8);
   if (!currentPrice) return averagePrice;
 
   const change = calculatePercentageChange(currentPrice, averagePrice);
@@ -127,10 +127,10 @@ function calculateAveragePrice(prices, currentPrice, percentageChange) {
 }
 
 function calculatePercentageChange(currentPrice, pastPrice, returnString) {
-  if (!(pastPrice >= 0 || currentPrice >= 0)) {
+  if (!(pastPrice >= 0 && currentPrice >= 0)) {
     throw new Error(`"currentPrice" and "pastPrice" values must be integer greater than zero.`);
   }
-  const change = +(((currentPrice - pastPrice) / pastPrice) * 100).toFixed(2);
+  const change = +(((currentPrice - pastPrice) / (pastPrice || 0)) * 100).toFixed(2);
   return !returnString ? change : `The price ${change < 0 ? "drops" : "increases"} ${change}%`;
 }
 
@@ -154,7 +154,7 @@ function countPercentageChange(prices, percentageThreshold) {
 function calculateEarnings(currentPrice, previousPrice, investedAmount) {
   const investedAmountIncludedProfit = (investedAmount / previousPrice) * currentPrice;
   const earnings = investedAmountIncludedProfit - investedAmount;
-  return +earnings.toFixed(2);
+  return +earnings.toFixed(8);
 }
 
 function calculateProfit(currentPrice, orderPrice, cryptoVolume) {

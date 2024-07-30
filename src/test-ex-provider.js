@@ -1,11 +1,12 @@
 const { randomUUID } = require("node:crypto");
-const pricesOffset = 144;
 
 module.exports = class TestExchangeProvider {
-  constructor(balance, prices) {
+  constructor(balance, prices, previousPricesLimit = 12) {
+    const limit = (previousPricesLimit * 60) / 5;
     this.currentBalance = balance;
     this.allPrices = prices;
-    this.currentPriceIndex = pricesOffset;
+    this.currentPriceIndex = limit;
+    this.pricesLimit = limit;
   }
 
   async balance() {
@@ -17,13 +18,13 @@ module.exports = class TestExchangeProvider {
     return price;
   }
   async prices() {
-    return this.allPrices.slice(this.currentPriceIndex - pricesOffset, this.currentPriceIndex);
+    return this.allPrices.slice(this.currentPriceIndex - this.pricesLimit, this.currentPriceIndex);
   }
   async createOrder(tradingType, b, c, amount) {
     const cost = amount * this.allPrices[this.currentPriceIndex];
     const fee = (cost * 0.4) / 100;
 
-    this.lastOrder = {
+    const newOrder = {
       id: randomUUID(),
       price: this.allPrices[this.currentPriceIndex],
       volume: amount,
@@ -31,15 +32,18 @@ module.exports = class TestExchangeProvider {
     };
 
     if (tradingType == "buy") {
-      if (this.currentBalance.eur < this.lastOrder.cost) throw new Error("No enough money");
-      this.currentBalance.eur -= this.lastOrder.cost;
+      const remainingBalance = this.currentBalance.eur - newOrder.cost;
+      if (remainingBalance < 0) throw new Error("No enough money");
+      this.currentBalance.eur = remainingBalance;
       this.currentBalance.crypto += amount;
     } else {
-      if (this.currentBalance.crypto < amount) throw new Error("No enough crypto");
-      this.currentBalance.eur += this.lastOrder.cost;
-      this.currentBalance.crypto -= amount;
+      const remainingCrypto = +(this.currentBalance.crypto - amount).toFixed(8);
+      if (remainingCrypto < 0) throw new Error("No enough crypto");
+      this.currentBalance.eur += newOrder.cost - fee * 2;
+      this.currentBalance.crypto = remainingCrypto;
     }
 
+    this.lastOrder = newOrder;
     return this.lastOrder.id;
   }
   async getOrder(orderId) {

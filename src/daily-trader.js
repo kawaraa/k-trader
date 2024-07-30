@@ -35,44 +35,37 @@ module.exports = class DailyTrader {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const currentPrice = await this.ex.currentPrice(this.#pair);
       const allPrices = await this.ex.prices(this.#pair); // For the last 2.5 days
-      const prices = allPrices.slice(-144); // The last 12 hours
-      this.#tradingAmount = +(this.#investedCapital / currentPrice).toFixed(4);
+      const prices = allPrices.slice(-(12 * 60) / 5); // The last 12 hours
+      this.#tradingAmount = +(this.#investedCapital / currentPrice).toFixed(8);
       let decision = "hold";
       let currentStrategy = this.strategy;
 
       // Safety Check
-      const sorted = allPrices.slice(-((60 * this.safetyTimeline) / 5)).toSorted();
+      const sorted = allPrices.slice(-((this.safetyTimeline * 60) / 5)).toSorted();
       const highest = sorted[sorted.length - 1];
       const spikeChange = analyzer.calculatePercentageChange(highest, sorted[0]);
       const trendChange = analyzer.calculatePercentageChange(currentPrice, sorted[0]);
+
       // Check if the highest price in the last xxx is too high
-      if (this.#pricePercentageThreshold * 2 <= spikeChange) {
+      // Check if the current price is still not close to the lowest price in the last xxx
+      if (this.#pricePercentageThreshold * 2 <= spikeChange && this.#pricePercentageThreshold < trendChange) {
         // Pause buying when there is a sudden significant rise in the price or if the price keeps rising
         currentStrategy = null;
-
-        // Check if the current price is close to the low price
-      } else if (this.#pricePercentageThreshold < trendChange) {
-        currentStrategy = null; // Pause buying when the price is still high
-      }
-
-      if (!currentStrategy) {
         this.logger.warn("Paused buying: The price is experiencing a significant increase");
-      } else {
-        // // Or resume buying when the price spike passes two days
-        //  this.logger.warn("Resumed buying: The price returned to it's 'original' state or stabilized");
       }
+      // Else the price spike has passed or the stabilized
 
       const rsi = analyzer.calculateRSI(prices);
       const sortedPrices = prices.slice(-24).sort(); // last 2 hours
       const highestPrice = sortedPrices[sortedPrices.length - 1];
-      const lowestChange = analyzer.calculatePercentageChange(currentPrice, sortedPrices[0]);
+      // const lowestChange = analyzer.calculatePercentageChange(currentPrice, sortedPrices[0]);
       const highestChange = analyzer.calculatePercentageChange(currentPrice, highestPrice);
 
       if (currentStrategy == "average-price") {
         decision = analyzer.calculateAveragePrice(prices, currentPrice, this.#pricePercentageThreshold);
       } else if (currentStrategy == "highest-price") {
         if (highestChange <= -this.#pricePercentageThreshold) decision = "buy";
-        if (this.#pricePercentageThreshold <= lowestChange) decision = "sell";
+        // if (this.#pricePercentageThreshold <= lowestChange) decision = "sell";
       }
 
       // Testing Starts
@@ -97,7 +90,7 @@ module.exports = class DailyTrader {
         this.logger.warn("Suggest buying: the price dropped");
 
         // calculates the amount of a cryptocurrency that can be purchased given current balance in EUR and the price of the cryptocurrency.
-        const remainingAmount = +(Math.min(this.#investedCapital, balance.eur) / currentPrice).toFixed(4);
+        const remainingAmount = +(Math.min(this.#investedCapital, balance.eur) / currentPrice).toFixed(8);
 
         if (balance.eur > 0 && remainingAmount > this.#tradingAmount / 2) {
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remainingAmount);
