@@ -17,10 +17,9 @@ module.exports = class DailyTrader {
   #pricePercentageThreshold;
   #tradingAmount;
   #investedCapital;
-  constructor(name, exchangeProvider, pair, strategy, percentageChange, investingAmount, safetyTimeline) {
+  constructor(name, exchangeProvider, pair, percentageChange, investingAmount, safetyTimeline) {
     this.name = name;
     this.ex = exchangeProvider;
-    this.strategy = strategy;
     this.logger = new Logger(name || pair, true); // + "-daily-trader"
     this.state = new TradingState(`${name}-state.json`);
     this.#pair = pair;
@@ -37,52 +36,35 @@ module.exports = class DailyTrader {
       const allPrices = await this.ex.prices(this.#pair); // For the last 2.5 days
       const prices = allPrices.slice(-(12 * 60) / 5); // The last 12 hours
       this.#tradingAmount = +(this.#investedCapital / currentPrice).toFixed(8);
-      let decision = "hold";
-      let currentStrategy = this.strategy;
+
+      const rsi = analyzer.calculateRSI(prices);
+      let decision = analyzer.calculateAveragePrice(prices, currentPrice, this.#pricePercentageThreshold);
 
       // Safety Check
       const sorted = allPrices.slice(-((this.safetyTimeline * 60) / 5)).toSorted();
-      const highest = sorted[sorted.length - 1];
-      const spikeChange = analyzer.calculatePercentageChange(highest, sorted[0]);
+      const spikeChange = analyzer.calculatePercentageChange(sorted[sorted.length - 1], sorted[0]);
       const trendChange = analyzer.calculatePercentageChange(currentPrice, sorted[0]);
 
       // Check if the highest price in the last xxx is too high
       // Check if the current price is still not close to the lowest price in the last xxx
       if (this.#pricePercentageThreshold * 2 <= spikeChange && this.#pricePercentageThreshold < trendChange) {
         // Pause buying when there is a sudden significant rise in the price or if the price keeps rising
-        currentStrategy = null;
+        decision = "hold";
         this.logger.warn("Paused buying: The price is experiencing a significant increase");
       }
       // Else the price spike has passed or the stabilized
 
-      const rsi = analyzer.calculateRSI(prices);
-      const sortedPrices = prices.slice(-24).sort(); // last 2 hours
-      const highestPrice = sortedPrices[sortedPrices.length - 1];
-      // const lowestChange = analyzer.calculatePercentageChange(currentPrice, sortedPrices[0]);
-      const highestChange = analyzer.calculatePercentageChange(currentPrice, highestPrice);
-
-      if (currentStrategy == "average-price") {
-        decision = analyzer.calculateAveragePrice(prices, currentPrice, this.#pricePercentageThreshold);
-      } else if (currentStrategy == "highest-price") {
-        if (highestChange <= -this.#pricePercentageThreshold) decision = "buy";
-        // if (this.#pricePercentageThreshold <= lowestChange) decision = "sell";
-      }
-
       // Testing Starts
       const averagePrice = analyzer.calculateAveragePrice(prices);
+      const change = analyzer.calculatePercentageChange(currentPrice, averagePrice);
       this.logger.info("Current balance => eur:", balance.eur, ` <|>  ${this.name}:`, balance.crypto);
       this.logger.info(
         `RSI: ${rsi} => ${decision}`,
         "- Current:",
         currentPrice,
-        // "- Lowest:",
-        // sortedPrices[0],
         "- Average:",
         averagePrice,
-        `${analyzer.calculatePercentageChange(currentPrice, averagePrice)}%`
-        // "- Highest:",
-        // sortedPrices[sortedPrices.length - 1],
-        // `${highestChange}%`
+        `${change}%`
       );
       // Testing Ends
 
