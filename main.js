@@ -3,8 +3,8 @@ const DailyTrader = require("./src/daily-trader");
 
 const kraken = new KrakenExchangeProvider(require("./.env.json"));
 
-const pair = process.argv[2]; // BTCEUR, ETHEUR, SOLEUR
-const traderName = pair.replace("EUR", ""); // btc, eth, sol etc
+// const pair = process.argv[2]; // BTCEUR, ETHEUR, SOLEUR
+// const traderName = pair.replace("EUR", ""); // btc, eth, sol etc
 // const strategy = process.argv[3] || "average-price"; // average-price or highest-price
 // const pricePercentageThreshold = process.argv[4] || 1.5; // 0 to 100, default is 1.4
 // const investingAmount = process.argv[5] || 10; // Investing Amount in EUR that will be used every time to by crypto
@@ -13,19 +13,22 @@ const traderName = pair.replace("EUR", ""); // btc, eth, sol etc
 // const trader = new DailyTrader(, strategy, pair, pricePercentageThreshold, cryptoTradingAmount);
 // trader.start(timeInterval);
 
-switch (traderName) {
-  case "BTC":
-    const btcTrader = new DailyTrader("btc", kraken, "BTCEUR", "average-price", 1.5, 10);
-    btcTrader.start(7);
-    break;
-  case "ETH":
-    const ethTrader = new DailyTrader("eth", kraken, "ETHEUR", "average-price", 1.5, 10);
-    ethTrader.start(4);
-    break;
-  case "SOL":
-    const solTrader = new DailyTrader("sol", kraken, "SOLEUR", "highest-price", 1.5, 10);
-    solTrader.start(3);
-    break;
-  default:
-    console.log(`"${traderName}" is not a valid trader name!`);
-}
+// switch (traderName) {
+//   case "BTC":
+//     const btcTrader = new DailyTrader("btc", kraken, "BTCEUR", "average-price", 1.5, 10, 8);
+//     btcTrader.start(7);
+//     break;
+//   case "ETH":
+//     const ethTrader = new DailyTrader("eth", kraken, "ETHEUR", "average-price", 1.5, 10, 8);
+//     ethTrader.start(4);
+//     break;
+//   case "SOL":
+//     const solTrader = new DailyTrader("sol", kraken, "SOLEUR", "average-price", 1.5, 10, 8);
+//     solTrader.start(3);
+//     break;
+//   default:
+//     console.log(`"${traderName}" is not a valid trader name!`);
+// }
+
+const solTrader = new DailyTrader("adx", kraken, "ADXEUR", "average-price", 1.5, 10, 8);
+solTrader.start(3);

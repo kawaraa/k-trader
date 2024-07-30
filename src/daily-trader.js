@@ -75,14 +75,14 @@ module.exports = class DailyTrader {
         `RSI: ${rsi} => ${decision}`,
         "- Current:",
         currentPrice,
-        "- Lowest:",
-        sortedPrices[0],
+        // "- Lowest:",
+        // sortedPrices[0],
         "- Average:",
         averagePrice,
-        `${analyzer.calculatePercentageChange(currentPrice, averagePrice)}%`,
-        "- Highest:",
-        sortedPrices[sortedPrices.length - 1],
-        `${highestChange}%`
+        `${analyzer.calculatePercentageChange(currentPrice, averagePrice)}%`
+        // "- Highest:",
+        // sortedPrices[sortedPrices.length - 1],
+        // `${highestChange}%`
       );
       // Testing Ends
 
@@ -123,10 +123,11 @@ module.exports = class DailyTrader {
       } else {
         this.logger.info("Suggest waiting for the price to change...");
       }
+      console.log("\n");
     } catch (error) {
       this.logger.error("Error running bot:", error);
     }
 
-    if (period) setTimeout(() => this.start(), 60000 * (Math.round(Math.random() * 3) + period));
+    if (period) setTimeout(() => this.start(period), 60000 * (Math.round(Math.random() * 3) + period));
   }
 };

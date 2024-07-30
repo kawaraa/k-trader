@@ -12,7 +12,7 @@ const files = readdirSync(`${process.cwd()}/data`);
   for (const file of files) {
     const prices = JSON.parse(readFileSync(`${folderPath}/${file}`, "utf8")).last30DaysPrices;
     const pair = file.replace(".json", "");
-    if (pair != "ALCXEUR") continue;
+    if (pair != "BRICKEUR") continue;
     const sorted = prices.toSorted();
     console.log("The lowest price: ", sorted[0], "The highest price: ", sorted[sorted.length - 1]);
 
