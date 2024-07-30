@@ -11,23 +11,23 @@ Recommendation:
 const { Logger } = require("k-utilities");
 const TradingState = require("./trading-state.js");
 const analyzer = require("./trend-analysis.js");
-const limitDaysMs = 1000 * 60 * 60 * 24 * 2; // 2 days in milliseconds
 
 module.exports = class DailyTrader {
   #pair;
   #pricePercentageThreshold;
   #tradingAmount;
   #investedCapital;
-  constructor(name, exchangeProvider, pair, strategy, allowedPercentageChange, investingAmount) {
+  constructor(name, exchangeProvider, pair, strategy, percentageChange, investingAmount, safetyTimeline) {
     this.name = name;
     this.ex = exchangeProvider;
     this.strategy = strategy;
     this.logger = new Logger(name || pair, true); // + "-daily-trader"
     this.state = new TradingState(`${name}-state.json`);
     this.#pair = pair;
-    this.#pricePercentageThreshold = allowedPercentageChange; // percentageMargin
+    this.#pricePercentageThreshold = percentageChange; // percentageMargin
     this.#investedCapital = investingAmount; // investing Amount that will be used every time to by crypto
     this.#tradingAmount = 0; // cryptoTradingAmount
+    this.safetyTimeline = safetyTimeline < 60 ? safetyTimeline : 48; // Number of hours, Default is 48 hours, the limit is 60 (2.5 days) because the price interval is 5 in the Exchange Provider
   }
 
   async start(period) {
@@ -38,30 +38,28 @@ module.exports = class DailyTrader {
       const prices = allPrices.slice(-144); // The last 12 hours
       this.#tradingAmount = +(this.#investedCapital / currentPrice).toFixed(4);
       let decision = "hold";
-      let currentStrategy = null; // This will pause buying in case there is a sudden significant rise in the price
+      let currentStrategy = this.strategy;
 
       // Safety Check
-      const sorted = prices.toSorted();
+      const sorted = allPrices.slice(-((60 * this.safetyTimeline) / 5)).toSorted();
       const highest = sorted[sorted.length - 1];
-      const trendChange = analyzer.calculatePercentageChange(highest, sorted[0]);
-      const [low, high, time] = this.state.getSpike();
+      const spikeChange = analyzer.calculatePercentageChange(highest, sorted[0]);
+      const trendChange = analyzer.calculatePercentageChange(currentPrice, sorted[0]);
+      // Check if the highest price in the last xxx is too high
+      if (this.#pricePercentageThreshold * 2 <= spikeChange) {
+        // Pause buying when there is a sudden significant rise in the price or if the price keeps rising
+        currentStrategy = null;
 
-      if (this.#pricePercentageThreshold * 2 <= trendChange) {
-        if (highest == 0) this.state.updateSpike(sorted[0], highest);
-        else if (high < highest) this.state.updateSpike(low, highest);
-      } else if (analyzer.calculatePercentageChange(currentPrice, low) <= this.#pricePercentageThreshold) {
-        // Resume buying when the current price is close to the low price in last two days
-        currentStrategy = this.strategy;
-        this.state.updateSpike(0, 0);
-        this.logger.warn("Resumed buying: The price returned to it's 'original' state");
-      } else if (Date.parse(time) < Date.now() - limitDaysMs) {
-        // Or resume buying when the price spike passes two days
-        currentStrategy = "average-price";
-        this.state.updateSpike(0, 0);
-        this.logger.warn("Resumed buying: The price stabilized on 'high' state");
+        // Check if the current price is close to the low price
+      } else if (this.#pricePercentageThreshold < trendChange) {
+        currentStrategy = null; // Pause buying when the price is still high
       }
+
       if (!currentStrategy) {
         this.logger.warn("Paused buying: The price is experiencing a significant increase");
+      } else {
+        // // Or resume buying when the price spike passes two days
+        //  this.logger.warn("Resumed buying: The price returned to it's 'original' state or stabilized");
       }
 
       const rsi = analyzer.calculateRSI(prices);
@@ -102,7 +100,7 @@ module.exports = class DailyTrader {
         const remainingAmount = +(Math.min(this.#investedCapital, balance.eur) / currentPrice).toFixed(4);
 
         if (balance.eur > 0 && remainingAmount > this.#tradingAmount / 2) {
-          const orderId = await this.ex.createOrder("buy", "market", this.#pair, amount);
+          const orderId = await this.ex.createOrder("buy", "market", this.#pair, remainingAmount);
           const order = await this.ex.getOrder(orderId);
           this.state.addOrder(order);
           this.logger.warn(`Bought crypto with order ID "${order.id}"`);
@@ -111,7 +109,7 @@ module.exports = class DailyTrader {
       } else if (70 < rsi) {
         this.logger.warn("Suggest selling: the price rose / increased");
         // Get Orders that have price Lower Than the Current Price
-        let orders = this.state.getOrder(
+        const orders = this.state.getOrder(
           (order) =>
             this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(currentPrice, order.price)
         );

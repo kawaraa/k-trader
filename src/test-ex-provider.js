@@ -1,47 +1,48 @@
 const { randomUUID } = require("node:crypto");
+const pricesOffset = 144;
 
 module.exports = class TestExchangeProvider {
-  constructor(balance, prices, oscillatorOffset) {
+  constructor(balance, prices) {
     this.currentBalance = balance;
     this.allPrices = prices;
-    this.currentPriceIndex = oscillatorOffset;
-    this.oscillatorOffset = oscillatorOffset;
+    this.currentPriceIndex = pricesOffset;
   }
 
-  balance() {
+  async balance() {
     return this.currentBalance;
   }
-  currentPrice() {
+  async currentPrice() {
+    const price = this.allPrices[this.currentPriceIndex];
     this.currentPriceIndex += 1;
-    return this.allPrices[this.currentPriceIndex];
+    return price;
   }
-  prices() {
-    return this.allPrices.slice(
-      this.currentPriceIndex - Math.min(144, this.oscillatorOffset),
-      this.currentPriceIndex
-    );
+  async prices() {
+    return this.allPrices.slice(this.currentPriceIndex - pricesOffset, this.currentPriceIndex);
   }
-  createOrder(tradingType, b, c, amount) {
-    const cost = amount / this.allPrices[this.currentPriceIndex];
+  async createOrder(tradingType, b, c, amount) {
+    const cost = amount * this.allPrices[this.currentPriceIndex];
     const fee = (cost * 0.4) / 100;
+
     this.lastOrder = {
       id: randomUUID(),
-      price: this.currentBalance[this.currentPriceIndex],
+      price: this.allPrices[this.currentPriceIndex],
       volume: amount,
       cost: cost + fee,
     };
 
     if (tradingType == "buy") {
+      if (this.currentBalance.eur < this.lastOrder.cost) throw new Error("No enough money");
       this.currentBalance.eur -= this.lastOrder.cost;
       this.currentBalance.crypto += amount;
     } else {
+      if (this.currentBalance.crypto < amount) throw new Error("No enough crypto");
       this.currentBalance.eur += this.lastOrder.cost;
       this.currentBalance.crypto -= amount;
     }
 
     return this.lastOrder.id;
   }
-  getOrder(orderId) {
+  async getOrder(orderId) {
     return this.lastOrder;
   }
 };

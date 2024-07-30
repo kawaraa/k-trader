@@ -20,8 +20,8 @@ module.exports = class TradingState {
 
   addOrder(order) {
     order.timestamp = dateToString();
-    const state = this.#loadFile().orders;
-    state.orders.push({ id, price, volume, cost, timeStamp });
+    const state = this.#loadFile();
+    state.orders.push(order);
     this.#updateFile(state);
   }
   getOrder(cb) {
@@ -34,15 +34,15 @@ module.exports = class TradingState {
     state.orders = state.orders.filter((order) => !orderIds.includes(order.id));
     this.#updateFile(state);
   }
-  updateSpike(lowPrice, heighPrice, time = dateToString()) {
-    const state = this.#loadFile();
-    state.spike = `${lowPrice}_${heighPrice}_${time}`;
-    this.#updateFile(state);
-  }
-  getSpike() {
-    let [low, high, time] = this.#loadFile().spike.split("_");
-    low = Number.isNaN(+low) ? 0 : +low;
-    high = Number.isNaN(+high) ? 0 : +high;
-    return [low, high, time || ""];
-  }
+  // updateSpike(lowPrice, heighPrice, time = dateToString()) {
+  //   const state = this.#loadFile();
+  //   state.spike = `${lowPrice}_${heighPrice}_${time}`;
+  //   this.#updateFile(state);
+  // }
+  // getSpike() {
+  //   let [low, high, time] = this.#loadFile().spike.split("_");
+  //   low = Number.isNaN(+low) ? 0 : +low;
+  //   high = Number.isNaN(+high) ? 0 : +high;
+  //   return [low, high, time || ""];
+  // }
 };
