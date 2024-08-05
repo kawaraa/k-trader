@@ -1,5 +1,5 @@
 const { createHash, createHmac } = require("node:crypto");
-const { parseNumbers } = require("./utilities.js");
+const { parseNumbers, delay } = require("./utilities.js");
 
 module.exports = class KrakenExchangeProvider {
   #apiUrl;
@@ -53,20 +53,30 @@ module.exports = class KrakenExchangeProvider {
 
   async balance(pair) {
     const curMap = { BTC: "XXBT", ETH: "XETH", SOL: "SOL" };
+    const key = pair.replace("EUR", "");
     const balance = parseNumbers(await this.#privateApi("Balance"));
-    return { eur: +balance.ZEUR, crypto: +(balance[pair] || balance[curMap[pair.replace("EUR", "")]]) };
+    if (pair == "all") return balance;
+    return { eur: +balance.ZEUR, crypto: +(balance[curMap[key]] || balance[key] || 0) };
   }
   async currentPrice(pair) {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
     return parseFloat(data[Object.keys(data)[0]].c[0]);
   }
-  async pricesData(pair, interval = 5, timestamp = "") {
-    const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${timestamp}`);
-    return data[Object.keys(data)[0]];
+  async pricesData(pair, lastDays = 0.5, interval = 5) {
+    let allPrices = [];
+    let timestamp = "";
+
+    while (lastDays > (allPrices.length * 5) / 60 / 24) {
+      const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${timestamp}`);
+      allPrices = data[Object.keys(data)[0]].concat(allPrices);
+      timestamp = allPrices[0][0]; // The oldest timestamp in the retrieved data
+      await delay(5000);
+    }
+    return allPrices.slice(-((lastDays * 24 * 60) / 5));
     // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
   }
-  async prices(pair) {
-    const prices = await this.pricesData(pair);
+  async prices(pair, lastDays) {
+    const prices = await this.pricesData(pair, lastDays);
     prices.pop();
     return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
   }
@@ -74,9 +84,11 @@ module.exports = class KrakenExchangeProvider {
     volume += "";
     return (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
   }
-  async getOrder(orderId) {
-    const o = (await this.#privateApi("QueryOrders", { txid: orderId }))[orderId];
-    return { id: orderId, price: +o.price, volume: +o.vol_exec, cost: +cost + +fee };
+  async getOrders(orderIds) {
+    const orders = await this.#privateApi("QueryOrders", { txid: orderIds });
+    return Object.keys(orders).map((id) => {
+      return { id, price: +orders[id].price, volume: +orders[id].vol_exec, cost: +orders[id].cost };
+    });
   }
   async getOpenClosedOrders(state) {
     if (state == "open") return (await this.#privateApi("OpenOrders")).open;

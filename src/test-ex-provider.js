@@ -1,12 +1,11 @@
 const { randomUUID } = require("node:crypto");
 
 module.exports = class TestExchangeProvider {
-  constructor(balance, prices, previousPricesLimit = 12) {
-    const limit = (previousPricesLimit * 60) / 5;
+  constructor(balance, prices, priceIndex) {
     this.currentBalance = balance;
     this.allPrices = prices;
-    this.currentPriceIndex = limit;
-    this.pricesLimit = limit;
+    this.currentPriceIndex = priceIndex;
+    this.orders = [];
   }
 
   async balance() {
@@ -17,8 +16,8 @@ module.exports = class TestExchangeProvider {
     this.currentPriceIndex += 1;
     return price;
   }
-  async prices() {
-    return this.allPrices.slice(this.currentPriceIndex - this.pricesLimit, this.currentPriceIndex);
+  async prices(pair, lastDays) {
+    return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
   }
   async createOrder(tradingType, b, c, amount) {
     const cost = amount * this.allPrices[this.currentPriceIndex];
@@ -42,12 +41,11 @@ module.exports = class TestExchangeProvider {
       this.currentBalance.eur += newOrder.cost - fee * 2;
       this.currentBalance.crypto = remainingCrypto;
     }
-
-    this.lastOrder = newOrder;
-    return this.lastOrder.id;
+    this.orders.push(newOrder);
+    return newOrder.id;
   }
-  async getOrder(orderId) {
-    return this.lastOrder;
+  async getOrders(ordersIds) {
+    return this.orders.filter((o) => ordersIds.includes(o.id));
   }
 };
 

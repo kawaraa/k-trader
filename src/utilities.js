@@ -1,3 +1,5 @@
+const tradableCurrencies = require("./tradable-currencies.json");
+
 function parseNumbers(data) {
   if (Array.isArray(data)) return data.map((n) => +n);
   for (const key in data) data[key] = +data[key];
@@ -13,20 +15,31 @@ function dateToString(date = new Date(), seconds) {
   return new Date(date).toISOString().slice(0, unWantedChar).replace("T", " ");
 }
 
-async function waitForApiLimit(lastApiCall, lastApiCall) {
-  let elapsedTime = (Date.now() - lastApiCall) / 1000;
-  apiCounter += elapsedTime * 0.33; // Increment counter based on elapsed time
-  apiCounter = Math.min(apiCounter, 15); // Cap the counter at 15
-  while (apiCounter < 1) {
-    // Ensure at least one API call is available
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    elapsedTime = (Date.now() - lastApiCall) / 1000;
-    apiCounter += elapsedTime * 0.33;
-    apiCounter = Math.min(apiCounter, 15);
-  }
-  apiCounter -= 1; // Decrement the counter for the current API call
-  lastApiCall = Date.now();
-  return { apiCounter, lastApiCall };
+function isValidPair(pair, throwError) {
+  if (tradableCurrencies[pair]) return pair;
+  if (!throwError) return null;
+  else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
 }
 
-module.exports = { parseNumbers, dateToString, waitForApiLimit, delay };
+function parseError(value, msgs = "") {
+  if (value && typeof value != "object") return msgs + value + " ";
+  else if (Array.isArray(value)) value.forEach((item) => (msgs += parseError(item)));
+  else if (typeof value == "object") Object.keys(value).forEach((key) => (msgs += parseError(value[key])));
+  return msgs?.trim() || "Unknown error";
+}
+function request() {
+  return fetch(...arguments)
+    .then(async (res) => {
+      let data = await res.text();
+      try {
+        data = JSON.parse(data);
+      } catch (err) {}
+      if (!res.ok) throw data;
+      return data;
+    })
+    .catch((error) => {
+      throw new Error(parseError(error));
+    });
+}
+
+module.exports = { request, parseError, delay, dateToString, parseNumbers, isValidPair };

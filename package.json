@@ -1,15 +1,28 @@
 {
-  "name": "cryptocurrency",
-  "version": "1.0.0",
+  "name": "k-trader",
+  "version": "0.1.0",
   "author": "Kawara",
-  "description": "Cryptocurrency Trading Bots",
-  "main": "main.js",
+  "description": "k-trader is a Cryptocurrency Trading Bots and bots Manager",
+  "private": true,
   "scripts": {
-    "start": "node main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon",
+    "dev2": "npm run build && node main.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node main.js"
   },
   "dependencies": {
-    "k-utilities": "^1.4.5"
+    "express": "^4.19.2",
+    "k-utilities": "^1.4.5",
+    "next": "^14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "nodemon": "^3.1.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
   },
   "repository": {
     "type": "git",

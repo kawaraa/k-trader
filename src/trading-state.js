@@ -18,20 +18,18 @@ module.exports = class TradingState {
     writeFileSync(this.filePath, JSON.stringify(state, null, 2));
   }
 
-  addOrder(order) {
-    order.timestamp = dateToString();
+  addOrder(orderId) {
     const state = this.#loadFile();
-    state.orders.push(order);
+    state.orders.push(orderId);
     this.#updateFile(state);
   }
-  getOrder(cb) {
-    const orders = this.#loadFile().orders;
-    return !cb ? orders : orders.filter(cb);
+  getOrders() {
+    return this.#loadFile().orders;
   }
   remove(orderIds) {
     if (!Array.isArray(orderIds)) orderIds = [orderIds];
     const state = this.#loadFile();
-    state.orders = state.orders.filter((order) => !orderIds.includes(order.id));
+    state.orders = state.orders.filter((id) => !orderIds.includes(id));
     this.#updateFile(state);
   }
   // updateSpike(lowPrice, heighPrice, time = dateToString()) {

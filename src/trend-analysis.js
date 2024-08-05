@@ -151,17 +151,19 @@ function countPercentageChange(prices, percentageThreshold) {
   return changes;
 }
 
+// This calculates the earnings from an investment given the current price, previous price, and invested amount.
 function calculateEarnings(currentPrice, previousPrice, investedAmount) {
   const investedAmountIncludedProfit = (investedAmount / previousPrice) * currentPrice;
   const earnings = investedAmountIncludedProfit - investedAmount;
   return +earnings.toFixed(8);
 }
-
-function calculateProfit(currentPrice, orderPrice, cryptoVolume) {
+// This calculates the profit from a transaction given the current price, order price, and volume of cryptoCur.
+function calculateProfit(currentPrice, orderPrice, cryptoVolume, feePercentage) {
   const cost = orderPrice * cryptoVolume;
   const revenue = currentPrice * cryptoVolume;
   const profit = revenue - cost;
-  return profit;
+  const fee = !feePercentage ? 0 : (profit * feePercentage) / 100;
+  return profit - fee;
 }
 
 module.exports = {

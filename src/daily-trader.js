@@ -8,40 +8,44 @@ Recommendation:
 - if it's monthly trading strategy, buy when the current price is 1.5% lower then the average price in the last 5 days
 */
 
-const { Logger } = require("k-utilities");
 const TradingState = require("./trading-state.js");
 const analyzer = require("./trend-analysis.js");
 
+// Smart trader
 module.exports = class DailyTrader {
   #pair;
+  #capital;
+  #investingCapital;
   #pricePercentageThreshold;
   #tradingAmount;
-  #investedCapital;
-  constructor(name, exchangeProvider, pair, percentageChange, investingAmount, safetyTimeline) {
-    this.name = name;
-    this.ex = exchangeProvider;
-    this.logger = new Logger(name || pair, true); // + "-daily-trader"
-    this.state = new TradingState(`${name}-state.json`);
+  constructor(exProvider, pair, info) {
+    const { capital, investment, priceChange, strategyRange, safetyTimeline } = info;
+    this.ex = exProvider;
+    this.state = new TradingState(`${pair}.json`);
     this.#pair = pair;
-    this.#pricePercentageThreshold = percentageChange; // percentageMargin
-    this.#investedCapital = investingAmount; // investing Amount that will be used every time to by crypto
+    this.#capital = capital;
+    this.#investingCapital = investment; // investing Amount in ERU that will be used every time to by crypto
+    this.#pricePercentageThreshold = priceChange; // Percentage Change
     this.#tradingAmount = 0; // cryptoTradingAmount
-    this.safetyTimeline = safetyTimeline < 60 ? safetyTimeline : 48; // Number of hours, Default is 48 hours, the limit is 60 (2.5 days) because the price interval is 5 in the Exchange Provider
+    this.strategyRange = Math.max(+strategyRange || 0, 0.5); // Range in days
+    this.safetyTimeline = safetyTimeline > 0 || safetyTimeline <= strategyRange * 24 ? safetyTimeline : 8; // The number of hours that will be monitored in case a price spike happen
+    this.listener = null;
   }
 
   async start(period) {
     try {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const currentPrice = await this.ex.currentPrice(this.#pair);
-      const allPrices = await this.ex.prices(this.#pair); // For the last 2.5 days
-      const prices = allPrices.slice(-(12 * 60) / 5); // The last 12 hours
-      this.#tradingAmount = +(this.#investedCapital / currentPrice).toFixed(8);
+      const prices = await this.ex.prices(this.#pair, this.strategyRange); // For the last xxx days
+      this.#tradingAmount = +(this.#investingCapital / currentPrice).toFixed(8);
 
+      const ordersIds = this.state.getOrders().join(",");
+      const orders = await this.ex.getOrders(ordersIds);
       const rsi = analyzer.calculateRSI(prices);
       let decision = analyzer.calculateAveragePrice(prices, currentPrice, this.#pricePercentageThreshold);
 
       // Safety Check
-      const sorted = allPrices.slice(-((this.safetyTimeline * 60) / 5)).toSorted();
+      const sorted = prices.slice(-((this.safetyTimeline * 60) / 5)).toSorted();
       const spikeChange = analyzer.calculatePercentageChange(sorted[sorted.length - 1], sorted[0]);
       const trendChange = analyzer.calculatePercentageChange(currentPrice, sorted[0]);
 
@@ -50,66 +54,79 @@ module.exports = class DailyTrader {
       if (this.#pricePercentageThreshold * 2 <= spikeChange && this.#pricePercentageThreshold < trendChange) {
         // Pause buying when there is a sudden significant rise in the price or if the price keeps rising
         decision = "hold";
-        this.logger.warn("Paused buying: The price is experiencing a significant increase");
+        this.dispatch("log", `Paused buying: The price is experiencing a significant increase`);
       }
       // Else the price spike has passed or the stabilized
 
-      // Testing Starts
       const averagePrice = analyzer.calculateAveragePrice(prices);
       const change = analyzer.calculatePercentageChange(currentPrice, averagePrice);
-      this.logger.info("Current balance => eur:", balance.eur, ` <|>  ${this.name}:`, balance.crypto);
-      this.logger.info(
-        `RSI: ${rsi} => ${decision}`,
-        "- Current:",
-        currentPrice,
-        "- Average:",
-        averagePrice,
-        `${change}%`
+      const name = this.#pair.replace("EUR", "").toLowerCase();
+      this.dispatch("currentPrice", currentPrice);
+      this.dispatch("priceChange", change);
+      this.dispatch("balance", balance.crypto);
+      this.dispatch("log", `Current balance => eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
+      this.dispatch(
+        "log",
+        `RSI: ${rsi} => ${decision} - Current: ${currentPrice} - Average: ${averagePrice} ${change}%`
       );
-      // Testing Ends
 
       if (rsi < 30 && decision == "buy") {
-        this.logger.warn("Suggest buying: the price dropped");
+        this.dispatch("log", `Suggest buying: the price dropped`);
 
-        // calculates the amount of a cryptocurrency that can be purchased given current balance in EUR and the price of the cryptocurrency.
-        const remainingAmount = +(Math.min(this.#investedCapital, balance.eur) / currentPrice).toFixed(8);
+        // Calculates the amount of a cryptocurrency that can be purchased given current balance in EUR and the price of the cryptocurrency.
+        const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
+        const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
 
-        if (balance.eur > 0 && remainingAmount > this.#tradingAmount / 2) {
-          const orderId = await this.ex.createOrder("buy", "market", this.#pair, remainingAmount);
-          const order = await this.ex.getOrder(orderId);
-          this.state.addOrder(order);
-          this.logger.warn(`Bought crypto with order ID "${order.id}"`);
+        if (balance.eur > 0 && remaining > this.#tradingAmount / 2 && totalInvestedAmount < this.#capital) {
+          const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
+          this.state.addOrder(orderId);
+          this.dispatch("buy", 1);
+          this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
         //
       } else if (70 < rsi) {
-        this.logger.warn("Suggest selling: the price rose / increased");
+        this.dispatch("log", `Suggest selling: the price rose / increased`);
+
         // Get Orders that have price Lower Than the Current Price
-        const orders = this.state.getOrder(
-          (order) =>
-            this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(currentPrice, order.price)
+        const ordersForSell = orders.filter(
+          (o) => this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(currentPrice, +o.price)
         );
 
         // // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
-        // if (highestPrice <= currentPrice || 0 <= highestChange) {
-        //   const check = (o) => 60000 * 60 * 24 * 4 <= Date.now() - Date.parse(o.timeStamp);
-        //   orders = orders.concat(this.state.getOrder(check));
+        // if (decision == "hold" && 2 <= change) {
+        //   const check = (o) => 60000 * 60 * 24 * 7 <= Date.now() - Date.parse(o.timeStamp);
+        //   ordersForSell = ordersForSell.concat(orders.filter(check));
         // }
 
-        if (balance.crypto > 0 && orders[0]) {
-          for (const { id, volume } of orders) {
-            await this.ex.createOrder("sell", "market", this.#pair, Math.min(volume, balance.crypto));
+        if (balance.crypto > 0 && ordersForSell[0]) {
+          for (const { id, volume, price } of ordersForSell) {
+            console.log(ordersForSell.length, id, volume, price, "=>", currentPrice);
+            await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
             this.state.remove(id);
-            this.logger.warn(`Sold crypto with order ID "${id}"`);
+            const change = analyzer.calculatePercentageChange(currentPrice, +price);
+            const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
+            this.dispatch("sell", 1);
+            this.dispatch("earnings", +profit.toFixed(2));
+            this.dispatch("log", `Sold crypto with ${change} => profit: ${profit} ID: "${id}"`);
+            this.dispatch("log", `ID: ${id} OrderPrice: ${price} "=>" CurrentPrice: ${currentPrice}`);
           }
         }
       } else {
-        this.logger.info("Suggest waiting for the price to change...");
+        // this.dispatch("log", `Waiting for the price to change...`);
       }
-      console.log("\n");
     } catch (error) {
-      this.logger.error("Error running bot:", error);
+      console.log(`Error running bot: ${error}`);
+      this.dispatch("log", `Error running bot: ${error}`);
     }
 
-    if (period) setTimeout(() => this.start(period), 60000 * (Math.round(Math.random() * 3) + period));
+    if (period) {
+      this.timeoutID = setTimeout(() => this.start(period), 60000 * (Math.round(Math.random() * 3) + period));
+    }
+  }
+  stop() {
+    clearTimeout(this.timeoutID);
+  }
+  dispatch(event, info) {
+    if (this.listener) this.listener(this.#pair + "", event, info);
   }
 };

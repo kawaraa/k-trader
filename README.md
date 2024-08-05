@@ -1,4 +1,6 @@
-# Cryptocurrency
+# K Trader
+
+K Trader is a Cryptocurrency Trading Bots and Bots Manager
 
 ## Trading fees calculation
 
@@ -8,14 +10,37 @@ Kraken says the fees is up to `0.25%` but they are charging around `0.40%`. this
 
 **Selling:** `3530 * 0.40 / 100 = (fee 14.12) - 3530 = (To get 3515.88)`
 
-**Earnings:** `(Got 3515.88) - (Paid 3514) = (1.88)`
+**Earnings:** `(Revenue 3515.88) - (Cost 3514) = (Profit 1.88)`
 
 ## Strategies
 
-- Buy ETH/USDT using 10% of starting capital. Add an additional 10% of available cash to the position at every 1% drop in price. Sell at 2% profit or 10% loss.
-- Buy ETH/USDT using 50% of starting capital. Add an additional 50% of available cash to the position at every 1% drop in price. Sell at 2% profit or 10% loss.
-- Buy ETH/USDT using 100% of starting capital if at 1% drop in price. Sell at 2% profit or 10% loss.
-- Check the price and Buy ETH/USDT using 100% of starting capital if at 1% drop in price. Sell at 2% profit or 10% loss.
-- Check the price and Buy ETH/USDT using 100% of starting capital if at 1% raise in price. Sell at 2% profit.
-- Buy ETH/USDT using 100% of starting capital. Sell at 2% profit
-- Buy ETH/USDT using 10% of starting capital. Add an additional 10% of available cash to the position at every 1% drop in price. Sell at 2% profit.
+1. (current) Buy when the average price drops 1.5% and sell the bought order only when the current price is 1.5% higher then the order price
+2. Buy ETH/USDT using 10% of starting capital. Add an additional 10% of available cash to the position at every 1% drop in price. Sell at 1.5% profit or 10% loss.
+
+- **BTC Settings**
+  - 2500, 2400, 2% => 5781
+  - 2500, 500, 1.5 % => 6950
+  - 5000, 2450, 1.8 % => 12720
+- **ETH Settings**
+  - sss
+
+## Getting Started / Running the App
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+bun dev
+# or
+pm2 start npm --name "nextjs-app" -- start
+```
+
+#### Styles
+
+##### Colors
+
+- #5b5b6d
+- #aea1ea
+- cornflowerblue
+- #9bface Or #7dffe6
