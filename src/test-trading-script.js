@@ -14,8 +14,7 @@ const strategyRange = +process.argv[6] || 0.5; // Range of the strategy in days,
 const safetyTimeline = +process.argv[7] || 8; // Number of hours, Default is 8 hours
 const testPeriod = +process.argv[8] || 30; // Number of days that will be tested
 const pricesLimitOffset = (strategyRange * 24 * 60) / 5;
-const filePath = `${process.cwd()}/data/${pair}.json`;
-const stateFilePath = `database/${pair.replace("EUR", "").toLowerCase()}-state.json`;
+const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
 
 // Command example: [command] > database/test.log 2>&1
 // node test-trading-script.js XETHZEUR 5000 2500 1.3 10 96 90
@@ -23,14 +22,12 @@ const stateFilePath = `database/${pair.replace("EUR", "").toLowerCase()}-state.j
 
 (async () => {
   let prices = [];
-  if (existsSync(filePath)) {
-    prices = JSON.parse(readFileSync(filePath, "utf8"));
+  if (existsSync(pricesFilePath)) {
+    prices = JSON.parse(readFileSync(pricesFilePath, "utf8"));
   } else {
     prices = await kraken.prices(pair, testPeriod);
-    writeFileSync(filePath, JSON.stringify(prices));
+    writeFileSync(pricesFilePath, JSON.stringify(prices));
   }
-
-  writeFileSync(stateFilePath, "");
 
   const sorted = prices.toSorted();
   console.log("The lowest price: ", sorted[0], "The highest price: ", sorted[sorted.length - 1]);
@@ -38,11 +35,10 @@ const stateFilePath = `database/${pair.replace("EUR", "").toLowerCase()}-state.j
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesLimitOffset);
   const info = { capital, investment, priceChange, strategyRange, safetyTimeline };
   const trader = new DailyTrader(ex, pair, info);
+  trader.listener = (pair, event, info) => event == "log" && console.log(pair, info);
 
   for (const i in prices) {
     if (i < pricesLimitOffset || prices.length - pricesLimitOffset <= i) continue;
     await trader.start();
   }
-
-  unlinkSync(stateFilePath);
 })();

@@ -117,13 +117,7 @@ function findHighLowPriceChanges(prices, currentPrice) {
 function calculateAveragePrice(prices, currentPrice, percentageChange) {
   if (prices.length === 0) throw new Error("Price list cannot be empty.");
   const total = prices.reduce((sum, price) => sum + price, 0);
-  const averagePrice = +(total / prices.length).toFixed(8);
-  if (!currentPrice) return averagePrice;
-
-  const change = calculatePercentageChange(currentPrice, averagePrice);
-  if (percentageChange <= change) return "sell";
-  else if (change <= -percentageChange) return "buy";
-  return "hold";
+  return +(total / prices.length).toFixed(8);
 }
 
 function calculatePercentageChange(currentPrice, pastPrice, returnString) {

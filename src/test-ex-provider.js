@@ -44,19 +44,11 @@ module.exports = class TestExchangeProvider {
     this.orders.push(newOrder);
     return newOrder.id;
   }
-  async getOrders(ordersIds) {
+  async getOrders(pair, ordersIds) {
+    if (!ordersIds) return this.orders;
     return this.orders.filter((o) => ordersIds.includes(o.id));
   }
 };
-
-class Order {
-  constructor(tradingType, orderType, pair, volume) {
-    this.tradingType = tradingType;
-    this.orderType = orderType;
-    this.pair = pair;
-    this.volume = volume + "";
-  }
-}
 
 // Examples of the pairs format from some popular exchanges:
 // Kraken: Uses the slash separator (e.g., BTC/EUR, ETH/USD).

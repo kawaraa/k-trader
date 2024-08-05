@@ -1,5 +1,6 @@
 const { createHash, createHmac } = require("node:crypto");
 const { parseNumbers, delay } = require("./utilities.js");
+const TradingState = require("./trading-state.js");
 
 module.exports = class KrakenExchangeProvider {
   #apiUrl;
@@ -10,6 +11,7 @@ module.exports = class KrakenExchangeProvider {
     this.#apiUrl = "https://api.kraken.com";
     this.#apiKey = credentials.apiKey;
     this.#apiSecret = credentials.privateKey;
+    this.state = new TradingState(`${process.cwd()}/database/`);
   }
   // Helper function to generate API signature
   #getSignature(urlPath, data) {
@@ -80,11 +82,15 @@ module.exports = class KrakenExchangeProvider {
     prices.pop();
     return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
   }
-  async createOrder(type, ordertype, pair, volume) {
+  async createOrder(type, ordertype, pair, volume, oldOrderId) {
     volume += "";
-    return (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
+    const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
+    this.state.addOrder(pair, orderId);
+    if (oldOrderId) this.state.remove(pair, oldOrderId);
+    return orderId;
   }
-  async getOrders(orderIds) {
+  async getOrders(pair, orderIds) {
+    if (!orderIds) orderIds = this.state.getOrders(pair).join(",");
     const orders = await this.#privateApi("QueryOrders", { txid: orderIds });
     return Object.keys(orders).map((id) => {
       return { id, price: +orders[id].price, volume: +orders[id].vol_exec, cost: +orders[id].cost };

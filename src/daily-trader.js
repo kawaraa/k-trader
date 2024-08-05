@@ -8,7 +8,6 @@ Recommendation:
 - if it's monthly trading strategy, buy when the current price is 1.5% lower then the average price in the last 5 days
 */
 
-const TradingState = require("./trading-state.js");
 const analyzer = require("./trend-analysis.js");
 
 // Smart trader
@@ -21,7 +20,6 @@ module.exports = class DailyTrader {
   constructor(exProvider, pair, info) {
     const { capital, investment, priceChange, strategyRange, safetyTimeline } = info;
     this.ex = exProvider;
-    this.state = new TradingState(`${pair}.json`);
     this.#pair = pair;
     this.#capital = capital;
     this.#investingCapital = investment; // investing Amount in ERU that will be used every time to by crypto
@@ -39,10 +37,14 @@ module.exports = class DailyTrader {
       const prices = await this.ex.prices(this.#pair, this.strategyRange); // For the last xxx days
       this.#tradingAmount = +(this.#investingCapital / currentPrice).toFixed(8);
 
-      const ordersIds = this.state.getOrders().join(",");
-      const orders = await this.ex.getOrders(ordersIds);
+      const orders = await this.ex.getOrders(this.#pair);
       const rsi = analyzer.calculateRSI(prices);
-      let decision = analyzer.calculateAveragePrice(prices, currentPrice, this.#pricePercentageThreshold);
+      const averagePrice = analyzer.calculateAveragePrice(prices);
+      const percentageChange = analyzer.calculatePercentageChange(currentPrice, averagePrice);
+
+      let decision = "hold";
+      if (this.#pricePercentageThreshold <= percentageChange) decision = "sell";
+      else if (percentageChange <= -this.#pricePercentageThreshold) decision = "buy";
 
       // Safety Check
       const sorted = prices.slice(-((this.safetyTimeline * 60) / 5)).toSorted();
@@ -58,16 +60,14 @@ module.exports = class DailyTrader {
       }
       // Else the price spike has passed or the stabilized
 
-      const averagePrice = analyzer.calculateAveragePrice(prices);
-      const change = analyzer.calculatePercentageChange(currentPrice, averagePrice);
       const name = this.#pair.replace("EUR", "").toLowerCase();
       this.dispatch("currentPrice", currentPrice);
-      this.dispatch("priceChange", change);
+      this.dispatch("priceChange", percentageChange);
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `Current balance => eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
       this.dispatch(
         "log",
-        `RSI: ${rsi} => ${decision} - Current: ${currentPrice} - Average: ${averagePrice} ${change}%`
+        `RSI: ${rsi} => ${decision} - Current: ${currentPrice} - Average: ${averagePrice} ${percentageChange}%`
       );
 
       if (rsi < 30 && decision == "buy") {
@@ -79,7 +79,6 @@ module.exports = class DailyTrader {
 
         if (balance.eur > 0 && remaining > this.#tradingAmount / 2 && totalInvestedAmount < this.#capital) {
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
-          this.state.addOrder(orderId);
           this.dispatch("buy", 1);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
@@ -100,20 +99,20 @@ module.exports = class DailyTrader {
 
         if (balance.crypto > 0 && ordersForSell[0]) {
           for (const { id, volume, price } of ordersForSell) {
-            console.log(ordersForSell.length, id, volume, price, "=>", currentPrice);
-            await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
-            this.state.remove(id);
+            await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto), id);
             const change = analyzer.calculatePercentageChange(currentPrice, +price);
             const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
             this.dispatch("sell", 1);
             this.dispatch("earnings", +profit.toFixed(2));
-            this.dispatch("log", `Sold crypto with ${change} => profit: ${profit} ID: "${id}"`);
+            this.dispatch("log", `Sold crypto with ${change}% => profit: ${profit} ID: "${id}"`);
             this.dispatch("log", `ID: ${id} OrderPrice: ${price} "=>" CurrentPrice: ${currentPrice}`);
           }
         }
       } else {
         // this.dispatch("log", `Waiting for the price to change...`);
       }
+
+      this.dispatch("log", "");
     } catch (error) {
       console.log(`Error running bot: ${error}`);
       this.dispatch("log", `Error running bot: ${error}`);
