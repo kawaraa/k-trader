@@ -43,6 +43,7 @@ export default function Home() {
   };
 
   const remove = async (pair) => {
+    if (!confirm("Do you want to delete Bot?")) return;
     setLoading(true);
     request(`/api/bots?pair=${pair}`, { method: "DELETE" })
       .then(() => {
@@ -58,6 +59,7 @@ export default function Home() {
     if (action == "edit") setBotToUpdate({ pair, info: bots[pair] });
     else if (action == "delete") remove(pair);
     else if (action == "turn-on" || action == "turn-off") {
+      if (action == "turn-on" && !confirm(`Do you run "${pair}" Bot?`)) return;
       setLoading(true);
       const url = `/api/bots?pair=${pair}&status=${action.replace("turn-", "")}`;
       await request(url, { method: "PATCH" }).catch(catchErr);
