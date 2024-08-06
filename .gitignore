@@ -1,9 +1,13 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # environment variables file
-.env
+.env*
 .env*.local
 variable.json
+*.db
+*ssh*
+*id_ed25519*
+*id_rsa*
 
 # build
 build
@@ -123,3 +127,21 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
+
+
+# Terraform state and other genereted files
+*.terraform
+*.terraformrc.*
+*.tfstate*
+*terraform.lock.hcl
+*crash.log
+# Ignore variables file with sensitive data
+*/terraform.tfvars
+*.tfvars
+# Ignore override files as they are usually used to override resources locally and should not be committed
+*/override.tf
+*/override.tf.json
+*_override.tf
+*_override.tf.json
+# Ignore tfplan files as they are binary files that are not usually part of version contro
+*.tfplan
