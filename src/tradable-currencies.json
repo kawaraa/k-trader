@@ -26,6 +26,15 @@
     "safetyTimeline": 24,
     "earnings": 210
   },
+  "BRICKEUR": {
+    "becameAvailable": "2022-09-01",
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 10,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 157
+  },
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
     "capital": 100,
@@ -37,30 +46,30 @@
   },
   "BTTEUR": {
     "becameAvailable": "2021-01-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0.5,
-    "safetyTimeline": 8,
-    "earnings": 31
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 5,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 105
   },
-  "BRICKEUR": {
-    "becameAvailable": "2022-09-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0.5,
-    "safetyTimeline": 8,
-    "earnings": 77
+  "QNTEUR": {
+    "becameAvailable": "2018-08-01",
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 10,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 88
   },
   "ADXEUR": {
     "becameAvailable": "2022-10-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0.5,
-    "safetyTimeline": 8,
-    "earnings": 629
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 10,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 87
   },
   "ACAEUR": {
     "becameAvailable": "2023-06-01",
@@ -1405,15 +1414,6 @@
   },
   "PSTAKEEUR": {
     "becameAvailable": "2021-07-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0.5,
-    "safetyTimeline": 0,
-    "earnings": 0
-  },
-  "QNTEUR": {
-    "becameAvailable": "2018-08-01",
     "capital": 0,
     "investment": 0,
     "priceChange": 0,
