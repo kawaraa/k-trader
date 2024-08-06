@@ -35,7 +35,10 @@ const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesLimitOffset);
   const info = { capital, investment, priceChange, strategyRange, safetyTimeline };
   const trader = new DailyTrader(ex, pair, info);
-  trader.listener = (pair, event, info) => event == "log" && console.log(pair, info);
+  trader.listener = (pair, event, info) => {
+    event == "sell" && ex.removeOrder(info);
+    event == "log" && console.log(pair, info);
+  };
 
   for (const i in prices) {
     if (i < pricesLimitOffset || prices.length - pricesLimitOffset <= i) continue;

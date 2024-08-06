@@ -1,15 +1,21 @@
 const KrakenExchangeProvider = require("./kraken-ex-provider");
 const DailyTrader = require("./daily-trader");
-const { existsSync, readFileSync, writeFileSync, statSync, appendFileSync } = require("node:fs");
+const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs");
 const { dateToString, delay } = require("./utilities");
+const LocalState = require("./local-state");
 
-const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS);
-const filePath = `database/bots.json`;
+const state = new LocalState("state");
+const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
 
 class BotsManager {
   static #bots = {};
   static #randomTimeInterval = 0;
+  static state = state;
 
+  static loadBots() {
+    const bots = this.state.getBots();
+    Object.keys(bots).forEach((pair) => this.add(pair, bots[pair]));
+  }
   static getEurBalance() {
     return ex.balance("all");
   }
@@ -28,18 +34,17 @@ class BotsManager {
   }
   static add(pair, info) {
     this.#bots[pair] = new Bot(info, new DailyTrader(ex, pair, info));
-    this.#updateState();
+    this.state.update(this.#bots);
   }
   static update(pair, info) {
     this.#bots[pair].stop();
     this.#bots[pair] = new Bot(info, new DailyTrader(ex, pair, info));
-    this.#updateState();
-    this.#bots[pair].start(this.#bots[pair].timeInterval);
+    this.state.update(this.#bots);
   }
   static remove(pair) {
     this.#bots[pair].stop();
     delete this.#bots[pair];
-    this.#updateState();
+    this.state.update(this.#bots);
   }
   static run(pair) {
     this.#bots[pair].start(this.#bots[pair].timeInterval);
@@ -83,13 +88,18 @@ class BotsManager {
     }
 
     const bot = this.#bots[pair];
-    if (event == "sell") bot.sold += info;
-    else if (event == "buy") bot.bought += info;
-    else if (event == "earnings") bot.earnings += info;
+    if (event == "buy") {
+      bot.bought += 1;
+      bot.orders.push(info);
+    } else if (event == "sell") {
+      bot.sold += 1;
+      bot.orders = bot.orders.filter((id) => id != info);
+    } else if (event == "earnings") bot.earnings += info;
     else if (event == "currentPrice") bot.currentPrice = info;
     else if (event == "priceChange") bot.averagePriceChange = info;
     else if (event == "balance") bot.balance = info;
-    this.#updateState();
+
+    this.state.update(this.#bots);
   }
 
   static syncBots(bots) {
@@ -100,15 +110,7 @@ class BotsManager {
       pairsFromFirestore.forEach((pair) => !this.get(pair) && this.add(pair, bots[pair]));
       pairs.forEach((pair) => !bots[pair] && this.remove(pair));
     }
-  }
-  static loadState() {
-    if (existsSync(filePath)) {
-      const bots = JSON.parse(readFileSync(filePath, "utf8"));
-      Object.keys(bots).forEach((pair) => this.add(pair, bots[pair]));
-    }
-  }
-  static #updateState() {
-    writeFileSync(filePath, JSON.stringify(this.get(), null, 2));
+    return this.get();
   }
 }
 
@@ -127,6 +129,7 @@ class Bot {
     this.averagePriceChange = +(this.#parseValue(info.averagePriceChange) || 0);
     this.sold = +(this.#parseValue(info.sold) || 0);
     this.bought = +(this.#parseValue(info.bought) || 0);
+    this.orders = this.#parseValue(info.orders) || [];
     this.createTime = this.#parseValue(info.createTime);
     this.updateTime = this.#parseValue(info.updateTime);
     this.startedOn = null;
@@ -134,6 +137,9 @@ class Bot {
     this.#trader = trader;
   }
   #parseValue(value) {
+    if (value?.arrayValue && Array.isArray(value?.arrayValue?.values)) {
+      return value.arrayValue.values.map((item) => this.#parseValue(item));
+    }
     return value?.stringValue || value?.integerValue || value?.doubleValue || value;
   }
 
@@ -147,7 +153,7 @@ class Bot {
   }
 }
 
-BotsManager.loadState();
+BotsManager.loadBots();
 console.log("====> Bots are loaded. <====");
 
 module.exports = { BotsManager, Bot };

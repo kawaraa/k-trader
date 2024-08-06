@@ -19,7 +19,7 @@ module.exports = class TestExchangeProvider {
   async prices(pair, lastDays) {
     return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
   }
-  async createOrder(tradingType, b, c, amount, oldOrderId) {
+  async createOrder(tradingType, b, c, amount) {
     const cost = amount * this.allPrices[this.currentPriceIndex];
     const fee = (cost * 0.4) / 100;
 
@@ -41,7 +41,6 @@ module.exports = class TestExchangeProvider {
       if (remainingCrypto < 0) throw new Error("No enough crypto");
       this.currentBalance.eur += newOrder.cost - fee * 2;
       this.currentBalance.crypto = remainingCrypto;
-      this.orders = this.orders.filter((o) => o.id !== oldOrderId);
     }
 
     return newOrder.id;
@@ -49,6 +48,11 @@ module.exports = class TestExchangeProvider {
   async getOrders(pair, ordersIds) {
     if (!ordersIds) return this.orders;
     return this.orders.filter((o) => ordersIds.includes(o.id));
+  }
+
+  // This is custom function only for running test.
+  removeOrder(orderId) {
+    this.orders = this.orders.filter((o) => o.id !== orderId);
   }
 };
 

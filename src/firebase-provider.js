@@ -82,7 +82,8 @@ class FireStoreProvider {
 
 class Doc {
   constructor(data) {
-    Object.keys(data).forEach((k) => (this[k] = this.#getTypedValue(data[k])));
+    const checkK = (k) => !["createTime", "updateTime"].includes(k);
+    Object.keys(data).forEach((k) => checkK(k) && (this[k] = this.#getTypedValue(data[k])));
   }
   #getTypedValue(value) {
     if (typeof value == "string") return { stringValue: value };
@@ -90,23 +91,14 @@ class Doc {
       if (Number.isInteger(value)) return { integerValue: value };
       return { doubleValue: value };
     }
+    if (Array.isArray(value)) {
+      return {
+        arrayValue: {
+          values: value.map((v) => this.#getTypedValue(v)),
+        },
+      };
+    }
   }
 }
 
 module.exports = new FireStoreProvider(require("../.env.json").FIRESTORE_CREDENTIALS);
-
-// { stringValue: "added" }
-
-// import admin from "firebase-admin";
-
-// if (!admin.apps.length) {
-//   admin.initializeApp({ credential: admin.credential.applicationDefault(), projectId });
-// }
-// const adminAuth = admin.auth();
-
-// async function verifyToken(token) {
-//   if (!token) throw new Error("Unauthorized");
-//   const decodedToken = await adminAuth.verifyIdToken(token); //.catch((err) => null);
-//   if (!decodedToken) throw new Error("Unauthorized");
-//   return decodedToken;
-// }

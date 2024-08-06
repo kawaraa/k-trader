@@ -44,6 +44,24 @@
     "safetyTimeline": 24,
     "earnings": 157
   },
+  "ALTEUR": {
+    "becameAvailable": "2022-03-01",
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 10,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 151
+  },
+  "1INCHEUR": {
+    "becameAvailable": "2021-08-01",
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 10,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 150
+  },
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
     "capital": 100,
@@ -80,7 +98,6 @@
     "safetyTimeline": 24,
     "earnings": 87
   },
-
   "ALTEUR": {
     "becameAvailable": "2022-03-01",
     "capital": 0,

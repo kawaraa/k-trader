@@ -9,14 +9,16 @@ module.exports = (router, fireStoreProvider, authRequired) => {
       const token = request.cookies?.idToken;
       if (pair) isValidPair(pair, true);
 
-      const bots = {};
+      const firestoreBots = {};
       (await fireStoreProvider.getDoc(token, "bots", pair)).forEach(({ document }) => {
         if (document) {
           const { name, fields, createTime, updateTime } = document;
-          bots[name.split("/").slice(-1)] = new Bot({ ...fields, createTime, updateTime });
+          firestoreBots[name.split("/").slice(-1)] = new Bot({ ...fields, createTime, updateTime });
         }
       });
-      BotsManager.syncBots(bots);
+      const bots = BotsManager.syncBots(firestoreBots);
+      Object.keys(bots).map((pair) => fireStoreProvider.updateDoc(token, "bots", pair, bots[pair]));
+
       response.json({ ...BotsManager.get(pair), balance: (await BotsManager.getEurBalance()).ZEUR });
     } catch (error) {
       response.status(500).json({ message: parseError(error) });
@@ -33,6 +35,7 @@ module.exports = (router, fireStoreProvider, authRequired) => {
       data.earnings = 0;
       data.currentPrice = 0;
       data.averagePriceChange = 0;
+      data.orders = [];
 
       if (pair) isValidPair(pair, true);
       const { fields, createTime, updateTime } = await fireStoreProvider.addDoc(token, "bots", pair, data);
@@ -57,18 +60,6 @@ module.exports = (router, fireStoreProvider, authRequired) => {
     }
   });
 
-  router.delete("/bots", authRequired, async (request, response) => {
-    try {
-      const { pair } = request.query;
-      if (pair) isValidPair(pair, true);
-      await fireStoreProvider.deleteDoc(request.cookies?.idToken, "bots", pair);
-      BotsManager.remove(pair);
-      response.json({ success: true });
-    } catch (error) {
-      response.status(500).json({ message: parseError(error) });
-    }
-  });
-
   // Change status to "on" or "off"
   router.patch("/bots", authRequired, async (request, response) => {
     try {
@@ -79,6 +70,18 @@ module.exports = (router, fireStoreProvider, authRequired) => {
       if (status == "off") BotsManager.stop(pair);
       // if (status == "on-all") BotsManager.runAll(5);
       // if (status == "off-all") BotsManager.stopAll();
+      response.json({ success: true });
+    } catch (error) {
+      response.status(500).json({ message: parseError(error) });
+    }
+  });
+
+  router.delete("/bots", authRequired, async (request, response) => {
+    try {
+      const { pair } = request.query;
+      if (pair) isValidPair(pair, true);
+      await fireStoreProvider.deleteDoc(request.cookies?.idToken, "bots", pair);
+      BotsManager.remove(pair);
       response.json({ success: true });
     } catch (error) {
       response.status(500).json({ message: parseError(error) });
