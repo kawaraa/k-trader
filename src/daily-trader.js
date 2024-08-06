@@ -56,7 +56,6 @@ module.exports = class DailyTrader {
       if (this.#pricePercentageThreshold * 2 <= spikeChange && this.#pricePercentageThreshold < trendChange) {
         // Pause buying when there is a sudden significant rise in the price or if the price keeps rising
         decision = "hold";
-        this.dispatch("log", `Paused buying: The price is experiencing a significant increase`);
       }
       // Else the price spike has passed or the stabilized
 
@@ -69,6 +68,9 @@ module.exports = class DailyTrader {
         "log",
         `RSI: ${rsi} => ${decision} - Current: ${currentPrice} - Average: ${averagePrice} ${percentageChange}%`
       );
+      if (decision == "hold") {
+        this.dispatch("log", `Paused buying: The price is experiencing a significant increase`);
+      }
 
       if (rsi < 30 && decision == "buy") {
         this.dispatch("log", `Suggest buying: the price dropped`);
@@ -79,7 +81,7 @@ module.exports = class DailyTrader {
 
         if (balance.eur > 0 && remaining > this.#tradingAmount / 2 && totalInvestedAmount < this.#capital) {
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
-          this.dispatch("buy", 1);
+          this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
         //
@@ -99,17 +101,15 @@ module.exports = class DailyTrader {
 
         if (balance.crypto > 0 && ordersForSell[0]) {
           for (const { id, volume, price } of ordersForSell) {
-            await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto), id);
+            await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
             const change = analyzer.calculatePercentageChange(currentPrice, +price);
             const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
-            this.dispatch("sell", 1);
+            this.dispatch("sell", id);
             this.dispatch("earnings", +profit.toFixed(2));
             this.dispatch("log", `Sold crypto with ${change}% => profit: ${profit} ID: "${id}"`);
             this.dispatch("log", `ID: ${id} OrderPrice: ${price} "=>" CurrentPrice: ${currentPrice}`);
           }
         }
-      } else {
-        // this.dispatch("log", `Waiting for the price to change...`);
       }
 
       this.dispatch("log", "");

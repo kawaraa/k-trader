@@ -171,30 +171,3 @@ module.exports = {
   calculateEarnings,
   calculateProfit,
 };
-
-// Example usage:
-// const prices = [
-//   3191.88, 3187.67, 3193.48, 3196.75, 3196.75, 3197.48, 3199.64, 3196.74, 3190.83, 3197.47, 3202.45, 3199.02,
-//   3199.02, 3199.12, 3198, 3194.99, 3194.24, 3189.54, 3189.58, 3191.59, 3193.65, 3195.04, 3196.24, 3197.5,
-// ];
-// console.log(`Relative Strength Index: ${calculateRSI(prices)}`);
-// console.log(`Linear Regression Decision: ${linearRegression(prices)}\n`);
-// console.log(`SMA Decision: ${simpleMovingAverage(prices, 10)}`);
-// console.log(`Average Price Decision: ${calculateAveragePrice(prices, 1.5)}`);
-
-// const changes = findHighLowPriceChanges(prices, prices[prices.length - 1]);
-
-// console.log(
-//   `Highest price:`,
-//   changes.highest.price,
-//   `- "${changes.highest.minsAgo}" mins ago -`,
-//   " Change: ",
-//   `${changes.highest.percent}%`
-// );
-// console.log(
-//   `Lowest price:`,
-//   changes.lowest.price,
-//   `- "${changes.lowest.minsAgo}" mins ago -`,
-//   " Change: ",
-//   `${changes.lowest.percent}%`
-// );

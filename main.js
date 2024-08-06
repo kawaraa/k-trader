@@ -6,6 +6,7 @@ const KrakenExchangeProvider = require("./src/kraken-ex-provider.js");
 const fireStoreProvider = require("./src/firebase-provider");
 const DailyTrader = require("./src/daily-trader");
 const { isValidPair } = require("./src/utilities.js");
+const LocalState = require("./src/local-state.js");
 
 const prod = process.env.NODE_ENV === "production";
 const port = 3000;
@@ -55,11 +56,20 @@ if (!isValidPair(pair)) {
     })
     .catch(console.log);
 } else {
-  const kraken = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CREDENTIALS);
+  const state = new LocalState("cli-state");
+  state.update({ [pair]: {} });
+
+  const kraken = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CREDENTIALS, state);
   const info = { capital, investment, priceChange, strategyRange, safetyTimeline };
-  const solTrader = new DailyTrader(kraken, pair, info);
-  solTrader.listener = (pair, event, info) => event == "log" && console.log(pair, info);
-  solTrader.start(timeInterval);
+  const trader = new DailyTrader(kraken, pair, info);
+
+  trader.listener = (pair, event, info) => {
+    if (event == "buy") state.addBotOrder(pair, info);
+    else if (event == "sell") state.removeBotOrder(pair, info);
+    else if (event == "log") console.log(pair, info);
+  };
+
+  trader.start(timeInterval);
 
   // Command example:
   // node main.js ALPHAEUR 100 10 1.5 0.5 8 4
