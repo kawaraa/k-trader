@@ -16,7 +16,7 @@ export default function BotItem({ botInfo, onAction }) {
         <span className="flex-1 w-1/5 text-orange">€{botInfo.capital}</span>
         <span className="flex-1 w-1/5 text-green">€{botInfo.earnings}</span>
         <span className="flex-1 w-2/5 flex justify-between items-center">
-          <span className="flex-auto text-red">{botInfo.sold}</span>
+          <span className="flex-auto text-red">{botInfo.orders.length}</span>
           <span
             className={`rounded-xl inline-flex w-4 h-4 ml-2 ${
               botInfo.startedOn ? "bg-green" : "bg-blur dark:bg-slate-300"
@@ -43,15 +43,6 @@ export default function BotItem({ botInfo, onAction }) {
       <div className={`flex flex-col overflow-hidden px-2 transition-all duration-300 ease-in-out ${cls}`}>
         <div className="flex flex-col mb-5">
           <p className="">
-            <strong>Balance</strong>: <span>{botInfo.balance}</span>
-          </p>
-          <p className="">
-            <strong>Current Price</strong>: <span>{botInfo.currentPrice}</span>
-          </p>
-          <p className="">
-            <strong>Average price change</strong>: <span>{botInfo.averagePriceChange}</span>
-          </p>
-          <p className="">
             <strong>Investment</strong>: <span>{botInfo.investment}</span>
           </p>
           <p className="">
@@ -62,6 +53,19 @@ export default function BotItem({ botInfo, onAction }) {
           </p>
           <p className="">
             <strong>Safety Timeline</strong>: <span>{botInfo.safetyTimeline} Hours</span>
+          </p>
+          <br />
+          <p className="">
+            <strong>Balance</strong>: <span>{botInfo.balance}</span>
+          </p>
+          <p className="">
+            <strong>Current Price</strong>: <span>{botInfo.currentPrice}</span>
+          </p>
+          <p className="">
+            <strong>Average price change</strong>: <span>{botInfo.averagePriceChange}</span>
+          </p>
+          <p className="">
+            <strong>Transactions</strong>: <span>{botInfo.sold}</span>
           </p>
         </div>
         <div className="flex items-center justify-between">

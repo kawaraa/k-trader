@@ -122,7 +122,7 @@ export default function Home() {
           <span className="flex-1 w-1/5">Crypto</span>
           <span className="flex-1 w-1/5">Capital</span>
           <span className="flex-1 w-1/5">Earings</span>
-          <span className="flex-1 w-2/5">Transactions</span>
+          <span className="flex-1 w-2/5">Orders</span>
         </p>
 
         <ul className="pt-5">
