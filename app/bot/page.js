@@ -15,7 +15,7 @@ export default function Bot({ searchParams }) {
   const fetchLogContent = async () => {
     setLoading(true);
     const response = await request(`/api/bots/logs?pair=${pair}`).catch((err) => err.message);
-    logsRef.current.innerText += response;
+    logsRef.current.innerText += response + "\n....";
     logsRef.current?.scroll({ top: logsRef.current?.scrollHeight, behavior: "smooth" });
     setLoading(false);
   };
@@ -41,10 +41,8 @@ export default function Bot({ searchParams }) {
         <div className="flex-1 w-auto px-3 pb-10 flex justify-center overflow-y-auto">
           <pre
             ref={logsRef}
-            className="text-xs min-w-full min-h-full max-w-5xl p-3 text-wrap rounded-md card overflow-x-auto"
-          >
-            {/* <code></code> */}
-          </pre>
+            className="text-xs min-w-full min-h-full max-w-5xl p-3 text-wrap leading-7 rounded-md card overflow-x-auto"
+          ></pre>
         </div>
       </main>
 
