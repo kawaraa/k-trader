@@ -14,15 +14,20 @@ Kraken says the fees is up to `0.25%` but they are charging around `0.40%`. this
 
 ## Strategies
 
+### Description
+
 1. (current) Buy when the average price drops 1.5% and sell the bought order only when the current price is 1.5% higher then the order price
 2. Buy ETH/USDT using 10% of starting capital. Add an additional 10% of available cash to the position at every 1% drop in price. Sell at 1.5% profit or 10% loss.
 
-- **BTC Settings**
-  - 2500, 2400, 2% => 5781
-  - 2500, 500, 1.5 % => 6950
-  - 5000, 2450, 1.8 % => 12720
-- **ETH Settings**
-  - sss
+### Strategy Test Settings
+
+- `ETHEUR €100 10 15% 2 24 30` => €250
+- `ETHEUR €2500 490 15% 2 24 30` => €7113 / 25
+- `ALPHAEUR €100 10 10% 2 24 30` => €210
+- `BTCEUR €100 10 7% 2 24 30` => €133
+- `SOLEUR €100 10 1.3% 0.5 8 30` => €108
+- `QNTEUR €100 10 10% 2 24 30` => €88
+- `` => €
 
 ## Getting Started / Running the App
 

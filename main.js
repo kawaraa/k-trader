@@ -24,7 +24,7 @@ const timeInterval = +process.argv[8] || 5; // 1 to 11440, time per mins E.g. 11
 if (!isValidPair(pair)) {
   // const maxAge = 60 * 60 * 24 * 7; // 1 week (weekSec)
   const maxAge = 30 * 24 * 3600 * 1000; // 30 days
-  const cookieOptions = { httpOnly: true, secure: prod, maxAge, path: "/", sameSite: "strict" };
+  const cookieOptions = { httpOnly: true, secure: prod, maxAge, path: "/", sameSite: "lax" }; // strict
   const authRequired = (...args) => isAuthenticated(...args, fireStoreProvider, cookieOptions);
 
   nextApp

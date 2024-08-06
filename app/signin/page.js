@@ -29,8 +29,8 @@ export default function Signin() {
   }, []);
 
   return (
-    <div className="h-screen p-3 flex justify-center items-center ">
-      <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-6">
+    <main className="h-screen p-3 flex justify-center">
+      <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-6 mt-[15vh]">
         <h1 className="text-center text-2xl font-bold">Sign in</h1>
 
         <input name="email" type="email" placeholder="Email" required className={`${inputCls} `} />
@@ -41,6 +41,6 @@ export default function Signin() {
 
         {error && <p className="mt-5 text-red">{error}</p>}
       </form>
-    </div>
+    </main>
   );
 }

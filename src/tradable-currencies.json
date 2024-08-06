@@ -1,33 +1,39 @@
 {
   "BTCEUR": {
     "becameAvailable": "2009-01-01",
-    "capital": 5000,
-    "investment": 2500,
-    "priceChange": 1.5,
-    "strategyRange": 10,
-    "safetyTimeline": 96,
-    "earnings": 2330,
-    "numberOfTransactions": 75
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 7,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 133
   },
   "ETHEUR": {
     "becameAvailable": "2015-07-01",
-    "capital": 5000,
-    "investment": 2500,
-    "priceChange": 1.3,
-    "strategyRange": 10,
-    "safetyTimeline": 96,
-    "earnings": 1088,
-    "numberOfTransactions": 154
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 15,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 250
+  },
+  "ALPHAEUR": {
+    "becameAvailable": "2021-08-01",
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 10,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 210
   },
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 1.3,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 31,
-    "numberOfTransactions": 181
+    "earnings": 108
   },
   "BTTEUR": {
     "becameAvailable": "2021-01-01",
@@ -36,8 +42,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 31,
-    "numberOfTransactions": 129
+    "earnings": 31
   },
   "BRICKEUR": {
     "becameAvailable": "2022-09-01",
@@ -46,8 +51,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 77,
-    "numberOfTransactions": 388
+    "earnings": 77
   },
   "ADXEUR": {
     "becameAvailable": "2022-10-01",
@@ -56,18 +60,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 629,
-    "numberOfTransactions": 737
-  },
-  "ALPHAEUR": {
-    "becameAvailable": "2021-08-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0.5,
-    "safetyTimeline": 8,
-    "earnings": 111,
-    "numberOfTransactions": 165
+    "earnings": 629
   },
   "ACAEUR": {
     "becameAvailable": "2023-06-01",
@@ -76,8 +69,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 110,
-    "numberOfTransactions": 259
+    "earnings": 110
   },
   "ALTEUR": {
     "becameAvailable": "2022-03-01",
@@ -86,8 +78,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 66,
-    "numberOfTransactions": 145
+    "earnings": 66
   },
   "1INCHEUR": {
     "becameAvailable": "2021-08-01",
@@ -96,8 +87,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 60,
-    "numberOfTransactions": 236
+    "earnings": 60
   },
   "AAVEEUR": {
     "becameAvailable": "2020-12-01",
@@ -106,8 +96,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 60,
-    "numberOfTransactions": 292
+    "earnings": 60
   },
   "AGLDEUR": {
     "becameAvailable": "2021-09-01",
@@ -116,8 +105,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 48,
-    "earnings": 62,
-    "numberOfTransactions": 119
+    "earnings": 62
   },
   "AKTEUR": {
     "becameAvailable": "2022-08-01",
@@ -126,8 +114,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 27,
-    "numberOfTransactions": 268
+    "earnings": 27
   },
   "ALICEEUR": {
     "becameAvailable": "2021-07-01",
@@ -136,8 +123,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 52,
-    "numberOfTransactions": 129
+    "earnings": 52
   },
   "ANKREUR": {
     "becameAvailable": "2020-11-01",
@@ -146,8 +132,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 42,
-    "numberOfTransactions": 215
+    "earnings": 42
   },
   "ANTEUR": {
     "becameAvailable": "2021-02-01",
@@ -156,8 +141,7 @@
     "priceChange": 1.5,
     "strategyRange": 0.5,
     "safetyTimeline": 8,
-    "earnings": 112,
-    "numberOfTransactions": 170
+    "earnings": 112
   },
   "APEEUR": {
     "becameAvailable": "2022-06-01",
@@ -166,8 +150,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "API3EUR": {
     "becameAvailable": "2021-11-01",
@@ -176,8 +159,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "APTEUR": {
     "becameAvailable": "2022-12-01",
@@ -186,8 +168,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ARBEUR": {
     "becameAvailable": "2021-06-01",
@@ -196,8 +177,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ARKMEUR": {
     "becameAvailable": "2022-07-01",
@@ -206,8 +186,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ARPAEUR": {
     "becameAvailable": "2021-12-01",
@@ -216,8 +195,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ASTREUR": {
     "becameAvailable": "2023-01-01",
@@ -226,8 +204,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ATLASEUR": {
     "becameAvailable": "2021-03-01",
@@ -236,8 +213,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ATOMEUR": {
     "becameAvailable": "2020-10-01",
@@ -246,8 +222,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "AUDIOEUR": {
     "becameAvailable": "2021-09-01",
@@ -256,8 +231,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "AXSEUR": {
     "becameAvailable": "2021-04-01",
@@ -266,8 +240,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BADGEREUR": {
     "becameAvailable": "2021-11-01",
@@ -276,8 +249,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BALEUR": {
     "becameAvailable": "2020-12-01",
@@ -286,8 +258,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BANDEUR": {
     "becameAvailable": "2020-11-01",
@@ -296,8 +267,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BATEUR": {
     "becameAvailable": "2021-10-01",
@@ -306,8 +276,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BCHEUR": {
     "becameAvailable": "2020-01-01",
@@ -316,8 +285,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BEAMEUR": {
     "becameAvailable": "2022-01-01",
@@ -326,8 +294,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BICOEUR": {
     "becameAvailable": "2021-12-01",
@@ -336,8 +303,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BIGTIMEEUR": {
     "becameAvailable": "2022-12-01",
@@ -346,8 +312,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BLUREUR": {
     "becameAvailable": "2022-02-01",
@@ -356,8 +321,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BLZEUR": {
     "becameAvailable": "2021-03-01",
@@ -366,8 +330,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BNCEUR": {
     "becameAvailable": "2020-11-01",
@@ -376,8 +339,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BNTEUR": {
     "becameAvailable": "2022-06-01",
@@ -386,8 +348,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BOBAEUR": {
     "becameAvailable": "2022-07-01",
@@ -396,8 +357,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BODENEUR": {
     "becameAvailable": "2022-05-01",
@@ -406,8 +366,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BONDEUR": {
     "becameAvailable": "2022-08-01",
@@ -416,8 +375,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BONKEUR": {
     "becameAvailable": "2021-10-01",
@@ -426,8 +384,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "BSXEUR": {
     "becameAvailable": "2022-03-01",
@@ -436,8 +393,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "C98EUR": {
     "becameAvailable": "2021-07-01",
@@ -446,8 +402,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CELREUR": {
     "becameAvailable": "2021-03-01",
@@ -456,8 +411,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CFGEUR": {
     "becameAvailable": "2021-05-01",
@@ -466,8 +420,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CHREUR": {
     "becameAvailable": "2022-02-01",
@@ -476,8 +429,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CHZEUR": {
     "becameAvailable": "2020-10-01",
@@ -486,8 +438,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CLOUDEUR": {
     "becameAvailable": "2023-01-01",
@@ -496,8 +447,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "COMPEUR": {
     "becameAvailable": "2021-06-01",
@@ -506,8 +456,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "COTIEUR": {
     "becameAvailable": "2020-09-01",
@@ -516,8 +465,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CQTEUR": {
     "becameAvailable": "2023-02-01",
@@ -526,8 +474,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CRVEUR": {
     "becameAvailable": "2020-08-01",
@@ -536,8 +483,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CSMEUR": {
     "becameAvailable": "2021-07-01",
@@ -546,8 +492,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CTSIEUR": {
     "becameAvailable": "2022-11-01",
@@ -556,8 +501,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CVCEUR": {
     "becameAvailable": "2022-12-01",
@@ -566,8 +510,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "CVXEUR": {
     "becameAvailable": "2021-02-01",
@@ -576,8 +519,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "DAIEUR": {
     "becameAvailable": "2020-01-01",
@@ -586,8 +528,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "DASHEUR": {
     "becameAvailable": "2019-12-01",
@@ -596,8 +537,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "DENTEUR": {
     "becameAvailable": "2022-04-01",
@@ -606,8 +546,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "DRIFTEUR": {
     "becameAvailable": "2023-01-01",
@@ -616,8 +555,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "DYDXEUR": {
     "becameAvailable": "2021-11-01",
@@ -626,8 +564,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "DYMEUR": {
     "becameAvailable": "2022-01-01",
@@ -636,8 +573,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "EGLDEUR": {
     "becameAvailable": "2021-04-01",
@@ -646,8 +582,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ENAEUR": {
     "becameAvailable": "2020-12-01",
@@ -656,8 +591,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ENJEUR": {
     "becameAvailable": "2021-06-01",
@@ -666,8 +600,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ENSEUR": {
     "becameAvailable": "2021-03-01",
@@ -676,8 +609,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "EOSEUR": {
     "becameAvailable": "2019-11-01",
@@ -686,8 +618,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ETHFIEUR": {
     "becameAvailable": "2022-03-01",
@@ -696,8 +627,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ETHWEUR": {
     "becameAvailable": "2022-09-01",
@@ -706,8 +636,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "EULEUR": {
     "becameAvailable": "2021-05-01",
@@ -716,8 +645,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "EURTEUR": {
     "becameAvailable": "2020-11-01",
@@ -726,8 +654,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "EWTEUR": {
     "becameAvailable": "2022-01-01",
@@ -736,8 +663,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FARMEUR": {
     "becameAvailable": "2021-02-01",
@@ -746,8 +672,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FETEUR": {
     "becameAvailable": "2021-05-01",
@@ -756,8 +681,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FIDAEUR": {
     "becameAvailable": "2020-12-01",
@@ -766,8 +690,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FILEUR": {
     "becameAvailable": "2020-07-01",
@@ -776,8 +699,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FISEUR": {
     "becameAvailable": "2022-11-01",
@@ -786,8 +708,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FLOKIEUR": {
     "becameAvailable": "2022-08-01",
@@ -796,8 +717,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FLOWEUR": {
     "becameAvailable": "2020-10-01",
@@ -806,8 +726,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FLREUR": {
     "becameAvailable": "2021-04-01",
@@ -816,8 +735,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FORTHEUR": {
     "becameAvailable": "2022-04-01",
@@ -826,8 +744,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FTMEUR": {
     "becameAvailable": "2021-01-01",
@@ -836,8 +753,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "FXSEUR": {
     "becameAvailable": "2022-06-01",
@@ -846,8 +762,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GALAEUR": {
     "becameAvailable": "2021-09-01",
@@ -856,8 +771,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GALEUR": {
     "becameAvailable": "2020-08-01",
@@ -866,8 +780,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GARIEUR": {
     "becameAvailable": "2022-03-01",
@@ -876,8 +789,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GHSTEUR": {
     "becameAvailable": "2021-03-01",
@@ -886,8 +798,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GLMREUR": {
     "becameAvailable": "2021-07-01",
@@ -896,8 +807,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GMTEUR": {
     "becameAvailable": "2022-12-01",
@@ -906,8 +816,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GMXEUR": {
     "becameAvailable": "2021-12-01",
@@ -916,8 +825,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GNOEUR": {
     "becameAvailable": "2021-01-01",
@@ -926,8 +834,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GRTEUR": {
     "becameAvailable": "2020-12-01",
@@ -936,8 +843,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GSTEUR": {
     "becameAvailable": "2022-05-01",
@@ -946,8 +852,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "GTCEUR": {
     "becameAvailable": "2021-12-01",
@@ -956,8 +861,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "HDXEUR": {
     "becameAvailable": "2022-11-01",
@@ -966,8 +870,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "HFTEUR": {
     "becameAvailable": "2022-09-01",
@@ -976,8 +879,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "HNTEUR": {
     "becameAvailable": "2021-08-01",
@@ -986,8 +888,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "HONEYEUR": {
     "becameAvailable": "2022-02-01",
@@ -996,8 +897,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ICPEUR": {
     "becameAvailable": "2021-10-01",
@@ -1006,8 +906,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ICXEUR": {
     "becameAvailable": "2020-05-01",
@@ -1016,8 +915,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "IDEXEUR": {
     "becameAvailable": "2021-03-01",
@@ -1026,8 +924,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "IMXEUR": {
     "becameAvailable": "2021-09-01",
@@ -1036,8 +933,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "INJEUR": {
     "becameAvailable": "2021-04-01",
@@ -1046,8 +942,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "INTREUR": {
     "becameAvailable": "2022-07-01",
@@ -1056,8 +951,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "JASMYEUR": {
     "becameAvailable": "2022-01-01",
@@ -1066,8 +960,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "JTOEUR": {
     "becameAvailable": "2023-01-01",
@@ -1076,8 +969,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "JUNOEUR": {
     "becameAvailable": "2022-03-01",
@@ -1086,8 +978,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "JUPEUR": {
     "becameAvailable": "2021-06-01",
@@ -1096,8 +987,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KAREUR": {
     "becameAvailable": "2021-02-01",
@@ -1106,8 +996,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KAVAEUR": {
     "becameAvailable": "2020-08-01",
@@ -1116,8 +1005,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KEEPEUR": {
     "becameAvailable": "2021-05-01",
@@ -1126,8 +1014,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KEYEUR": {
     "becameAvailable": "2022-06-01",
@@ -1136,8 +1023,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KILTEUR": {
     "becameAvailable": "2023-02-01",
@@ -1146,8 +1032,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KINEUR": {
     "becameAvailable": "2022-08-01",
@@ -1156,8 +1041,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KINTEUR": {
     "becameAvailable": "2020-10-01",
@@ -1166,8 +1050,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KNCEUR": {
     "becameAvailable": "2021-09-01",
@@ -1176,8 +1059,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KP3REUR": {
     "becameAvailable": "2021-12-01",
@@ -1186,8 +1068,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KSMEUR": {
     "becameAvailable": "2020-11-01",
@@ -1196,8 +1077,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "KUJIEUR": {
     "becameAvailable": "2022-09-01",
@@ -1206,8 +1086,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "LCXEUR": {
     "becameAvailable": "2020-12-01",
@@ -1216,8 +1095,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "LDOEUR": {
     "becameAvailable": "2022-01-01",
@@ -1226,8 +1104,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "LINKEUR": {
     "becameAvailable": "2019-10-01",
@@ -1236,8 +1113,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "LMWREUR": {
     "becameAvailable": "2021-11-01",
@@ -1246,8 +1122,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "LPTEUR": {
     "becameAvailable": "2022-01-01",
@@ -1256,8 +1131,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "LSKEUR": {
     "becameAvailable": "2021-07-01",
@@ -1266,8 +1140,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "LUNA2EUR": {
     "becameAvailable": "2022-05-01",
@@ -1276,8 +1149,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "LUNAEUR": {
     "becameAvailable": "2019-08-01",
@@ -1286,8 +1158,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MANAEUR": {
     "becameAvailable": "2019-12-01",
@@ -1296,8 +1167,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MASKEUR": {
     "becameAvailable": "2021-06-01",
@@ -1306,8 +1176,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MCEUR": {
     "becameAvailable": "2022-07-01",
@@ -1316,8 +1185,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MINAEUR": {
     "becameAvailable": "2021-09-01",
@@ -1326,8 +1194,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MIREUR": {
     "becameAvailable": "2021-02-01",
@@ -1336,8 +1203,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MKREUR": {
     "becameAvailable": "2020-11-01",
@@ -1346,8 +1212,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MNGOEUR": {
     "becameAvailable": "2020-07-01",
@@ -1356,8 +1221,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MNTEUR": {
     "becameAvailable": "2022-10-01",
@@ -1366,8 +1230,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MOONEUR": {
     "becameAvailable": "2022-03-01",
@@ -1376,8 +1239,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MOVREUR": {
     "becameAvailable": "2021-08-01",
@@ -1386,8 +1248,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MPLEUR": {
     "becameAvailable": "2021-10-01",
@@ -1396,8 +1257,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MSOLEUR": {
     "becameAvailable": "2022-04-01",
@@ -1406,8 +1266,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "MULTIEUR": {
     "becameAvailable": "2020-11-01",
@@ -1416,8 +1275,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "NANOEUR": {
     "becameAvailable": "2015-03-01",
@@ -1426,8 +1284,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "NEAREUR": {
     "becameAvailable": "2020-10-01",
@@ -1436,8 +1293,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "NYMEUR": {
     "becameAvailable": "2021-03-01",
@@ -1446,8 +1302,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "OCEANEUR": {
     "becameAvailable": "2017-09-01",
@@ -1456,8 +1311,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "OMGEUR": {
     "becameAvailable": "2017-07-01",
@@ -1466,8 +1320,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ORCAEUR": {
     "becameAvailable": "2021-10-01",
@@ -1476,8 +1329,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "OSMOEUR": {
     "becameAvailable": "2021-06-01",
@@ -1486,8 +1338,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "OXTEUR": {
     "becameAvailable": "2017-11-01",
@@ -1496,8 +1347,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "OXYEUR": {
     "becameAvailable": "2021-03-01",
@@ -1506,8 +1356,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "PAXGEUR": {
     "becameAvailable": "2018-09-01",
@@ -1516,8 +1365,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "PENDLEEUR": {
     "becameAvailable": "2021-04-01",
@@ -1526,8 +1374,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "PEPEEUR": {
     "becameAvailable": "2023-04-01",
@@ -1536,8 +1383,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "PERPEUR": {
     "becameAvailable": "2020-08-01",
@@ -1546,8 +1392,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "PHAEUR": {
     "becameAvailable": "2020-08-01",
@@ -1556,8 +1401,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "PSTAKEEUR": {
     "becameAvailable": "2021-07-01",
@@ -1566,8 +1410,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "QNTEUR": {
     "becameAvailable": "2018-08-01",
@@ -1576,8 +1419,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "QTUMEUR": {
     "becameAvailable": "2017-03-01",
@@ -1586,8 +1428,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "RAREEUR": {
     "becameAvailable": "2021-06-01",
@@ -1596,8 +1437,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "RARIEUR": {
     "becameAvailable": "2021-06-01",
@@ -1606,8 +1446,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "RAYEUR": {
     "becameAvailable": "2021-03-01",
@@ -1616,8 +1455,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "RENEUR": {
     "becameAvailable": "2020-05-01",
@@ -1626,8 +1464,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "REPV2EUR": {
     "becameAvailable": "2020-08-01",
@@ -1636,8 +1473,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "REQEUR": {
     "becameAvailable": "2017-08-01",
@@ -1646,8 +1482,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "RLCEUR": {
     "becameAvailable": "2021-03-01",
@@ -1656,8 +1491,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "RUNEEUR": {
     "becameAvailable": "2020-07-01",
@@ -1666,8 +1500,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SAMOEUR": {
     "becameAvailable": "2021-01-01",
@@ -1676,8 +1509,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SANDEUR": {
     "becameAvailable": "2020-08-01",
@@ -1686,8 +1518,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SBREUR": {
     "becameAvailable": "2020-03-01",
@@ -1696,8 +1527,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SCRTEUR": {
     "becameAvailable": "2021-02-28",
@@ -1706,8 +1536,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SEIEUR": {
     "becameAvailable": "2021-01-01",
@@ -1716,8 +1545,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SGBEUR": {
     "becameAvailable": "2021-09-01",
@@ -1726,8 +1554,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SHIBEUR": {
     "becameAvailable": "2020-08-01",
@@ -1736,8 +1563,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SNXEUR": {
     "becameAvailable": "2018-03-01",
@@ -1746,8 +1572,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SPELLEUR": {
     "becameAvailable": "2021-05-01",
@@ -1756,8 +1581,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SRMEUR": {
     "becameAvailable": "2020-07-01",
@@ -1766,8 +1590,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "STEPEUR": {
     "becameAvailable": "2022-01-01",
@@ -1776,8 +1599,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "STGEUR": {
     "becameAvailable": "2020-09-01",
@@ -1786,8 +1608,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "STORJEUR": {
     "becameAvailable": "2017-07-01",
@@ -1796,8 +1617,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "STRKEUR": {
     "becameAvailable": "2021-09-01",
@@ -1806,8 +1626,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "STXEUR": {
     "becameAvailable": "2019-10-01",
@@ -1816,8 +1635,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SUPEREUR": {
     "becameAvailable": "2021-04-01",
@@ -1826,8 +1644,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "SUSHIEUR": {
     "becameAvailable": "2020-08-01",
@@ -1836,8 +1653,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "TEEREUR": {
     "becameAvailable": "2021-10-01",
@@ -1846,8 +1662,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "TLMEUR": {
     "becameAvailable": "2020-12-01",
@@ -1856,8 +1671,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "TRUEUR": {
     "becameAvailable": "2018-07-01",
@@ -1866,8 +1680,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "TRXEUR": {
     "becameAvailable": "2017-07-01",
@@ -1876,8 +1689,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "TUSDEUR": {
     "becameAvailable": "2018-10-01",
@@ -1886,8 +1698,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "TVKEUR": {
     "becameAvailable": "2019-09-01",
@@ -1896,8 +1707,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "UNFIEUR": {
     "becameAvailable": "2021-03-01",
@@ -1906,8 +1716,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "UNIEUR": {
     "becameAvailable": "2020-09-01",
@@ -1916,8 +1725,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "WAXLEUR": {
     "becameAvailable": "2017-12-01",
@@ -1926,8 +1734,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "WBTCEUR": {
     "becameAvailable": "2019-01-01",
@@ -1936,8 +1743,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "WENEUR": {
     "becameAvailable": "2020-12-01",
@@ -1946,8 +1752,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "WIFEUR": {
     "becameAvailable": "2020-08-01",
@@ -1956,8 +1761,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "WOOEUR": {
     "becameAvailable": "2020-10-01",
@@ -1966,8 +1770,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XDGEUR": {
     "becameAvailable": "2013-12-01",
@@ -1976,8 +1779,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XETCZEUR": {
     "becameAvailable": "2016-07-01",
@@ -1986,8 +1788,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XMLNZEUR": {
     "becameAvailable": "2014-07-01",
@@ -1996,8 +1797,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XREPZEUR": {
     "becameAvailable": "2015-08-01",
@@ -2006,8 +1806,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XTZEUR": {
     "becameAvailable": "2018-06-01",
@@ -2016,8 +1815,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XXLMZEUR": {
     "becameAvailable": "2014-07-01",
@@ -2026,8 +1824,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XXMRZEUR": {
     "becameAvailable": "2014-04-01",
@@ -2036,8 +1833,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XXRPZEUR": {
     "becameAvailable": "2013-01-01",
@@ -2046,8 +1842,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "XZECZEUR": {
     "becameAvailable": "2016-10-01",
@@ -2056,8 +1851,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "YFIEUR": {
     "becameAvailable": "2020-07-01",
@@ -2066,8 +1860,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "YGGEUR": {
     "becameAvailable": "2021-07-01",
@@ -2076,8 +1869,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ZETAEUR": {
     "becameAvailable": "2022-04-01",
@@ -2086,8 +1878,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ZROEUR": {
     "becameAvailable": "2020-08-01",
@@ -2096,8 +1887,7 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   },
   "ZRXEUR": {
     "becameAvailable": "2017-08-01",
@@ -2106,7 +1896,6 @@
     "priceChange": 0,
     "strategyRange": 0.5,
     "safetyTimeline": 0,
-    "earnings": 0,
-    "numberOfTransactions": 0
+    "earnings": 0
   }
 }

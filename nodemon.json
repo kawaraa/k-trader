@@ -1,7 +1,7 @@
 {
   "watch": ["app", "src", "main.js"],
   "ext": "js,jsx,ts,tsx",
-  "exec": "node main.js",
+  "exec": "npm run build && node main.js",
   "other": "npm run build && node main.js",
   "delay": "2000"
 }
