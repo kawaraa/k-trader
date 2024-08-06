@@ -17,6 +17,15 @@
     "safetyTimeline": 24,
     "earnings": 250
   },
+  "ACAEUR": {
+    "becameAvailable": "2023-06-01",
+    "capital": 100,
+    "investment": 10,
+    "priceChange": 10,
+    "strategyRange": 2,
+    "safetyTimeline": 24,
+    "earnings": 233
+  },
   "ALPHAEUR": {
     "becameAvailable": "2021-08-01",
     "capital": 100,
@@ -71,15 +80,7 @@
     "safetyTimeline": 24,
     "earnings": 87
   },
-  "ACAEUR": {
-    "becameAvailable": "2023-06-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0.5,
-    "safetyTimeline": 8,
-    "earnings": 110
-  },
+
   "ALTEUR": {
     "becameAvailable": "2022-03-01",
     "capital": 0,
