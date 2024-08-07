@@ -28,7 +28,7 @@ resource "digitalocean_droplet" "vm" {
   image  = "ubuntu-23-10-x64"   # nodejs
   size   = "s-1vcpu-512mb-10gb" # s-1vcpu-1gb
   # disk     = "25"
-  monitoring = true
+  # monitoring = true
   # private_networking = true
   ssh_keys = [digitalocean_ssh_key.auth.id]
   tags     = ["trader"]
@@ -43,6 +43,7 @@ resource "digitalocean_droplet" "vm" {
 
     # Update VM
     inline = [
+      "curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash",
       "sudo systemctl restart do-agent",
       "sleep 10",
       "export DEBIAN_FRONTEND=noninteractive",
