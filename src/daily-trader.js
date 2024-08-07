@@ -100,7 +100,7 @@ module.exports = class DailyTrader {
         // }
 
         if (balance.crypto > 0 && ordersForSell[0]) {
-          for (const { id, volume, price } of ordersForSell) {
+          for (const { id, volume, price, cost } of ordersForSell) {
             await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
             const change = analyzer.calculatePercentageChange(currentPrice, +price);
             const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
