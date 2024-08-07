@@ -21,6 +21,19 @@ Kraken says the fees is up to `0.25%` but they are charging around `0.40%`. this
 
 ### Strategy Test Settings
 
+- 15 2 24
+- 10 2 24
+- 5 2 24
+- 1.5 2 24
+
+- 10 1 12
+- 5 1 12
+- 1.5 1 12
+
+- 10 0.5 8
+- 5 0.5 8
+- 1.5 0.5 8
+
 1. `BTCEUR €100 10 7% 2 24 30` => €133
 1. `ETHEUR €100 10 15% 2 24 30` => €250
 1. `ETHEUR €2500 490 15% 2 24 30` => €7113 / 25
