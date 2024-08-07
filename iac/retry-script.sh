@@ -48,6 +48,7 @@ else
 
   # Install Node.js and NPM
   node -v || curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  # curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
   sleep 5
   export DEBIAN_FRONTEND=noninteractive
   retry_command 3 apt-get install nodejs -y
