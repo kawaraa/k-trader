@@ -45,13 +45,6 @@ export default function AddBotFrom({ bot, onSubmit }) {
         className={inputCls}
       />
       <input
-        name="safetyTimeline"
-        type="number"
-        placeholder="Safety Timeline in hours"
-        defaultValue={bot?.info?.safetyTimeline}
-        className={inputCls}
-      />
-      <input
         name="timeInterval"
         type="number"
         placeholder="Time Interval in mins"

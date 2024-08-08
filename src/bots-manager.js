@@ -121,7 +121,6 @@ class Bot {
     this.investment = +this.#parseValue(info.investment);
     this.priceChange = +this.#parseValue(info.priceChange);
     this.strategyRange = +this.#parseValue(info.strategyRange);
-    this.safetyTimeline = +this.#parseValue(info.safetyTimeline);
     this.timeInterval = +this.#parseValue(info.timeInterval);
     this.balance = +(this.#parseValue(info.balance) || 0);
     this.earnings = +(this.#parseValue(info.earnings) || 0);

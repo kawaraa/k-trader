@@ -52,10 +52,6 @@ export default function BotItem({ botInfo, onAction }) {
             <strong>Strategy Range</strong>: <span>{botInfo.strategyRange} Days</span>
           </p>
           <p className="">
-            <strong>Safety Timeline</strong>: <span>{botInfo.safetyTimeline} Hours</span>
-          </p>
-          <br />
-          <p className="">
             <strong>Balance</strong>: <span>{botInfo.balance}</span>
           </p>
           <p className="">
