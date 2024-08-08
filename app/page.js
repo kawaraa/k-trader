@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import BotItem from "./components/bot-item";
 import { Modal } from "./components/modal";
@@ -106,14 +105,8 @@ export default function Home() {
             onClick={() => setShowAddBotForm(true)}
             className={`${btnCls} !w-8 !h-8 ml-3 p-1 flex items-center justify-center rounded-3xl`}
           >
-            <Image
-              src="/add-bot-icon.png"
-              width={100}
-              height={100}
-              alt="Add bot icon"
-              priority
-              className="w-full"
-            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/add-bot-icon.png" alt="Add bot icon" priority className="w-full" />
           </button>
         </div>
       </header>
