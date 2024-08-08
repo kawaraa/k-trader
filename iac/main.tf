@@ -20,13 +20,13 @@ resource "digitalocean_ssh_key" "auth" {
   public_key = file("${path.module}/id_rsa.pub")
 }
 
-# Docs for Digitalocean Resources:
+# Docs for Digitalocean Resources and droplet Size Slugs: https://slugs.do-api.dev/
 # https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs
 resource "digitalocean_droplet" "vm" {
   name   = "k-trader-app"
-  region = "fra1"
-  image  = "ubuntu-23-10-x64"
-  size   = "s-1vcpu-1gb"
+  region = "ams3"               # fra1, sgp1
+  image  = "ubuntu-23-10-x64"   # nodejs
+  size   = "s-1vcpu-512mb-10gb" # s-1vcpu-1gb
   # disk     = "25"
   # monitoring = true
   # private_networking = true
@@ -43,6 +43,8 @@ resource "digitalocean_droplet" "vm" {
 
     # Update VM
     inline = [
+      "curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash",
+      "sudo systemctl restart do-agent",
       "sleep 10",
       "export DEBIAN_FRONTEND=noninteractive",
       "systemctl daemon-reload",

@@ -153,11 +153,12 @@ function calculateEarnings(currentPrice, previousPrice, investedAmount) {
 }
 // This calculates the profit from a transaction given the current price, order price, and volume of cryptoCur.
 function calculateProfit(currentPrice, orderPrice, cryptoVolume, feePercentage) {
-  const cost = orderPrice * cryptoVolume;
-  const revenue = currentPrice * cryptoVolume;
-  const profit = revenue - cost;
-  const fee = !feePercentage ? 0 : (profit * feePercentage) / 100;
-  return profit - fee;
+  const cost = orderPrice * cryptoVolume + calculateFee(orderPrice * cryptoVolume, feePercentage);
+  const revenue = currentPrice * cryptoVolume - calculateFee(currentPrice * cryptoVolume, feePercentage);
+  return revenue - cost; // profit
+}
+function calculateFee(amount, feePercentage) {
+  return !feePercentage ? 0 : (amount * feePercentage) / 100;
 }
 
 module.exports = {
@@ -170,4 +171,5 @@ module.exports = {
   countPercentageChange,
   calculateEarnings,
   calculateProfit,
+  calculateFee,
 };

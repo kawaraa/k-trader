@@ -88,6 +88,7 @@ module.exports = class KrakenExchangeProvider {
   }
   async getOrders(pair, orderIds) {
     if (!orderIds) orderIds = this.state.getBotOrders(pair).join(",");
+    if (!orderIds) return [];
     const orders = await this.#privateApi("QueryOrders", { txid: orderIds });
     return Object.keys(orders).map((id) => {
       return { id, price: +orders[id].price, volume: +orders[id].vol_exec, cost: +orders[id].cost };

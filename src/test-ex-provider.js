@@ -1,4 +1,5 @@
 const { randomUUID } = require("node:crypto");
+const { calculateFee } = require("./trend-analysis");
 
 module.exports = class TestExchangeProvider {
   constructor(balance, prices, priceIndex) {
@@ -21,7 +22,7 @@ module.exports = class TestExchangeProvider {
   }
   async createOrder(tradingType, b, c, amount) {
     const cost = amount * this.allPrices[this.currentPriceIndex];
-    const fee = (cost * 0.4) / 100;
+    const fee = calculateFee(cost, 0.4);
 
     const newOrder = {
       id: randomUUID(),

@@ -11,8 +11,8 @@ const capital = +process.argv[3] || 100; // Amount in EUR which is the total mon
 const investment = +process.argv[4] || 10; // Amount in EUR that will be used every time to by crypto
 const priceChange = +process.argv[5] || 1.5; // price Percentage Threshold 0 to 100, default is 1.5
 const strategyRange = +process.argv[6] || 0.5; // Range of the strategy in days, Default is 0.5 day
-const safetyTimeline = +process.argv[7] || 8; // Number of hours, Default is 8 hours
-const testPeriod = +process.argv[8] || 30; // Number of days that will be tested
+// const safetyTimeline = +process.argv[7] || 8; // Number of hours, Default is 8 hours
+const testPeriod = +process.argv[7] || 30; // Number of days that will be tested
 const pricesLimitOffset = (strategyRange * 24 * 60) / 5;
 const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
 
@@ -33,7 +33,7 @@ const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
   console.log("The lowest price: ", sorted[0], "The highest price: ", sorted[sorted.length - 1]);
 
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesLimitOffset);
-  const info = { capital, investment, priceChange, strategyRange, safetyTimeline };
+  const info = { capital, investment, priceChange, strategyRange };
   const trader = new DailyTrader(ex, pair, info);
   trader.listener = (pair, event, info) => {
     event == "sell" && ex.removeOrder(info);

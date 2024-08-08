@@ -1,13 +1,15 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { request } from "../../src/utilities";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import RefreshButton from "../components/refresh-button";
 import Loader from "../components/loader";
 
-export default function Bot({ searchParams }) {
-  const { pair } = searchParams;
+export default function Bot() {
+  const searchParams = useSearchParams();
+  const pair = searchParams.get("pair");
+
   const router = useRouter();
   const logsRef = useRef(null);
   const [loading, setLoading] = useState(false);

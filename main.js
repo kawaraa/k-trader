@@ -1,6 +1,5 @@
 require("node:fs").mkdirSync("database/logs", { recursive: true });
 const express = require("express");
-const next = require("next");
 const { rateLimiter, cookiesParser, isAuthenticated } = require("./src/routes/middlewares.js");
 const KrakenExchangeProvider = require("./src/kraken-ex-provider.js");
 const fireStoreProvider = require("./src/firebase-provider");
@@ -11,8 +10,6 @@ const LocalState = require("./src/local-state.js");
 const prod = process.env.NODE_ENV === "production";
 const port = 3000;
 const server = express();
-const nextApp = next({ prod });
-const handle = nextApp.getRequestHandler();
 
 const pair = process.argv[2]; // The pair of the two currency that will be used for trading E.g. ETHEUR
 const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
@@ -28,33 +25,33 @@ if (!isValidPair(pair)) {
   const cookieOptions = { httpOnly: true, secure: prod, maxAge, path: "/", sameSite: "lax" }; // strict
   const authRequired = (...args) => isAuthenticated(...args, fireStoreProvider, cookieOptions);
 
-  nextApp
-    .prepare()
-    .then(() => {
-      // Apply the rate limiting all requests by adding rate limiter middleware to all routes
-      server.use(rateLimiter);
+  try {
+    // Apply the rate limiting all requests by adding rate limiter middleware to all routes
+    // server.use(rateLimiter);
+    server.use(cookiesParser);
+    server.use(express.json());
+    server.use(express.urlencoded({ extended: true }));
 
-      server.use(cookiesParser);
-      server.use(express.json());
-      server.use(express.urlencoded({ extended: true }));
-      server.use(express.static(`${process.cwd()}/public/`));
+    const apiRouter = express.Router();
+    require("./src/routes/auth")(apiRouter, fireStoreProvider, authRequired, cookieOptions);
+    require("./src/routes/bots")(apiRouter, fireStoreProvider, authRequired);
+    server.use("/api", apiRouter);
 
-      const apiRouter = express.Router();
-      require("./src/routes/auth")(apiRouter, fireStoreProvider, authRequired, cookieOptions);
-      require("./src/routes/bots")(apiRouter, fireStoreProvider, authRequired);
-      server.use("/api", apiRouter);
+    server.use(express.static(`${__dirname}/public/`));
+    // Serve static files from the "out" directory
+    server.use(express.static(`${__dirname}/out/`));
+    // Serve the index.html file for any unknown routes (SPA behavior)
+    server.get("*", (req, res) => {
+      res.sendFile(`${__dirname}/out/index.html`);
+    });
 
-      // Handle Next.js requests
-      server.get("*", (req, res) => {
-        return handle(req, res);
-      });
-
-      server.listen(port, (err) => {
-        if (err) throw err;
-        console.log(`Server is running on http://localhost:${port}`);
-      });
-    })
-    .catch(console.log);
+    server.listen(port, (err) => {
+      if (err) throw err;
+      console.log(`Server is running on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.log("App error: ", error);
+  }
 } else {
   const state = new LocalState("cli-state");
   state.update({ [pair]: {} });
@@ -72,7 +69,7 @@ if (!isValidPair(pair)) {
   trader.start(timeInterval);
 
   // Command example:
-  // node main.js ALPHAEUR 100 10 1.5 0.5 8 4
-  // node main.js ADXEUR 100 10 1.5 0.5 8 5
-  // node main.js SOLEUR 100 10 1.5 0.5 8 3
+  // node main.js ALPHAEUR 100 10 1.5 0.5 2
+  // node main.js ADXEUR 100 10 1.5 0.5 2
+  // node main.js SOLEUR 100 10 1.5 0.5 2
 }

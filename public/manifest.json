@@ -34,9 +34,9 @@
       "sizes": "192x192"
     },
     {
-      "src": "/purple-logo",
+      "src": "/purple-logo.png",
       "type": "image/png",
-      "sizes": "500x500",
+      "sizes": "1006x1006",
       "purpose": "maskable"
     },
     {
