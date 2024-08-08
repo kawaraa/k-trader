@@ -3,9 +3,8 @@
     "becameAvailable": "2009-01-01",
     "capital": 100,
     "investment": 10,
-    "priceChange": 7,
-    "strategyRange": 2,
-    "safetyTimeline": 24,
+    "priceChange": 3,
+    "strategyRange": 1,
     "earnings": 133
   },
   "ETHEUR": {
@@ -14,7 +13,6 @@
     "investment": 99,
     "priceChange": 2,
     "strategyRange": 1,
-    "safetyTimeline": 0,
     "earnings": 50
   },
   "ACAEUR": {
@@ -23,7 +21,6 @@
     "investment": 10,
     "priceChange": 10,
     "strategyRange": 2,
-    "safetyTimeline": 24,
     "earnings": 233
   },
   "ALPHAEUR": {
@@ -32,7 +29,6 @@
     "investment": 10,
     "priceChange": 10,
     "strategyRange": 2,
-    "safetyTimeline": 24,
     "earnings": 210
   },
   "AKTEUR": {
@@ -41,7 +37,6 @@
     "investment": 10,
     "priceChange": 15,
     "strategyRange": 1,
-    "safetyTimeline": 12,
     "earnings": 180
   },
   "BRICKEUR": {
@@ -50,7 +45,6 @@
     "investment": 10,
     "priceChange": 10,
     "strategyRange": 2,
-    "safetyTimeline": 24,
     "earnings": 157
   },
   "ALTEUR": {
@@ -59,7 +53,6 @@
     "investment": 10,
     "priceChange": 10,
     "strategyRange": 2,
-    "safetyTimeline": 24,
     "earnings": 151
   },
   "1INCHEUR": {
@@ -68,7 +61,6 @@
     "investment": 10,
     "priceChange": 10,
     "strategyRange": 2,
-    "safetyTimeline": 24,
     "earnings": 150
   },
   "AGLDEUR": {
@@ -77,7 +69,6 @@
     "investment": 10,
     "priceChange": 15,
     "strategyRange": 0.5,
-    "safetyTimeline": 8,
     "earnings": 169
   },
   "AAVEEUR": {
@@ -86,7 +77,6 @@
     "investment": 10,
     "priceChange": 10,
     "strategyRange": 0.5,
-    "safetyTimeline": 8,
     "earnings": 125
   },
   "SOLEUR": {
@@ -95,7 +85,6 @@
     "investment": 10,
     "priceChange": 5,
     "strategyRange": 0.5,
-    "safetyTimeline": 8,
     "earnings": 140
   },
   "BTTEUR": {
@@ -104,7 +93,6 @@
     "investment": 10,
     "priceChange": 5,
     "strategyRange": 2,
-    "safetyTimeline": 24,
     "earnings": 105
   },
   "QNTEUR": {
@@ -113,7 +101,6 @@
     "investment": 10,
     "priceChange": 10,
     "strategyRange": 1,
-    "safetyTimeline": 12,
     "earnings": 94
   },
   "ADXEUR": {
@@ -122,7 +109,6 @@
     "investment": 10,
     "priceChange": 10,
     "strategyRange": 2,
-    "safetyTimeline": 24,
     "earnings": 87
   },
 
@@ -132,7 +118,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 8,
     "earnings": 52
   },
   "ANKREUR": {
@@ -141,7 +126,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 8,
     "earnings": 42
   },
   "ANTEUR": {
@@ -150,7 +134,6 @@
     "investment": 10,
     "priceChange": 1.5,
     "strategyRange": 0.5,
-    "safetyTimeline": 8,
     "earnings": 112
   },
   "APEEUR": {
@@ -159,7 +142,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "API3EUR": {
@@ -168,7 +150,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "APTEUR": {
@@ -177,7 +158,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ARBEUR": {
@@ -186,7 +166,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ARKMEUR": {
@@ -195,7 +174,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ARPAEUR": {
@@ -204,7 +182,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ASTREUR": {
@@ -213,7 +190,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ATLASEUR": {
@@ -222,7 +198,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ATOMEUR": {
@@ -231,7 +206,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "AUDIOEUR": {
@@ -240,7 +214,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "AXSEUR": {
@@ -249,7 +222,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BADGEREUR": {
@@ -258,7 +230,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BALEUR": {
@@ -267,7 +238,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BANDEUR": {
@@ -276,7 +246,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BATEUR": {
@@ -285,7 +254,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BCHEUR": {
@@ -294,7 +262,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BEAMEUR": {
@@ -303,7 +270,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BICOEUR": {
@@ -312,7 +278,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BIGTIMEEUR": {
@@ -321,7 +286,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BLUREUR": {
@@ -330,7 +294,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BLZEUR": {
@@ -339,7 +302,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BNCEUR": {
@@ -348,7 +310,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BNTEUR": {
@@ -357,7 +318,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BOBAEUR": {
@@ -366,7 +326,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BODENEUR": {
@@ -375,7 +334,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BONDEUR": {
@@ -384,7 +342,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BONKEUR": {
@@ -393,7 +350,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "BSXEUR": {
@@ -402,7 +358,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "C98EUR": {
@@ -411,7 +366,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CELREUR": {
@@ -420,7 +374,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CFGEUR": {
@@ -429,7 +382,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CHREUR": {
@@ -438,7 +390,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CHZEUR": {
@@ -447,7 +398,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CLOUDEUR": {
@@ -456,7 +406,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "COMPEUR": {
@@ -465,7 +414,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "COTIEUR": {
@@ -474,7 +422,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CQTEUR": {
@@ -483,7 +430,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CRVEUR": {
@@ -492,7 +438,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CSMEUR": {
@@ -501,7 +446,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CTSIEUR": {
@@ -510,7 +454,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CVCEUR": {
@@ -519,7 +462,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "CVXEUR": {
@@ -528,7 +470,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "DAIEUR": {
@@ -537,7 +478,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "DASHEUR": {
@@ -546,7 +486,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "DENTEUR": {
@@ -555,7 +494,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "DRIFTEUR": {
@@ -564,7 +502,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "DYDXEUR": {
@@ -573,7 +510,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "DYMEUR": {
@@ -582,7 +518,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "EGLDEUR": {
@@ -591,7 +526,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ENAEUR": {
@@ -600,7 +534,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ENJEUR": {
@@ -609,7 +542,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ENSEUR": {
@@ -618,7 +550,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "EOSEUR": {
@@ -627,7 +558,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ETHFIEUR": {
@@ -636,7 +566,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ETHWEUR": {
@@ -645,7 +574,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "EULEUR": {
@@ -654,7 +582,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "EURTEUR": {
@@ -663,7 +590,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "EWTEUR": {
@@ -672,7 +598,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FARMEUR": {
@@ -681,7 +606,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FETEUR": {
@@ -690,7 +614,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FIDAEUR": {
@@ -699,7 +622,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FILEUR": {
@@ -708,7 +630,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FISEUR": {
@@ -717,7 +638,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FLOKIEUR": {
@@ -726,7 +646,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FLOWEUR": {
@@ -735,7 +654,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FLREUR": {
@@ -744,7 +662,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FORTHEUR": {
@@ -753,7 +670,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FTMEUR": {
@@ -762,7 +678,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "FXSEUR": {
@@ -771,7 +686,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GALAEUR": {
@@ -780,7 +694,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GALEUR": {
@@ -789,7 +702,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GARIEUR": {
@@ -798,7 +710,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GHSTEUR": {
@@ -807,7 +718,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GLMREUR": {
@@ -816,7 +726,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GMTEUR": {
@@ -825,7 +734,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GMXEUR": {
@@ -834,7 +742,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GNOEUR": {
@@ -843,7 +750,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GRTEUR": {
@@ -852,7 +758,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GSTEUR": {
@@ -861,7 +766,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "GTCEUR": {
@@ -870,7 +774,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "HDXEUR": {
@@ -879,7 +782,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "HFTEUR": {
@@ -888,7 +790,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "HNTEUR": {
@@ -897,7 +798,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "HONEYEUR": {
@@ -906,7 +806,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ICPEUR": {
@@ -915,7 +814,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ICXEUR": {
@@ -924,7 +822,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "IDEXEUR": {
@@ -933,7 +830,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "IMXEUR": {
@@ -942,7 +838,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "INJEUR": {
@@ -951,7 +846,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "INTREUR": {
@@ -960,7 +854,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "JASMYEUR": {
@@ -969,7 +862,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "JTOEUR": {
@@ -978,7 +870,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "JUNOEUR": {
@@ -987,7 +878,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "JUPEUR": {
@@ -996,7 +886,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KAREUR": {
@@ -1005,7 +894,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KAVAEUR": {
@@ -1014,7 +902,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KEEPEUR": {
@@ -1023,7 +910,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KEYEUR": {
@@ -1032,7 +918,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KILTEUR": {
@@ -1041,7 +926,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KINEUR": {
@@ -1050,7 +934,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KINTEUR": {
@@ -1059,7 +942,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KNCEUR": {
@@ -1068,7 +950,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KP3REUR": {
@@ -1077,7 +958,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KSMEUR": {
@@ -1086,7 +966,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "KUJIEUR": {
@@ -1095,7 +974,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "LCXEUR": {
@@ -1104,7 +982,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "LDOEUR": {
@@ -1113,7 +990,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "LINKEUR": {
@@ -1122,7 +998,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "LMWREUR": {
@@ -1131,7 +1006,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "LPTEUR": {
@@ -1140,7 +1014,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "LSKEUR": {
@@ -1149,7 +1022,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "LUNA2EUR": {
@@ -1158,7 +1030,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "LUNAEUR": {
@@ -1167,7 +1038,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MANAEUR": {
@@ -1176,7 +1046,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MASKEUR": {
@@ -1185,7 +1054,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MCEUR": {
@@ -1194,7 +1062,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MINAEUR": {
@@ -1203,7 +1070,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MIREUR": {
@@ -1212,7 +1078,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MKREUR": {
@@ -1221,7 +1086,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MNGOEUR": {
@@ -1230,7 +1094,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MNTEUR": {
@@ -1239,7 +1102,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MOONEUR": {
@@ -1248,7 +1110,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MOVREUR": {
@@ -1257,7 +1118,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MPLEUR": {
@@ -1266,7 +1126,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MSOLEUR": {
@@ -1275,7 +1134,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "MULTIEUR": {
@@ -1284,7 +1142,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "NANOEUR": {
@@ -1293,7 +1150,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "NEAREUR": {
@@ -1302,7 +1158,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "NYMEUR": {
@@ -1311,7 +1166,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "OCEANEUR": {
@@ -1320,7 +1174,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "OMGEUR": {
@@ -1329,7 +1182,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ORCAEUR": {
@@ -1338,7 +1190,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "OSMOEUR": {
@@ -1347,7 +1198,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "OXTEUR": {
@@ -1356,7 +1206,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "OXYEUR": {
@@ -1365,7 +1214,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "PAXGEUR": {
@@ -1374,7 +1222,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "PENDLEEUR": {
@@ -1383,7 +1230,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "PEPEEUR": {
@@ -1392,7 +1238,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "PERPEUR": {
@@ -1401,7 +1246,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "PHAEUR": {
@@ -1410,7 +1254,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "PSTAKEEUR": {
@@ -1419,7 +1262,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "QTUMEUR": {
@@ -1428,7 +1270,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "RAREEUR": {
@@ -1437,7 +1278,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "RARIEUR": {
@@ -1446,7 +1286,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "RAYEUR": {
@@ -1455,7 +1294,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "RENEUR": {
@@ -1464,7 +1302,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "REPV2EUR": {
@@ -1473,7 +1310,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "REQEUR": {
@@ -1482,7 +1318,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "RLCEUR": {
@@ -1491,7 +1326,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "RUNEEUR": {
@@ -1500,7 +1334,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SAMOEUR": {
@@ -1509,7 +1342,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SANDEUR": {
@@ -1518,7 +1350,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SBREUR": {
@@ -1527,7 +1358,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SCRTEUR": {
@@ -1536,7 +1366,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SEIEUR": {
@@ -1545,7 +1374,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SGBEUR": {
@@ -1554,7 +1382,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SHIBEUR": {
@@ -1563,7 +1390,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SNXEUR": {
@@ -1572,7 +1398,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SPELLEUR": {
@@ -1581,7 +1406,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SRMEUR": {
@@ -1590,7 +1414,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "STEPEUR": {
@@ -1599,7 +1422,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "STGEUR": {
@@ -1608,7 +1430,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "STORJEUR": {
@@ -1617,7 +1438,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "STRKEUR": {
@@ -1626,7 +1446,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "STXEUR": {
@@ -1635,7 +1454,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SUPEREUR": {
@@ -1644,7 +1462,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "SUSHIEUR": {
@@ -1653,7 +1470,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "TEEREUR": {
@@ -1662,7 +1478,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "TLMEUR": {
@@ -1671,7 +1486,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "TRUEUR": {
@@ -1680,7 +1494,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "TRXEUR": {
@@ -1689,7 +1502,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "TUSDEUR": {
@@ -1698,7 +1510,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "TVKEUR": {
@@ -1707,7 +1518,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "UNFIEUR": {
@@ -1716,7 +1526,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "UNIEUR": {
@@ -1725,7 +1534,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "WAXLEUR": {
@@ -1734,7 +1542,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "WBTCEUR": {
@@ -1743,7 +1550,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "WENEUR": {
@@ -1752,7 +1558,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "WIFEUR": {
@@ -1761,7 +1566,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "WOOEUR": {
@@ -1770,7 +1574,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XDGEUR": {
@@ -1779,7 +1582,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XETCZEUR": {
@@ -1788,7 +1590,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XMLNZEUR": {
@@ -1797,7 +1598,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XREPZEUR": {
@@ -1806,7 +1606,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XTZEUR": {
@@ -1815,7 +1614,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XXLMZEUR": {
@@ -1824,7 +1622,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XXMRZEUR": {
@@ -1833,7 +1630,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XXRPZEUR": {
@@ -1842,7 +1638,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "XZECZEUR": {
@@ -1851,7 +1646,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "YFIEUR": {
@@ -1860,7 +1654,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "YGGEUR": {
@@ -1869,7 +1662,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ZETAEUR": {
@@ -1878,7 +1670,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ZROEUR": {
@@ -1887,7 +1678,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   },
   "ZRXEUR": {
@@ -1896,7 +1686,6 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0.5,
-    "safetyTimeline": 0,
     "earnings": 0
   }
 }
