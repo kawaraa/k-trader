@@ -18,7 +18,7 @@ module.exports = class DailyTrader {
   #pricePercentageThreshold;
   #tradingAmount;
   constructor(exProvider, pair, info) {
-    const { capital, investment, priceChange, strategyRange } = info;
+    const { capital, investment, priceChange, strategyRange, safetyTimeline } = info;
     this.ex = exProvider;
     this.#pair = pair;
     this.#capital = capital;
@@ -26,6 +26,7 @@ module.exports = class DailyTrader {
     this.#pricePercentageThreshold = priceChange; // Percentage Change
     this.#tradingAmount = 0; // cryptoTradingAmount
     this.strategyRange = Math.max(+strategyRange || 0, 0.5); // Range in days
+    this.safetyTimeline = safetyTimeline > 0 || safetyTimeline <= strategyRange * 24 ? safetyTimeline : 8; // The number of hours that will be monitored in case a price spike happen
     this.listener = null;
   }
 
@@ -40,49 +41,75 @@ module.exports = class DailyTrader {
       const rsi = analyzer.calculateRSI(prices);
       const averagePrice = analyzer.calculateAveragePrice(prices);
       const percentageChange = analyzer.calculatePercentageChange(currentPrice, averagePrice);
-      const name = this.#pair.replace("EUR", "").toLowerCase();
 
+      let decision = "hold";
+      if (this.#pricePercentageThreshold <= percentageChange) decision = "sell";
+      else if (percentageChange <= -this.#pricePercentageThreshold) decision = "buy";
+
+      // Safety Check
+      const sorted = prices.slice(-((this.safetyTimeline * 60) / 5)).toSorted();
+      const spikeChange = analyzer.calculatePercentageChange(sorted[sorted.length - 1], sorted[0]);
+      const trendChange = analyzer.calculatePercentageChange(currentPrice, sorted[0]);
+
+      // Check if the highest price in the last xxx is too high
+      // Check if the current price is still not close to the lowest price in the last xxx
+      if (this.#pricePercentageThreshold * 2 <= spikeChange && this.#pricePercentageThreshold < trendChange) {
+        // Pause buying when there is a sudden significant rise in the price or if the price keeps rising
+        decision = "hold";
+      }
+      // Else the price spike has passed or the stabilized
+
+      const name = this.#pair.replace("EUR", "").toLowerCase();
       this.dispatch("currentPrice", currentPrice);
       this.dispatch("priceChange", percentageChange);
       this.dispatch("balance", balance.crypto);
-      this.dispatch("log", `Balance => eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
-      this.dispatch("log", `RSI: ${rsi} - Current: ${currentPrice} - Average: ${averagePrice}`);
+      this.dispatch("log", `Current balance => eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
+      this.dispatch(
+        "log",
+        `RSI: ${rsi} => ${decision} - Current: ${currentPrice} - Average: ${averagePrice} ${percentageChange}%`
+      );
+      if (decision == "hold") {
+        this.dispatch("log", `Paused buying: The price is experiencing a significant increase`);
+      }
 
-      if (rsi < 30 && percentageChange < -1) {
-        this.dispatch("log", `Suggest buying: the price dropped ${percentageChange}%`);
+      if (rsi < 30 && decision == "buy") {
+        this.dispatch("log", `Suggest buying: the price dropped`);
 
-        const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
+        // Calculates the amount of a cryptocurrency that can be purchased given current balance in EUR and the price of the cryptocurrency.
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
+        const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
 
-        if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
+        if (balance.eur > 0 && remaining > this.#tradingAmount / 2 && totalInvestedAmount < this.#capital) {
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
         //
       } else if (70 < rsi) {
-        this.dispatch("log", `Suggest selling: the price increased ${percentageChange}%`);
+        this.dispatch("log", `Suggest selling: the price rose / increased`);
 
         // Get Orders that have price Lower Than the Current Price
         const ordersForSell = orders.filter(
           (o) => this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(currentPrice, +o.price)
         );
 
+        // // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
+        // if (decision == "hold" && 2 <= change) {
+        //   const check = (o) => 60000 * 60 * 24 * 7 <= Date.now() - Date.parse(o.timeStamp);
+        //   ordersForSell = ordersForSell.concat(orders.filter(check));
+        // }
+
         if (balance.crypto > 0 && ordersForSell[0]) {
-          for (const { id, volume, price } of ordersForSell) {
+          for (const { id, volume, price, cost } of ordersForSell) {
             await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
             const change = analyzer.calculatePercentageChange(currentPrice, +price);
             const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
             this.dispatch("sell", id);
             this.dispatch("earnings", +profit.toFixed(2));
-            this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
+            this.dispatch("log", `Sold crypto with ${change}% => profit: ${profit} ID: "${id}"`);
+            this.dispatch("log", `ID: ${id} OrderPrice: ${price} "=>" CurrentPrice: ${currentPrice}`);
           }
         }
-      } else {
-        this.dispatch(
-          "log",
-          `Suggest waiting: price ${percentageChange <= 0 ? "drops" : "increases"} ${percentageChange}%`
-        );
       }
 
       this.dispatch("log", "");

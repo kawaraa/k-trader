@@ -11,11 +11,11 @@
   "ETHEUR": {
     "becameAvailable": "2015-07-01",
     "capital": 100,
-    "investment": 10,
-    "priceChange": 15,
-    "strategyRange": 2,
-    "safetyTimeline": 24,
-    "earnings": 250
+    "investment": 99,
+    "priceChange": 2,
+    "strategyRange": 1,
+    "safetyTimeline": 0,
+    "earnings": 50
   },
   "ACAEUR": {
     "becameAvailable": "2023-06-01",
