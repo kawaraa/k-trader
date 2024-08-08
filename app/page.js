@@ -90,7 +90,6 @@ export default function Home() {
 
   useEffect(() => {
     request("/api/auth").catch(() => router.replace("/signin"));
-
     if (!renderRef.current) fetchBots();
     renderRef.current = true;
   }, []);
@@ -119,9 +118,11 @@ export default function Home() {
         </p>
 
         <ul className="pt-5">
-          {Object.keys(bots).map((pair) => (
-            <BotItem botInfo={{ pair, ...bots[pair] }} onAction={handleActions} key={pair} />
-          ))}
+          {Object.keys(bots)
+            .sort((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
+            .map((pair) => (
+              <BotItem botInfo={{ pair, ...bots[pair] }} onAction={handleActions} key={pair} />
+            ))}
         </ul>
       </main>
 

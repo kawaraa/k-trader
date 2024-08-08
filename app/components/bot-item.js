@@ -48,14 +48,11 @@ export default function BotItem({ botInfo, onAction }) {
           <p className="">
             <strong>Price Change</strong>: <span>{botInfo.priceChange}%</span>
           </p>
-          <p className="">
+          <p className="mb-1">
             <strong>Strategy Range</strong>: <span>{botInfo.strategyRange} Days</span>
           </p>
-          <p className="">
-            <strong>Safety Timeline</strong>: <span>{botInfo.safetyTimeline} Hours</span>
-          </p>
-          <br />
-          <p className="">
+          <hr />
+          <p className="mt-1">
             <strong>Balance</strong>: <span>{botInfo.balance}</span>
           </p>
           <p className="">

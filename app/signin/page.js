@@ -18,7 +18,7 @@ export default function Signin() {
       });
       router.replace("/");
     } catch (error) {
-      setError(error);
+      setError(error.message);
     }
   };
 

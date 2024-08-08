@@ -16,8 +16,7 @@ const capital = +process.argv[3] || 100; // Amount in EUR which is the total mon
 const investment = +process.argv[4] || 10; // Amount in EUR that will be used every time to by crypto
 const priceChange = +process.argv[5] || 1.5; // price Percentage Threshold 0 to 100, default is 1.5
 const strategyRange = +process.argv[6] || 0.5; // Range of the strategy in days, Default is 0.5 day
-const safetyTimeline = +process.argv[7] || 8; // Number of hours, Default is 8 hours
-const timeInterval = +process.argv[8] || 5; // 1 to 11440, time per mins E.g. 11440 would be every 24 hours
+const timeInterval = +process.argv[7] || 5; // 1 to 11440, time per mins E.g. 11440 would be every 24 hours
 
 if (!isValidPair(pair)) {
   // const maxAge = 60 * 60 * 24 * 7; // 1 week (weekSec)
@@ -57,7 +56,7 @@ if (!isValidPair(pair)) {
   state.update({ [pair]: {} });
 
   const kraken = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CREDENTIALS, state);
-  const info = { capital, investment, priceChange, strategyRange, safetyTimeline };
+  const info = { capital, investment, priceChange, strategyRange };
   const trader = new DailyTrader(kraken, pair, info);
 
   trader.listener = (pair, event, info) => {
