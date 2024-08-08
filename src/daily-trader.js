@@ -46,10 +46,13 @@ module.exports = class DailyTrader {
       this.dispatch("priceChange", percentageChange);
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `Balance => eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
-      this.dispatch("log", `RSI: ${rsi} - Current: ${currentPrice} - Average: ${averagePrice}`);
+      this.dispatch(
+        "log",
+        `RSI: ${rsi} => Change: ${percentageChange}% - Current: ${currentPrice} - Average: ${averagePrice}`
+      );
 
-      if (rsi < 30 && percentageChange < -1) {
-        this.dispatch("log", `Suggest buying: the price dropped ${percentageChange}%`);
+      if (rsi < 30 && percentageChange < -1.2) {
+        this.dispatch("log", `Suggest buying`);
 
         const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
@@ -61,7 +64,7 @@ module.exports = class DailyTrader {
         }
         //
       } else if (70 < rsi) {
-        this.dispatch("log", `Suggest selling: the price increased ${percentageChange}%`);
+        this.dispatch("log", `Suggest selling`);
 
         // Get Orders that have price Lower Than the Current Price
         const ordersForSell = orders.filter(
@@ -78,11 +81,6 @@ module.exports = class DailyTrader {
             this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
           }
         }
-      } else {
-        this.dispatch(
-          "log",
-          `Suggest waiting: price ${percentageChange <= 0 ? "drops" : "increases"} ${percentageChange}%`
-        );
       }
 
       this.dispatch("log", "");
