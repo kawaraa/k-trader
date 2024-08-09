@@ -31,6 +31,14 @@
     "strategyRange": 1,
     "earnings": 280
   },
+  "AKTEUR": {
+    "becameAvailable": "2022-08-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 0.5,
+    "earnings": 185
+  },
   "ACAEUR": {
     "becameAvailable": "2023-06-01",
     "capital": 100,
@@ -38,14 +46,6 @@
     "priceChange": 3,
     "strategyRange": 5,
     "earnings": 175
-  },
-  "AKTEUR": {
-    "becameAvailable": "2022-08-01",
-    "capital": 100,
-    "investment": 10,
-    "priceChange": 3,
-    "strategyRange": 0.5,
-    "earnings": 170
   },
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
@@ -68,9 +68,10 @@
     "capital": 100,
     "investment": 19,
     "priceChange": 9,
-    "strategyRange": 0.5,
-    "earnings": 135
+    "strategyRange": 3,
+    "earnings": 140
   },
+
   "AGLDEUR": {
     "becameAvailable": "2021-09-01",
     "capital": 100,
