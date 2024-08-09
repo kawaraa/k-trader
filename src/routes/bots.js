@@ -52,7 +52,8 @@ module.exports = (router, fireStoreProvider, authRequired) => {
       const { pair, ...data } = request.body;
       const token = request.cookies?.idToken;
       if (pair) isValidPair(pair, true);
-      const { fields, updateTime } = await fireStoreProvider.updateDoc(token, "bots", pair, data);
+      const bot = { ...BotsManager.get(pair)[pair], ...data };
+      const { fields, updateTime } = await fireStoreProvider.updateDoc(token, "bots", pair, bot);
       BotsManager.update(pair, new Bot({ ...fields, updateTime }));
       response.json(BotsManager.get(pair));
     } catch (error) {

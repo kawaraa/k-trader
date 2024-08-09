@@ -34,15 +34,15 @@
       "sizes": "192x192"
     },
     {
-      "src": "/purple-logo.png",
-      "type": "image/png",
-      "sizes": "1006x1006",
-      "purpose": "maskable"
-    },
-    {
       "src": "/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/white-gb-logo.png",
+      "type": "image/png",
+      "sizes": "1286x1286",
       "purpose": "any"
     }
   ]
