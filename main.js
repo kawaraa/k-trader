@@ -53,11 +53,10 @@ if (!isValidPair(pair)) {
   }
 } else {
   const state = new LocalState("cli-state");
-  state.update({ [pair]: {} });
+  state.update({ [pair]: { orders: [] } });
 
   const kraken = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CREDENTIALS, state);
-  const info = { capital, investment, priceChange, strategyRange };
-  const trader = new DailyTrader(kraken, pair, info);
+  const trader = new DailyTrader(kraken, pair, { capital, investment, priceChange, strategyRange });
 
   trader.listener = (pair, event, info) => {
     if (event == "buy") state.addBotOrder(pair, info);

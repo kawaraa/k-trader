@@ -17,8 +17,7 @@ module.exports = class DailyTrader {
   #investingCapital;
   #pricePercentageThreshold;
   #tradingAmount;
-  constructor(exProvider, pair, info) {
-    const { capital, investment, priceChange, strategyRange } = info;
+  constructor(exProvider, pair, { capital, investment, priceChange, strategyRange }) {
     this.ex = exProvider;
     this.#pair = pair;
     this.#capital = capital;
@@ -74,7 +73,6 @@ module.exports = class DailyTrader {
         if (balance.crypto > 0 && ordersForSell[0]) {
           for (const { id, volume, price } of ordersForSell) {
             await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
-            const change = analyzer.calculatePercentageChange(currentPrice, +price);
             const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
             this.dispatch("sell", id);
             this.dispatch("earnings", +profit.toFixed(2));

@@ -39,14 +39,6 @@
     "strategyRange": 0.5,
     "earnings": 170
   },
-  "AGLDEUR": {
-    "becameAvailable": "2021-09-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0.5,
-    "earnings": 169
-  },
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
     "capital": 100,
@@ -54,6 +46,14 @@
     "priceChange": 7,
     "strategyRange": 1,
     "earnings": 155
+  },
+  "AGLDEUR": {
+    "becameAvailable": "2021-09-01",
+    "capital": 100,
+    "investment": 49,
+    "priceChange": 5,
+    "strategyRange": 1,
+    "earnings": 130
   },
   "AAVEEUR": {
     "becameAvailable": "2020-12-01",
