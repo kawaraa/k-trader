@@ -99,7 +99,7 @@ class BotsManager {
     else if (event == "priceChange") bot.averagePriceChange = info;
     else if (event == "balance") bot.balance = info;
 
-    this.state.update(this.#bots);
+    this.state.update(this.get());
   }
 
   static syncBots(bots) {
