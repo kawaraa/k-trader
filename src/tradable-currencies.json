@@ -55,14 +55,6 @@
     "strategyRange": 0.5,
     "earnings": 185
   },
-  "ACAEUR": {
-    "becameAvailable": "2023-06-01",
-    "capital": 100,
-    "investment": 19,
-    "priceChange": 3,
-    "strategyRange": 5,
-    "earnings": 175
-  },
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
     "capital": 100,

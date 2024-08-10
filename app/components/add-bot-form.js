@@ -9,7 +9,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
         <option value="">Pair</option>
         {Object.keys(tradableCurrencies).map((pair) => (
           <option value={pair} key={pair}>
-            {pair.replace("EUR", "")}
+            {pair.replace("ZEUR", "").replace("EUR", "")}
           </option>
         ))}
       </select>
@@ -25,13 +25,14 @@ export default function AddBotFrom({ bot, onSubmit }) {
         name="investment"
         type="number"
         placeholder="Investment"
+        step="0.5"
         defaultValue={bot?.info?.investment}
         className={inputCls}
       />
       <input
         name="priceChange"
         type="number"
-        step="0.5"
+        step="0.1"
         placeholder="Price percentage change"
         defaultValue={bot?.info?.priceChange}
         className={inputCls}
@@ -39,7 +40,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
       <input
         name="strategyRange"
         type="number"
-        step="0.5"
+        step="0.05"
         placeholder="Strategy range in days"
         defaultValue={bot?.info?.strategyRange}
         className={inputCls}

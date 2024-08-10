@@ -12,28 +12,6 @@
     "capital": 100,
     "investment": 9,
     "priceChange": 5,
-<<<<<<< HEAD
-    "strategyRange": 0.25,
-    "earnings": 70
-  },
-
-  "XXMRZEUR": {
-    "becameAvailable": "2014-04-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
-  "XREPZEUR": {
-    "becameAvailable": "2015-08-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
-=======
     "strategyRange": 3,
     "earnings": 40
   },
@@ -46,7 +24,6 @@
     "earnings": 40
   },
 
->>>>>>> stage
   "NANOEUR": {
     "becameAvailable": "2015-03-01",
     "capital": 0,
