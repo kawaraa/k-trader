@@ -23,6 +23,14 @@
     "strategyRange": 1,
     "earnings": 500
   },
+  "XREPZEUR": {
+    "becameAvailable": "2015-08-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 1.5,
+    "strategyRange": 0.25,
+    "earnings": 330
+  },
   "ADXEUR": {
     "becameAvailable": "2022-10-01",
     "capital": 100,
@@ -63,6 +71,22 @@
     "strategyRange": 3,
     "earnings": 155
   },
+  "AAVEEUR": {
+    "becameAvailable": "2020-12-01",
+    "capital": 100,
+    "investment": 49,
+    "priceChange": 6,
+    "strategyRange": 1,
+    "earnings": 150
+  },
+  "ALPHAEUR": {
+    "becameAvailable": "2021-08-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 5,
+    "strategyRange": 3,
+    "earnings": 145
+  },
   "ANTEUR": {
     "becameAvailable": "2021-02-01",
     "capital": 100,
@@ -71,7 +95,6 @@
     "strategyRange": 3,
     "earnings": 140
   },
-
   "AGLDEUR": {
     "becameAvailable": "2021-09-01",
     "capital": 100,
@@ -79,22 +102,6 @@
     "priceChange": 5,
     "strategyRange": 1,
     "earnings": 130
-  },
-  "AAVEEUR": {
-    "becameAvailable": "2020-12-01",
-    "capital": 100,
-    "investment": 49,
-    "priceChange": 6,
-    "strategyRange": 1,
-    "earnings": 125
-  },
-  "ALPHAEUR": {
-    "becameAvailable": "2021-08-01",
-    "capital": 100,
-    "investment": 10,
-    "priceChange": 3,
-    "strategyRange": 1,
-    "earnings": 110
   },
   "BTTEUR": {
     "becameAvailable": "2021-01-01",
