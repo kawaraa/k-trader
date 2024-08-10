@@ -1,8 +1,5 @@
 /*
-This strategy based on 5 to 8 mins interval and checking the last 4 hours on every 5 mins change:
-1. Buy if price 1, 2, or 3 up to 24 drops 1.5% 
-2. Sell if current price is 1.5% higher than the order price
-
+This strategy based on 5 to 8 mins interval and checking the last 4 hours on every 5 mins change.
 Recommendation:
 - if it's daily trading strategy, buy when the current price is 1.5% lower then any price in the last 4 hours
 - if it's monthly trading strategy, buy when the current price is 1.5% lower then the average price in the last 5 days
@@ -24,7 +21,7 @@ module.exports = class DailyTrader {
     this.#investingCapital = investment; // investing Amount in ERU that will be used every time to by crypto
     this.#pricePercentageThreshold = priceChange; // Percentage Change
     this.#tradingAmount = 0; // cryptoTradingAmount
-    this.strategyRange = Math.max(+strategyRange || 0, 0.5); // Range in days
+    this.strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
     this.listener = null;
   }
 
