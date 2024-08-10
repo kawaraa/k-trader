@@ -23,32 +23,15 @@
     "strategyRange": 3,
     "earnings": 40
   },
-
-  "NANOEUR": {
-    "becameAvailable": "2015-03-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
   "XETCZEUR": {
     "becameAvailable": "2016-07-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 4,
+    "strategyRange": 4,
+    "earnings": 55
   },
 
-  "XZECZEUR": {
-    "becameAvailable": "2016-10-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
   "OCEANEUR": {
     "becameAvailable": "2017-09-01",
     "capital": 0,
