@@ -27,25 +27,25 @@
     "becameAvailable": "2015-08-01",
     "capital": 100,
     "investment": 9,
-    "priceChange": 1.5,
-    "strategyRange": 0.25,
-    "earnings": 330
+    "priceChange": 1.7,
+    "strategyRange": 2,
+    "earnings": 200
   },
   "ADXEUR": {
     "becameAvailable": "2022-10-01",
     "capital": 100,
     "investment": 49,
-    "priceChange": 5.5,
-    "strategyRange": 1,
-    "earnings": 285
+    "priceChange": 5,
+    "strategyRange": 2,
+    "earnings": 240
   },
   "XZECZEUR": {
     "becameAvailable": "2016-10-01",
     "capital": 100,
-    "investment": 49,
-    "priceChange": 13.5,
-    "strategyRange": 0.25,
-    "earnings": 300
+    "investment": 19,
+    "priceChange": 13,
+    "strategyRange": 3,
+    "earnings": 160
   },
   "AKTEUR": {
     "becameAvailable": "2022-08-01",
@@ -55,14 +55,6 @@
     "strategyRange": 0.5,
     "earnings": 185
   },
-  "ACAEUR": {
-    "becameAvailable": "2023-06-01",
-    "capital": 100,
-    "investment": 9,
-    "priceChange": 3,
-    "strategyRange": 0.25,
-    "earnings": 215
-  },
   "NANOEUR": {
     "becameAvailable": "2015-03-01",
     "capital": 100,
@@ -71,14 +63,7 @@
     "strategyRange": 3,
     "earnings": 170
   },
-  "ALPHAEUR": {
-    "becameAvailable": "2021-08-01",
-    "capital": 100,
-    "investment": 9,
-    "priceChange": 5,
-    "strategyRange": 1,
-    "earnings": 160
-  },
+
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
     "capital": 100,
@@ -87,12 +72,36 @@
     "strategyRange": 1,
     "earnings": 155
   },
+  "ACAEUR": {
+    "becameAvailable": "2023-06-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 3,
+    "earnings": 155
+  },
+  "ALPHAEUR": {
+    "becameAvailable": "2021-08-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 5,
+    "strategyRange": 3,
+    "earnings": 150
+  },
   "XXLMZEUR": {
     "becameAvailable": "2014-07-01",
     "capital": 100,
     "investment": 9,
     "priceChange": 10,
     "strategyRange": 3,
+    "earnings": 155
+  },
+  "ANTEUR": {
+    "becameAvailable": "2021-02-01",
+    "capital": 100,
+    "investment": 99,
+    "priceChange": 9,
+    "strategyRange": 2,
     "earnings": 155
   },
   "AAVEEUR": {
@@ -103,21 +112,13 @@
     "strategyRange": 1,
     "earnings": 150
   },
-  "ANTEUR": {
-    "becameAvailable": "2021-02-01",
-    "capital": 100,
-    "investment": 9,
-    "priceChange": 9,
-    "strategyRange": 0.5,
-    "earnings": 150
-  },
   "AGLDEUR": {
     "becameAvailable": "2021-09-01",
     "capital": 100,
     "investment": 9,
     "priceChange": 5,
-    "strategyRange": 0.5,
-    "earnings": 130
+    "strategyRange": 1.5,
+    "earnings": 140
   },
   "BTTEUR": {
     "becameAvailable": "2021-01-01",
@@ -132,16 +133,16 @@
     "capital": 100,
     "investment": 9,
     "priceChange": 7.5,
-    "strategyRange": 0.5,
+    "strategyRange": 1,
     "earnings": 90
   },
   "1INCHEUR": {
     "becameAvailable": "2021-08-01",
     "capital": 100,
     "investment": 9,
-    "priceChange": 2.5,
-    "strategyRange": 0.25,
-    "earnings": 90
+    "priceChange": 3,
+    "strategyRange": 1,
+    "earnings": 50
   },
   "ALICEEUR": {
     "becameAvailable": "2021-07-01",
