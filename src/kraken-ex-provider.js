@@ -53,9 +53,10 @@ module.exports = class KrakenExchangeProvider {
   }
 
   async balance(pair) {
-    const curMap = { BTC: "XXBT", ETH: "XETH", SOL: "SOL" };
-    const key = pair.replace("EUR", "");
+    const curMap = { BTC: "XXBT", ETH: "XETH" };
+    const key = pair.replace("ZEUR", "").replace("EUR", "");
     const balance = parseNumbers(await this.#privateApi("Balance"));
+
     if (pair == "all") return balance;
     return { eur: +balance.ZEUR, crypto: +(balance[curMap[key]] || balance[key] || 0) };
   }
@@ -78,7 +79,6 @@ module.exports = class KrakenExchangeProvider {
   }
   async prices(pair, lastDays) {
     const prices = await this.pricesData(pair, lastDays);
-    prices.pop();
     return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
   }
   async createOrder(type, ordertype, pair, volume) {

@@ -42,8 +42,8 @@
   "XZECZEUR": {
     "becameAvailable": "2016-10-01",
     "capital": 100,
-    "investment": 99,
-    "priceChange": 13,
+    "investment": 49,
+    "priceChange": 13.5,
     "strategyRange": 0.25,
     "earnings": 300
   },

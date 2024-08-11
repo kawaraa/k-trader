@@ -8,6 +8,8 @@ import { dateToString, request } from "../src/utilities";
 import { btnCls } from "./components/tailwind-classes";
 import Loader from "./components/loader";
 import RefreshButton from "./components/refresh-button";
+const badgeCls =
+  "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
 
 export default function Home() {
   const renderRef = useRef(null);
@@ -97,9 +99,9 @@ export default function Home() {
   return (
     <>
       <header className="flex px-3 md:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
-        <strong className="text-3xl font-bold text-emerald-500">€{balance}</strong>
+        <strong className="text-3xl font-bold text-emerald-500">€{balance.toFixed(2)}</strong>
         <div className="flex items-end">
-          <strong>{Object.keys(bots).length}</strong>
+          <strong className="text-pc">{Object.keys(bots).length}</strong>
           <button
             onClick={() => setShowAddBotForm(true)}
             className={`${btnCls} !w-8 !h-8 ml-3 p-1 flex items-center justify-center rounded-3xl`}
@@ -110,14 +112,24 @@ export default function Home() {
         </div>
       </header>
       <main className="px-3 md:px-5 py-6 mb-8 max-w-2xl mx-auto">
-        <p className="flex overflow-y-auto no-srl-bar">
-          <span className="flex-1 w-1/5">Crypto</span>
-          <span className="flex-1 w-1/5">Capital</span>
-          <span className="flex-1 w-1/5">Earings</span>
-          <span className="flex-1 w-2/5">Orders</span>
-        </p>
+        <div className="flex no-srl-bar">
+          <span className="flex-1 w-1/5 font-medium">Crypto</span>
+          <span className="flex-1 w-1/5 font-medium">Capital</span>
+          <p className="relative flex-1 w-2/5">
+            <span className={`${badgeCls} bg-emerald-400`}>
+              {Object.keys(bots).reduce((acc, p) => acc + bots[p].earnings, 0)}
+            </span>
+            <span className="block font-medium">Earings</span>
+          </p>
+          <p className="relative flex-1 w-2/5">
+            <span className={`${badgeCls} bg-rose-300`}>
+              {Object.keys(bots).reduce((acc, p) => acc + bots[p].orders.length, 0)}
+            </span>
+            <span className="block font-medium">Orders</span>
+          </p>
+        </div>
 
-        <ul className="pt-5">
+        <ul className="pt-4">
           {Object.keys(bots)
             .sort((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
             .map((pair) => (

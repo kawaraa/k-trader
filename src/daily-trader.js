@@ -41,7 +41,7 @@ module.exports = class DailyTrader {
       this.dispatch("currentPrice", currentPrice);
       this.dispatch("priceChange", percentageChange);
       this.dispatch("balance", balance.crypto);
-      this.dispatch("log", `Balance => eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
+      this.dispatch("log", `💰=> eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
       this.dispatch(
         "log",
         `RSI: ${rsi} => Change: ${percentageChange}% - Current: ${currentPrice} - Average: ${averagePrice}`
@@ -51,9 +51,13 @@ module.exports = class DailyTrader {
         this.dispatch("log", `Suggest buying`);
 
         const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
+        this.dispatch("log", `TotalInvestedAmount: "${totalInvestedAmount}"`); // Test
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
+        this.dispatch("log", `Remaining: "${remaining}"`); // Test
 
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
+          this.dispatch("log", `OrderInfo: "${this.#pair}"`); // Test
+
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);

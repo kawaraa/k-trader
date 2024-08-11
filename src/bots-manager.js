@@ -77,7 +77,7 @@ class BotsManager {
       const filePath = `database/logs/${pair}.log`;
       const d = new Date();
       const ops = { hour12: false };
-      info = `[${d.toJSON().substring(0, 10)} ${d.toLocaleTimeString([], ops).substring(0, 5)}] ${info}\n`;
+      info = `[${d.toJSON().substring(5, 10)} ${d.toLocaleTimeString([], ops).substring(0, 5)}] ${info}\n`;
       // logToFile
       if (!existsSync(filePath)) writeFileSync(filePath, info);
       else {

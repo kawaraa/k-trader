@@ -12,7 +12,7 @@ export default function BotItem({ botInfo, onAction }) {
   return (
     <li className={`mb-3 p-2 overflow-y-auto no-srl-bar card rounded-md ${borderCls}`}>
       <div className="flex cursor-pointer" onClick={() => setOpen(!open)}>
-        <span className="flex-1 w-1/5">{botInfo.pair.replace("EUR", "")}</span>
+        <span className="flex-1 w-1/5">{botInfo.pair.replace("ZEUR", "").replace("EUR", "")}</span>
         <span className="flex-1 w-1/5 text-orange">€{botInfo.capital}</span>
         <span className="flex-1 w-1/5 text-green">€{botInfo.earnings}</span>
         <span className="flex-1 w-2/5 flex justify-between items-center">
@@ -62,7 +62,7 @@ export default function BotItem({ botInfo, onAction }) {
             <strong>Average price change</strong>: <span>{botInfo.averagePriceChange}</span>
           </p>
           <p className="">
-            <strong>Sold</strong>: <span>{botInfo.sold}</span>
+            <strong>Sold / Transactions</strong>: <span>{botInfo.sold}</span>
           </p>
         </div>
         <div className="flex items-center justify-between">

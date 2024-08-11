@@ -31,14 +31,13 @@
     "strategyRange": 4,
     "earnings": 55
   },
-
   "OCEANEUR": {
     "becameAvailable": "2017-09-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 6,
+    "strategyRange": 4,
+    "earnings": 50
   },
   "OMGEUR": {
     "becameAvailable": "2017-07-01",
@@ -48,6 +47,7 @@
     "strategyRange": 0,
     "earnings": 0
   },
+
   "OXTEUR": {
     "becameAvailable": "2017-11-01",
     "capital": 0,
