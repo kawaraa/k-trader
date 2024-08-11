@@ -81,17 +81,21 @@ module.exports = class KrakenExchangeProvider {
     const prices = await this.pricesData(pair, lastDays);
     return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
   }
-  async createOrder(type, ordertype, pair, volume) {
-    volume += "";
-    const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
+  async createOrder(type, ordertype, pair, volume, price) {
+    const data = { type, ordertype, pair, volume: volume + "", price: price ? price + "" : undefined };
+    const orderId = (await this.#privateApi("AddOrder", data)).txid[0];
     return orderId;
+  }
+  async cancelOrder(id) {
+    return !(await this.#privateApi("CancelOrder", { txid: id })).pending;
   }
   async getOrders(pair, orderIds) {
     if (!orderIds) orderIds = this.state.getBotOrders(pair).join(",");
     if (!orderIds) return [];
     const orders = await this.#privateApi("QueryOrders", { txid: orderIds });
     return Object.keys(orders).map((id) => {
-      return { id, price: +orders[id].price, volume: +orders[id].vol_exec, cost: +orders[id].cost };
+      const { price, vol_exec, cost, status } = orders[id];
+      return { id, price: +price, volume: +vol_exec, cost: +cost, status };
     });
   }
   async getOpenClosedOrders(state) {

@@ -32,7 +32,7 @@ module.exports = class DailyTrader {
       const prices = await this.ex.prices(this.#pair, this.strategyRange); // For the last xxx days
       this.#tradingAmount = +(this.#investingCapital / currentPrice).toFixed(8);
 
-      let orders = await this.ex.getOrders(this.#pair);
+      const orders = await this.ex.getOrders(this.#pair);
       const rsi = analyzer.calculateRSI(prices);
       const averagePrice = analyzer.calculateAveragePrice(prices);
       const percentageChange = analyzer.calculatePercentageChange(currentPrice, averagePrice);
@@ -50,27 +50,11 @@ module.exports = class DailyTrader {
       if (rsi < 30 && percentageChange < -1.2) {
         this.dispatch("log", `Suggest buying`);
 
-        // Filter and remove the unfulfilled orders
-        const unfulfilledOrders = [];
-
-        orders = orders.filter((o) => {
-          if (o.status == "closed") return true;
-          unfulfilledOrders.push(o);
-          return false;
-        });
-        await unfulfilledOrders.map(async (o) => {
-          if (await this.ex.cancelOrder(o.id)) this.dispatch("cancelOrder", o.id);
-        });
-
         const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
-        this.dispatch("log", `TotalInvestedAmount: "${totalInvestedAmount}"`); // Test
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
-        this.dispatch("log", `Remaining: "${remaining}"`); // Test
 
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
-          this.dispatch("log", `OrderInfo: "${this.#pair}"`); // Test
-
-          const orderId = await this.ex.createOrder("buy", "limit", this.#pair, remaining, currentPrice);
+          const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }

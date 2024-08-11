@@ -88,7 +88,10 @@ class BotsManager {
     }
 
     const bot = this.#bots[pair];
-    if (event == "buy") {
+    if (event == "cancelOrder") {
+      bot.bought -= 1;
+      bot.orders = bot.orders.filter((id) => id != info);
+    } else if (event == "buy") {
       bot.bought += 1;
       bot.orders.push(info);
     } else if (event == "sell") {
