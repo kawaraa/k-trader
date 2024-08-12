@@ -84,7 +84,7 @@ module.exports = class DailyTrader {
 
       this.dispatch("log", "");
     } catch (error) {
-      console.log(`Error running bot: ${error}`);
+      // console.log(`Error running bot: ${error}`);
       this.dispatch("log", `Error running bot: ${error}`);
     }
 

@@ -201,19 +201,19 @@
   },
   "CHZEUR": {
     "becameAvailable": "2020-10-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 3,
+    "earnings": 30
   },
   "COTIEUR": {
     "becameAvailable": "2020-09-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 2,
+    "strategyRange": 5,
+    "earnings": 40
   },
 
   "CRVEUR": {

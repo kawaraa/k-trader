@@ -1,6 +1,7 @@
 // test-trading-script is a analyze-price-history-script
 const { existsSync, readFileSync, writeFileSync, unlinkSync } = require("node:fs");
 const KrakenExchangeProvider = require("./kraken-ex-provider.js");
+const cryptos = require("./available-currencies.json");
 
 const kraken = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS);
 const TestExchangeProvider = require("./test-ex-provider.js");
@@ -20,27 +21,157 @@ const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
 // node test-trading-script.js ADAEUR 100 10 1.5 0.5 8 30
 
 (async () => {
-  let prices = [];
-  if (existsSync(pricesFilePath)) {
-    prices = JSON.parse(readFileSync(pricesFilePath, "utf8"));
-  } else {
-    prices = await kraken.prices(pair, testPeriod);
-    writeFileSync(pricesFilePath, JSON.stringify(prices));
+  // for (let pair of cryptos) {
+  //   const filePath = `${process.cwd()}/database/test/${pair}-prices.json`;
+
+  //   if (!existsSync(filePath)) {
+  //     writeFileSync(filePath, JSON.stringify(await kraken.prices(pair, 60)));
+  //     console.log(pair);
+  //   }
+  // }
+
+  // ====> Part 2
+  const strategySettings = getStrategySettings();
+  const capital = 100;
+  let strategyRage = 0.25;
+
+  for (const pair in cryptos) {
+    console.log(`Started new analysis with ${pair}.\n`);
+    const filePath = `${process.cwd()}/database/test/${pair}-prices.json`;
+    const prices = JSON.parse(readFileSync(filePath, "utf8"));
+    const result = { investment: 0, priceChange: 0, range: 0, balance: 0 };
+
+    try {
+      for (const [investment, priceChange] of strategySettings) {
+        let range = strategyRage;
+
+        while (range < 6) {
+          const pricesOffset = (range * 24 * 60) / 5;
+          const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset);
+          const info = { capital, investment, priceChange, strategyRange: range };
+          const trader = new DailyTrader(ex, pair, info);
+          trader.listener = (p, event, info) => {
+            event == "sell" && ex.removeOrder(info);
+          };
+
+          for (const i in prices) {
+            if (i < pricesOffset || prices.length - pricesOffset <= i) continue;
+            await trader.start();
+          }
+
+          const eur = +(await ex.balance()).eur.toFixed(2);
+
+          if (eur > 200 && (result.balance <= eur || (range > 1 && result.balance <= eur + 10))) {
+            result.balance = eur;
+            result.range = range;
+            result.investment = investment;
+            result.priceChange = priceChange;
+            console.log(
+              `Strategy: ${result.investment}, ${result.priceChange}, ${result.range} -`,
+              "Balance: ",
+              result.balance,
+              "=> ",
+              +((result.balance - 100) / 2).toFixed(2)
+            );
+          }
+
+          range = range < 0.5 ? 0.5 : range + 0.5;
+        }
+      }
+    } catch (error) {
+      console.log("Error with ", pair, "===>", error);
+    }
+    console.log(`\n Finished analyzing ${pair}.\n`);
   }
 
-  const sorted = prices.toSorted();
-  console.log("The lowest price: ", sorted[0], "The highest price: ", sorted[sorted.length - 1]);
+  // ====> Part 3
 
-  const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesLimitOffset);
-  const info = { capital, investment, priceChange, strategyRange };
-  const trader = new DailyTrader(ex, pair, info);
-  trader.listener = (pair, event, info) => {
-    event == "sell" && ex.removeOrder(info);
-    event == "log" && console.log(pair, info);
-  };
+  // let prices = [];
+  // if (existsSync(pricesFilePath)) {
+  //   prices = JSON.parse(readFileSync(pricesFilePath, "utf8"));
+  // } else {
+  //   prices = await kraken.prices(pair, testPeriod);
+  //   writeFileSync(pricesFilePath, JSON.stringify(prices));
+  // }
 
-  for (const i in prices) {
-    if (i < pricesLimitOffset || prices.length - pricesLimitOffset <= i) continue;
-    await trader.start();
-  }
+  // const sorted = prices.toSorted();
+  // console.log("The lowest price: ", sorted[0], "The highest price: ", sorted[sorted.length - 1]);
+
+  // const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesLimitOffset);
+  // const info = { capital, investment, priceChange, strategyRange };
+  // const trader = new DailyTrader(ex, pair, info);
+  // trader.listener = (pair, event, info) => {
+  //   event == "sell" && ex.removeOrder(info);
+  //   event == "log" && console.log(pair, info);
+  // };
+
+  // for (const i in prices) {
+  //   if (i < pricesLimitOffset || prices.length - pricesLimitOffset <= i) continue;
+  //   await trader.start();
+  // }
 })();
+
+function getStrategySettings() {
+  return [
+    [9, 2],
+    [9, 3],
+    [9, 4],
+    [9, 5],
+    [9, 6],
+    [9, 7],
+    [9, 8],
+    [9, 9],
+    [9, 10],
+    [9, 11],
+    [9, 12],
+    [9, 13],
+    [19, 2],
+    [19, 3],
+    [19, 4],
+    [19, 5],
+    [19, 6],
+    [19, 7],
+    [19, 8],
+    [19, 9],
+    [19, 10],
+    [19, 11],
+    [19, 12],
+    [19, 13],
+    [32, 2],
+    [32, 3],
+    [32, 4],
+    [32, 5],
+    [32, 6],
+    [32, 7],
+    [32, 8],
+    [32, 9],
+    [32, 10],
+    [32, 11],
+    [32, 12],
+    [32, 13],
+    [49, 2],
+    [49, 3],
+    [49, 4],
+    [49, 5],
+    [49, 6],
+    [49, 7],
+    [49, 8],
+    [49, 9],
+    [49, 10],
+    [49, 11],
+    [49, 12],
+    [49, 13],
+    [99, 2],
+    [99, 3],
+    [99, 4],
+    [99, 5],
+    [99, 6],
+    [99, 7],
+    [99, 8],
+    [99, 9],
+    [99, 10],
+    [99, 11],
+    [99, 12],
+    [99, 13],
+  ];
+}

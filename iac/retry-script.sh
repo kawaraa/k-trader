@@ -73,15 +73,10 @@ else
   ufw allow 'Nginx HTTPS'
   ufw enable
 
-  # Set the node NODE_ENV variable to "production" permanently if not already set
-  ! [ -n "$NODE_ENV" ] && test -f ~/.bashrc && echo 'export NODE_ENV=production' >> ~/.bashrc && source ~/.bashrc
-  ! [ -n "$NODE_ENV" ] && test -f ~/.zshrc && echo 'export NODE_ENV=production' >> ~/.zshrc && source ~/.zshrc
-
-
   # Additional commands for application setup
   rm -f ~/.pm2/logs/*
   npm install --production
-  pm2 restart app || pm2 start main.js --name app
+  NODE_ENV=production pm2 restart app --update-env || NODE_ENV=production pm2 start main.js --name app --update-env 
   pm2 save # save the current PM2 process list to ensure that your application restarts on boot
   sudo pm2 startup # Generate Startup Script so it restarts on boot
   systemctl restart nginx
