@@ -1,9 +1,8 @@
 // test-trading-script is a analyze-price-history-script
 const { existsSync, readFileSync, writeFileSync, unlinkSync } = require("node:fs");
-const KrakenExchangeProvider = require("./kraken-ex-provider.js");
-const cryptos = require("./available-currencies.json");
+// const KrakenExchangeProvider = require("./kraken-ex-provider.js");
 
-const kraken = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS);
+// const kraken = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS);
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
 
@@ -20,6 +19,8 @@ const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
 // node test-trading-script.js XETHZEUR 5000 2500 1.3 10 96 90
 // node test-trading-script.js ADAEUR 100 10 1.5 0.5 8 30
 
+const cryptos = require(`./currencies.json`);
+
 (async () => {
   // for (let pair of cryptos) {
   //   const filePath = `${process.cwd()}/database/test/${pair}-prices.json`;
@@ -33,7 +34,8 @@ const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
   // ====> Part 2
   const strategySettings = getStrategySettings();
   const capital = 100;
-  let strategyRage = 0.25;
+  // let strategyRage =  0.25;
+  let strategyRage = +process.argv[3] || 0.25;
 
   for (const pair in cryptos) {
     console.log(`Started new analysis with ${pair}.\n`);
@@ -81,7 +83,7 @@ const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
     } catch (error) {
       console.log("Error with ", pair, "===>", error);
     }
-    console.log(`\n Finished analyzing ${pair}.\n`);
+    console.log(`\n\n`);
   }
 
   // ====> Part 3

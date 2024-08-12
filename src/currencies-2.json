@@ -1,0 +1,170 @@
+{
+  "GMTEUR": {
+    "becameAvailable": "2022-12-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "DENTEUR": {
+    "becameAvailable": "2022-04-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "DYMEUR": {
+    "becameAvailable": "2022-01-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "ETHFIEUR": {
+    "becameAvailable": "2022-03-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "ETHWEUR": {
+    "becameAvailable": "2022-09-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "ZETAEUR": {
+    "becameAvailable": "2022-04-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "JUNOEUR": {
+    "becameAvailable": "2022-03-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "APTEUR": {
+    "becameAvailable": "2022-12-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "ARKMEUR": {
+    "becameAvailable": "2022-07-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "BNTEUR": {
+    "becameAvailable": "2022-06-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "BOBAEUR": {
+    "becameAvailable": "2022-07-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "BODENEUR": {
+    "becameAvailable": "2022-05-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "BONDEUR": {
+    "becameAvailable": "2022-08-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "BEAMEUR": {
+    "becameAvailable": "2022-01-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "BIGTIMEEUR": {
+    "becameAvailable": "2022-12-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "BLUREUR": {
+    "becameAvailable": "2022-02-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "CHREUR": {
+    "becameAvailable": "2022-02-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "BSXEUR": {
+    "becameAvailable": "2022-03-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "CTSIEUR": {
+    "becameAvailable": "2022-11-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "CVCEUR": {
+    "becameAvailable": "2022-12-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "STEPEUR": {
+    "becameAvailable": "2022-01-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  }
+}

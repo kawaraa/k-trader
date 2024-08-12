@@ -1,0 +1,90 @@
+{
+  "HFTEUR": {
+    "becameAvailable": "2022-09-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "GALEUR": {
+    "becameAvailable": "2020-08-01",
+    "capital": 100,
+    "investment": 0,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "KINTEUR": {
+    "becameAvailable": "2020-10-01",
+    "capital": 0,
+    "investment": 0,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "SBREUR": {
+    "becameAvailable": "2020-03-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "HNTEUR": {
+    "becameAvailable": "2021-08-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "IDEXEUR": {
+    "becameAvailable": "2021-03-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "KEEPEUR": {
+    "becameAvailable": "2021-05-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "KP3REUR": {
+    "becameAvailable": "2021-12-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "SGBEUR": {
+    "becameAvailable": "2021-09-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "INTREUR": {
+    "becameAvailable": "2022-07-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  },
+  "MCEUR": {
+    "becameAvailable": "2022-07-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 0,
+    "strategyRange": 0,
+    "earnings": 0
+  }
+}

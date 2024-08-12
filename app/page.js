@@ -117,7 +117,9 @@ export default function Home() {
           <span className="flex-1 w-1/5 font-medium">Capital</span>
           <p className="relative flex-1 w-2/5">
             <span className={`${badgeCls} bg-emerald-400`}>
-              {Object.keys(bots).reduce((acc, p) => acc + bots[p].earnings, 0)}
+              {Object.keys(bots)
+                .reduce((acc, p) => acc + bots[p].earnings, 0)
+                .toFixed(2)}
             </span>
             <span className="block font-medium">Earings</span>
           </p>
