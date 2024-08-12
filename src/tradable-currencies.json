@@ -35,8 +35,8 @@
     "becameAvailable": "2022-10-01",
     "capital": 100,
     "investment": 49,
-    "priceChange": 5,
-    "strategyRange": 2,
+    "priceChange": 5.5,
+    "strategyRange": 5,
     "earnings": 240
   },
   "XZECZEUR": {
@@ -63,7 +63,6 @@
     "strategyRange": 3,
     "earnings": 170
   },
-
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
     "capital": 100,
@@ -94,6 +93,14 @@
     "investment": 9,
     "priceChange": 10,
     "strategyRange": 3,
+    "earnings": 155
+  },
+  "WAXLEUR": {
+    "becameAvailable": "2017-12-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 4,
+    "strategyRange": 1,
     "earnings": 155
   },
   "ANTEUR": {
@@ -136,36 +143,76 @@
     "strategyRange": 1,
     "earnings": 90
   },
-  "1INCHEUR": {
-    "becameAvailable": "2021-08-01",
+  "TVKEUR": {
+    "becameAvailable": "2019-09-01",
     "capital": 100,
     "investment": 9,
-    "priceChange": 3,
-    "strategyRange": 1,
-    "earnings": 50
+    "priceChange": 4,
+    "strategyRange": 4,
+    "earnings": 80
   },
   "ALICEEUR": {
     "becameAvailable": "2021-07-01",
     "capital": 100,
-    "investment": 19,
+    "investment": 4.5,
     "priceChange": 7,
     "strategyRange": 2,
-    "earnings": 85
+    "earnings": 80
   },
-  "ALTEUR": {
-    "becameAvailable": "2022-03-01",
+  "STORJEUR": {
+    "becameAvailable": "2017-07-01",
     "capital": 100,
-    "investment": 49,
-    "priceChange": 1.5,
-    "strategyRange": 0.5,
-    "earnings": 74
+    "investment": 9,
+    "priceChange": 2,
+    "strategyRange": 2,
+    "earnings": 75
+  },
+  "ZRXEUR": {
+    "becameAvailable": "2017-08-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 5,
+    "strategyRange": 2,
+    "earnings": 75
   },
   "QNTEUR": {
     "becameAvailable": "2018-08-01",
     "capital": 100,
     "investment": 9,
-    "priceChange": 4.5,
-    "strategyRange": 4,
-    "earnings": 85
+    "priceChange": 4,
+    "strategyRange": 1.5,
+    "earnings": 75
+  },
+  "TRUEUR": {
+    "becameAvailable": "2018-07-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 2,
+    "earnings": 70
+  },
+  "LUNAEUR": {
+    "becameAvailable": "2019-08-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 7,
+    "strategyRange": 5,
+    "earnings": 70
+  },
+  "1INCHEUR": {
+    "becameAvailable": "2021-08-01",
+    "capital": 100,
+    "investment": 49,
+    "priceChange": 3,
+    "strategyRange": 3.5,
+    "earnings": 70
+  },
+  "ALTEUR": {
+    "becameAvailable": "2022-03-01",
+    "capital": 100,
+    "investment": 19,
+    "priceChange": 2,
+    "strategyRange": 2,
+    "earnings": 70
   }
 }

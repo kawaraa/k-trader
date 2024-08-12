@@ -41,20 +41,19 @@
   },
   "OMGEUR": {
     "becameAvailable": "2017-07-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 4,
+    "earnings": 25
   },
-
   "OXTEUR": {
     "becameAvailable": "2017-11-01",
     "capital": 0,
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0,
-    "earnings": 0
+    "earnings": 15
   },
   "QTUMEUR": {
     "becameAvailable": "2017-03-01",
@@ -62,23 +61,15 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0,
-    "earnings": 0
+    "earnings": 30
   },
   "REQEUR": {
     "becameAvailable": "2017-08-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
-  "STORJEUR": {
-    "becameAvailable": "2017-07-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 3,
+    "earnings": 55
   },
   "TRXEUR": {
     "becameAvailable": "2017-07-01",
@@ -86,23 +77,7 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0,
-    "earnings": 0
-  },
-  "WAXLEUR": {
-    "becameAvailable": "2017-12-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
-  "ZRXEUR": {
-    "becameAvailable": "2017-08-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "earnings": 15
   },
   "PAXGEUR": {
     "becameAvailable": "2018-09-01",
@@ -110,23 +85,15 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0,
-    "earnings": 0
+    "earnings": "xxx"
   },
   "SNXEUR": {
     "becameAvailable": "2018-03-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
-  "TRUEUR": {
-    "becameAvailable": "2018-07-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 2,
+    "strategyRange": 0.5,
+    "earnings": 40
   },
   "TUSDEUR": {
     "becameAvailable": "2018-10-01",
@@ -134,119 +101,103 @@
     "investment": 0,
     "priceChange": 0,
     "strategyRange": 0,
-    "earnings": 0
+    "earnings": "xxx"
   },
   "XTZEUR": {
     "becameAvailable": "2018-06-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 19,
+    "priceChange": 2,
+    "strategyRange": 2,
+    "earnings": 35
   },
   "DASHEUR": {
     "becameAvailable": "2019-12-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 19,
+    "priceChange": 3,
+    "strategyRange": 2,
+    "earnings": 40
   },
   "EOSEUR": {
     "becameAvailable": "2019-11-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 4.5,
+    "priceChange": 3,
+    "strategyRange": 3,
+    "earnings": 25
   },
   "LINKEUR": {
     "becameAvailable": "2019-10-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
-  "LUNAEUR": {
-    "becameAvailable": "2019-08-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 2,
+    "earnings": 25
   },
   "MANAEUR": {
     "becameAvailable": "2019-12-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 2,
+    "earnings": 25
   },
   "STXEUR": {
     "becameAvailable": "2019-10-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
-  },
-  "TVKEUR": {
-    "becameAvailable": "2019-09-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 2,
+    "strategyRange": 2,
+    "earnings": 45
   },
   "WBTCEUR": {
     "becameAvailable": "2019-01-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 2,
+    "strategyRange": 1,
+    "earnings": 30
   },
   "ATOMEUR": {
     "becameAvailable": "2020-10-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 2,
+    "earnings": 25
   },
   "BALEUR": {
     "becameAvailable": "2020-12-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 2,
+    "strategyRange": 2,
+    "earnings": 50
   },
   "BANDEUR": {
     "becameAvailable": "2020-11-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 3,
+    "strategyRange": 3,
+    "earnings": 50
   },
   "BCHEUR": {
     "becameAvailable": "2020-01-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 19,
+    "priceChange": 3,
+    "strategyRange": 3,
+    "earnings": 25
   },
   "BNCEUR": {
     "becameAvailable": "2020-11-01",
-    "capital": 0,
-    "investment": 0,
-    "priceChange": 0,
-    "strategyRange": 0,
-    "earnings": 0
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 2,
+    "strategyRange": 5,
+    "earnings": 30
   },
   "CHZEUR": {
     "becameAvailable": "2020-10-01",
@@ -264,6 +215,7 @@
     "strategyRange": 0,
     "earnings": 0
   },
+
   "CRVEUR": {
     "becameAvailable": "2020-08-01",
     "capital": 0,

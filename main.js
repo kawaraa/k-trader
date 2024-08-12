@@ -33,7 +33,7 @@ if (!isValidPair(pair)) {
 
     const apiRouter = express.Router();
     require("./src/routes/auth")(apiRouter, fireStoreProvider, authRequired, cookieOptions);
-    require("./src/routes/bots")(apiRouter, fireStoreProvider, authRequired);
+    require("./src/routes/bots")(apiRouter, fireStoreProvider, authRequired, prod);
     server.use("/api", apiRouter);
 
     server.use(express.static(`${__dirname}/public/`));

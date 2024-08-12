@@ -1,7 +1,7 @@
 const { Bot, BotsManager } = require("../bots-manager");
 const { parseError, isValidPair } = require("../utilities");
 
-module.exports = (router, fireStoreProvider, authRequired) => {
+module.exports = (router, fireStoreProvider, authRequired, production) => {
   router.get("/bots", authRequired, async (request, response) => {
     try {
       // const { pair } = req.params; // Todo: pass the pair as param
@@ -17,8 +17,10 @@ module.exports = (router, fireStoreProvider, authRequired) => {
         }
       });
 
-      const bots = BotsManager.syncBots(firestoreBots);
-      Object.keys(bots).map((pair) => fireStoreProvider.updateDoc(token, "bots", pair, bots[pair]));
+      if (production) {
+        const bots = BotsManager.syncBots(firestoreBots);
+        Object.keys(bots).map((pair) => fireStoreProvider.updateDoc(token, "bots", pair, bots[pair]));
+      }
 
       response.json({ ...BotsManager.get(pair), balance: (await BotsManager.getEurBalance()).ZEUR });
     } catch (error) {
