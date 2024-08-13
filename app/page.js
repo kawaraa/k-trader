@@ -99,7 +99,7 @@ export default function Home() {
   return (
     <>
       <header className="no-select flex px-3 md:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
-        <strong className="text-3xl font-bold text-emerald-500">€{Number.parseInt(balance)}</strong>
+        <strong className="text-3xl font-bold text-emerald-500">€{parseInt(balance)}</strong>
         <div className="flex items-end">
           <strong className="text-pc">{Object.keys(bots).length}</strong>
           <button
@@ -117,7 +117,7 @@ export default function Home() {
           <span className="flex-1 w-1/5 font-medium">Capital</span>
           <p className="relative flex-1 w-2/5">
             <span className={`${badgeCls} bg-emerald-400`}>
-              {Number.parseInt(Object.keys(bots).reduce((acc, p) => acc + bots[p].earnings, 0))}
+              {parseInt(Object.keys(bots).reduce((acc, p) => acc + bots[p].earnings, 0))}
             </span>
             <span className="block font-medium">Earings</span>
           </p>
