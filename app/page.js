@@ -91,15 +91,15 @@ export default function Home() {
   };
 
   useEffect(() => {
-    request("/api/auth").catch(() => router.replace("/signin"));
-    if (!renderRef.current) fetchBots();
-    renderRef.current = true;
+    request("/api/auth")
+      .then(fetchBots)
+      .catch(() => router.replace("/signin"));
   }, []);
 
   return (
     <>
       <header className="flex px-3 md:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
-        <strong className="text-3xl font-bold text-emerald-500">€{balance.toFixed(2)}</strong>
+        <strong className="text-3xl font-bold text-emerald-500">€{Number.parseInt(balance)}</strong>
         <div className="flex items-end">
           <strong className="text-pc">{Object.keys(bots).length}</strong>
           <button
@@ -117,9 +117,7 @@ export default function Home() {
           <span className="flex-1 w-1/5 font-medium">Capital</span>
           <p className="relative flex-1 w-2/5">
             <span className={`${badgeCls} bg-emerald-400`}>
-              {Object.keys(bots)
-                .reduce((acc, p) => acc + bots[p].earnings, 0)
-                .toFixed(2)}
+              {Number.parseInt(Object.keys(bots).reduce((acc, p) => acc + bots[p].earnings, 0))}
             </span>
             <span className="block font-medium">Earings</span>
           </p>
