@@ -50,7 +50,7 @@ module.exports = class DailyTrader {
       if (rsi < 30 && percentageChange < -1.2) {
         this.dispatch("log", `Suggest buying`);
 
-        const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
+        const totalInvestedAmount = orders.reduce((acc, o) => acc + +o.cost, 0) + this.#investingCapital;
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
 
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
@@ -80,7 +80,7 @@ module.exports = class DailyTrader {
 
       this.dispatch("log", "");
     } catch (error) {
-      console.log(`Error running bot: ${error}`);
+      // console.log(`Error running bot: ${error}`);
       this.dispatch("log", `Error running bot: ${error}`);
     }
 
