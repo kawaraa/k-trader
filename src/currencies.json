@@ -91,10 +91,10 @@
     "SGBEUR": {
       "becameAvailable": "2021-09-01",
       "capital": 100,
-      "investment": 49,
+      "investment": 9,
       "priceChange": 2,
       "strategyRange": 0.25,
-      "earnings": 270
+      "earnings": 2010
     },
     "KINTEUR": {
       "becameAvailable": "2020-10-01",

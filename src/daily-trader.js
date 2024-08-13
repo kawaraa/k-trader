@@ -69,11 +69,12 @@ module.exports = class DailyTrader {
         );
 
         if (balance.crypto > 0 && ordersForSell[0]) {
-          for (const { id, volume, price } of ordersForSell) {
-            await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
-            const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
+          for (const { id, volume, cost } of ordersForSell) {
+            const amount = Math.min(+volume, balance.crypto);
+            const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
+            const profit = +((await this.ex.getOrders(null, orderId))[0]?.cost - cost).toFixed(2);
             this.dispatch("sell", id);
-            this.dispatch("earnings", +profit.toFixed(2));
+            this.dispatch("earnings", profit);
             this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
           }
         }
