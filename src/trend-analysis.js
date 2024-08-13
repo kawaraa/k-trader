@@ -114,7 +114,7 @@ function findHighLowPriceChanges(prices, currentPrice) {
   return priceChanges;
 }
 
-function calculateAveragePrice(prices, currentPrice, percentageChange) {
+function calculateAveragePrice(prices) {
   if (prices.length === 0) throw new Error("Price list cannot be empty.");
   const total = prices.reduce((sum, price) => sum + price, 0);
   return +(total / prices.length).toFixed(8);

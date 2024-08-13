@@ -36,6 +36,7 @@ module.exports = class DailyTrader {
       const rsi = analyzer.calculateRSI(prices);
       const averagePrice = analyzer.calculateAveragePrice(prices);
       const percentageChange = analyzer.calculatePercentageChange(currentPrice, averagePrice);
+      const priceIsStable = this.#isPriceStable(prices);
       const name = this.#pair.replace("EUR", "").toLowerCase();
 
       this.dispatch("currentPrice", currentPrice);
@@ -47,23 +48,19 @@ module.exports = class DailyTrader {
         `RSI: ${rsi} => Change: ${percentageChange}% - Current: ${currentPrice} - Average: ${averagePrice}`
       );
 
-      if (rsi < 30 && percentageChange < -1.2) {
+      if (rsi < 30 && percentageChange < -1.2 && priceIsStable) {
         this.dispatch("log", `Suggest buying`);
 
         const totalInvestedAmount = orders.reduce((acc, o) => acc + +o.cost, 0) + this.#investingCapital;
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
 
-        this.dispatch("log", `TotalInvestedAmount: "${totalInvestedAmount}" - Remaining: "${remaining}"`); // Testing
-
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
-          this.dispatch("log", `OrderInfo: "${this.#pair}"`); // Test
-
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
         //
-      } else if (70 < rsi) {
+      } else if (70 < rsi && priceIsStable) {
         this.dispatch("log", `Suggest selling`);
 
         // Get Orders that have price Lower Than the Current Price
@@ -92,6 +89,22 @@ module.exports = class DailyTrader {
       this.timeoutID = setTimeout(() => this.start(period), 60000 * (Math.round(Math.random() * 3) + period));
     }
   }
+  #isPriceStable(prices) {
+    const limit = 90 / 5; // Price for 90 mins period
+    const pricesLength = prices.length - limit;
+    let consolidationPricePattern = false;
+    const stabilized = (period) => period.every((p) => p == period[0]);
+
+    for (let i = 0; i < pricesLength; i++) {
+      // Check if price has been stable within 90 mins period
+      consolidationPricePattern = stabilized(prices.slice(i, i + limit));
+      if (consolidationPricePattern) break;
+    }
+
+    if (!consolidationPricePattern) return true;
+    return stabilized(prices.slice(-2)); // Check if price has been stable for 15 mins
+  }
+
   stop() {
     clearTimeout(this.timeoutID);
   }
