@@ -5,7 +5,7 @@ import "./globals.css";
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth group">
-      <body className="no-select relative min-h-screen bg-bg antialiased font-base">
+      <body className="relative min-h-screen bg-bg antialiased font-base">
         <Suspense>{children}</Suspense>
       </body>
     </html>

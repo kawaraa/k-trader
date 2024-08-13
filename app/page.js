@@ -98,7 +98,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="flex px-3 md:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
+      <header className="no-select flex px-3 md:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
         <strong className="text-3xl font-bold text-emerald-500">€{Number.parseInt(balance)}</strong>
         <div className="flex items-end">
           <strong className="text-pc">{Object.keys(bots).length}</strong>
@@ -111,7 +111,7 @@ export default function Home() {
           </button>
         </div>
       </header>
-      <main className="px-3 md:px-5 py-6 mb-8 max-w-2xl mx-auto">
+      <main className="no-select px-3 md:px-5 py-6 mb-8 max-w-2xl mx-auto">
         <div className="flex no-srl-bar">
           <span className="flex-1 w-1/5 font-medium">Crypto</span>
           <span className="flex-1 w-1/5 font-medium">Capital</span>
@@ -148,7 +148,7 @@ export default function Home() {
       </Modal>
 
       <button
-        className="fixed bottom-8 left-8 w-8 h-8 default-bg rounded-md shadow-[0px_1px_9px_1px_rgba(0,0,0,0.25)]"
+        className="no-select fixed bottom-8 left-8 w-8 h-8 default-bg rounded-md shadow-[0px_1px_9px_1px_rgba(0,0,0,0.25)]"
         onClick={signOut}
       >
         <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

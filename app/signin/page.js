@@ -29,7 +29,7 @@ export default function Signin() {
   }, []);
 
   return (
-    <main className="h-screen p-3 flex justify-center">
+    <main className="no-select h-screen p-3 flex justify-center">
       <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-6 mt-[15vh]">
         <h1 className="text-center text-2xl font-bold">Sign in</h1>
 
