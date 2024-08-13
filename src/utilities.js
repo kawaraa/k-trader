@@ -38,7 +38,6 @@ function request() {
       return data;
     })
     .catch((error) => {
-      console.log("Request ERROR: ", error);
       throw new Error(parseError(error));
     });
 }
