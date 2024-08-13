@@ -65,7 +65,8 @@ module.exports = class DailyTrader {
         const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
         this.dispatch("log", `TotalInvestedAmount: "${totalInvestedAmount}"`); // Test
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
-        this.dispatch("log", `Remaining: "${remaining}"`); // Test
+
+        this.dispatch("log", `TotalInvestedAmount: "${totalInvestedAmount}" - Remaining: "${remaining}"`); // Testing
 
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
           this.dispatch("log", `OrderInfo: "${this.#pair}"`); // Test
@@ -96,7 +97,7 @@ module.exports = class DailyTrader {
 
       this.dispatch("log", "");
     } catch (error) {
-      console.log(`Error running bot: ${error}`);
+      // console.log(`Error running bot: ${error}`);
       this.dispatch("log", `Error running bot: ${error}`);
     }
 

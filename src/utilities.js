@@ -1,4 +1,4 @@
-const tradableCurrencies = require("./tradable-currencies.json");
+const { tradable } = require("./currencies.json");
 
 function parseNumbers(data) {
   if (Array.isArray(data)) return data.map((n) => +n);
@@ -16,7 +16,7 @@ function dateToString(date = new Date(), seconds) {
 }
 
 function isValidPair(pair, throwError) {
-  if (tradableCurrencies[pair]) return pair;
+  if (tradable[pair]) return pair;
   if (!throwError) return null;
   else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
 }
@@ -38,6 +38,7 @@ function request() {
       return data;
     })
     .catch((error) => {
+      console.log("Request ERROR: ", error);
       throw new Error(parseError(error));
     });
 }
