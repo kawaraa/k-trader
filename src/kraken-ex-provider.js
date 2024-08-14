@@ -37,11 +37,11 @@ module.exports = class KrakenExchangeProvider {
       },
       method: "POST",
       body,
-    });
+    }).then((res) => res.result);
   }
   // Function to make calls to public API
   publicApi(path, options) {
-    return request(`${this.#apiUrl}/0/public${path}`, options);
+    return request(`${this.#apiUrl}/0/public${path}`, options).then((res) => res.result);
   }
 
   async balance(pair) {

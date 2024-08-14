@@ -59,16 +59,6 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).tradable;
           await ex.createOrder("sell", "", "", (await ex.balance()).crypto);
           const eur = +(await ex.balance()).eur.toFixed(2);
 
-          // if (eur > 800) {
-          //   console.log(
-          //     `Strategy: ${investment}, ${priceChange}, ${range} -`,
-          //     "Balance: ",
-          //     eur,
-          //     "=> ",
-          //     +((eur - 100) / 2).toFixed(2)
-          //   );
-          // }
-
           if (eur > 200 && result.balance <= eur + 20) {
             result.balance = eur;
             result.range = range;
