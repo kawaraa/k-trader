@@ -1,5 +1,5 @@
 const { createHash, createHmac } = require("node:crypto");
-const { parseNumbers, delay } = require("./utilities.js");
+const { parseNumbers, delay, request } = require("./utilities.js");
 
 module.exports = class KrakenExchangeProvider {
   #apiUrl;
@@ -22,17 +22,13 @@ module.exports = class KrakenExchangeProvider {
     const signature = hmac.update(urlPath + hash_digest, "binary").digest("base64");
     return signature;
   }
-  #checkError(res) {
-    if (!res.error[0]) return res.result;
-    else throw new Error(res.error.reduce((acc, err) => acc + "\n" + err, ""));
-  }
   // Function to make calls to private API
   #privateApi(path, data = {}) {
     path = `/0/private/${path}`;
     data.nonce = Date.now() * 1000;
     const body = JSON.stringify(data);
 
-    return fetch(`${this.#apiUrl}${path}`, {
+    return request(`${this.#apiUrl}${path}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -41,15 +37,11 @@ module.exports = class KrakenExchangeProvider {
       },
       method: "POST",
       body,
-    })
-      .then((res) => res.json())
-      .then(this.#checkError);
+    });
   }
   // Function to make calls to public API
   publicApi(path, options) {
-    return fetch(`${this.#apiUrl}/0/public${path}`, options)
-      .then((res) => res.json())
-      .then(this.#checkError);
+    return request(`${this.#apiUrl}/0/public${path}`, options);
   }
 
   async balance(pair) {
@@ -65,6 +57,7 @@ module.exports = class KrakenExchangeProvider {
     return parseFloat(data[Object.keys(data)[0]].c[0]);
   }
   async pricesData(pair, lastDays = 0.5, interval = 5) {
+    // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
     let allPrices = [];
     let timestamp = "";
 
@@ -75,31 +68,49 @@ module.exports = class KrakenExchangeProvider {
       await delay(5000);
     }
     return allPrices.slice(-((lastDays * 24 * 60) / 5));
-    // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
   }
   async prices(pair, lastDays) {
     const prices = await this.pricesData(pair, lastDays);
     return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
   }
   async createOrder(type, ordertype, pair, volume, price) {
-    const data = { type, ordertype, pair, volume: volume + "", price: price ? price + "" : undefined };
-    const orderId = (await this.#privateApi("AddOrder", data)).txid[0];
-    return orderId;
+    const data = { type, ordertype, pair, volume: volume + "", price: price + "", expiretm: "+120" };
+    return (await this.#privateApi("AddOrder", data)).txid[0]; // Return the order ID
   }
   async cancelOrder(id) {
     return !(await this.#privateApi("CancelOrder", { txid: id })).pending;
   }
   async getOrders(pair, orderIds) {
-    if (!orderIds) orderIds = this.state.getBotOrders(pair).join(",");
-    if (!orderIds) return [];
+    const stateOrders = this.state.getBotOrders(pair);
+    if (!orderIds) {
+      orderIds = stateOrders
+        .map((o) => o.split("::"))
+        .flat()
+        .filter((o) => o?.trim())
+        .join(",")
+        ?.trim();
+      if (!orderIds) return [];
+    }
+
     const orders = await this.#privateApi("QueryOrders", { txid: orderIds });
-    return Object.keys(orders).map((id) => {
-      const { price, vol_exec, cost, status } = orders[id];
-      return { id, price: +price, volume: +vol_exec, cost: +cost, status };
-    });
+    return {
+      stateOrders,
+      orders: Object.keys(orders).map((id) => {
+        const { price, vol_exec, cost, descr, status } = orders[id];
+        return { id, price: +price, volume: +vol_exec, cost: +cost, type: descr.type, status };
+      }),
+    };
   }
-  async getOpenClosedOrders(state) {
-    if (state == "open") return (await this.#privateApi("OpenOrders")).open;
-    else (await this.#privateApi("ClosedOrders")).closed;
+  async getOpenClosedOrders(state, pair, type) {
+    let response = {};
+    const orders = [];
+    if (state == "open") response = (await this.#privateApi("OpenOrders")).open;
+    else response = (await this.#privateApi("ClosedOrders")).closed;
+
+    return Object.keys(response).forEach((id) => {
+      const { price, vol_exec, cost, descr } = orders[id];
+      const condition = descr.pair === pair && (!type || type == descr.type);
+      if (condition) orders.push({ id, price: +price, volume: +vol_exec, cost: +cost });
+    });
   }
 };

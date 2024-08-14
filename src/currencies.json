@@ -24,14 +24,6 @@
       "strategyRange": 0.5,
       "earnings": 570
     },
-    "MSOLEUR": {
-      "becameAvailable": "2022-04-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 12,
-      "strategyRange": 1.5,
-      "earnings": 510
-    },
     "BRICKEUR": {
       "becameAvailable": "2022-09-01",
       "capital": 100,
@@ -44,41 +36,49 @@
       "becameAvailable": "2021-07-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 3,
-      "strategyRange": 0.25,
+      "priceChange": 11,
+      "strategyRange": 2,
+      "earnings": 555
+    },
+    "MSOLEUR": {
+      "becameAvailable": "2022-04-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 12,
+      "strategyRange": 3,
       "earnings": 480
     },
     "GALEUR": {
       "becameAvailable": "2020-08-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 4,
-      "strategyRange": 0.25,
-      "earnings": 470
+      "priceChange": 3,
+      "strategyRange": 0.5,
+      "earnings": 465
     },
     "KEEPEUR": {
       "becameAvailable": "2021-05-01",
       "capital": 100,
-      "investment": 32,
+      "investment": 9,
       "priceChange": 7,
       "strategyRange": 0.5,
-      "earnings": 395
+      "earnings": 425
     },
     "BSXEUR": {
       "becameAvailable": "2022-03-01",
       "capital": 100,
-      "investment": 19,
+      "investment": 9,
       "priceChange": 10,
       "strategyRange": 2,
-      "earnings": 300
+      "earnings": 400
     },
     "ZETAEUR": {
       "becameAvailable": "2022-04-01",
       "capital": 100,
-      "investment": 32,
-      "priceChange": 7,
-      "strategyRange": 2,
-      "earnings": 200
+      "investment": 19,
+      "priceChange": 8,
+      "strategyRange": 2.5,
+      "earnings": 335
     },
     "MCEUR": {
       "becameAvailable": "2022-07-01",
@@ -91,10 +91,10 @@
     "SGBEUR": {
       "becameAvailable": "2021-09-01",
       "capital": 100,
-      "investment": 9,
+      "investment": 49,
       "priceChange": 2,
       "strategyRange": 0.25,
-      "earnings": 2010
+      "earnings": 270
     },
     "KINTEUR": {
       "becameAvailable": "2020-10-01",

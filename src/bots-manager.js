@@ -89,14 +89,20 @@ class BotsManager {
 
     const bot = this.#bots[pair];
     if (event == "cancelOrder") {
+      bot.orders = bot.orders.filter((id) => id != info);
       bot.bought -= 1;
-      bot.orders = bot.orders.filter((id) => id != info);
     } else if (event == "buy") {
-      bot.bought += 1;
-      bot.orders.push(info);
+      const [buyId, sellId] = info.split("::");
+      const index = bot.orders.findIndex((o) => o.includes(buyId));
+      if (index > -1) bot.orders[index] = info;
+      else {
+        bot.orders.push(info);
+        bot.bought += 1;
+      }
     } else if (event == "sell") {
+      const [buyId, sellId] = info.split("::");
+      bot.orders = bot.orders.filter((o) => !o.includes(buyId));
       bot.sold += 1;
-      bot.orders = bot.orders.filter((id) => id != info);
     } else if (event == "earnings") bot.earnings += info;
     else if (event == "currentPrice") bot.currentPrice = info;
     else if (event == "priceChange") bot.averagePriceChange = info;

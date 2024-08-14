@@ -72,7 +72,7 @@ module.exports = class DailyTrader {
           for (const { id, volume, cost } of ordersForSell) {
             const amount = Math.min(+volume, balance.crypto);
             const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
-            const profit = +((await this.ex.getOrders(null, orderId))[0]?.cost - cost).toFixed(2);
+            const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || cost) - cost).toFixed(2);
             this.dispatch("sell", id);
             this.dispatch("earnings", profit);
             this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);

@@ -7,6 +7,7 @@ module.exports = class TestExchangeProvider {
     this.allPrices = prices;
     this.currentPriceIndex = priceIndex;
     this.orders = [];
+    this.stateOrders = [];
   }
 
   async balance() {
@@ -20,40 +21,55 @@ module.exports = class TestExchangeProvider {
   async prices(pair, lastDays) {
     return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
   }
-  async createOrder(tradingType, b, c, amount) {
-    const cost = amount * this.allPrices[this.currentPriceIndex];
+  async createOrder(tradingType, ordertype, pair, volume, price) {
+    const cost = volume * this.allPrices[this.currentPriceIndex];
     const fee = calculateFee(cost, 0.4);
 
     const newOrder = {
       id: randomUUID(),
       price: this.allPrices[this.currentPriceIndex],
-      volume: amount,
+      volume,
       cost: cost + fee,
+      status: "closed",
     };
 
     if (tradingType == "buy") {
       const remainingBalance = this.currentBalance.eur - newOrder.cost;
       if (remainingBalance < 0) throw new Error("No enough money");
       this.currentBalance.eur = remainingBalance;
-      this.currentBalance.crypto += amount;
-      this.orders.push(newOrder);
+      this.currentBalance.crypto += volume;
     } else {
-      const remainingCrypto = +(this.currentBalance.crypto - amount).toFixed(8);
+      const remainingCrypto = +(this.currentBalance.crypto - volume).toFixed(8);
       if (remainingCrypto < 0) throw new Error("No enough crypto");
       this.currentBalance.eur += newOrder.cost - fee * 2;
       this.currentBalance.crypto = remainingCrypto;
     }
 
+    this.orders.push(newOrder);
+
     return newOrder.id;
   }
+  async cancelOrder(id) {
+    this.removeOrderId(id);
+    return true;
+  }
   async getOrders(pair, ordersIds) {
-    if (!ordersIds) return this.orders;
-    return this.orders.filter((o) => ordersIds.includes(o.id));
+    let orders = this.orders;
+    if (ordersIds) orders = this.orders.filter((o) => ordersIds.includes(o.id));
+    return { stateOrders: this.stateOrders, orders };
   }
 
-  // This is custom function only for running test.
-  removeOrder(orderId) {
-    this.orders = this.orders.filter((o) => o.id !== orderId);
+  // The following custom function only for running test and mocking the state.
+  addOrderId(orderIds) {
+    const [buyId, sellId] = orderIds.split("::");
+    const index = this.stateOrders.findIndex((o) => o.includes(buyId));
+    if (index > -1) this.stateOrders[index] = orderIds;
+    else this.stateOrders.push(orderIds);
+  }
+  removeOrderId(orderId) {
+    const [buyId, sellId] = orderId.split("::");
+    this.stateOrders = this.stateOrders.filter((o) => !o.includes(buyId));
+    this.orders = this.orders.filter((o) => !orderId.includes(o.id));
   }
 };
 
