@@ -16,29 +16,32 @@
       "strategyRange": 1,
       "earnings": 325
     },
-    "KINEUR": {
-      "becameAvailable": "2022-08-01",
-      "capital": 100,
-      "investment": 99,
-      "priceChange": 4,
-      "strategyRange": 0.5,
-      "earnings": 570
-    },
     "MSOLEUR": {
       "becameAvailable": "2022-04-01",
       "capital": 100,
-      "investment": 9,
+      "investment": 19,
       "priceChange": 12,
       "strategyRange": 1.5,
-      "earnings": 510
+      "earnings": 485,
+      "note": "With €49, 12, 1.5 return €500"
     },
     "BRICKEUR": {
       "becameAvailable": "2022-09-01",
       "capital": 100,
-      "investment": 9,
+      "investment": 49,
+      "priceChange": 2.8,
+      "strategyRange": 1,
+      "earnings": 425,
+      "note": "With €99, 2.8, 1 return €500"
+    },
+    "KINEUR": {
+      "becameAvailable": "2022-08-01",
+      "capital": 100,
+      "investment": 49,
       "priceChange": 2,
       "strategyRange": 1,
-      "earnings": 500
+      "earnings": 445,
+      "note": "With €99, 3, 0.5 return €500"
     },
     "CSMEUR": {
       "becameAvailable": "2021-07-01",
@@ -46,7 +49,7 @@
       "investment": 9,
       "priceChange": 3,
       "strategyRange": 0.25,
-      "earnings": 480
+      "earnings": 390
     },
     "GALEUR": {
       "becameAvailable": "2020-08-01",
@@ -54,47 +57,33 @@
       "investment": 9,
       "priceChange": 4,
       "strategyRange": 0.25,
-      "earnings": 470
+      "earnings": 445
     },
     "KEEPEUR": {
       "becameAvailable": "2021-05-01",
       "capital": 100,
-      "investment": 32,
-      "priceChange": 7,
-      "strategyRange": 0.5,
-      "earnings": 395
+      "investment": 9,
+      "priceChange": 12,
+      "strategyRange": 3.5,
+      "earnings": 400,
+      "note": "With €49, 7, 0.5 return €460"
+    },
+    "BLZEUR": {
+      "becameAvailable": "2021-03-01",
+      "capital": 100,
+      "investment": 99,
+      "priceChange": 2,
+      "strategyRange": 2.5,
+      "earnings": 380,
+      "note": "With €49, 2, 2.5 return €205"
     },
     "BSXEUR": {
       "becameAvailable": "2022-03-01",
       "capital": 100,
       "investment": 19,
       "priceChange": 10,
-      "strategyRange": 2,
+      "strategyRange": 3,
       "earnings": 300
-    },
-    "ZETAEUR": {
-      "becameAvailable": "2022-04-01",
-      "capital": 100,
-      "investment": 32,
-      "priceChange": 7,
-      "strategyRange": 2,
-      "earnings": 200
-    },
-    "MCEUR": {
-      "becameAvailable": "2022-07-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 9,
-      "strategyRange": 0.5,
-      "earnings": 305
-    },
-    "SGBEUR": {
-      "becameAvailable": "2021-09-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 2,
-      "strategyRange": 0.25,
-      "earnings": 2010
     },
     "KINTEUR": {
       "becameAvailable": "2020-10-01",
@@ -102,75 +91,74 @@
       "investment": 49,
       "priceChange": 4,
       "strategyRange": 0.25,
-      "earnings": 265,
-      "note": "With '0.5' generates €160, and it should be at least '1'"
+      "earnings": 260,
+      "note": "With €99, 4, 0.25 return €315"
     },
     "HNTEUR": {
       "becameAvailable": "2021-08-01",
       "capital": 100,
-      "investment": 99,
-      "priceChange": 2,
+      "investment": 49,
+      "priceChange": 4,
       "strategyRange": 0.25,
-      "earnings": 260,
-      "note": "With €99, '2', '1' settings generates €200, and it should be at least '0.5'"
-    },
-    "BLZEUR": {
-      "becameAvailable": "2021-03-01",
-      "capital": 100,
-      "investment": 19,
-      "priceChange": 2,
-      "strategyRange": 2.5,
-      "earnings": 250
+      "earnings": 200
     },
     "PSTAKEEUR": {
       "becameAvailable": "2021-07-01",
       "capital": 100,
-      "investment": 9,
+      "investment": 19,
       "priceChange": 6,
-      "strategyRange": 3,
+      "strategyRange": 2.5,
       "earnings": 250
     },
     "ADXEUR": {
       "becameAvailable": "2022-10-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 5.7,
-      "strategyRange": 4,
-      "earnings": 250
+      "investment": 19,
+      "priceChange": 5,
+      "strategyRange": 1,
+      "earnings": 220
     },
     "MULTIEUR": {
       "becameAvailable": "2020-11-01",
       "capital": 100,
-      "investment": 19,
-      "priceChange": 2,
-      "strategyRange": 1.5,
-      "earnings": 245
+      "investment": 49,
+      "priceChange": 3,
+      "strategyRange": 0.5,
+      "earnings": 255
     },
     "SBREUR": {
       "becameAvailable": "2020-03-01",
       "capital": 100,
-      "investment": 32,
+      "investment": 49,
       "priceChange": 3,
       "strategyRange": 0.25,
-      "earnings": 240,
-      "note": "With €99, '2', '1' settings generates €205, and it should be at least '1'"
+      "earnings": 195
+    },
+    "ZETAEUR": {
+      "becameAvailable": "2022-04-01",
+      "capital": 100,
+      "investment": 49,
+      "priceChange": 7,
+      "strategyRange": 2,
+      "earnings": 250
     },
     "AKTEUR": {
       "becameAvailable": "2022-08-01",
       "capital": 100,
-      "investment": 32,
-      "priceChange": 7,
-      "strategyRange": 3,
-      "earnings": 230
+      "investment": 49,
+      "priceChange": 6.8,
+      "strategyRange": 2.5,
+      "earnings": 245,
+      "note": "With €32, 6, 2.5 return €216"
     },
     "BIGTIMEEUR": {
       "becameAvailable": "2022-12-01",
       "capital": 100,
-      "investment": 49,
-      "priceChange": 2,
+      "investment": 99,
+      "priceChange": 3,
       "strategyRange": 0.25,
-      "earnings": 225,
-      "note": "With €9, '3', '1.5' settings generates €170, and it should be at least '0.5'"
+      "earnings": 220,
+      "note": "With €19, 4, 2 return €180"
     },
     "XXRPZEUR": {
       "becameAvailable": "2013-01-01",
@@ -178,15 +166,15 @@
       "investment": 9,
       "priceChange": 12,
       "strategyRange": 3,
-      "earnings": 215
+      "earnings": 205
     },
     "RAREEUR": {
       "becameAvailable": "2021-06-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 12,
-      "strategyRange": 3,
-      "earnings": 210
+      "priceChange": 8,
+      "strategyRange": 1.5,
+      "earnings": 495
     },
     "HDXEUR": {
       "becameAvailable": "2022-11-01",
@@ -196,68 +184,87 @@
       "strategyRange": 2.5,
       "earnings": 210
     },
+    "MCEUR": {
+      "becameAvailable": "2022-07-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 10,
+      "strategyRange": 1.5,
+      "earnings": 205
+    },
     "XREPZEUR": {
       "becameAvailable": "2015-08-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 2,
-      "strategyRange": 2.5,
-      "earnings": 200
+      "investment": 32,
+      "priceChange": 5,
+      "strategyRange": 0.25,
+      "earnings": 295,
+      "note": "With €9, 3, 0.25 return €260"
     },
     "KP3REUR": {
       "becameAvailable": "2021-12-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 3,
-      "strategyRange": 0.5,
+      "investment": 19,
+      "priceChange": 11,
+      "strategyRange": 1,
       "earnings": 200
+    },
+    "SGBEUR": {
+      "becameAvailable": "2021-09-01",
+      "capital": 100,
+      "investment": 32,
+      "priceChange": 3,
+      "strategyRange": 0.25,
+      "earnings": 170
     },
     "INTREUR": {
       "becameAvailable": "2022-07-01",
       "capital": 100,
-      "investment": 9,
+      "investment": 19,
       "priceChange": 6,
       "strategyRange": 0.5,
-      "earnings": 190
+      "earnings": 220
     },
     "NANOEUR": {
       "becameAvailable": "2015-03-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 8.9,
-      "strategyRange": 2.5,
+      "priceChange": 8.8,
+      "strategyRange": 1.5,
       "earnings": 180
     },
     "SAMOEUR": {
       "becameAvailable": "2021-01-01",
       "capital": 100,
-      "investment": 9,
+      "investment": 19,
       "priceChange": 5,
       "strategyRange": 1,
-      "earnings": 180
+      "earnings": 170
     },
     "JUNOEUR": {
       "becameAvailable": "2022-03-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 4,
-      "strategyRange": 2,
-      "earnings": 180
+      "investment": 49,
+      "priceChange": 5,
+      "strategyRange": 0.5,
+      "earnings": 190,
+      "note": "With €99,  4.8, 0.5 return €205"
     },
     "EWTEUR": {
       "becameAvailable": "2022-01-01",
       "capital": 100,
       "investment": 49,
-      "priceChange": 3,
-      "strategyRange": 4,
-      "earnings": 175
+      "priceChange": 4.8,
+      "strategyRange": 1,
+      "earnings": 165,
+      "note": "With €99, 2, 1 return €180"
     },
     "BEAMEUR": {
       "becameAvailable": "2022-01-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 12.5,
-      "strategyRange": 3.5,
+      "investment": 19,
+      "priceChange": 12.8,
+      "strategyRange": 1.5,
       "earnings": 170
     },
     "XZECZEUR": {
@@ -265,97 +272,99 @@
       "capital": 100,
       "investment": 49,
       "priceChange": 12,
-      "strategyRange": 0.25,
-      "earnings": 160
+      "strategyRange": 0.5,
+      "earnings": 215,
+      "note": "With €99, 12, 0.5 return €300"
     },
     "BLUREUR": {
       "becameAvailable": "2022-02-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 7,
-      "strategyRange": 2.5,
-      "earnings": 160
+      "priceChange": 6.8,
+      "strategyRange": 2,
+      "earnings": 175
     },
     "MNGOEUR": {
       "becameAvailable": "2020-07-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 3,
+      "investment": 19,
+      "priceChange": 4,
       "strategyRange": 2,
-      "earnings": 155
+      "earnings": 160
     },
     "ACAEUR": {
       "becameAvailable": "2023-06-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 3,
-      "strategyRange": 2.5,
-      "earnings": 155,
+      "investment": 19,
+      "priceChange": 3.7,
+      "strategyRange": 0.5,
+      "earnings": 160,
       "note": "Causes loss"
     },
     "SOLEUR": {
       "becameAvailable": "2020-04-01",
       "capital": 100,
-      "investment": 9,
+      "investment": 32,
       "priceChange": 7,
-      "strategyRange": 1,
-      "earnings": 150
+      "strategyRange": 0.5,
+      "earnings": 160
     },
     "ALPHAEUR": {
       "becameAvailable": "2021-08-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 5,
-      "strategyRange": 2.5,
-      "earnings": 150
+      "priceChange": 4,
+      "strategyRange": 1,
+      "earnings": 160
     },
     "WAXLEUR": {
       "becameAvailable": "2017-12-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 4,
-      "strategyRange": 1.5,
-      "earnings": 150
+      "strategyRange": 1,
+      "earnings": 155
     },
     "STGEUR": {
       "becameAvailable": "2020-09-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 13,
-      "strategyRange": 3,
-      "earnings": 150
+      "priceChange": 12.8,
+      "strategyRange": 2.5,
+      "earnings": 160
     },
     "ANTEUR": {
       "becameAvailable": "2021-02-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 10,
-      "strategyRange": 0.5,
-      "earnings": 150
+      "investment": 49,
+      "priceChange": 4.8,
+      "strategyRange": 2.5,
+      "earnings": 200,
+      "note": "With €99, 4.8, 2.5 return €255"
     },
     "BODENEUR": {
       "becameAvailable": "2022-05-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 5,
+      "priceChange": 6,
       "strategyRange": 1,
-      "earnings": 150
+      "earnings": 160
     },
     "UNFIEUR": {
       "becameAvailable": "2021-03-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 13,
-      "strategyRange": 2.5,
-      "earnings": 145
+      "priceChange": 12.8,
+      "strategyRange": 2,
+      "earnings": 160
     },
     "STEPEUR": {
       "becameAvailable": "2022-01-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 11,
+      "priceChange": 10,
       "strategyRange": 2,
-      "earnings": 145
+      "earnings": 155
     },
     "ETHFIEUR": {
       "becameAvailable": "2022-03-01",

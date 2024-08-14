@@ -95,7 +95,7 @@ class BotsManager {
       bot.sold += 1;
       bot.orders = bot.orders.filter((id) => id != info);
     } else if (event == "earnings") bot.earnings += info;
-    else if (event == "currentPrice") bot.currentPrice = info;
+    else if (event == "tradePrice") bot.tradePrice = info;
     else if (event == "priceChange") bot.averagePriceChange = info;
     else if (event == "balance") bot.balance = info;
 
@@ -124,7 +124,7 @@ class Bot {
     this.timeInterval = +this.#parseValue(info.timeInterval);
     this.balance = +(this.#parseValue(info.balance) || 0);
     this.earnings = +(this.#parseValue(info.earnings) || 0);
-    this.currentPrice = +(this.#parseValue(info.currentPrice) || 0);
+    this.tradePrice = +(this.#parseValue(info.tradePrice) || 0);
     this.averagePriceChange = +(this.#parseValue(info.averagePriceChange) || 0);
     this.sold = +(this.#parseValue(info.sold) || 0);
     this.bought = +(this.#parseValue(info.bought) || 0);

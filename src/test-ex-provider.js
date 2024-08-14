@@ -12,35 +12,37 @@ module.exports = class TestExchangeProvider {
   async balance() {
     return this.currentBalance;
   }
-  async currentPrice() {
-    const price = this.allPrices[this.currentPriceIndex];
+  async currentPrices() {
+    const price = this.allPrices[this.currentPriceIndex] || this.allPrices[this.allPrices.length - 1];
     this.currentPriceIndex += 1;
-    return price;
+    // Increase the tradePrice 0.10% by multiply it by 1.001, And decrease the tradePrice 0.10%, by multiply it by 0.999.
+    return { tradePrice: price, askPrice: price * 1.001, bidPrice: price * 0.999 };
   }
   async prices(pair, lastDays) {
     return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
   }
-  async createOrder(tradingType, b, c, amount) {
-    const cost = amount * this.allPrices[this.currentPriceIndex];
-    const fee = calculateFee(cost, 0.4);
+  async createOrder(tradingType, b, c, volume) {
+    const { tradePrice, askPrice, bidPrice } = await this.currentPrices();
+    const newOrder = { id: randomUUID(), type: tradingType, volume };
 
-    const newOrder = {
-      id: randomUUID(),
-      price: this.allPrices[this.currentPriceIndex],
-      volume: amount,
-      cost: cost + fee,
-    };
+    if (newOrder.type == "buy") {
+      const cost = volume * askPrice;
+      newOrder.price = askPrice;
+      newOrder.cost = cost + calculateFee(cost, 0.4);
 
-    if (tradingType == "buy") {
       const remainingBalance = this.currentBalance.eur - newOrder.cost;
       if (remainingBalance < 0) throw new Error("No enough money");
       this.currentBalance.eur = remainingBalance;
-      this.currentBalance.crypto += amount;
+      this.currentBalance.crypto += volume;
       this.orders.push(newOrder);
     } else {
-      const remainingCrypto = +(this.currentBalance.crypto - amount).toFixed(8);
+      const cost = volume * bidPrice;
+      newOrder.price = bidPrice;
+      newOrder.cost = cost - calculateFee(cost, 0.4);
+
+      const remainingCrypto = +(this.currentBalance.crypto - volume).toFixed(8);
       if (remainingCrypto < 0) throw new Error("No enough crypto");
-      this.currentBalance.eur += newOrder.cost - fee * 2;
+      this.currentBalance.eur += newOrder.cost;
       this.currentBalance.crypto = remainingCrypto;
     }
 

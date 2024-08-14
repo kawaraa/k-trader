@@ -28,31 +28,32 @@ module.exports = class DailyTrader {
   async start(period) {
     try {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
-      const currentPrice = await this.ex.currentPrice(this.#pair);
+      const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
       const prices = await this.ex.prices(this.#pair, this.strategyRange); // For the last xxx days
-      this.#tradingAmount = +(this.#investingCapital / currentPrice).toFixed(8);
+      this.#tradingAmount = +(this.#investingCapital / tradePrice).toFixed(8);
 
       const orders = await this.ex.getOrders(this.#pair);
       const rsi = analyzer.calculateRSI(prices);
       const averagePrice = analyzer.calculateAveragePrice(prices);
-      const percentageChange = analyzer.calculatePercentageChange(currentPrice, averagePrice);
+      const percentageChange = analyzer.calculatePercentageChange(tradePrice, averagePrice);
+      const askPercentageChange = analyzer.calculatePercentageChange(askPrice, averagePrice);
       const priceIsStable = this.#isPriceStable(prices);
       const name = this.#pair.replace("EUR", "").toLowerCase();
 
-      this.dispatch("currentPrice", currentPrice);
+      this.dispatch("tradePrice", tradePrice);
       this.dispatch("priceChange", percentageChange);
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `💰=> eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
       this.dispatch(
         "log",
-        `RSI: ${rsi} => Change: ${percentageChange}% - Current: ${currentPrice} - Average: ${averagePrice}`
+        `RSI: ${rsi} => Change: ${percentageChange}% - Current: ${tradePrice} - Average: ${averagePrice}`
       );
 
-      if (rsi < 30 && percentageChange < -1.2 && priceIsStable) {
+      if (rsi < 30 && askPercentageChange < -1.2 && priceIsStable) {
         this.dispatch("log", `Suggest buying`);
 
         const totalInvestedAmount = orders.reduce((acc, o) => acc + +o.cost, 0) + this.#investingCapital;
-        const remaining = +(Math.min(this.#investingCapital, balance.eur) / currentPrice).toFixed(8);
+        const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);
 
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
@@ -63,19 +64,16 @@ module.exports = class DailyTrader {
       } else if (70 < rsi && priceIsStable) {
         this.dispatch("log", `Suggest selling`);
 
-        // Get Orders that have price Lower Than the Current Price
-        const ordersForSell = orders.filter(
-          (o) => this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(currentPrice, +o.price)
-        );
-
-        if (balance.crypto > 0 && ordersForSell[0]) {
-          for (const { id, volume, cost } of ordersForSell) {
-            const amount = Math.min(+volume, balance.crypto);
-            const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
-            const profit = +((await this.ex.getOrders(null, orderId))[0]?.cost - cost).toFixed(2);
-            this.dispatch("sell", id);
-            this.dispatch("earnings", profit);
-            this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
+        if (balance.crypto > 0 && orders[0]) {
+          for (const { id, price, volume, cost } of orders) {
+            if (this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(bidPrice, price)) {
+              const amount = Math.min(+volume, balance.crypto);
+              const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
+              const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || cost) - cost).toFixed(2);
+              this.dispatch("sell", id);
+              this.dispatch("earnings", profit);
+              this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
+            }
           }
         }
       }

@@ -1,5 +1,5 @@
 const { createHash, createHmac } = require("node:crypto");
-const { parseNumbers, delay } = require("./utilities.js");
+const { parseNumbers, delay, request } = require("./utilities.js");
 
 module.exports = class KrakenExchangeProvider {
   #apiUrl;
@@ -22,17 +22,13 @@ module.exports = class KrakenExchangeProvider {
     const signature = hmac.update(urlPath + hash_digest, "binary").digest("base64");
     return signature;
   }
-  #checkError(res) {
-    if (!res.error[0]) return res.result;
-    else throw new Error(res.error.reduce((acc, err) => acc + "\n" + err, ""));
-  }
   // Function to make calls to private API
   #privateApi(path, data = {}) {
     path = `/0/private/${path}`;
     data.nonce = Date.now() * 1000;
     const body = JSON.stringify(data);
 
-    return fetch(`${this.#apiUrl}${path}`, {
+    return request(`${this.#apiUrl}${path}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -41,15 +37,11 @@ module.exports = class KrakenExchangeProvider {
       },
       method: "POST",
       body,
-    })
-      .then((res) => res.json())
-      .then(this.#checkError);
+    });
   }
   // Function to make calls to public API
   publicApi(path, options) {
-    return fetch(`${this.#apiUrl}/0/public${path}`, options)
-      .then((res) => res.json())
-      .then(this.#checkError);
+    return request(`${this.#apiUrl}/0/public${path}`, options);
   }
 
   async balance(pair) {
@@ -60,9 +52,10 @@ module.exports = class KrakenExchangeProvider {
     if (pair == "all") return balance;
     return { eur: +balance.ZEUR, crypto: +(balance[curMap[key]] || balance[key] || 0) };
   }
-  async currentPrice(pair) {
+  async currentPrices(pair) {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
-    return parseFloat(data[Object.keys(data)[0]].c[0]);
+    const { a, b, c } = data[Object.keys(data)[0]];
+    return { tradePrice: parseFloat(c[0]), askPrice: parseFloat(a[0]), bidPrice: parseFloat(b[0]) };
   }
   async pricesData(pair, lastDays = 0.5, interval = 5) {
     let allPrices = [];

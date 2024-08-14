@@ -56,7 +56,7 @@ export default function BotItem({ botInfo, onAction }) {
             <strong>Balance</strong>: <span>{botInfo.balance}</span>
           </p>
           <p className="">
-            <strong>Current Price</strong>: <span>{botInfo.currentPrice}</span>
+            <strong>Current Price</strong>: <span>{botInfo.tradePrice}</span>
           </p>
           <p className="">
             <strong>Average price change</strong>: <span>{botInfo.averagePriceChange}</span>

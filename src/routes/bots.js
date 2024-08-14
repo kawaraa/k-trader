@@ -34,7 +34,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
       const token = request.cookies?.idToken;
       data.balance = 0;
       data.earnings = 0;
-      data.currentPrice = 0;
+      data.tradePrice = 0;
       data.averagePriceChange = 0;
       data.bought = 0;
       data.sold = 0;
