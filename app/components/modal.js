@@ -14,7 +14,7 @@ export function Modal({ title, open, loading, onCancel, children }) {
       {/* min-h-[50%]  */}
       <Transition
         Tag="div"
-        base={`z-9 fixed left-5 bottom-10 md:bottom-1/2 md:translate-y-1/2 right-5 p-4 pt-10 overflow-hidden md:min-w-[550px] md:max-w-xl mx-auto default-bg rounded-lg`}
+        base={`no-select z-9 fixed left-5 bottom-10 md:bottom-1/2 md:translate-y-1/2 right-5 p-4 pt-10 overflow-hidden md:min-w-[550px] md:max-w-xl mx-auto default-bg rounded-lg`}
         enter="opacity-100 md:scale-100"
         exit="opacity-0 translate-y-4 md:scale-75"
         time="300"

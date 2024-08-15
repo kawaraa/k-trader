@@ -52,8 +52,10 @@ module.exports = class DailyTrader {
       if (rsi < 30 && askPercentageChange < -1.2 && priceIsStable) {
         this.dispatch("log", `Suggest buying`);
 
-        const totalInvestedAmount = orders.reduce((acc, o) => acc + +o.cost, 0) + this.#investingCapital;
+        const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);
+
+        console.log("Testing buying", askPrice, this.#tradingAmount, totalInvestedAmount, remaining); // Testing
 
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);

@@ -55,7 +55,7 @@ module.exports = class KrakenExchangeProvider {
   async currentPrices(pair) {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
     const { a, b, c } = data[Object.keys(data)[0]];
-    return { tradePrice: parseFloat(c[0]), askPrice: parseFloat(a[0]), bidPrice: parseFloat(b[0]) };
+    return { tradePrice: +c[0], askPrice: +a[0], bidPrice: +b[0] };
   }
   async pricesData(pair, lastDays = 0.5, interval = 5) {
     let allPrices = [];

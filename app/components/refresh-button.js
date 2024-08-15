@@ -3,7 +3,7 @@ export default function RefreshButton(props) {
   return (
     <button
       {...props}
-      className="fixed bottom-8 right-8 w-8 h-8 default-bg rounded-md shadow-[0px_1px_9px_1px_rgba(0,0,0,0.25)]"
+      className="no-select fixed bottom-8 right-8 w-8 h-8 default-bg rounded-md shadow-[0px_1px_9px_1px_rgba(0,0,0,0.25)]"
     >
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path
