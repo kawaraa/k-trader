@@ -56,8 +56,6 @@ module.exports = class DailyTrader {
         const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);
 
-        console.log("Testing buying", askPrice, this.#tradingAmount, totalInvestedAmount, remaining); // Testing
-
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
           this.dispatch("buy", orderId);
@@ -72,7 +70,8 @@ module.exports = class DailyTrader {
             if (this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(bidPrice, price)) {
               const amount = Math.min(+volume, balance.crypto);
               const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
-              const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || cost) - cost).toFixed(2);
+              const aCost = bidPrice * amount + analyzer.calculateFee(bidPrice * amount, 0.4);
+              const profit = +((await this.ex.getOrders(null, orderId))[0]?.cost || aCost - cost).toFixed(2);
               this.dispatch("sell", id);
               this.dispatch("earnings", profit);
               this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);

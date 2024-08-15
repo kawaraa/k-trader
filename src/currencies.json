@@ -366,77 +366,72 @@
       "strategyRange": 2,
       "earnings": 155
     },
+
     "ETHFIEUR": {
       "becameAvailable": "2022-03-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 12,
+      "priceChange": 11,
       "strategyRange": 0.5,
-      "earnings": 145
+      "earnings": 140
     },
     "GMXEUR": {
       "becameAvailable": "2021-12-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 13,
-      "strategyRange": 3,
-      "earnings": 140
+      "priceChange": 11,
+      "strategyRange": 2,
+      "earnings": 130
     },
     "REPV2EUR": {
       "becameAvailable": "2020-08-01 xxx",
       "capital": 100,
-      "investment": 99,
-      "priceChange": 4,
+      "investment": 32,
+      "priceChange": 6,
       "strategyRange": 2.5,
-      "earnings": 135
-    },
-    "LMWREUR": {
-      "becameAvailable": "2021-11-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 2,
-      "strategyRange": 2,
-      "earnings": 135
+      "earnings": 120,
+      "note": "With €99, 6, 2.5 return €145"
     },
     "APTEUR": {
       "becameAvailable": "2022-12-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 12,
-      "strategyRange": 0.25,
-      "earnings": 135
+      "strategyRange": 0.5,
+      "earnings": 135,
+      "note": "With €49, 13, 0.5 return €145"
     },
     "LUNAEUR": {
       "becameAvailable": "2019-08-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 12,
-      "strategyRange": 2.5,
-      "earnings": 130
+      "strategyRange": 1.5,
+      "earnings": 230
     },
     "AGLDEUR": {
       "becameAvailable": "2021-09-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 6,
-      "strategyRange": 2.5,
-      "earnings": 130
+      "strategyRange": 0.5,
+      "earnings": 135
     },
     "KAREUR": {
       "becameAvailable": "2021-02-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 5,
-      "strategyRange": 3,
-      "earnings": 125
+      "priceChange": 10,
+      "strategyRange": 2.5,
+      "earnings": 120
     },
     "YGGEUR": {
       "becameAvailable": "2021-07-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 13,
-      "strategyRange": 3,
-      "earnings": 125
+      "priceChange": 12,
+      "strategyRange": 2.5,
+      "earnings": 140
     },
     "LPTEUR": {
       "becameAvailable": "2022-01-01",
