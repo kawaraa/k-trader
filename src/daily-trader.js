@@ -38,16 +38,17 @@ module.exports = class DailyTrader {
       const percentageChange = analyzer.calculatePercentageChange(tradePrice, averagePrice);
       const askPercentageChange = analyzer.calculatePercentageChange(askPrice, averagePrice);
       const priceIsStable = this.#isPriceStable(prices);
-      const name = this.#pair.replace("EUR", "").toLowerCase();
+      const name = this.#pair.replace("EUR", "");
 
       this.dispatch("tradePrice", tradePrice);
       this.dispatch("priceChange", percentageChange);
       this.dispatch("balance", balance.crypto);
-      this.dispatch("log", `💰=> eur: ${balance.eur} <|> ${name}: ${balance.crypto}`);
+      this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto}`);
       this.dispatch(
         "log",
-        `RSI: ${rsi} => Change: ${percentageChange}% - Current: ${tradePrice} - Average: ${averagePrice}`
+        `RSI: ${rsi} => ${percentageChange}% - Prices: ${tradePrice}, ${askPrice}, ${bidPrice}, ${averagePrice}`
       );
+      // 💰 📊
 
       if (rsi < 30 && askPercentageChange < -1.2 && priceIsStable) {
         this.dispatch("log", `Suggest buying`);
