@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import BotItem from "./components/bot-item";
 import { Modal } from "./components/modal";
 import AddBotFrom from "./components/add-bot-form";
@@ -12,7 +12,6 @@ const badgeCls =
   "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
 
 export default function Home() {
-  const renderRef = useRef(null);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState(0);
@@ -21,6 +20,7 @@ export default function Home() {
   const [showAddBotForm, setShowAddBotForm] = useState(false);
   const close = () => setShowAddBotForm(false) + setBotToUpdate(null);
   const catchErr = (er) => alert(er.message || er.error || er);
+  const botsPairs = Object.keys(bots);
 
   const add = async (e) => {
     e.preventDefault();
@@ -101,7 +101,11 @@ export default function Home() {
       <header className="no-select flex px-3 md:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
         <strong className="text-3xl font-bold text-emerald-500">€{parseInt(balance)}</strong>
         <div className="flex items-end">
-          <strong className="text-pc">{Object.keys(bots).length}</strong>
+          <strong>
+            <span className="text-green">{botsPairs.filter((p) => bots[p].startedOn).length}</span>
+            <span className="mx-1 ">/</span>
+            {botsPairs.length}
+          </strong>
           <button
             onClick={() => setShowAddBotForm(true)}
             className={`${btnCls} !w-8 !h-8 ml-3 p-1 flex items-center justify-center rounded-3xl`}

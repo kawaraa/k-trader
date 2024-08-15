@@ -46,7 +46,7 @@ module.exports = class DailyTrader {
       this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto}`);
       this.dispatch(
         "log",
-        `RSI: ${rsi} => ${percentageChange}% - Prices: ${tradePrice}, ${askPrice}, ${bidPrice}, ${averagePrice}`
+        `RSI: ${rsi} => ${percentageChange}% - Prices: ${tradePrice} | ${askPrice} | ${bidPrice} | ${averagePrice}`
       );
       // 💰 📊
 
@@ -88,7 +88,7 @@ module.exports = class DailyTrader {
     }
 
     if (period) {
-      this.timeoutID = setTimeout(() => this.start(period), 60000 * (Math.round(Math.random() * 3) + period));
+      this.timeoutID = setTimeout(() => this.start(period), Math.round(60000 * (Math.random() * 3 + period)));
     }
   }
   #isPriceStable(prices) {
