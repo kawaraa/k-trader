@@ -22,6 +22,11 @@ module.exports = class KrakenExchangeProvider {
     const signature = hmac.update(urlPath + hash_digest, "binary").digest("base64");
     return signature;
   }
+  #checkError(res) {
+    if (!res.error[0]) return res.result;
+    else throw new Error(res.error.reduce((acc, err) => acc + "\n" + err, ""));
+  }
+
   // Function to make calls to private API
   #privateApi(path, data = {}) {
     path = `/0/private/${path}`;
@@ -37,11 +42,11 @@ module.exports = class KrakenExchangeProvider {
       },
       method: "POST",
       body,
-    }).then((res) => res.result);
+    }).then(this.#checkError);
   }
   // Function to make calls to public API
   publicApi(path, options) {
-    return request(`${this.#apiUrl}/0/public${path}`, options).then((res) => res.result);
+    return request(`${this.#apiUrl}/0/public${path}`, options).then(this.#checkError);
   }
 
   async balance(pair) {
