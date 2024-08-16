@@ -1,8 +1,14 @@
 /*
-This strategy based on 5 to 8 mins interval and checking the last 4 hours on every 5 mins change.
+How DailyTrader works:
+- DailyTrader performs a strategy based on the provided settings. It analyzes the prices of the last xxx days on every xxx mins interval. It buys if the average price drops -1.1% and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
 Recommendation:
-- if it's daily trading strategy, buy when the current price is 1.5% lower then any price in the last 4 hours
-- if it's monthly trading strategy, buy when the current price is 1.5% lower then the average price in the last 5 days
+- if it's daily trading strategy, buy when the current price is 1.5% lower than any price in the last 3 hours
+- if it's monthly trading strategy, buy when the current price is 1.5% lower than the average price in the last 4 or 5 days
+Note: this is how orders are managed.
+1. Check if there are buy order ID in state that has not been fulfilled, remove it from the state,
+2. If fulfilled buy orders have fulfilled sell order, calculate the profits and remove these orders from the state
+3. If it's good time to buy, place buy orders with 2 mins expire and store their IDs in the state.
+4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
 */
 
 const analyzer = require("./trend-analysis.js");
