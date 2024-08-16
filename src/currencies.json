@@ -144,6 +144,14 @@
       "earnings": 245,
       "note": "With €32, 6, 2.5 return €216"
     },
+    "LUNAEUR": {
+      "becameAvailable": "2019-08-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 12,
+      "strategyRange": 1.5,
+      "earnings": 230
+    },
     "INTREUR": {
       "becameAvailable": "2022-07-01",
       "capital": 100,
@@ -284,6 +292,14 @@
       "strategyRange": 1.5,
       "earnings": 170
     },
+    "PENDLEEUR": {
+      "becameAvailable": "2021-04-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 6,
+      "strategyRange": 2.5,
+      "earnings": 170
+    },
     "EWTEUR": {
       "becameAvailable": "2022-01-01",
       "capital": 100,
@@ -366,7 +382,39 @@
       "strategyRange": 2,
       "earnings": 155
     },
-
+    "KUJIEUR": {
+      "becameAvailable": "2022-09-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 2,
+      "strategyRange": 2,
+      "earnings": 145
+    },
+    "YGGEUR": {
+      "becameAvailable": "2021-07-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 12,
+      "strategyRange": 2.5,
+      "earnings": 140
+    },
+    "AUDIOEUR": {
+      "becameAvailable": "2021-09-01",
+      "capital": 100,
+      "investment": 49,
+      "priceChange": 9,
+      "strategyRange": 2.5,
+      "earnings": 140,
+      "note": "With €99, 9, 2.5 return €190"
+    },
+    "LPTEUR": {
+      "becameAvailable": "2022-01-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 11,
+      "strategyRange": 2.5,
+      "earnings": 140
+    },
     "ETHFIEUR": {
       "becameAvailable": "2022-03-01",
       "capital": 100,
@@ -375,22 +423,13 @@
       "strategyRange": 0.5,
       "earnings": 140
     },
-    "GMXEUR": {
-      "becameAvailable": "2021-12-01",
+    "AGLDEUR": {
+      "becameAvailable": "2021-09-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 11,
-      "strategyRange": 2,
-      "earnings": 130
-    },
-    "REPV2EUR": {
-      "becameAvailable": "2020-08-01 xxx",
-      "capital": 100,
-      "investment": 32,
       "priceChange": 6,
-      "strategyRange": 2.5,
-      "earnings": 120,
-      "note": "With €99, 6, 2.5 return €145"
+      "strategyRange": 0.5,
+      "earnings": 135
     },
     "APTEUR": {
       "becameAvailable": "2022-12-01",
@@ -401,21 +440,46 @@
       "earnings": 135,
       "note": "With €49, 13, 0.5 return €145"
     },
-    "LUNAEUR": {
-      "becameAvailable": "2019-08-01",
+    "MPLEUR": {
+      "becameAvailable": "2021-10-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 12,
+      "priceChange": 5.8,
       "strategyRange": 1.5,
-      "earnings": 230
+      "earnings": 130
     },
-    "AGLDEUR": {
-      "becameAvailable": "2021-09-01",
+    "GMXEUR": {
+      "becameAvailable": "2021-12-01",
       "capital": 100,
       "investment": 9,
+      "priceChange": 11,
+      "strategyRange": 2,
+      "earnings": 130
+    },
+    "SRMEUR": {
+      "becameAvailable": "2020-07-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 5,
+      "strategyRange": 2,
+      "earnings": 125
+    },
+    "GARIEUR": {
+      "becameAvailable": "2022-03-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 5,
+      "strategyRange": 2.5,
+      "earnings": 125
+    },
+    "REPV2EUR": {
+      "becameAvailable": "2020-08-01 xxx",
+      "capital": 100,
+      "investment": 32,
       "priceChange": 6,
-      "strategyRange": 0.5,
-      "earnings": 135
+      "strategyRange": 2.5,
+      "earnings": 120,
+      "note": "With €99, 6, 2.5 return €145"
     },
     "KAREUR": {
       "becameAvailable": "2021-02-01",
@@ -425,76 +489,36 @@
       "strategyRange": 2.5,
       "earnings": 120
     },
-    "YGGEUR": {
-      "becameAvailable": "2021-07-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 12,
-      "strategyRange": 2.5,
-      "earnings": 140
-    },
-    "LPTEUR": {
-      "becameAvailable": "2022-01-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 12,
-      "strategyRange": 3.5,
-      "earnings": 125
-    },
-    "AUDIOEUR": {
-      "becameAvailable": "2021-09-01",
-      "capital": 100,
-      "investment": 49,
-      "priceChange": 3,
-      "strategyRange": 2,
-      "earnings": 120
-    },
     "ARKMEUR": {
       "becameAvailable": "2022-07-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 10,
+      "priceChange": 9,
       "strategyRange": 1,
       "earnings": 120
     },
-    "MPLEUR": {
-      "becameAvailable": "2021-10-01",
+    "AAVEEUR": {
+      "becameAvailable": "2020-12-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 6,
-      "strategyRange": 2,
+      "investment": 32,
+      "priceChange": 5,
+      "strategyRange": 1,
       "earnings": 115
     },
-    "KUJIEUR": {
-      "becameAvailable": "2022-09-01",
+    "QNTEUR": {
+      "becameAvailable": "2018-08-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 2,
-      "strategyRange": 2,
-      "earnings": 115
-    },
-    "SRMEUR": {
-      "becameAvailable": "2020-07-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 4,
-      "strategyRange": 2,
+      "investment": 49,
+      "priceChange": 5,
+      "strategyRange": 1.5,
       "earnings": 110
     },
-    "BTTEUR": {
-      "becameAvailable": "2021-01-01",
-      "capital": 100,
-      "investment": 19,
-      "priceChange": 4,
-      "strategyRange": 2,
-      "earnings": 110
-    },
-    "PENDLEEUR": {
-      "becameAvailable": "2021-04-01",
+    "API3EUR": {
+      "becameAvailable": "2021-11-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 6,
-      "strategyRange": 3.5,
+      "priceChange": 9,
+      "strategyRange": 2,
       "earnings": 110
     },
     "XXLMZEUR": {
@@ -505,53 +529,30 @@
       "strategyRange": 3,
       "earnings": 105
     },
-    "AAVEEUR": {
-      "becameAvailable": "2020-12-01",
+
+    "GTCEUR": {
+      "becameAvailable": "2021-12-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 5,
-      "strategyRange": 1,
-      "earnings": 105
-    },
-    "API3EUR": {
-      "becameAvailable": "2021-11-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 10,
-      "strategyRange": 2.5,
-      "earnings": 105
-    },
-    "GARIEUR": {
-      "becameAvailable": "2022-03-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 4,
-      "strategyRange": 4,
-      "earnings": 105
+      "priceChange": 9,
+      "strategyRange": 12.5,
+      "earnings": 95
     },
     "IDEXEUR": {
       "becameAvailable": "2021-03-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 2,
-      "strategyRange": 3.5,
-      "earnings": 100
+      "priceChange": 6,
+      "strategyRange": 1.5,
+      "earnings": 80
     },
-    "QNTEUR": {
-      "becameAvailable": "2018-08-01",
+    "BTTEUR": {
+      "becameAvailable": "2021-01-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 5,
-      "strategyRange": 4,
-      "earnings": 100
-    },
-    "GTCEUR": {
-      "becameAvailable": "2021-12-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 8,
-      "strategyRange": 1,
-      "earnings": 100
+      "priceChange": 4,
+      "strategyRange": 2,
+      "earnings": 70
     }
   },
   "other": {
@@ -707,14 +708,6 @@
       "strategyRange": 3,
       "earnings": 80
     },
-    "OXYEUR": {
-      "becameAvailable": "2021-03-01",
-      "capital": 100,
-      "investment": 99,
-      "priceChange": 2,
-      "strategyRange": 2,
-      "earnings": 75
-    },
     "TEEREUR": {
       "becameAvailable": "2021-10-01",
       "capital": 100,
@@ -794,14 +787,6 @@
       "priceChange": 7,
       "strategyRange": 1,
       "earnings": 70
-    },
-    "SNXEUR": {
-      "becameAvailable": "2018-03-01",
-      "capital": 100,
-      "investment": 99,
-      "priceChange": 2,
-      "strategyRange": 3,
-      "earnings": 65
     },
     "RUNEEUR": {
       "becameAvailable": "2020-07-01",
@@ -915,14 +900,6 @@
       "strategyRange": 3.5,
       "earnings": 55
     },
-    "KAVAEUR": {
-      "becameAvailable": "2020-08-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 6,
-      "strategyRange": 5.5,
-      "earnings": 55
-    },
     "RAYEUR": {
       "becameAvailable": "2021-03-01",
       "capital": 100,
@@ -945,14 +922,6 @@
       "investment": 9,
       "priceChange": 6,
       "strategyRange": 4,
-      "earnings": 55
-    },
-    "LDOEUR": {
-      "becameAvailable": "2022-01-01",
-      "capital": 100,
-      "investment": 49,
-      "priceChange": 3,
-      "strategyRange": 1,
       "earnings": 55
     },
     "KEYEUR": {
@@ -978,14 +947,6 @@
       "priceChange": 5,
       "strategyRange": 1,
       "earnings": 55
-    },
-    "OCEANEUR": {
-      "becameAvailable": "2017-09-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 6,
-      "strategyRange": 4,
-      "earnings": 50
     },
     "ATLASEUR": {
       "becameAvailable": "2021-03-01",

@@ -15,7 +15,7 @@ const testPeriod = +process.argv[7] || 30; // Number of days that will be tested
 const pricesLimitOffset = (strategyRange * 24 * 60) / 5;
 const pricesFilePath = `${process.cwd()}/database/test/${pair}-prices.json`;
 
-const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).tradable;
+const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
 
 (async () => {
   // for (let pair of cryptos) {
@@ -59,7 +59,7 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).tradable;
           await ex.createOrder("sell", "", "", (await ex.balance()).crypto);
           const eur = +(await ex.balance()).eur.toFixed(2);
 
-          if (eur > 200 && result.balance <= eur + 20) {
+          if (200 <= eur && result.balance <= eur) {
             result.balance = eur;
             result.range = range;
             result.investment = investment;
