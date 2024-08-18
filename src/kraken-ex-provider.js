@@ -51,7 +51,7 @@ module.exports = class KrakenExchangeProvider {
 
   async balance(pair) {
     const curMap = { BTC: "XXBT", ETH: "XETH" };
-    const key = pair.replace("ZEUR", "").replace("EUR", "");
+    const key = pair.replace("EUR", "");
     const balance = parseNumbers(await this.#privateApi("Balance"));
 
     if (pair == "all") return balance;

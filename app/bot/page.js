@@ -38,9 +38,7 @@ export default function Bot() {
             </svg>
           </Link>
 
-          <h1 class="mx-auto text-2xl md:text-3xl font-bold">
-            ✨ {pair.replace("ZEUR", "").replace("EUR", "")} / EUR ✨
-          </h1>
+          <h1 class="mx-auto text-2xl md:text-3xl font-bold">✨ {pair.replace("EUR", "")} / EUR ✨</h1>
         </header>
 
         <div className="flex-1 w-auto px-3 pb-10 flex justify-center overflow-y-auto">

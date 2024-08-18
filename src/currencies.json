@@ -93,7 +93,7 @@
       "strategyRange": 3,
       "earnings": 300
     },
-    "XREPZEUR": {
+    "REPEUR": {
       "becameAvailable": "2015-08-01",
       "capital": 100,
       "investment": 32,
@@ -177,7 +177,7 @@
       "earnings": 220,
       "note": "With €19, 4, 2 return €180"
     },
-    "XZECZEUR": {
+    "ZECEUR": {
       "becameAvailable": "2016-10-01",
       "capital": 100,
       "investment": 49,
@@ -194,7 +194,7 @@
       "strategyRange": 2.5,
       "earnings": 210
     },
-    "XXRPZEUR": {
+    "XRPEUR": {
       "becameAvailable": "2013-01-01",
       "capital": 100,
       "investment": 9,
@@ -481,7 +481,7 @@
       "earnings": 125
     },
     "REPV2EUR": {
-      "becameAvailable": "2020-08-01 xxx",
+      "becameAvailable": "2020-08-01",
       "capital": 100,
       "investment": 32,
       "priceChange": 6,
@@ -545,7 +545,7 @@
       "strategyRange": 2.5,
       "earnings": 110
     },
-    "XXLMZEUR": {
+    "XLMEUR": {
       "becameAvailable": "2014-07-01",
       "capital": 100,
       "investment": 9,
@@ -629,7 +629,7 @@
       "earnings": 95
     },
     "XDGEUR": {
-      "becameAvailable": "2013-12-01",
+      "becameAvailable": "2013-12-06",
       "capital": 100,
       "investment": 19,
       "priceChange": 8,
@@ -752,7 +752,7 @@
       "earnings": 80,
       "note": "With €49, 3, 0.25 return €90"
     },
-    "XETCZEUR": {
+    "ETCEUR": {
       "becameAvailable": "2016-07-01",
       "capital": 100,
       "investment": 9,
@@ -916,14 +916,6 @@
       "strategyRange": 3,
       "earnings": 60
     },
-    "ARBEUR": {
-      "becameAvailable": "2021-06-01",
-      "capital": 100,
-      "investment": 19,
-      "priceChange": 4.8,
-      "strategyRange": 2,
-      "earnings": 60
-    },
     "OSMOEUR": {
       "becameAvailable": "2021-06-01",
       "capital": 100,
@@ -997,6 +989,34 @@
       "priceChange": 2,
       "strategyRange": 1.5,
       "earnings": 50
+    },
+    "ADAEUR": {
+      "becameAvailable": "2017-09-29",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 5,
+      "strategyRange": 0.5,
+      "earnings": 55
+    },
+    "ALGOEUR": {
+      "becameAvailable": "2019-06-19",
+      "capital": 100,
+      "investment": 99,
+      "priceChange": 3,
+      "strategyRange": 1,
+      "earnings": 60
+    },
+    "LTCEUR": {},
+    "MATICEUR": {},
+    "USDCEUR": {},
+    "USDTEUR": {},
+    "XTZEUR": {
+      "becameAvailable": "",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 0,
+      "strategyRange": 0,
+      "earnings": 0
     }
   }
 }

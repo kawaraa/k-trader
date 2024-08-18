@@ -76,8 +76,8 @@ module.exports = class DailyTrader {
             if (this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(bidPrice, price)) {
               const amount = Math.min(+volume, balance.crypto);
               const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
-              const aCost = bidPrice * amount + analyzer.calculateFee(bidPrice * amount, 0.4);
-              const profit = +((await this.ex.getOrders(null, orderId))[0]?.cost || aCost - cost).toFixed(2);
+              const c = bidPrice * amount + analyzer.calculateFee(bidPrice * amount, 0.4);
+              const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
               this.dispatch("sell", id);
               this.dispatch("earnings", profit);
               this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);

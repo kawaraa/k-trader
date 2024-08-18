@@ -9,7 +9,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
         <option value="">Pair</option>
         {Object.keys(tradable).map((pair) => (
           <option value={pair} key={pair}>
-            {pair.replace("ZEUR", "").replace("EUR", "")}
+            {pair.replace("EUR", "")}
           </option>
         ))}
       </select>
