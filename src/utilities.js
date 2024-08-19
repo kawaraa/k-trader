@@ -23,8 +23,9 @@ function isValidPair(pair, throwError) {
 
 function parseError(value, msgs = "") {
   if (value && typeof value != "object") return msgs + value + " ";
+  if (value instanceof Error && value.message) return msgs + value.message + " ";
   else if (Array.isArray(value)) value.forEach((item) => (msgs += parseError(item)));
-  else if (typeof value == "object") Object.keys(value).forEach((key) => (msgs += parseError(value[key])));
+  else Object.keys(value).forEach((k) => (msgs += parseError(value[k])));
   return msgs?.trim() || "Unknown error";
 }
 function request() {

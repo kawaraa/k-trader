@@ -48,8 +48,8 @@ class FireStoreProvider {
     };
   }
 
-  async testAuthentication(token) {
-    return !!(await this.getDoc(token, "data", "state"))?.name;
+  testAuthentication(token) {
+    return this.getDoc(token, "bots").then(() => true);
   }
 
   signOut(token) {}
