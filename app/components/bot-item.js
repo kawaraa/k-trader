@@ -14,7 +14,7 @@ export default function BotItem({ botInfo, onAction }) {
       <div className="flex cursor-pointer" onClick={() => setOpen(!open)}>
         <span className="flex-1 w-1/5">{botInfo.pair.replace("EUR", "")}</span>
         <span className="flex-1 w-1/5 text-orange">€{botInfo.capital}</span>
-        <span className="flex-1 w-1/5 text-green">€{botInfo.earnings}</span>
+        <span className="flex-1 w-1/5 text-green">€{botInfo.earnings.toFixed(2)}</span>
         <span className="flex-1 w-2/5 flex justify-between items-center">
           <span className="flex-auto text-red">{botInfo.orders.length}</span>
           <span

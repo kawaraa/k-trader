@@ -1005,18 +1005,6 @@
       "priceChange": 3,
       "strategyRange": 1,
       "earnings": 60
-    },
-    "LTCEUR": {},
-    "MATICEUR": {},
-    "USDCEUR": {},
-    "USDTEUR": {},
-    "XTZEUR": {
-      "becameAvailable": "",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 0,
-      "strategyRange": 0,
-      "earnings": 0
     }
   }
 }

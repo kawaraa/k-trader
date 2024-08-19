@@ -78,12 +78,11 @@ class BotsManager {
       const d = new Date();
       const ops = { hour12: false };
       info = `[${d.toJSON().substring(5, 10)} ${d.toLocaleTimeString([], ops).substring(0, 5)}] ${info}\n`;
-      // logToFile
+
       if (!existsSync(filePath)) writeFileSync(filePath, info);
       else {
-        const fileSizeInBytes = statSync(filePath).size;
-        if (+(fileSizeInBytes / (1024 * 1024)).toFixed(2) < 1) appendFileSync(filePath, info);
-        else writeFileSync(filePath, info);
+        const fileSizeInKB = statSync(filePath).size / 1024; // if file less then 200 KB append logs to file
+        fileSizeInKB < 200 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
       }
     }
 
