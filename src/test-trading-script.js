@@ -7,8 +7,9 @@ const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
 
 const pair = process.argv[2]; // The pair of the two currency that will be used for trading E.g. ETHEUR
-const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
-const minTestPeriod = +process.argv[7] || 60; // Number of days that will be tested
+const minStrategyRange = process.argv[3] || 0.25; // Is a Range of the strategy in days, min value from 0.25 day which equivalent to 6 hours
+const capital = +process.argv[4] || 100; // Amount in EUR which is the total money that can be used for trading
+const minTestPeriod = +process.argv[5] || 60; // Number of days that will be tested
 const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
 
 // Command example: node test-trading-script.js ETHEUR 100 60 > database/log/all.log 2>&1
@@ -16,7 +17,7 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
 
 (async () => {
   const strategySettings = getStrategySettingsMatrix();
-  let strategyRage = +process.argv[3] || 0.25;
+  let strategyRage = minStrategyRange;
 
   for (const pair in cryptos) {
     console.log(`Started new analysis with ${pair}.\n`);
@@ -37,12 +38,11 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
 
     try {
       for (const [investment, priceChange] of strategySettings) {
-        let range = strategyRage;
         // investment is and investing Amount in EUR that will be used every time to by crypto
         // priceChange is a price Percentage Threshold, value from 0 to 100
-        // strategyRange is a Range of the strategy in days, min value from 0.25 day which equivalent to 6 hours
+        let range = strategyRage;
 
-        while (range < 6) {
+        while (range < 3) {
           const pricesOffset = (range * 24 * 60) / 5;
           const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset);
           const info = { capital, investment, priceChange, strategyRange: range };
@@ -86,6 +86,7 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
 
 function getStrategySettingsMatrix() {
   return [
+    [9, 1.5],
     [9, 2],
     [9, 3],
     [9, 4],
@@ -95,9 +96,7 @@ function getStrategySettingsMatrix() {
     [9, 8],
     [9, 9],
     [9, 10],
-    [9, 11],
-    [9, 12],
-    [9, 13],
+    [19, 1.5],
     [19, 2],
     [19, 3],
     [19, 4],
@@ -107,44 +106,41 @@ function getStrategySettingsMatrix() {
     [19, 8],
     [19, 9],
     [19, 10],
-    [19, 11],
-    [19, 12],
-    [19, 13],
-    [32, 2],
-    [32, 3],
-    [32, 4],
-    [32, 5],
-    [32, 6],
-    [32, 7],
-    [32, 8],
-    [32, 9],
-    [32, 10],
-    [32, 11],
-    [32, 12],
-    [32, 13],
-    [49, 2],
-    [49, 3],
-    [49, 4],
-    [49, 5],
-    [49, 6],
-    [49, 7],
-    [49, 8],
-    [49, 9],
-    [49, 10],
-    [49, 11],
-    [49, 12],
-    [49, 13],
-    [99, 2],
-    [99, 3],
-    [99, 4],
-    [99, 5],
-    [99, 6],
-    [99, 7],
-    [99, 8],
-    [99, 9],
-    [99, 10],
-    [99, 11],
-    [99, 12],
-    [99, 13],
+    // [32, 2],
+    // [32, 3],
+    // [32, 4],
+    // [32, 5],
+    // [32, 6],
+    // [32, 7],
+    // [32, 8],
+    // [32, 9],
+    // [32, 10],
+    // [32, 11],
+    // [32, 12],
+    // [32, 13],
+    // [49, 2],
+    // [49, 3],
+    // [49, 4],
+    // [49, 5],
+    // [49, 6],
+    // [49, 7],
+    // [49, 8],
+    // [49, 9],
+    // [49, 10],
+    // [49, 11],
+    // [49, 12],
+    // [49, 13],
+    // [99, 2],
+    // [99, 3],
+    // [99, 4],
+    // [99, 5],
+    // [99, 6],
+    // [99, 7],
+    // [99, 8],
+    // [99, 9],
+    // [99, 10],
+    // [99, 11],
+    // [99, 12],
+    // [99, 13],
   ];
 }

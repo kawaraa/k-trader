@@ -41,23 +41,25 @@ module.exports = class DailyTrader {
       const orders = await this.ex.getOrders(this.#pair);
       const rsi = analyzer.calculateRSI(prices);
       const averagePrice = analyzer.calculateAveragePrice(prices);
-      const percentageChange = analyzer.calculatePercentageChange(tradePrice, averagePrice);
       const askPercentageChange = analyzer.calculatePercentageChange(askPrice, averagePrice);
       const priceIsStable = this.#isPriceStable(prices);
       const name = this.#pair.replace("EUR", "");
 
       this.dispatch("tradePrice", tradePrice);
-      this.dispatch("priceChange", percentageChange);
+      this.dispatch("priceChange", analyzer.calculatePercentageChange(tradePrice, averagePrice));
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto}`);
       this.dispatch(
         "log",
-        `RSI: ${rsi} => ${percentageChange}% - Prices: ${tradePrice} | ${askPrice} | ${bidPrice} | ${averagePrice}`
+        `RSI: ${rsi} => ${askPercentageChange}% - Prices: ${tradePrice} | ${askPrice} | ${bidPrice} | ${averagePrice}`
       );
       // 💰 📊
 
-      if (rsi < 30 && askPercentageChange < -1.2 && priceIsStable) {
-        this.dispatch("log", `Suggest buying`);
+      const lowestPrice = prices.toSorted()[0];
+      const buy = askPercentageChange < -1.2 && askPrice <= averagePrice - (averagePrice - lowestPrice) / 1.5;
+      if (rsi < 30 && buy && priceIsStable) {
+        // if (rsi < 30 && askPercentageChange < -1.2 && priceIsStable) {
+        this.dispatch("log", `Suggest buying: ${lowestPrice}`);
 
         const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);
@@ -68,21 +70,22 @@ module.exports = class DailyTrader {
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
         //
-      } else if (70 < rsi && priceIsStable) {
-        this.dispatch("log", `Suggest selling`);
+      }
+      // else if (70 < rsi && priceIsStable) {
+      //   this.dispatch("log", `Suggest selling`);
 
-        if (balance.crypto > 0 && orders[0]) {
-          for (const { id, price, volume, cost } of orders) {
-            if (this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(bidPrice, price)) {
-              const amount = Math.min(+volume, balance.crypto);
-              const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
-              const c = bidPrice * amount + analyzer.calculateFee(bidPrice * amount, 0.4);
-              const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
-              this.dispatch("sell", id);
-              this.dispatch("earnings", profit);
-              this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
-            }
+      if (balance.crypto > 0 && orders[0]) {
+        for (const { id, price, volume, cost } of orders) {
+          if (this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(bidPrice, price)) {
+            const amount = Math.min(+volume, balance.crypto);
+            const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
+            const c = bidPrice * amount + analyzer.calculateFee(bidPrice * amount, 0.4);
+            const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
+            this.dispatch("sell", id);
+            this.dispatch("earnings", profit);
+            this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
           }
+          // }
         }
       }
 
