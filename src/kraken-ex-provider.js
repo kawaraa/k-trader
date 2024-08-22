@@ -60,8 +60,11 @@ module.exports = class KrakenExchangeProvider {
   async currentPrices(pair) {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
     const { a, b, c } = data[Object.keys(data)[0]];
-    return { tradePrice: +c[0], askPrice: +a[0], bidPrice: +b[0] };
+    const prices = { tradePrice: +c[0], askPrice: +a[0], bidPrice: +b[0] };
+    this.state.updateLocalPrices(pair, prices);
+    return prices;
   }
+
   async pricesData(pair, lastDays = 0.5, interval = 5) {
     // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
     let allPrices = [];
@@ -76,8 +79,9 @@ module.exports = class KrakenExchangeProvider {
     return allPrices.slice(-((lastDays * 24 * 60) / 5));
   }
   async prices(pair, lastDays) {
-    const prices = await this.pricesData(pair, lastDays);
-    return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
+    // const prices = await this.pricesData(pair, lastDays);
+    // return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
+    return this.state.getLocalPrices(pair, (lastDays * 24 * 60) / 5);
   }
   async createOrder(type, ordertype, pair, volume) {
     volume += "";
@@ -89,7 +93,8 @@ module.exports = class KrakenExchangeProvider {
     if (!orderIds) return [];
     const orders = await this.#privateApi("QueryOrders", { txid: orderIds });
     return Object.keys(orders).map((id) => {
-      return { id, price: +orders[id].price, volume: +orders[id].vol_exec, cost: +orders[id].cost };
+      const { price, vol_exec, cost, opentm } = orders[id];
+      return { id, price: +price, volume: +vol_exec, cost: +cost, createdAt: +opentm + 1000 };
     });
   }
   async getOpenClosedOrders(state) {

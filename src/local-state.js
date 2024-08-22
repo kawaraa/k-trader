@@ -1,11 +1,16 @@
 const { readFileSync, writeFileSync } = require("node:fs");
 
 module.exports = class LocalState {
+  #databaseFolder;
   #filePath;
   constructor(filename) {
-    this.#filePath = `${process.cwd()}/database/${filename}.json`;
+    this.#databaseFolder = `${process.cwd()}/database/`;
+    this.#filePath = `${this.#databaseFolder}${filename}.json`;
   }
 
+  #getPricesFilePath(pair) {
+    return `${this.#databaseFolder}prices/${pair}.json`;
+  }
   load() {
     try {
       return JSON.parse(readFileSync(this.#filePath, "utf8"));
@@ -37,5 +42,20 @@ module.exports = class LocalState {
     const state = this.load();
     state[pair].orders = state[pair].orders.filter((id) => id != orderId);
     this.update(state);
+  }
+
+  getLocalPrices(pair, limit = 864) {
+    limit = limit > 864 ? 864 : limit; // Limit Storing prices to 3 days
+    try {
+      const data = JSON.parse(readFileSync(this.#getPricesFilePath(pair), "utf8")).slice(-limit);
+      return data && data[0]?.askPrice ? data : [];
+    } catch (error) {
+      return [];
+    }
+  }
+  updateLocalPrices(pair, prices) {
+    const data = this.getLocalPrices(pair);
+    data.push(prices);
+    return writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
   }
 };
