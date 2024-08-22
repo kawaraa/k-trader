@@ -36,7 +36,7 @@ module.exports = class DailyTrader {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
       const prices = await this.ex.prices(this.#pair, this.strategyRange); // For the last xxx days
-      this.#tradingAmount = +(this.#investingCapital / tradePrice).toFixed(8);
+      this.#tradingAmount = +(this.#investingCapital / bidPrice).toFixed(8);
 
       const orders = await this.ex.getOrders(this.#pair);
       const rsi = analyzer.calculateRSI(prices);
