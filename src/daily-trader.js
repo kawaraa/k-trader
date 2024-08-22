@@ -61,8 +61,12 @@ module.exports = class DailyTrader {
       );
       // 💰 📊
 
+      // 160 - (160 - 150) / 1.5 => 153.33
+      // 160 - (160 - 150) / 1.6 => 153.75
+      // 175 - (175 - 150) / 1.5 => 158.33
+      // 175 - (175 - 150) / 1.6 => 159.37
       const lowestAskPr = askPrices.toSorted()[0];
-      const buy = askPercentageChange < -1.2 && askPrice <= avgAskPrice - (avgAskPrice - lowestAskPr) / 2.5;
+      const buy = askPercentageChange < -1.2 && askPrice <= avgAskPrice - (avgAskPrice - lowestAskPr) / 1.5;
       if (askPriceRsi < 30 && !(prices.length < (this.strategyRange * 24 * 60) / 5) && buy) {
         this.dispatch("log", `Suggest buying: ${lowestAskPr}`);
 
@@ -77,9 +81,9 @@ module.exports = class DailyTrader {
       }
 
       if (balance.crypto > 0 && orders[0]) {
-        for (const { id, price, volume, cost } of orders) {
+        for (const { id, price, volume, cost, createdAt } of orders) {
           // Backlog: Sell accumulated orders that has been more than 5 days if the current price is higher then highest price in the lest 4 hours.
-          const accumulated = 60000 * 60 * 24 * 30 <= Date.now() - Date.parse(o.createdAt);
+          const accumulated = 60000 * 60 * 24 * 30 <= Date.now() - Date.parse(createdAt);
           const sell = this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(bidPrice, price);
 
           if (sell || (accumulated && 70 < bidPriceRsi)) {

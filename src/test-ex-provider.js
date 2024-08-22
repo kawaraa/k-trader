@@ -15,13 +15,10 @@ module.exports = class TestExchangeProvider {
   async currentPrices() {
     const price = this.allPrices[this.currentPriceIndex] || this.allPrices[this.allPrices.length - 1];
     this.currentPriceIndex += 1;
-    // Increase the tradePrice 0.10% by multiply it by 1.001, And decrease the tradePrice 0.10%, by multiply it by 0.999.
-    return { tradePrice: price, askPrice: price * 1.001, bidPrice: price * 0.999 };
+    return price;
   }
   async prices(pair, lastDays) {
-    return this.allPrices
-      .slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex)
-      .map((p) => ({ tradePrice: p, askPrice: p * 1.001, bidPrice: p * 0.999 }));
+    return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
   }
   async createOrder(tradingType, b, c, volume) {
     const { tradePrice, askPrice, bidPrice } = await this.currentPrices();

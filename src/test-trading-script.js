@@ -9,7 +9,7 @@ const DailyTrader = require("./daily-trader.js");
 const pair = process.argv[2]; // The pair of the two currency that will be used for trading E.g. ETHEUR
 const minStrategyRange = process.argv[3] || 0.25; // Is a Range of the strategy in days, min value from 0.25 day which equivalent to 6 hours
 const capital = +process.argv[4] || 100; // Amount in EUR which is the total money that can be used for trading
-const minTestPeriod = +process.argv[5] || 60; // Number of days that will be tested
+const minTestPeriod = +process.argv[5] || 30; // Number of days that will be tested
 const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
 
 // Command example: node test-trading-script.js ETHEUR 100 60 > database/log/all.log 2>&1
@@ -22,23 +22,22 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
   for (const pair in cryptos) {
     console.log(`Started new analysis with ${pair}.\n`);
 
-    const filePath = `${process.cwd()}/database/prices/${pair}.json`;
+    const filePath = `${process.cwd()}/database/test-prices/${pair}.json`;
     const result = { investment: 0, priceChange: 0, range: 0, balance: 0 };
     let prices = [];
 
     if (existsSync(filePath)) {
-      // prices = JSON.parse(readFileSync(filePath, "utf8"));
-      prices = (await kraken.pricesData(pair, minTestPeriod)).map((candle) => {
-        const closingPrice = parseFloat(candle[4]);
-        return { tradePrice: closingPrice, askPrice: closingPrice * 1.001, bidPrice: closingPrice * 0.999 };
-      });
+      prices = JSON.parse(readFileSync(filePath, "utf8"));
     } else {
       console.log(`No prices file is found for ${pair}`);
-      // prices = (await kraken.pricesData(pair, minTestPeriod)).map((candle) => {
-      //   const closingPrice = parseFloat(candle[4]);
-      //   return { tradePrice: closingPrice, askPrice: closingPrice * 1.001, bidPrice: closingPrice * 0.999 };
-      // });
-      // writeFileSync(filePath, JSON.stringify(prices));
+
+      // XXX Remove this when the filePath changes from "/test-prices" to "/prices" XXX
+      prices = (await kraken.pricesData(pair, minTestPeriod)).map((candle) => {
+        const closingPrice = parseFloat(candle[4]);
+        // Increase the tradePrice 0.10% by multiply it by 1.001, And decrease the tradePrice 0.10%, by multiply it by 0.999.
+        return { tradePrice: closingPrice, askPrice: closingPrice * 1.001, bidPrice: closingPrice * 0.999 };
+      });
+      writeFileSync(filePath, JSON.stringify(prices));
     }
 
     // const sorted = prices.toSorted();
@@ -57,7 +56,7 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
           const trader = new DailyTrader(ex, pair, info);
           trader.listener = (p, event, info) => {
             event == "sell" && ex.removeOrder(info);
-            //  event == "log" && console.log(pair, info);
+            // event == "log" && console.log(pair, info);
           };
 
           for (const i in prices) {
@@ -65,10 +64,11 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
             await trader.start();
           }
 
-          await ex.createOrder("sell", "", "", (await ex.balance()).crypto);
+          const crypto = (await ex.balance()).crypto;
+          if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
           const eur = +(await ex.balance()).eur.toFixed(2);
 
-          if (200 <= eur && result.balance <= eur) {
+          if (150 <= eur && result.balance <= eur - 3) {
             result.balance = eur;
             result.range = range;
             result.investment = investment;
@@ -77,6 +77,8 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
               `Strategy: ${result.investment}, ${result.priceChange}, ${result.range} -`,
               "Balance: ",
               result.balance,
+              "-",
+              crypto,
               "=> ",
               +((result.balance - 100) / 2).toFixed(2)
             );
