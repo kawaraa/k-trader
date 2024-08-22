@@ -56,12 +56,6 @@ export default function BotItem({ botInfo, onAction }) {
             <strong>Balance</strong>: <span>{botInfo.balance}</span>
           </p>
           <p className="">
-            <strong>Trade Price</strong>: <span>{botInfo.tradePrice}</span>
-          </p>
-          <p className="">
-            <strong>Average price change</strong>: <span>{botInfo.averagePriceChange}</span>
-          </p>
-          <p className="">
             <strong>Sold / Transactions</strong>: <span>{botInfo.sold}</span>
           </p>
         </div>

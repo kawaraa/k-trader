@@ -22,15 +22,23 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
   for (const pair in cryptos) {
     console.log(`Started new analysis with ${pair}.\n`);
 
-    const filePath = `${process.cwd()}/database/test/${pair}-prices.json`;
+    const filePath = `${process.cwd()}/database/prices/${pair}.json`;
     const result = { investment: 0, priceChange: 0, range: 0, balance: 0 };
     let prices = [];
 
     if (existsSync(filePath)) {
-      prices = JSON.parse(readFileSync(filePath, "utf8"));
+      // prices = JSON.parse(readFileSync(filePath, "utf8"));
+      prices = (await kraken.pricesData(pair, minTestPeriod)).map((candle) => {
+        const closingPrice = parseFloat(candle[4]);
+        return { tradePrice: closingPrice, askPrice: closingPrice * 1.001, bidPrice: closingPrice * 0.999 };
+      });
     } else {
-      prices = await kraken.prices(pair, minTestPeriod);
-      writeFileSync(filePath, JSON.stringify(prices));
+      console.log(`No prices file is found for ${pair}`);
+      // prices = (await kraken.pricesData(pair, minTestPeriod)).map((candle) => {
+      //   const closingPrice = parseFloat(candle[4]);
+      //   return { tradePrice: closingPrice, askPrice: closingPrice * 1.001, bidPrice: closingPrice * 0.999 };
+      // });
+      // writeFileSync(filePath, JSON.stringify(prices));
     }
 
     // const sorted = prices.toSorted();

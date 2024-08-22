@@ -77,8 +77,10 @@ class BotsManager {
       const filePath = `database/logs/${pair}.log`;
       const d = new Date();
       const ops = { hour12: false };
-      info = `[${d.toJSON().substring(5, 10)} ${d.toLocaleTimeString([], ops).substring(0, 5)}] ${info}\n`;
-
+      if (!info) info = "\n";
+      else {
+        info = `[${d.toJSON().substring(5, 10)} ${d.toLocaleTimeString([], ops).substring(0, 5)}] ${info}\n`;
+      }
       if (!existsSync(filePath)) writeFileSync(filePath, info);
       else {
         const fileSizeInKB = statSync(filePath).size / 1024; // if file less then 200 KB append logs to file
@@ -94,8 +96,6 @@ class BotsManager {
       bot.sold += 1;
       bot.orders = bot.orders.filter((id) => id != info);
     } else if (event == "earnings") bot.earnings += info;
-    else if (event == "tradePrice") bot.tradePrice = info;
-    else if (event == "priceChange") bot.averagePriceChange = info;
     else if (event == "balance") bot.balance = info;
 
     this.state.update(this.get());
@@ -123,8 +123,6 @@ class Bot {
     this.timeInterval = +this.#parseValue(info.timeInterval);
     this.balance = +(this.#parseValue(info.balance) || 0);
     this.earnings = +(this.#parseValue(info.earnings) || 0);
-    this.tradePrice = +(this.#parseValue(info.tradePrice) || 0);
-    this.averagePriceChange = +(this.#parseValue(info.averagePriceChange) || 0);
     this.sold = +(this.#parseValue(info.sold) || 0);
     this.bought = +(this.#parseValue(info.bought) || 0);
     this.orders = this.#parseValue(info.orders) || [];

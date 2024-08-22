@@ -1,4 +1,4 @@
-require("node:fs").mkdirSync("database/logs", { recursive: true });
+const { mkdirSync } = require("node:fs");
 const express = require("express");
 const { rateLimiter, cookiesParser, isAuthenticated } = require("./src/routes/middlewares.js");
 const KrakenExchangeProvider = require("./src/kraken-ex-provider.js");
@@ -6,6 +6,9 @@ const fireStoreProvider = require("./src/firebase-provider");
 const DailyTrader = require("./src/daily-trader");
 const { isValidPair } = require("./src/utilities.js");
 const LocalState = require("./src/local-state.js");
+
+mkdirSync("database/logs", { recursive: true });
+mkdirSync("database/prices", { recursive: true });
 
 const prod = process.env.NODE_ENV === "production";
 const port = 3000;

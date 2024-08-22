@@ -19,7 +19,9 @@ module.exports = class TestExchangeProvider {
     return { tradePrice: price, askPrice: price * 1.001, bidPrice: price * 0.999 };
   }
   async prices(pair, lastDays) {
-    return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
+    return this.allPrices
+      .slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex)
+      .map((p) => ({ tradePrice: p, askPrice: p * 1.001, bidPrice: p * 0.999 }));
   }
   async createOrder(tradingType, b, c, volume) {
     const { tradePrice, askPrice, bidPrice } = await this.currentPrices();
