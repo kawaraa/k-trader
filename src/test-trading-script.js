@@ -9,11 +9,10 @@ const DailyTrader = require("./daily-trader.js");
 const pair = process.argv[2]; // The pair of the two currency that will be used for trading E.g. ETHEUR
 const minStrategyRange = process.argv[3] || 0.25; // Is a Range of the strategy in days, min value from 0.25 day which equivalent to 6 hours
 const capital = +process.argv[4] || 100; // Amount in EUR which is the total money that can be used for trading
-const minTestPeriod = +process.argv[5] || 30; // Number of days that will be tested
+const minTestPeriod = +process.argv[5] || 60; // Number of days that will be tested
 const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
 
 // Command example: node test-trading-script.js ETHEUR 100 60 > database/log/all.log 2>&1
-//
 
 (async () => {
   const strategySettings = getStrategySettingsMatrix();
@@ -40,9 +39,6 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
       writeFileSync(filePath, JSON.stringify(prices));
     }
 
-    // const sorted = prices.toSorted();
-    // console.log("The lowest price: ", sorted[0], "The highest price: ", sorted[sorted.length - 1]);
-
     try {
       for (const [investment, priceChange] of strategySettings) {
         // investment is and investing Amount in EUR that will be used every time to by crypto
@@ -64,7 +60,7 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
             await trader.start();
           }
 
-          const crypto = (await ex.balance()).crypto;
+          const crypto = (await ex.balance()).crypto + 0;
           if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
           const eur = +(await ex.balance()).eur.toFixed(2);
 
@@ -84,7 +80,7 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
             );
           }
 
-          range = range < 0.5 ? 0.5 : range + 0.5;
+          range += 0.25;
         }
       }
     } catch (error) {
@@ -103,9 +99,6 @@ function getStrategySettingsMatrix() {
     [9, 5],
     [9, 6],
     [9, 7],
-    [9, 8],
-    [9, 9],
-    [9, 10],
     [19, 1.5],
     [19, 2],
     [19, 3],
@@ -113,44 +106,23 @@ function getStrategySettingsMatrix() {
     [19, 5],
     [19, 6],
     [19, 7],
-    [19, 8],
-    [19, 9],
-    [19, 10],
-    // [32, 2],
-    // [32, 3],
-    // [32, 4],
-    // [32, 5],
-    // [32, 6],
-    // [32, 7],
-    // [32, 8],
-    // [32, 9],
-    // [32, 10],
-    // [32, 11],
-    // [32, 12],
-    // [32, 13],
-    // [49, 2],
-    // [49, 3],
-    // [49, 4],
-    // [49, 5],
-    // [49, 6],
-    // [49, 7],
-    // [49, 8],
-    // [49, 9],
-    // [49, 10],
-    // [49, 11],
-    // [49, 12],
-    // [49, 13],
+    [32, 2],
+    [32, 3],
+    [32, 4],
+    [32, 5],
+    [32, 6],
+    [32, 7],
+    [49, 2],
+    [49, 3],
+    [49, 4],
+    [49, 5],
+    [49, 6],
+    [49, 7],
     // [99, 2],
     // [99, 3],
     // [99, 4],
     // [99, 5],
     // [99, 6],
     // [99, 7],
-    // [99, 8],
-    // [99, 9],
-    // [99, 10],
-    // [99, 11],
-    // [99, 12],
-    // [99, 13],
   ];
 }

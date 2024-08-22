@@ -54,7 +54,8 @@ module.exports = class LocalState {
     }
   }
   updateLocalPrices(pair, prices) {
-    const data = this.getLocalPrices(pair);
+    // const data = this.getLocalPrices(pair);
+    const data = JSON.parse(readFileSync(this.#getPricesFilePath(pair), "utf8")).slice(-8640);
     data.push(prices);
     return writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
   }

@@ -66,8 +66,14 @@ module.exports = class DailyTrader {
       // 175 - (175 - 150) / 1.5 => 158.33
       // 175 - (175 - 150) / 1.6 => 159.37
       const lowestAskPr = askPrices.toSorted()[0];
-      const buy = askPercentageChange < -1.2 && askPrice <= avgAskPrice - (avgAskPrice - lowestAskPr) / 1.5;
-      if (askPriceRsi < 30 && !(prices.length < (this.strategyRange * 24 * 60) / 5) && buy) {
+      const priceDifference = avgAskPrice - lowestAskPr;
+      const shouldBuy =
+        !(prices.length < (this.strategyRange * 24 * 60) / 5) &&
+        askPercentageChange < -(this.#pricePercentageThreshold / 1.5) &&
+        priceDifference > 0 &&
+        askPrice <= avgAskPrice - priceDifference / 1.5;
+
+      if (askPriceRsi < 30 && shouldBuy) {
         this.dispatch("log", `Suggest buying: ${lowestAskPr}`);
 
         const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
@@ -78,15 +84,13 @@ module.exports = class DailyTrader {
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
-      }
-
-      if (balance.crypto > 0 && orders[0]) {
+      } else if (70 <= bidPriceRsi && balance.crypto > 0 && orders[0]) {
         for (const { id, price, volume, cost, createdAt } of orders) {
           // Backlog: Sell accumulated orders that has been more than 5 days if the current price is higher then highest price in the lest 4 hours.
-          const accumulated = 60000 * 60 * 24 * 30 <= Date.now() - Date.parse(createdAt);
+          const oldOrder = 60000 * 60 * 24 * 20 <= Date.now() - Date.parse(createdAt);
           const sell = this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(bidPrice, price);
 
-          if (sell || (accumulated && 70 < bidPriceRsi)) {
+          if (sell || oldOrder) {
             const amount = Math.min(+volume, balance.crypto);
             const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
             const c = bidPrice * amount + analyzer.calculateFee(bidPrice * amount, 0.4);
