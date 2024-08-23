@@ -34,7 +34,7 @@ const cryptos = pair ? { [pair]: pair } : require(`./currencies.json`).other;
       prices = (await kraken.pricesData(pair, minTestPeriod)).map((candle) => {
         const closingPrice = parseFloat(candle[4]);
         // Increase the tradePrice 0.10% by multiply it by 1.001, And decrease the tradePrice 0.10%, by multiply it by 0.999.
-        return { tradePrice: closingPrice, askPrice: closingPrice * 1.001, bidPrice: closingPrice * 0.999 };
+        return { tradePrice: closingPrice, askPrice: closingPrice * 1.009, bidPrice: closingPrice * 0.991 };
       });
       writeFileSync(filePath, JSON.stringify(prices));
     }

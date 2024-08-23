@@ -19,5 +19,24 @@
       "note": "With €49, 3, 0.2 return €270"
     }
   },
+  "RAREEUR": {
+    "becameAvailable": "2021-06-01",
+    "capital": 100,
+    "investment": 9,
+    "priceChange": 6.5,
+    "strategyRange": 0.75,
+    "askBidSpreadPercentage": 0.9,
+    "earnings": 210
+  },
+  "BLZEUR": {
+    "becameAvailable": "2021-03-01",
+    "capital": 100,
+    "investment": 19,
+    "priceChange": 5,
+    "strategyRange": 1,
+    "askBidSpreadPercentage": 0.9,
+    "earnings": 50,
+    "note": ""
+  },
   "other": {}
 }

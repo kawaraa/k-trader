@@ -16,14 +16,6 @@
       "strategyRange": 1,
       "earnings": 325
     },
-    "RAREEUR": {
-      "becameAvailable": "2021-06-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 8,
-      "strategyRange": 1.5,
-      "earnings": 495
-    },
     "MSOLEUR": {
       "becameAvailable": "2022-04-01",
       "capital": 100,
@@ -31,7 +23,7 @@
       "priceChange": 8,
       "strategyRange": 1.5,
       "earnings": 485,
-      "note": "With €49, 12, 1.5 return €500"
+      "note": ""
     },
     "GALEUR": {
       "becameAvailable": "2020-08-01",
@@ -76,15 +68,7 @@
       "strategyRange": 0.25,
       "earnings": 390
     },
-    "BLZEUR": {
-      "becameAvailable": "2021-03-01",
-      "capital": 100,
-      "investment": 99,
-      "priceChange": 2,
-      "strategyRange": 2.5,
-      "earnings": 380,
-      "note": "With €49, 2, 2.5 return €205"
-    },
+
     "BSXEUR": {
       "becameAvailable": "2022-03-01",
       "capital": 100,
