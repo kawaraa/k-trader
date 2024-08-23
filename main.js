@@ -6,6 +6,7 @@ const fireStoreProvider = require("./src/firebase-provider");
 const DailyTrader = require("./src/daily-trader");
 const { isValidPair } = require("./src/utilities.js");
 const LocalState = require("./src/local-state.js");
+const pairs = require("./src/pairs.js");
 
 mkdirSync("database/logs", { recursive: true });
 mkdirSync("database/prices", { recursive: true });
@@ -21,6 +22,22 @@ const priceChange = +process.argv[5] || 2; // price Percentage Threshold 0 to 10
 const strategyRange = +process.argv[6] || 0.5; // Range of the strategy in days, Default is 0.5 day
 const timeInterval = +process.argv[7] || 5; // 1 to 11440, time per mins E.g. 11440 would be every 24 hours
 
+const state = new LocalState("cli-state");
+const kraken = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CREDENTIALS, state);
+
+async function fetchStorePrices() {
+  console.log("Started recording prices", pairs.length);
+  for (const pair of pairs) {
+    try {
+      // await kraken.currentPrices(pair);
+    } catch (error) {
+      console.log(`Error with ${pair}`, error.message);
+    }
+  }
+  console.log("Finish recording prices, will start again after 5 mins");
+  setTimeout(fetchStorePrices, 60000 * 5);
+}
+
 if (!isValidPair(pair)) {
   // const maxAge = 60 * 60 * 24 * 7; // 1 week (weekSec)
   const maxAge = 30 * 24 * 3600 * 1000; // 30 days
@@ -29,7 +46,7 @@ if (!isValidPair(pair)) {
 
   try {
     // Apply the rate limiting all requests by adding rate limiter middleware to all routes
-    // server.use(rateLimiter);
+    server.use(rateLimiter);
     server.use(cookiesParser);
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
@@ -37,6 +54,7 @@ if (!isValidPair(pair)) {
     const apiRouter = express.Router();
     require("./src/routes/auth")(apiRouter, fireStoreProvider, authRequired, cookieOptions);
     require("./src/routes/bots")(apiRouter, fireStoreProvider, authRequired, prod);
+    apiRouter.use("/prices", authRequired, express.static(`${__dirname}/database/prices/`));
     server.use("/api", apiRouter);
 
     server.use(express.static(`${__dirname}/public/`));
@@ -47,6 +65,8 @@ if (!isValidPair(pair)) {
       res.sendFile(`${__dirname}/out/index.html`);
     });
 
+    fetchStorePrices();
+
     server.listen(port, (err) => {
       if (err) throw err;
       console.log(`Server is running on http://localhost:${port}`);
@@ -55,10 +75,7 @@ if (!isValidPair(pair)) {
     console.log("App error: ", error);
   }
 } else {
-  const state = new LocalState("cli-state");
   state.update({ [pair]: { orders: [] } });
-
-  const kraken = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CREDENTIALS, state);
   const trader = new DailyTrader(kraken, pair, { capital, investment, priceChange, strategyRange });
 
   trader.listener = (pair, event, info) => {

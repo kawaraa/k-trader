@@ -91,6 +91,8 @@ export default function Home() {
   };
 
   useEffect(() => {
+    window.profit = (ask, bid, amt = 9) => (amt / ask) * bid * 0.992;
+    window.percentage = (cur, past) => `${(((cur - past) / (past || 0)) * 100).toFixed(2)}%`;
     request("/api/auth")
       .then(fetchBots)
       .catch(() => router.replace("/signin"));

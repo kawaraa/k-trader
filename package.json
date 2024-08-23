@@ -12,17 +12,18 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "k-utilities": "^1.4.5",
-    "next": "^14.2.5",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "k-utilities": "^1.4.5"
   },
   "devDependencies": {
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "next": "^14.2.5",
     "nodemon": "^3.1.4",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.1",
+    "chart.js": "^4.4.4"
   },
   "repository": {
     "type": "git",

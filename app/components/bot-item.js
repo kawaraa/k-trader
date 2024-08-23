@@ -58,6 +58,9 @@ export default function BotItem({ botInfo, onAction }) {
           <p className="">
             <strong>Sold / Transactions</strong>: <span>{botInfo.sold}</span>
           </p>
+          <p className="">
+            <Link href={`/chart?pair=${botInfo.pair}`}>{botInfo.sold}</Link>
+          </p>
         </div>
         <div className="flex items-center justify-between">
           <button onClick={() => onAction("delete", botInfo.pair)} className={`w-8 flex text-pc`}>

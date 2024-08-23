@@ -2,7 +2,7 @@
 const requestCounts = new Map();
 // Define the rate limit parameters
 const WINDOW_SIZE = 60 * 1000; // 1 minute
-const MAX_REQUESTS = 60;
+const MAX_REQUESTS = 120; // or 60 which mean a request per second
 
 function rateLimiter(request, response, next) {
   const clientIp = request.ip; // Get client's IP address
