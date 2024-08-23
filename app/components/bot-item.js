@@ -59,7 +59,12 @@ export default function BotItem({ botInfo, onAction }) {
             <strong>Sold / Transactions</strong>: <span>{botInfo.sold}</span>
           </p>
           <p className="">
-            <Link href={`/chart?pair=${botInfo.pair}`}>{botInfo.sold}</Link>
+            <Link
+              href={`/chart?pair=${botInfo.pair}`}
+              className="font-bold underline text-pc underline-offset-4 "
+            >
+              Prices chart
+            </Link>
           </p>
         </div>
         <div className="flex items-center justify-between">

@@ -59,6 +59,7 @@ export default function CryptoChart() {
             <select
               name="pair"
               onChange={(e) => changePair(e.target.value)}
+              defaultValue={pair}
               className="m-5 text-lg bg-amber-100 py-1 px-3 appearance-none outline-none border-[1px] focus:border-blue rounded-md"
             >
               {pairs.map((pair, i) => (
