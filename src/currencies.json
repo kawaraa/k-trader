@@ -16,6 +16,9 @@
       "strategyRange": 1,
       "earnings": 325
     },
+    "RAREEUR": {},
+    "BLZEUR": {},
+
     "MSOLEUR": {
       "becameAvailable": "2022-04-01",
       "capital": 100,
