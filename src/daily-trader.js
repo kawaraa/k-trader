@@ -65,16 +65,16 @@ module.exports = class DailyTrader {
       // 160 - (160 - 150) / 1.6 => 153.75
       // 175 - (175 - 150) / 1.5 => 158.33
       // 175 - (175 - 150) / 1.6 => 159.37
-      const lowestAskPr = askPrices.toSorted()[0];
-      const priceDifference = avgAskPrice - lowestAskPr;
+      const sortedPries = bidPrices.toSorted();
+      const highestBidPr = sortedPries[sortedPries.length - 1];
       const shouldBuy =
-        !(prices.length < (this.strategyRange * 24 * 60) / 5) &&
-        askPercentageChange < -(this.#pricePercentageThreshold / 1.5) &&
-        priceDifference > 0 &&
-        askPrice <= avgAskPrice - priceDifference / 1.5;
+        !((this.strategyRange * 24 * 60) / 5 > prices.length) &&
+        -this.#pricePercentageThreshold > analyzer.calculatePercentageChange(askPrice, highestBidPr);
+      // && -(this.#pricePercentageThreshold / 2) > askPercentageChange ;
+      // && avgAskPrice - (avgAskPrice - lowestAskPr) / 1.5; >= askPrice; // 1.5 for more restriction
 
-      if (askPriceRsi < 30 && shouldBuy) {
-        this.dispatch("log", `Suggest buying: ${lowestAskPr}`);
+      if (bidPriceRsi < 30 && shouldBuy) {
+        this.dispatch("log", `Suggest buying: Lowest Ask Price is ${askPrices.toSorted()[0]}`);
 
         const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);

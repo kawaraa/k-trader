@@ -67,16 +67,8 @@ module.exports = class KrakenExchangeProvider {
 
   async pricesData(pair, lastDays = 0.5, interval = 5) {
     // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
-    let allPrices = [];
-    let timestamp = "";
-
-    while (lastDays > (allPrices.length * 5) / 60 / 24) {
-      const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${timestamp}`);
-      allPrices = data[Object.keys(data)[0]].concat(allPrices);
-      timestamp = allPrices[0][0]; // The oldest timestamp in the retrieved data
-      await delay(5000);
-    }
-    return allPrices.slice(-((lastDays * 24 * 60) / 5));
+    const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}`);
+    return data[Object.keys(data)[0]].slice(-((lastDays * 24 * 60) / interval));
   }
   async prices(pair, lastDays) {
     // const prices = await this.pricesData(pair, lastDays);

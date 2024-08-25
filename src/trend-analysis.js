@@ -160,6 +160,11 @@ function calculateProfit(currentPrice, orderPrice, cryptoVolume, feePercentage) 
 function calculateFee(amount, feePercentage) {
   return !feePercentage ? 0 : (amount * feePercentage) / 100;
 }
+// This increases the tradePrice 0.10% by multiply it by 1.001, And decreases the tradePrice 0.10%, by multiply it by 0.999
+function adjustPrice(price, percentage) {
+  const multiplier = percentage / 100;
+  return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
+}
 
 module.exports = {
   linearRegression,
@@ -172,4 +177,5 @@ module.exports = {
   calculateEarnings,
   calculateProfit,
   calculateFee,
+  adjustPrice,
 };

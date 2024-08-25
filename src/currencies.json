@@ -3,54 +3,195 @@
     "BTCEUR": {
       "becameAvailable": "2009-01-01",
       "capital": 500,
-      "investment": 49,
-      "priceChange": 2.8,
-      "strategyRange": 1,
-      "earnings": 225
+      "investment": 19,
+      "priceChange": 3,
+      "strategyRange": 0.25,
+      "earnings": 240,
+      "note": "With €49, 3, 0.25 return €300"
     },
     "ETHEUR": {
       "becameAvailable": "2015-07-01",
       "capital": 500,
-      "investment": 499,
+      "investment": 32,
       "priceChange": 3,
-      "strategyRange": 1,
-      "earnings": 325
+      "strategyRange": 0.25,
+      "earnings": 250,
+      "note": "With €49, 3, 0.2 return €270"
     },
-    "RAREEUR": {},
-    "BLZEUR": {},
-
-    "MSOLEUR": {
-      "becameAvailable": "2022-04-01",
-      "capital": 100,
-      "investment": 19,
-      "priceChange": 8,
-      "strategyRange": 1.5,
-      "earnings": 485,
-      "note": ""
-    },
-    "GALEUR": {
-      "becameAvailable": "2020-08-01",
+    "RAREEUR": {
+      "becameAvailable": "2021-06-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 4,
-      "strategyRange": 0.25,
-      "earnings": 445
+      "priceChange": 9,
+      "strategyRange": 0.75,
+      "askBidSpreadPercentage": 0.25,
+      "earnings": 255
     },
-    "KINEUR": {
-      "becameAvailable": "2022-08-01",
+    "ZETAEUR": {
+      "becameAvailable": "2022-04-01",
       "capital": 100,
-      "investment": 49,
-      "priceChange": 2,
+      "investment": 9,
+      "priceChange": 9,
       "strategyRange": 1,
-      "earnings": 445,
-      "note": "With €99, 3, 0.5 return €500"
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 115
     },
+    "AAVEEUR": {
+      "becameAvailable": "2020-12-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 5,
+      "strategyRange": 1,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 55,
+      "note": ""
+    },
+    "ADAEUR": {
+      "becameAvailable": "2017-09-29",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 6,
+      "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 55
+    },
+    "ALGOEUR": {
+      "becameAvailable": "2019-06-19",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 6,
+      "strategyRange": 1,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 60
+    },
+    "API3EUR": {
+      "becameAvailable": "2021-11-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 9,
+      "strategyRange": 1.25,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 110
+    },
+    "APTEUR": {
+      "becameAvailable": "2022-12-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 10,
+      "strategyRange": 1,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 110,
+      "note": ""
+    },
+    "ARBEUR": {
+      "becameAvailable": "2023-04-23",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 9,
+      "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 105
+    },
+    "ARKMEUR": {
+      "becameAvailable": "2022-07-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 10,
+      "strategyRange": 1.25,
+      "askBidSpreadPercentage": 0.7,
+      "earnings": 115
+    },
+    "ATLASEUR": {
+      "becameAvailable": "2021-03-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 7,
+      "strategyRange": 1.75,
+      "askBidSpreadPercentage": 0.9,
+      "earnings": 70
+    },
+    "ATOMEUR": {
+      "becameAvailable": "2019-03-14",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 7,
+      "strategyRange": 1,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 70
+    },
+    "AXSEUR": {
+      "becameAvailable": "2020-11-04",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 7,
+      "strategyRange": 1,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 80
+    },
+    "BADGEREUR": {
+      "becameAvailable": "2020-12-03",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 7,
+      "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0.5,
+      "earnings": 115
+    },
+    "BALEUR": {
+      "becameAvailable": "2020-06-23",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 7,
+      "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0.55,
+      "earnings": 80
+    },
+    "BANDEUR": {
+      "becameAvailable": "2020-11-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 8,
+      "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0.35,
+      "earnings": 100
+    },
+    "BATEUR": {
+      "becameAvailable": "2017-06-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 6,
+      "strategyRange": 0.75,
+      "askBidSpreadPercentage": 0.4,
+      "earnings": 60
+    },
+    "BLUREUR": {
+      "becameAvailable": "2022-02-01",
+      "capital": 100,
+      "investment": 9,
+      "priceChange": 9,
+      "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0.15,
+      "earnings": 145
+    },
+
+    "EGLDEUR": { "askBidSpreadPercentage": 0.12 },
+    "ENAEUR": {
+      "becameAvailable": "2020-12-01",
+      "capital": 100,
+      "investment": 32,
+      "priceChange": 7,
+      "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 95
+    },
+
     "BRICKEUR": {
       "becameAvailable": "2022-09-01",
       "capital": 100,
       "investment": 49,
       "priceChange": 2.5,
       "strategyRange": 1,
+      "askBidSpreadPercentage": 0,
       "earnings": 425,
       "note": "With €99, 2.8, 1 return €500"
     },
@@ -60,6 +201,7 @@
       "investment": 9,
       "priceChange": 12,
       "strategyRange": 3.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 400,
       "note": "With €49, 7, 0.5 return €460"
     },
@@ -69,15 +211,16 @@
       "investment": 9,
       "priceChange": 3,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
       "earnings": 390
     },
-
     "BSXEUR": {
       "becameAvailable": "2022-03-01",
       "capital": 100,
       "investment": 19,
       "priceChange": 10,
       "strategyRange": 3,
+      "askBidSpreadPercentage": 0,
       "earnings": 300
     },
     "REPEUR": {
@@ -86,6 +229,7 @@
       "investment": 32,
       "priceChange": 5,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
       "earnings": 295,
       "note": "With €9, 3, 0.25 return €260"
     },
@@ -95,6 +239,7 @@
       "investment": 49,
       "priceChange": 4,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
       "earnings": 260,
       "note": "With €99, 4, 0.25 return €315"
     },
@@ -104,6 +249,7 @@
       "investment": 49,
       "priceChange": 3,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 255
     },
     "PSTAKEEUR": {
@@ -112,31 +258,17 @@
       "investment": 19,
       "priceChange": 6,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 250
     },
-    "ZETAEUR": {
-      "becameAvailable": "2022-04-01",
-      "capital": 100,
-      "investment": 49,
-      "priceChange": 7,
-      "strategyRange": 2,
-      "earnings": 250
-    },
-    "AKTEUR": {
-      "becameAvailable": "2022-08-01",
-      "capital": 100,
-      "investment": 49,
-      "priceChange": 6.8,
-      "strategyRange": 2.5,
-      "earnings": 245,
-      "note": "With €32, 6, 2.5 return €216"
-    },
+
     "LUNAEUR": {
       "becameAvailable": "2019-08-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 12,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 230
     },
     "INTREUR": {
@@ -145,14 +277,7 @@
       "investment": 19,
       "priceChange": 6,
       "strategyRange": 0.5,
-      "earnings": 220
-    },
-    "ADXEUR": {
-      "becameAvailable": "2022-10-01",
-      "capital": 100,
-      "investment": 19,
-      "priceChange": 5,
-      "strategyRange": 1,
+      "askBidSpreadPercentage": 0,
       "earnings": 220
     },
     "BIGTIMEEUR": {
@@ -161,6 +286,7 @@
       "investment": 99,
       "priceChange": 3,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
       "earnings": 220,
       "note": "With €19, 4, 2 return €180"
     },
@@ -170,6 +296,7 @@
       "investment": 49,
       "priceChange": 12,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 215,
       "note": "With €99, 12, 0.5 return €300"
     },
@@ -179,6 +306,7 @@
       "investment": 9,
       "priceChange": 6,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 210
     },
     "XRPEUR": {
@@ -187,6 +315,7 @@
       "investment": 9,
       "priceChange": 12,
       "strategyRange": 3,
+      "askBidSpreadPercentage": 0,
       "earnings": 205
     },
     "MCEUR": {
@@ -195,6 +324,7 @@
       "investment": 9,
       "priceChange": 10,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 205
     },
     "ANTEUR": {
@@ -203,6 +333,7 @@
       "investment": 49,
       "priceChange": 4.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 200,
       "note": "With €99, 4.8, 2.5 return €255"
     },
@@ -212,6 +343,7 @@
       "investment": 49,
       "priceChange": 4,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
       "earnings": 200
     },
     "KP3REUR": {
@@ -220,6 +352,7 @@
       "investment": 19,
       "priceChange": 11,
       "strategyRange": 1,
+      "askBidSpreadPercentage": 0.1,
       "earnings": 200
     },
     "SBREUR": {
@@ -228,6 +361,7 @@
       "investment": 49,
       "priceChange": 3,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
       "earnings": 195
     },
     "JUNOEUR": {
@@ -236,6 +370,7 @@
       "investment": 49,
       "priceChange": 5,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 190,
       "note": "With €99,  4.8, 0.5 return €205"
     },
@@ -245,15 +380,8 @@
       "investment": 9,
       "priceChange": 8.8,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 180
-    },
-    "BLUREUR": {
-      "becameAvailable": "2022-02-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 6.8,
-      "strategyRange": 2,
-      "earnings": 175
     },
     "SGBEUR": {
       "becameAvailable": "2021-09-01",
@@ -261,6 +389,7 @@
       "investment": 32,
       "priceChange": 3,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
       "earnings": 170
     },
     "SAMOEUR": {
@@ -269,6 +398,7 @@
       "investment": 19,
       "priceChange": 5,
       "strategyRange": 1,
+      "askBidSpreadPercentage": 0,
       "earnings": 170
     },
     "BEAMEUR": {
@@ -277,6 +407,7 @@
       "investment": 19,
       "priceChange": 12.8,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 170
     },
     "PENDLEEUR": {
@@ -285,6 +416,7 @@
       "investment": 9,
       "priceChange": 6,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 170
     },
     "EWTEUR": {
@@ -293,6 +425,7 @@
       "investment": 49,
       "priceChange": 4.8,
       "strategyRange": 1,
+      "askBidSpreadPercentage": 1.14,
       "earnings": 165,
       "note": "With €99, 2, 1 return €180"
     },
@@ -302,6 +435,7 @@
       "investment": 19,
       "priceChange": 4,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 160
     },
     "STGEUR": {
@@ -310,6 +444,7 @@
       "investment": 9,
       "priceChange": 12.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 160
     },
     "UNFIEUR": {
@@ -318,6 +453,7 @@
       "investment": 9,
       "priceChange": 12.8,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 160
     },
     "ALPHAEUR": {
@@ -326,22 +462,17 @@
       "investment": 9,
       "priceChange": 4,
       "strategyRange": 1,
+      "askBidSpreadPercentage": 0,
       "earnings": 160
     },
-    "BODENEUR": {
-      "becameAvailable": "2022-05-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 6,
-      "strategyRange": 1,
-      "earnings": 160
-    },
+
     "ACAEUR": {
       "becameAvailable": "2023-06-01",
       "capital": 100,
       "investment": 19,
       "priceChange": 3.7,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 160,
       "note": "Causes loss"
     },
@@ -351,6 +482,7 @@
       "investment": 9,
       "priceChange": 4,
       "strategyRange": 1,
+      "askBidSpreadPercentage": 0,
       "earnings": 155
     },
     "STEPEUR": {
@@ -359,6 +491,7 @@
       "investment": 9,
       "priceChange": 10,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 155
     },
     "SOLEUR": {
@@ -367,6 +500,7 @@
       "investment": 9,
       "priceChange": 7,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
       "earnings": 145
     },
     "KUJIEUR": {
@@ -375,6 +509,7 @@
       "investment": 9,
       "priceChange": 2,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 145
     },
     "YGGEUR": {
@@ -383,6 +518,7 @@
       "investment": 9,
       "priceChange": 12,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 140
     },
     "AUDIOEUR": {
@@ -391,6 +527,7 @@
       "investment": 49,
       "priceChange": 9,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 140,
       "note": "With €99, 9, 2.5 return €190"
     },
@@ -400,6 +537,7 @@
       "investment": 9,
       "priceChange": 11,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 140
     },
     "ETHFIEUR": {
@@ -408,6 +546,7 @@
       "investment": 9,
       "priceChange": 11,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 140
     },
     "AGLDEUR": {
@@ -416,23 +555,17 @@
       "investment": 9,
       "priceChange": 6,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 135
     },
-    "APTEUR": {
-      "becameAvailable": "2022-12-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 12,
-      "strategyRange": 0.5,
-      "earnings": 135,
-      "note": "With €49, 13, 0.5 return €145"
-    },
+
     "MPLEUR": {
       "becameAvailable": "2021-10-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 5.8,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 130
     },
     "GMXEUR": {
@@ -441,6 +574,7 @@
       "investment": 9,
       "priceChange": 11,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0.1,
       "earnings": 130
     },
     "SRMEUR": {
@@ -449,6 +583,7 @@
       "investment": 9,
       "priceChange": 5,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 125
     },
     "SPELLEUR": {
@@ -457,6 +592,7 @@
       "investment": 9,
       "priceChange": 10,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 125
     },
     "GARIEUR": {
@@ -465,6 +601,7 @@
       "investment": 9,
       "priceChange": 5,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 125
     },
     "REPV2EUR": {
@@ -473,6 +610,7 @@
       "investment": 32,
       "priceChange": 6,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 120,
       "note": "With €99, 6, 2.5 return €145"
     },
@@ -482,30 +620,17 @@
       "investment": 9,
       "priceChange": 10,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 120
     },
-    "ARKMEUR": {
-      "becameAvailable": "2022-07-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 9,
-      "strategyRange": 1,
-      "earnings": 120
-    },
-    "AAVEEUR": {
-      "becameAvailable": "2020-12-01",
-      "capital": 100,
-      "investment": 32,
-      "priceChange": 5,
-      "strategyRange": 1,
-      "earnings": 115
-    },
+
     "QNTEUR": {
       "becameAvailable": "2018-08-01",
       "capital": 100,
       "investment": 49,
       "priceChange": 5,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 110
     },
     "FIDAEUR": {
@@ -514,14 +639,7 @@
       "investment": 32,
       "priceChange": 10,
       "strategyRange": 2,
-      "earnings": 110
-    },
-    "API3EUR": {
-      "becameAvailable": "2021-11-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 9,
-      "strategyRange": 2,
+      "askBidSpreadPercentage": 1.33,
       "earnings": 110
     },
     "LUNA2EUR": {
@@ -530,6 +648,7 @@
       "investment": 9,
       "priceChange": 9.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0.32,
       "earnings": 110
     },
     "XLMEUR": {
@@ -538,6 +657,7 @@
       "investment": 9,
       "priceChange": 10,
       "strategyRange": 3,
+      "askBidSpreadPercentage": 0,
       "earnings": 105
     },
     "FETEUR": {
@@ -546,6 +666,7 @@
       "investment": 9,
       "priceChange": 9.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 105
     },
     "BICOEUR": {
@@ -554,6 +675,7 @@
       "investment": 9,
       "priceChange": 8,
       "strategyRange": 3,
+      "askBidSpreadPercentage": 0,
       "earnings": 105
     },
     "ZROEUR": {
@@ -562,15 +684,30 @@
       "investment": 9,
       "priceChange": 9,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 100
     },
-    "DYMEUR": {
-      "becameAvailable": "2022-01-01",
+
+    "KINEUR": {
+      "becameAvailable": "2022-08-01",
+      "capital": 100,
+      "investment": 49,
+      "priceChange": 2,
+      "strategyRange": 1,
+      "askBidSpreadPercentage": 3.7,
+      "earnings": 445,
+      "note": "With €99, 3, 0.5 return €500"
+    },
+
+    "AKTEUR": {
+      "becameAvailable": "2022-08-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 8.8,
-      "strategyRange": 2.5,
-      "earnings": 100
+      "priceChange": 6,
+      "strategyRange": 1.25,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 60,
+      "note": "With €9, 7, 1 return €70"
     }
   },
   "other": {
@@ -580,6 +717,7 @@
       "investment": 32,
       "priceChange": 3,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 95,
       "note": "With €49, 3, 2 return €100"
     },
@@ -589,22 +727,17 @@
       "investment": 9,
       "priceChange": 7,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 95
     },
-    "ENAEUR": {
-      "becameAvailable": "2020-12-01",
-      "capital": 100,
-      "investment": 32,
-      "priceChange": 7,
-      "strategyRange": 1.5,
-      "earnings": 95
-    },
+
     "ORCAEUR": {
       "becameAvailable": "2021-10-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 7.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 95
     },
     "GTCEUR": {
@@ -613,6 +746,7 @@
       "investment": 9,
       "priceChange": 9,
       "strategyRange": 12.5,
+      "askBidSpreadPercentage": 0.1,
       "earnings": 95
     },
     "XDGEUR": {
@@ -621,22 +755,17 @@
       "investment": 19,
       "priceChange": 8,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 90
     },
-    "CRVEUR": {
-      "becameAvailable": "2020-08-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 3.8,
-      "strategyRange": 2.5,
-      "earnings": 90
-    },
+
     "GNOEUR": {
       "becameAvailable": "2021-01-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 7,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 90
     },
     "SEIEUR": {
@@ -645,6 +774,7 @@
       "investment": 9,
       "priceChange": 8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 90
     },
     "SUPEREUR": {
@@ -653,6 +783,7 @@
       "investment": 32,
       "priceChange": 8,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 90,
       "note": "With €49, 8, 2 return €95"
     },
@@ -662,23 +793,18 @@
       "investment": 9,
       "priceChange": 4,
       "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0.63,
       "earnings": 90,
       "note": "With €99, 4, 1 return €100"
     },
-    "CTSIEUR": {
-      "becameAvailable": "2022-11-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 9,
-      "strategyRange": 2.5,
-      "earnings": 90
-    },
+
     "HFTEUR": {
       "becameAvailable": "2022-09-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 7,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 90
     },
     "ALICEEUR": {
@@ -687,6 +813,7 @@
       "investment": 9,
       "priceChange": 7.5,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 85
     },
     "TEEREUR": {
@@ -695,6 +822,7 @@
       "investment": 9,
       "priceChange": 7,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 85
     },
     "WIFEUR": {
@@ -703,6 +831,7 @@
       "investment": 9,
       "priceChange": 8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 80,
       "note": "With €32, 7, 2.5 return €87"
     },
@@ -712,6 +841,7 @@
       "investment": 9,
       "priceChange": 6,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 80
     },
     "INJEUR": {
@@ -720,6 +850,7 @@
       "investment": 9,
       "priceChange": 3,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 80
     },
     "C98EUR": {
@@ -728,6 +859,7 @@
       "investment": 9,
       "priceChange": 7,
       "strategyRange": 3,
+      "askBidSpreadPercentage": 0,
       "earnings": 80
     },
     "1INCHEUR": {
@@ -736,6 +868,7 @@
       "investment": 19,
       "priceChange": 3,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0.41,
       "earnings": 80,
       "note": "With €49, 3, 0.25 return €90"
     },
@@ -745,6 +878,7 @@
       "investment": 9,
       "priceChange": 7,
       "strategyRange": 1.5,
+      "askBidSpreadPercentage": 0.1,
       "earnings": 75,
       "note": "With €49, 9, 1.5 return €95"
     },
@@ -754,6 +888,7 @@
       "investment": 9,
       "priceChange": 5,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 75
     },
     "MINAEUR": {
@@ -762,22 +897,17 @@
       "investment": 9,
       "priceChange": 6.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 75
     },
-    "DENTEUR": {
-      "becameAvailable": "2022-04-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 7,
-      "strategyRange": 2.5,
-      "earnings": 75
-    },
+
     "MNTEUR": {
       "becameAvailable": "2022-10-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 6.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 75
     },
     "RUNEEUR": {
@@ -786,6 +916,7 @@
       "investment": 9,
       "priceChange": 4,
       "strategyRange": 3,
+      "askBidSpreadPercentage": 0,
       "earnings": 70
     },
     "PERPEUR": {
@@ -794,6 +925,7 @@
       "investment": 9,
       "priceChange": 5.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 70
     },
     "GRTEUR": {
@@ -802,6 +934,7 @@
       "investment": 9,
       "priceChange": 7,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 70,
       "note": "With €99, 7, 2.5 return €85"
     },
@@ -811,6 +944,7 @@
       "investment": 9,
       "priceChange": 4,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 70
     },
     "MASKEUR": {
@@ -819,14 +953,7 @@
       "investment": 9,
       "priceChange": 5.8,
       "strategyRange": 2.5,
-      "earnings": 70
-    },
-    "COMPEUR": {
-      "becameAvailable": "2021-06-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 2,
-      "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 70
     },
     "BONDEUR": {
@@ -835,6 +962,7 @@
       "investment": 19,
       "priceChange": 6,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 70
     },
     "ALTEUR": {
@@ -843,6 +971,7 @@
       "investment": 9,
       "priceChange": 5.8,
       "strategyRange": 1,
+      "askBidSpreadPercentage": 0,
       "earnings": 65,
       "note": "With €49, 3, 0.25 return €75"
     },
@@ -852,6 +981,7 @@
       "investment": 19,
       "priceChange": 5.8,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 65
     },
     "RAYEUR": {
@@ -860,22 +990,17 @@
       "investment": 9,
       "priceChange": 6,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 65
     },
-    "ATLASEUR": {
-      "becameAvailable": "2021-03-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 5,
-      "strategyRange": 2.5,
-      "earnings": 65
-    },
+
     "STRKEUR": {
       "becameAvailable": "2021-09-01",
       "capital": 100,
       "investment": 9,
       "priceChange": 6,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 65,
       "note": "With €99, 6, 2.5 return €74"
     },
@@ -885,6 +1010,7 @@
       "investment": 9,
       "priceChange": 2,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 60
     },
     "PHAEUR": {
@@ -893,22 +1019,17 @@
       "investment": 19,
       "priceChange": 6,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 60
     },
-    "CELREUR": {
-      "becameAvailable": "2021-03-01",
-      "capital": 100,
-      "investment": 9,
-      "priceChange": 5,
-      "strategyRange": 3,
-      "earnings": 60
-    },
+
     "OSMOEUR": {
       "becameAvailable": "2021-06-01",
       "capital": 100,
       "investment": 19,
       "priceChange": 2,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 60,
       "note": "With €49, 3, 0.5 return €71"
     },
@@ -918,6 +1039,7 @@
       "investment": 9,
       "priceChange": 5.8,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0.74,
       "earnings": 60
     },
     "LSKEUR": {
@@ -926,6 +1048,7 @@
       "investment": 9,
       "priceChange": 5.8,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 60
     },
     "ICPEUR": {
@@ -934,6 +1057,7 @@
       "investment": 9,
       "priceChange": 5,
       "strategyRange": 2.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 60
     },
     "REQEUR": {
@@ -942,6 +1066,7 @@
       "investment": 19,
       "priceChange": 4,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 55
     },
     "STXEUR": {
@@ -950,6 +1075,7 @@
       "investment": 19,
       "priceChange": 3,
       "strategyRange": 2,
+      "askBidSpreadPercentage": 0,
       "earnings": 55
     },
     "KEYEUR": {
@@ -958,6 +1084,7 @@
       "investment": 9,
       "priceChange": 4,
       "strategyRange": 0.5,
+      "askBidSpreadPercentage": 0,
       "earnings": 55
     },
     "JUPEUR": {
@@ -966,32 +1093,63 @@
       "investment": 49,
       "priceChange": 5,
       "strategyRange": 3,
+      "askBidSpreadPercentage": 0,
       "earnings": 55,
       "note": "With €99, 6, 2.5 return €60"
     },
-    "BANDEUR": {
-      "becameAvailable": "2020-11-01",
+
+    "MSOLEUR": {
+      "becameAvailable": "2022-04-01",
       "capital": 100,
-      "investment": 9,
-      "priceChange": 2,
+      "investment": 19,
+      "priceChange": 8,
       "strategyRange": 1.5,
-      "earnings": 50
+      "askBidSpreadPercentage": 0,
+      "earnings": 485,
+      "note": ""
     },
-    "ADAEUR": {
-      "becameAvailable": "2017-09-29",
+    "GALEUR": {
+      "becameAvailable": "2020-08-01",
       "capital": 100,
       "investment": 9,
-      "priceChange": 5,
-      "strategyRange": 0.5,
-      "earnings": 55
+      "priceChange": 4,
+      "strategyRange": 0.25,
+      "askBidSpreadPercentage": 0,
+      "earnings": 445
     },
-    "ALGOEUR": {
-      "becameAvailable": "2019-06-19",
+
+    "ADXEUR": {
+      "becameAvailable": "2022-10-01",
       "capital": 100,
-      "investment": 99,
+      "investment": 9,
       "priceChange": 3,
-      "strategyRange": 1,
-      "earnings": 60
-    }
+      "strategyRange": 2,
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 90
+    },
+
+    "ENSEUR": { "askBidSpreadPercentage": 0 },
+    "EOSEUR": { "askBidSpreadPercentage": 0 },
+    "FILEUR": { "askBidSpreadPercentage": 0 },
+    "FTMEUR": { "askBidSpreadPercentage": 0 },
+    "IMXEUR": { "askBidSpreadPercentage": 0 },
+    "JASMYEUR": { "askBidSpreadPercentage": 0 },
+    "KAVAEUR": { "askBidSpreadPercentage": 0 },
+    "KNCEUR": { "askBidSpreadPercentage": 0 },
+    "KSMEUR": { "askBidSpreadPercentage": 0 },
+    "LDOEUR": { "askBidSpreadPercentage": 0 },
+    "LINKEUR": { "askBidSpreadPercentage": 0 },
+    "LMWREUR": { "askBidSpreadPercentage": 0 },
+    "LTCEUR": { "askBidSpreadPercentage": 0 },
+
+    "ETHWEUR": { "askBidSpreadPercentage": 0.1 },
+    "FLOWEUR": { "askBidSpreadPercentage": 0.1 },
+    "FLREUR": { "askBidSpreadPercentage": 0.1 },
+    "FXSEUR": { "askBidSpreadPercentage": 0.1 },
+    "GALAEUR": { "askBidSpreadPercentage": 0.1 },
+    "GMTEUR": { "askBidSpreadPercentage": 0.86 },
+    "GSTEUR": { "askBidSpreadPercentage": 8.33 },
+    "HONEYEUR": { "askBidSpreadPercentage": 1.54 },
+    "ICXEUR": { "askBidSpreadPercentage": 0.78 }
   }
 }

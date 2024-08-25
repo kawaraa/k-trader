@@ -2,7 +2,6 @@ module.exports = [
   //  class 1
   "BTCEUR",
   "ETHEUR",
-  "1INCHEUR",
   "AAVEEUR",
   "ADAEUR",
   "ALGOEUR",
@@ -132,6 +131,7 @@ module.exports = [
   "ZETAEUR",
   "ZROEUR",
   "ZRXEUR",
+  "1INCHEUR",
 
   //  Class 2
 
