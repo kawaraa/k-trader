@@ -165,6 +165,9 @@ function adjustPrice(price, percentage) {
   const multiplier = percentage / 100;
   return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
 }
+function isOlderThen(timestamp, days) {
+  return (Date.now() - new Date(timestamp).getTime()) / 60000 / 60 / 24 > days;
+}
 
 module.exports = {
   linearRegression,
@@ -178,4 +181,5 @@ module.exports = {
   calculateProfit,
   calculateFee,
   adjustPrice,
+  isOlderThen,
 };

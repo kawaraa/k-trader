@@ -61,17 +61,35 @@ module.exports = class DailyTrader {
       );
       // 💰 📊
 
-      // 160 - (160 - 150) / 1.5 => 153.33
-      // 160 - (160 - 150) / 1.6 => 153.75
-      // 175 - (175 - 150) / 1.5 => 158.33
-      // 175 - (175 - 150) / 1.6 => 159.37
+      const lastOrder = orders[orders.length - 1];
       const sortedPries = bidPrices.toSorted();
       const highestBidPr = sortedPries[sortedPries.length - 1];
+
       const shouldBuy =
         !((this.strategyRange * 24 * 60) / 5 > prices.length) &&
         -this.#pricePercentageThreshold > analyzer.calculatePercentageChange(askPrice, highestBidPr);
+      // &&(!lastOrder ||-this.#pricePercentageThreshold > analyzer.calculatePercentageChange(askPrice, lastOrder.price));
+
+      // const shouldBuy =
+      //   !((this.strategyRange * 24 * 60) / 5 > prices.length) &&
+      //   -(this.#pricePercentageThreshold / 2) > analyzer.calculatePercentageChange(askPrice, avgBidPrice) &&
+      //   (!lastOrder ||
+      //     -this.#pricePercentageThreshold > analyzer.calculatePercentageChange(askPrice, lastOrder.price));
+
+      // || (analyzer.isOlderThen(lastOrder.createdAt, this.strategyRange / 2) &&  -(this.#pricePercentageThreshold / 2) > analyzer.calculatePercentageChange(askPrice, lastOrder.price)));
+
+      // console.log("shouldBuy: ", shouldBuy);
+      // if (lastOrder) {
+      //   console.log(
+      //     "Order: ",
+      //     new Date(lastOrder.createdAt),
+      //     -this.#pricePercentageThreshold,
+      //     analyzer.calculatePercentageChange(askPrice, lastOrder.price)
+      //   );
+      // }
       // && -(this.#pricePercentageThreshold / 2) > askPercentageChange ;
       // && avgAskPrice - (avgAskPrice - lowestAskPr) / 1.5; >= askPrice; // 1.5 for more restriction
+      // && orders.length < 3
 
       if (bidPriceRsi < 30 && shouldBuy) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${askPrices.toSorted()[0]}`);
@@ -87,10 +105,9 @@ module.exports = class DailyTrader {
       } else if (70 <= bidPriceRsi && balance.crypto > 0 && orders[0]) {
         for (const { id, price, volume, cost, createdAt } of orders) {
           // Backlog: Sell accumulated orders that has been more than 5 days if the current price is higher then highest price in the lest 4 hours.
-          const oldOrder = 60000 * 60 * 24 * 20 <= Date.now() - Date.parse(createdAt);
           const sell = this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(bidPrice, price);
 
-          if (sell || oldOrder) {
+          if (sell || analyzer.isOlderThen(createdAt, 20)) {
             const amount = Math.min(+volume, balance.crypto);
             const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
             const c = bidPrice * amount + analyzer.calculateFee(bidPrice * amount, 0.4);

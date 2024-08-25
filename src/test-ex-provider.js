@@ -7,22 +7,24 @@ module.exports = class TestExchangeProvider {
     this.allPrices = prices;
     this.currentPriceIndex = priceIndex;
     this.orders = [];
+    this.timestamp = Date.now() - this.allPrices.length * 5 * 60 * 1000;
   }
 
-  async balance() {
+  balance() {
     return this.currentBalance;
   }
-  async currentPrices() {
+  currentPrices() {
     const price = this.allPrices[this.currentPriceIndex] || this.allPrices[this.allPrices.length - 1];
     this.currentPriceIndex += 1;
     return price;
   }
-  async prices(pair, lastDays) {
+  prices(pair, lastDays) {
     return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
   }
-  async createOrder(tradingType, b, c, volume) {
-    const { tradePrice, askPrice, bidPrice } = await this.currentPrices();
-    const newOrder = { id: randomUUID(), type: tradingType, volume };
+  createOrder(tradingType, b, c, volume) {
+    const { tradePrice, askPrice, bidPrice } = this.currentPrices();
+    const createdAt = this.timestamp + this.currentPriceIndex * 5 * 60 * 1000;
+    const newOrder = { id: randomUUID(), type: tradingType, volume, createdAt };
 
     if (newOrder.type == "buy") {
       const cost = volume * askPrice;
@@ -47,7 +49,7 @@ module.exports = class TestExchangeProvider {
 
     return newOrder.id;
   }
-  async getOrders(pair, ordersIds) {
+  getOrders(pair, ordersIds) {
     if (!ordersIds) return this.orders;
     return this.orders.filter((o) => ordersIds.includes(o.id));
   }

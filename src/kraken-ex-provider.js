@@ -86,7 +86,7 @@ module.exports = class KrakenExchangeProvider {
     const orders = await this.#privateApi("QueryOrders", { txid: orderIds });
     return Object.keys(orders).map((id) => {
       const { price, vol_exec, cost, opentm } = orders[id];
-      return { id, price: +price, volume: +vol_exec, cost: +cost, createdAt: +opentm + 1000 };
+      return { id, price: +price, volume: +vol_exec, cost: +cost, createdAt: +opentm * 1000 };
     });
   }
   async getOpenClosedOrders(state) {
