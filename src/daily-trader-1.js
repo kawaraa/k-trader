@@ -40,7 +40,7 @@ module.exports = class DailyTrader {
       const orders = await this.ex.getOrders(this.#pair);
       const rsi = analyzer.calculateRSI(prices);
       const averagePrice = analyzer.calculateAveragePrice(prices);
-      const percentageChange = analyzer.calculatePercentageChange(currentPrice, averagePrice);
+      const percentageChange = analyzer.calcPercentageDifference(averagePrice, currentPrice);
 
       let decision = "hold";
       if (this.#pricePercentageThreshold <= percentageChange) decision = "sell";
@@ -48,8 +48,8 @@ module.exports = class DailyTrader {
 
       // Safety Check
       const sorted = prices.slice(-((this.safetyTimeline * 60) / 5)).toSorted();
-      const spikeChange = analyzer.calculatePercentageChange(sorted[sorted.length - 1], sorted[0]);
-      const trendChange = analyzer.calculatePercentageChange(currentPrice, sorted[0]);
+      const spikeChange = analyzer.calcPercentageDifference(sorted[0], sorted[sorted.length - 1]);
+      const trendChange = analyzer.calcPercentageDifference(sorted[0], currentPrice);
 
       // Check if the highest price in the last xxx is too high
       // Check if the current price is still not close to the lowest price in the last xxx
@@ -90,7 +90,7 @@ module.exports = class DailyTrader {
 
         // Get Orders that have price Lower Than the Current Price
         const ordersForSell = orders.filter(
-          (o) => this.#pricePercentageThreshold <= analyzer.calculatePercentageChange(currentPrice, +o.price)
+          (o) => this.#pricePercentageThreshold <= analyzer.calcPercentageDifference(+o.price, currentPrice)
         );
 
         // // Backlog: Sell accumulated orders that has been more than 4 days if the current price is higher then highest price in the lest 4 hours.
@@ -102,7 +102,7 @@ module.exports = class DailyTrader {
         if (balance.crypto > 0 && ordersForSell[0]) {
           for (const { id, volume, price, cost } of ordersForSell) {
             await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
-            const change = analyzer.calculatePercentageChange(currentPrice, +price);
+            const change = analyzer.calcPercentageDifference(+price, currentPrice);
             const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
             this.dispatch("sell", id);
             this.dispatch("earnings", +profit.toFixed(2));

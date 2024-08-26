@@ -93,8 +93,8 @@ function calculateRSI(prices, period = 14) {
 
 function findHighLowPriceChanges(prices, currentPrice) {
   // const sortedPrices = prices.sorted();
-  // const lowestChange = calculatePercentageChange(currentPrice, sortedPrices[0]);
-  // const highestChange = calculatePercentageChange(currentPrice, sortedPrices[sortedPrices.length - 1]);
+  // const lowestChange = calcPercentageDifference( sortedPrices[0], currentPrice);
+  // const highestChange = calcPercentageDifference( sortedPrices[sortedPrices.length - 1], currentPrice);
 
   const priceChanges = {
     lowest: { price: currentPrice, minsAgo: 0, percent: 0 },
@@ -109,8 +109,8 @@ function findHighLowPriceChanges(prices, currentPrice) {
       priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 5;
     }
   }
-  priceChanges.highest.percent = calculatePercentageChange(currentPrice, priceChanges.highest.price);
-  priceChanges.lowest.percent = calculatePercentageChange(currentPrice, priceChanges.lowest.price);
+  priceChanges.highest.percent = -calcPercentageDifference(priceChanges.highest.price, currentPrice);
+  priceChanges.lowest.percent = -calcPercentageDifference(priceChanges.lowest.price, currentPrice);
   return priceChanges;
 }
 
@@ -120,12 +120,9 @@ function calculateAveragePrice(prices) {
   return +(total / prices.length).toFixed(8);
 }
 
-function calculatePercentageChange(currentPrice, pastPrice, returnString) {
-  if (!(pastPrice >= 0 && currentPrice >= 0)) {
-    throw new Error(`"currentPrice" and "pastPrice" values must be integer greater than zero.`);
-  }
-  const change = +(((currentPrice - pastPrice) / (pastPrice || 0)) * 100).toFixed(2);
-  return !returnString ? change : `The price ${change < 0 ? "drops" : "increases"} ${change}%`;
+function calcPercentageDifference(oldPrice, newPrice) {
+  const difference = newPrice - oldPrice;
+  return +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2);
 }
 
 function countPriceChanges(prices, percentageThreshold) {
@@ -133,7 +130,7 @@ function countPriceChanges(prices, percentageThreshold) {
   let picePointer = prices[0];
 
   for (let i = 1; i < prices.length; i++) {
-    const change = calculatePercentageChange(picePointer, prices[i]);
+    const change = calcPercentageDifference(picePointer, prices[i]);
     if (percentageThreshold <= change) {
       changes.push(change);
       picePointer = prices[i];
@@ -175,7 +172,7 @@ module.exports = {
   calculateRSI,
   findHighLowPriceChanges,
   calculateAveragePrice,
-  calculatePercentageChange,
+  calcPercentageDifference,
   countPriceChanges,
   calculateEarnings,
   calculateProfit,
