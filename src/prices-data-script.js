@@ -1,19 +1,21 @@
 const { existsSync, writeFileSync } = require("node:fs");
-const { request } = require("./utilities");
+const { request, delay } = require("./utilities");
 
 const pair = process.argv[2];
 const minTestPeriod = +process.argv[3] || 60; // Number of days that will be tested
 const cryptocurrencies = pair ? { [pair]: pair } : require(`./currencies.json`);
 
-for (const pair in cryptocurrencies) {
-  const filePath = `${process.cwd()}/database/test-prices/${pair}.json`;
+(async () => {
+  for (const pair in cryptocurrencies) {
+    const filePath = `${process.cwd()}/database/test-prices/${pair}.json`;
 
-  if (existsSync(filePath)) console.log(`The prices file for ${pair} already exists`);
-  else if (filePath.includes("test-prices")) {
-    writeFileSync(filePath, JSON.stringify(await getBinanceData(pair, minTestPeriod)));
-    console.log(`Finished fetching prices for ${pair}`);
+    if (existsSync(filePath)) console.log(`The prices file for ${pair} already exists`);
+    else if (filePath.includes("test-prices")) {
+      writeFileSync(filePath, JSON.stringify(await getBinanceData(pair, minTestPeriod)));
+      console.log(`Finished fetching prices for ${pair}`);
+    }
   }
-}
+})();
 
 async function getBinanceData(pair, days = 0.5, interval = "5m") {
   const baseUrl = "https://api.binance.com/api/v3/klines";
@@ -36,7 +38,7 @@ async function getBinanceData(pair, days = 0.5, interval = "5m") {
       console.error("Error fetching data from Binance:", error);
       break;
     }
-    await delay(500);
+    await delay(300);
   }
 
   return allPrices;

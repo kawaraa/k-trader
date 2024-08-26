@@ -128,7 +128,7 @@ function calculatePercentageChange(currentPrice, pastPrice, returnString) {
   return !returnString ? change : `The price ${change < 0 ? "drops" : "increases"} ${change}%`;
 }
 
-function countPercentageChange(prices, percentageThreshold) {
+function countPriceChanges(prices, percentageThreshold) {
   const changes = [];
   let picePointer = prices[0];
 
@@ -176,7 +176,7 @@ module.exports = {
   findHighLowPriceChanges,
   calculateAveragePrice,
   calculatePercentageChange,
-  countPercentageChange,
+  countPriceChanges,
   calculateEarnings,
   calculateProfit,
   calculateFee,

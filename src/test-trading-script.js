@@ -1,15 +1,15 @@
 // test-trading-script is a price-history-analysis-script
-const { adjustPrice } = require("./trend-analysis.js");
+const { adjustPrice, countPriceChanges } = require("./trend-analysis.js");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
 
 const pair = process.argv[2]; // The pair of the two currency that will be used for trading E.g. ETHEUR
-const investment = +process.argv[3];
 const askBidSpreadPercentage = +process.argv[3] || 0.1; // A number from 0 to 100, the prices difference percent
 const capital = +process.argv[4] || 100; // Amount in EUR which is the total money that can be used for trading
-const minStrategyRange = +process.argv[5] || 0.25; // Is a Range of the strategy in days, min value from 0.25 day which equivalent to 6 hours
-const minPercentagePriceChange = +process.argv[6] || 1.25;
-const strategyInvestments = [9, 19, 32, 49, 99]; // strategySettings
+const investment = +process.argv[5] || 9;
+const minStrategyRange = +process.argv[6] || 0.25; // Is a Range of the strategy in days, min value from 0.25 day which equivalent to 6 hours
+const minPercentagePriceChange = +process.argv[7] || 1.25;
+// const strategyInvestments = [9, 19, 32, 49, 99]; // strategySettings
 
 // investment is and investing Amount in EUR that will be used every time to by crypto
 // priceChange is a price Percentage Threshold, value from 0 to 100
@@ -20,36 +20,24 @@ const strategyInvestments = [9, 19, 32, 49, 99]; // strategySettings
   console.log(`Started new analysis with ${pair}.\n`);
 
   let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);
+  // const counts = countPriceChanges(prices, 2);
+  // console.log(counts.length, JSON.stringify(counts));
   if (!prices[0]?.tradePrice) prices = prices.map((p) => adjustPrice(p, askBidSpreadPercentage));
-
-  let previousBalance = 0;
 
   try {
     let range = minStrategyRange;
-    while (range <= 4) {
-      let priceChange = minPercentagePriceChange;
-      // console.log("testStrategy: range", range);
+    let priceChange = minPercentagePriceChange;
 
-      while (priceChange <= 10) {
-        // console.log("testStrategy: priceChange", priceChange);
-
-        const result = await testStrategy(pair, prices, capital, investment, range, priceChange);
-        if (result.balance >= previousBalance) {
-          previousBalance = result.balance;
-          console.log(
-            `Strategy: ${result.investment}, ${result.priceChange}, ${result.range} -`,
-            "Balance: ",
-            result.balance,
-            "-",
-            result.crypto,
-            "=> ",
-            +((result.balance - 100) / 2).toFixed(2)
-          );
-        }
-        priceChange = priceChange < 0.5 ? priceChange + 0.25 : priceChange + 0.5;
-      }
-      range = range < 0.5 ? range + 0.25 : range + 0.5;
-    }
+    const result = await testStrategy(pair, prices, capital, investment, range, priceChange);
+    console.log(
+      `Strategy: ${result.investment}, ${result.priceChange}, ${result.range} -`,
+      "Balance: ",
+      result.balance,
+      "-",
+      result.crypto,
+      "=> ",
+      +((result.balance - capital) / 2).toFixed(2)
+    );
   } catch (error) {
     console.log("Error with ", pair, "===>", error);
   }

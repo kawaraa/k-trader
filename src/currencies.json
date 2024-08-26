@@ -2,12 +2,12 @@
   "tradable": {
     "BTCEUR": {
       "becameAvailable": "2009-01-01",
-      "capital": 500,
-      "investment": 19,
-      "priceChange": 3,
-      "strategyRange": 0.25,
-      "earnings": 240,
-      "note": "With €49, 3, 0.25 return €300"
+      "strategyRange": 1.5,
+      "capital": 100,
+      "investment": 4.9,
+      "priceChange": 19,
+      "earnings": 9,
+      "note": "Increase priceChange if the investment increases"
     },
     "ETHEUR": {
       "becameAvailable": "2015-07-01",
