@@ -1,13 +1,13 @@
 "use client";
 import { btnCls, inputCls } from "./tailwind-classes";
-const { tradable } = require("../../src/currencies.json");
+const cryptocurrencies = require("../../src/currencies.json");
 
 export default function AddBotFrom({ bot, onSubmit }) {
   return (
     <form onSubmit={onSubmit} className="w-full max-w-md mx-auto space-y-2 flex flex-col">
       <select name="pair" defaultValue={bot?.pair} required className={inputCls}>
         <option value="">Pair</option>
-        {Object.keys(tradable).map((pair) => (
+        {Object.keys(cryptocurrencies).map((pair) => (
           <option value={pair} key={pair}>
             {pair.replace("EUR", "")}
           </option>

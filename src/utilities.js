@@ -1,4 +1,4 @@
-const { tradable } = require("./currencies.json");
+const cryptocurrencies = require("./currencies.json");
 
 function isNumber(num, min, max) {
   const N = Number.parseFloat(num);
@@ -23,7 +23,7 @@ function dateToString(date = new Date(), seconds) {
 }
 
 function isValidPair(pair, throwError) {
-  if (tradable[pair]) return pair;
+  if (cryptocurrencies[pair]) return pair;
   if (!throwError) return null;
   else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
 }
