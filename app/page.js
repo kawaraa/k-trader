@@ -28,7 +28,7 @@ export default function Home() {
     const data = {};
     let method = "POST";
     try {
-      new FormData(e.target).forEach((v, k) => (data[k] = k == "pair" ? v : +v));
+      new FormData(e.target).forEach((v, k) => (data[k] = k == "pair" || k == "mode" ? v : +v));
       if (bots[data.pair]) method = "PUT";
       const newBot = await request("/api/bots", {
         headers: { "Content-Type": "application/json" },
