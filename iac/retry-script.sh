@@ -53,7 +53,7 @@ else
   retry_command 3 apt-get install nodejs -y
   sleep 5
   retry_command 3 apt-get install npm -y
-  retry_command 3 npm install -g pm2@latest
+  which pm2 > /dev/null 2>&1 || npm install -g pm2@latest
 
   # apt autoremove
 
@@ -81,3 +81,9 @@ else
   sudo pm2 startup # Generate Startup Script so it restarts on boot
   systemctl restart nginx
 fi
+
+# # Fix for running error ##
+# sudo npm cache clean --force
+# sudo rm -rf /usr/lib/node_modules/pm2
+# sudo npm uninstall -g pm2
+# sudo npm install -g pm2@latest
