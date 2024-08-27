@@ -1,5 +1,12 @@
 const { tradable } = require("./currencies.json");
 
+function isNumber(num, min, max) {
+  const N = Number.parseFloat(num);
+  if (Number.isNaN(N)) return false;
+  else if (min && min > N) return false;
+  else if (max && max < N) return false;
+  return true;
+}
 function parseNumbers(data) {
   if (Array.isArray(data)) return data.map((n) => +n);
   for (const key in data) data[key] = +data[key];
@@ -43,4 +50,4 @@ function request() {
     });
 }
 
-module.exports = { request, parseError, delay, dateToString, parseNumbers, isValidPair };
+module.exports = { request, parseError, delay, dateToString, parseNumbers, isValidPair, isNumber };

@@ -5,7 +5,7 @@ const { tradable } = require("../../src/currencies.json");
 export default function AddBotFrom({ bot, onSubmit }) {
   return (
     <form onSubmit={onSubmit} className="w-full max-w-md mx-auto space-y-2 flex flex-col">
-      <select name="pair" defaultValue={bot?.pair} className={inputCls}>
+      <select name="pair" defaultValue={bot?.pair} required className={inputCls}>
         <option value="">Pair</option>
         {Object.keys(tradable).map((pair) => (
           <option value={pair} key={pair}>
@@ -13,12 +13,12 @@ export default function AddBotFrom({ bot, onSubmit }) {
           </option>
         ))}
       </select>
-
       <input
         name="capital"
         type="number"
         placeholder="Capital amount in EUR"
         defaultValue={bot?.info?.capital}
+        required
         className={inputCls}
       />
       <input
@@ -27,14 +27,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
         placeholder="Investment"
         step="0.5"
         defaultValue={bot?.info?.investment}
-        className={inputCls}
-      />
-      <input
-        name="priceChange"
-        type="number"
-        step="0.1"
-        placeholder="Price percentage change"
-        defaultValue={bot?.info?.priceChange}
+        required
         className={inputCls}
       />
       <input
@@ -43,13 +36,29 @@ export default function AddBotFrom({ bot, onSubmit }) {
         step="0.05"
         placeholder="Strategy range in days"
         defaultValue={bot?.info?.strategyRange}
+        required
         className={inputCls}
       />
+      <input
+        name="priceChange"
+        type="number"
+        step="0.1"
+        placeholder="Price percentage change"
+        defaultValue={bot?.info?.priceChange}
+        required
+        className={inputCls}
+      />
+      <select name="mode" defaultValue={bot?.mode} required className={inputCls}>
+        <option value="">Mode</option>
+        <option value="strict">Strict</option>
+        <option value="non-strict">Non-strict</option>
+      </select>
       <input
         name="timeInterval"
         type="number"
         placeholder="Time Interval in mins"
         defaultValue={bot?.info?.timeInterval}
+        required
         className={inputCls}
       />
 

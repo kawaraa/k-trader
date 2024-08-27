@@ -21,6 +21,7 @@ const mode = process.argv[8] || "non-strict";
   console.log(`Started new analysis with ${pair}.\n`);
 
   let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);
+  console.log(prices.length, "Prices");
   // const counts = countPriceChanges(prices, minPercentagePriceChange);
   // console.log(counts.length, JSON.stringify(counts));
   if (!prices[0]?.tradePrice) prices = prices.map((p) => adjustPrice(p, askBidSpreadPercentage));
