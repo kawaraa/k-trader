@@ -1,12 +1,5 @@
-/*
-This strategy based on 5 to 8 mins interval and checking the last 4 hours on every 5 mins change:
-1. Buy if price 1, 2, or 3 up to 24 drops 1.5% 
-2. Sell if current price is 1.5% higher than the order price
-
-Recommendation:
-- if it's daily trading strategy, buy when the current price is 1.5% lower then any price in the last 4 hours
-- if it's monthly trading strategy, buy when the current price is 1.5% lower then the average price in the last 5 days
-*/
+// Versions on GitHub:
+// - https://github.com/kawaraa/k-trader/commit/6121007befdf264195f08f19f589b38f570d2adb
 
 const analyzer = require("./trend-analysis.js");
 
@@ -39,7 +32,7 @@ module.exports = class DailyTrader {
 
       const orders = await this.ex.getOrders(this.#pair);
       const rsi = analyzer.calculateRSI(prices);
-      const averagePrice = analyzer.calculateAveragePrice(prices);
+      const averagePrice = analyzer.calcAveragePrice(prices);
       const percentageChange = analyzer.calcPercentageDifference(averagePrice, currentPrice);
 
       let decision = "hold";
@@ -103,7 +96,7 @@ module.exports = class DailyTrader {
           for (const { id, volume, price, cost } of ordersForSell) {
             await this.ex.createOrder("sell", "market", this.#pair, Math.min(+volume, balance.crypto));
             const change = analyzer.calcPercentageDifference(+price, currentPrice);
-            const profit = analyzer.calculateProfit(currentPrice, +price, +volume, 0.4);
+            const profit = analyzer.calcTransactionProfit(+price, currentPrice, +volume, 0.4);
             this.dispatch("sell", id);
             this.dispatch("earnings", +profit.toFixed(2));
             this.dispatch("log", `Sold crypto with ${change}% => profit: ${profit} ID: "${id}"`);

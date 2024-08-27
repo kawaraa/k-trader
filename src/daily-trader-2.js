@@ -15,7 +15,7 @@ Note: this is how orders are managed.
 
 const {
   calculateRSI,
-  calculateAveragePrice,
+  calcAveragePrice,
   calcPercentageDifference,
   calculateFee,
   isOlderThen,
@@ -51,8 +51,8 @@ module.exports = class DailyTrader {
       const orders = await this.ex.getOrders(this.#pair);
       const askPriceRsi = calculateRSI(askPrices);
       const bidPriceRsi = calculateRSI(bidPrices);
-      const avgAskPrice = calculateAveragePrice(askPrices);
-      const avgBidPrice = calculateAveragePrice(bidPrices);
+      const avgAskPrice = calcAveragePrice(askPrices);
+      const avgBidPrice = calcAveragePrice(bidPrices);
       const askPercentageChange = calcPercentageDifference(avgAskPrice, askPrice);
       const bidPercentageChange = calcPercentageDifference(avgBidPrice, bidPrice);
       const name = this.#pair.replace("EUR", "");

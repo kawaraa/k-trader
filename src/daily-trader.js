@@ -15,7 +15,7 @@ Note: this is how orders are managed.
 
 const {
   calculateRSI,
-  calculateAveragePrice,
+  calcAveragePrice,
   calcPercentageDifference,
   calculateFee,
   isOlderThen,
@@ -48,20 +48,17 @@ module.exports = class DailyTrader {
       const prices = await this.ex.prices(this.#pair, this.strategyRange); // For the last xxx days
       this.#tradingAmount = +(this.#investingCapital / bidPrice).toFixed(8);
 
+      const name = this.#pair.replace("EUR", "");
       const askPrices = prices.map((p) => p.askPrice);
       const bidPrices = prices.map((p) => p.bidPrice);
       const orders = await this.ex.getOrders(this.#pair);
       const askPriceRsi = calculateRSI(askPrices);
       const bidPriceRsi = calculateRSI(bidPrices);
-      const avgAskPrice = calculateAveragePrice(askPrices);
-      const avgBidPrice = calculateAveragePrice(bidPrices);
+      const avgAskPrice = calcAveragePrice(askPrices);
+      const avgBidPrice = calcAveragePrice(bidPrices);
       const askPercentageChange = calcPercentageDifference(avgAskPrice, askPrice);
       const bidPercentageChange = calcPercentageDifference(avgBidPrice, bidPrice);
-      const name = this.#pair.replace("EUR", "");
-
-      const highestBidPr = bidPrices.toSorted().pop();
-      const oldestOrder = orders.at(0);
-      const lastOrder = orders.at(-1);
+      const highestBidPr = bidPrices.toSorted().at(-1);
 
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto} - Price: ${tradePrice}`);
@@ -78,19 +75,12 @@ module.exports = class DailyTrader {
       let shouldBuy = calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 1.2);
 
       if (this.#mode == "strict") {
-        shouldBuy = calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 2);
+        const lowestAsk = askPrices.toSorted()[0];
+        shouldBuy = calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
 
-        if (shouldBuy && lastOrder) {
-          const lowerPrice = calcPercentageDifference(lastOrder.price, askPrice) < -this.#percentageThreshold;
-
-          if (!lowerPrice) shouldBuy = false;
-          else {
-            // console.log("lowerPrice", calcPercentageDifference(lastOrder.price, askPrice));
-            if (balance.eur < this.#investingCapital) {
-              // console.log(oldestOrder);
-              // await this.#sell(oldestOrder.id, oldestOrder.volume, oldestOrder.cost, balance.crypto, bidPrice);
-            }
-          }
+        if (shouldBuy && balance.eur - this.#investingCapital * 3 <= 0) {
+          const order = orders.find((o) => 0.5 <= calcPercentageDifference(o.price, bidPrice));
+          if (order) await this.#sell(order, balance.crypto, bidPrice);
         }
       }
 
@@ -101,37 +91,18 @@ module.exports = class DailyTrader {
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);
 
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
-          // console.log(balance);
-
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, remaining);
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
-          console.log("Bought", askPrice, (await this.ex.getOrders(this.#pair)).length);
         }
       } else if (70 <= bidPriceRsi && balance.crypto > 0 && orders[0]) {
         for (const { id, price, volume, cost, createdAt } of orders) {
           const sell = this.#percentageThreshold <= calcPercentageDifference(price, bidPrice);
           // Backlog: Sell accumulated orders that has been more than 5 days if the current price is higher then highest price in the lest 4 hours.
           // Todo: add the this for live || isOlderThen(createdAt, 20)
-          if (sell) await this.#sell(id, volume, cost, balance.crypto, bidPrice);
-          // console.log("Check <=========");
+          if (sell) await this.#sell({ id, volume, cost }, balance.crypto, bidPrice);
         }
       }
-
-      // // Prices Changes Tests
-      // if (calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 2)) {
-      //   console.log("Should Buy:", askPrice, calcPercentageDifference(highestBidPr, askPrice)); // Buy
-      //   this.lastPrice = askPrice;
-      // } else if (
-      //   this.lastPrice &&
-      //   calcPercentageDifference(this.lastPrice, bidPrice) > this.#percentageThreshold
-      // ) {
-      //   console.log("Should Sell:", bidPrice, calcPercentageDifference(this.lastPrice, bidPrice)); // Sell
-      //   if (!this.profit) this.profit = 0;
-      //   this.profit += bidPrice - this.lastPrice;
-      //   this.lastPrice = bidPrice;
-      //   console.log("profit", this.profit);
-      // }
 
       this.dispatch("log", "");
     } catch (error) {
@@ -144,7 +115,7 @@ module.exports = class DailyTrader {
     }
   }
 
-  async #sell(id, volume, cost, cryptoBalance, bidPrice) {
+  async #sell({ id, volume, cost }, cryptoBalance, bidPrice) {
     const amount = Math.min(+volume, cryptoBalance);
     const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
     const c = bidPrice * amount + calculateFee(bidPrice * amount, 0.4);
@@ -152,7 +123,7 @@ module.exports = class DailyTrader {
     this.dispatch("sell", id);
     this.dispatch("earnings", profit);
     this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
-    console.log("Sold", bidPrice, profit);
+    // console.log("Sold", profit);
   }
 
   stop() {
@@ -162,3 +133,34 @@ module.exports = class DailyTrader {
     if (this.listener) this.listener(this.#pair + "", event, info);
   }
 };
+
+/*
+========== Old code ==========
+
+// const lowerOrder = calcPercentageDifference(lastOrder.price, askPrice) < -this.#percentageThreshold;
+// if (!lowerOrder) shouldBuy = false;
+// else if (balance.eur < this.#investingCapital) {
+//   // console.log("lowerPrice", calcPercentageDifference(lastOrder.price, askPrice));
+//   // console.log(oldestOrder);
+//   await this.#sell(oldestOrder, balance.crypto, bidPrice);
+// }
+// if (highestPriceChange >= this.#percentageThreshold * 2) {
+//   shouldBuy =
+//     calcPercentageDifference(Math.max(highestAsk, highestBidPr), askPrice) <= -highestPriceChange;
+// }
+
+// // ========== Prices Changes Tests ==========
+// if (calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 2)) {
+//   console.log("Should Buy:", askPrice, calcPercentageDifference(highestBidPr, askPrice)); // Buy
+//   this.lastPrice = askPrice;
+// } else if (
+//   this.lastPrice &&
+//   calcPercentageDifference(this.lastPrice, bidPrice) > this.#percentageThreshold
+// ) {
+//   console.log("Should Sell:", bidPrice, calcPercentageDifference(this.lastPrice, bidPrice)); // Sell
+//   if (!this.profit) this.profit = 0;
+//   this.profit += bidPrice - this.lastPrice;
+//   this.lastPrice = bidPrice;
+//   console.log("profit", this.profit);
+// }
+*/

@@ -7,8 +7,9 @@
       "strategyRange": 5,
       "priceChange": 11,
       "mode": "non-strict",
+      "askBidSpreadPercentage": 0.1,
       "earnings": 10,
-      "note": "Increase priceChange if the investment increases"
+      "note": "With €100, €9, 3, 9% returns €8 | With €500, €49, 7, 12% returns €56"
     },
     "ETHEUR": {
       "becameAvailable": "2015-07-01",
@@ -17,19 +18,64 @@
       "strategyRange": 2,
       "priceChange": 4,
       "mode": "non-strict",
+      "askBidSpreadPercentage": 0.1,
       "earnings": 10,
-      "note": ""
+      "note": "With €100, €49, 3, 5% returns €11 | With €500, €99, 3, 5% returns €57"
     },
     "AAVEEUR": {
       "becameAvailable": "2020-12-01",
       "capital": 100,
-      "investment": 9,
-      "strategyRange": 1,
-      "priceChange": 5,
+      "investment": 1,
+      "strategyRange": 8,
+      "priceChange": 1.5,
       "mode": "strict",
       "askBidSpreadPercentage": 0.1,
-      "earnings": 55,
-      "note": ""
+      "earnings": 12,
+      "note": "With €100, €2, 8, 1.3% return €10 | With €500, €2, 8, 1.5% return €85"
+    },
+    "ADAEUR": {
+      "becameAvailable": "2017-09-29",
+      "capital": 100,
+      "investment": 9,
+      "strategyRange": 5,
+      "priceChange": 15,
+      "mode": "non-strict",
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 17,
+      "note": "With €100, €9, 6, 16% return €18 | With €500, €249, 5, 16% return €97"
+    },
+    "APTEUR": {
+      "becameAvailable": "2022-12-01",
+      "capital": 100,
+      "investment": 4.9,
+      "strategyRange": 2,
+      "priceChange": 8,
+      "mode": "non-strict",
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 20,
+      "note": "With €100, €9, 28% return €20 | With €500, €9, 2, 8% return €103"
+    },
+    "ARBEUR": {
+      "becameAvailable": "2023-04-23",
+      "capital": 100,
+      "investment": 9,
+      "strategyRange": 3,
+      "priceChange": 24,
+      "mode": "strict",
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 24,
+      "note": "With €500, €9, 3, 24% return €121"
+    },
+
+    "ATOMEUR": {
+      "becameAvailable": "2019-03-14",
+      "capital": 100,
+      "investment": 9,
+      "strategyRange": 1,
+      "priceChange": 7,
+      "mode": "non-strict",
+      "askBidSpreadPercentage": 0.1,
+      "earnings": 70
     },
 
     "RAREEUR": {
@@ -53,16 +99,6 @@
       "earnings": 115
     },
 
-    "ADAEUR": {
-      "becameAvailable": "2017-09-29",
-      "capital": 100,
-      "investment": 9,
-      "strategyRange": 1.5,
-      "priceChange": 6,
-      "mode": "non-strict",
-      "askBidSpreadPercentage": 0.1,
-      "earnings": 55
-    },
     "ALGOEUR": {
       "becameAvailable": "2019-06-19",
       "capital": 100,
@@ -82,27 +118,6 @@
       "mode": "non-strict",
       "askBidSpreadPercentage": 0.1,
       "earnings": 110
-    },
-    "APTEUR": {
-      "becameAvailable": "2022-12-01",
-      "capital": 100,
-      "investment": 9,
-      "strategyRange": 1,
-      "priceChange": 10,
-      "mode": "non-strict",
-      "askBidSpreadPercentage": 0.1,
-      "earnings": 110,
-      "note": ""
-    },
-    "ARBEUR": {
-      "becameAvailable": "2023-04-23",
-      "capital": 100,
-      "investment": 9,
-      "strategyRange": 0.5,
-      "priceChange": 9,
-      "mode": "non-strict",
-      "askBidSpreadPercentage": 0.1,
-      "earnings": 105
     },
     "ARKMEUR": {
       "becameAvailable": "2022-07-01",
@@ -124,16 +139,7 @@
       "askBidSpreadPercentage": 0.9,
       "earnings": 70
     },
-    "ATOMEUR": {
-      "becameAvailable": "2019-03-14",
-      "capital": 100,
-      "investment": 9,
-      "strategyRange": 1,
-      "priceChange": 7,
-      "mode": "non-strict",
-      "askBidSpreadPercentage": 0.1,
-      "earnings": 70
-    },
+
     "AXSEUR": {
       "becameAvailable": "2020-11-04",
       "capital": 100,

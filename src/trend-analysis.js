@@ -50,6 +50,7 @@ function simpleMovingAverage(prices, period) {
 // - When RSI rise means the market is moving upward, and prices are likely to keep rising. It indicates strong buying interest and positive market sentiment.
 // - When the RSI is very low, suggesting that the asset is likely in oversold conditions, which could indicate a potential buying opportunity if the price stabilizes.
 
+// calcRelativeStrengthIndex
 function calculateRSI(prices, period = 14) {
   if (prices.length < period) throw new Error("Not enough data to calculate RSI.");
   // The 14-period setting for the RSI was recommended by J. Welles Wilder, the developer of the RSI, in his book "New Concepts in Technical Trading Systems." This default period is widely used because it has been found to provide a good balance between responsiveness and reliability in identifying overbought and oversold conditions across various markets.
@@ -114,7 +115,7 @@ function findHighLowPriceChanges(prices, currentPrice) {
   return priceChanges;
 }
 
-function calculateAveragePrice(prices) {
+function calcAveragePrice(prices) {
   if (prices.length === 0) throw new Error("Price list cannot be empty.");
   const total = prices.reduce((sum, price) => sum + price, 0);
   return +(total / prices.length).toFixed(8);
@@ -131,11 +132,14 @@ function countPriceChanges(prices, percentageThreshold) {
 
   for (let i = 1; i < prices.length; i++) {
     const change = calcPercentageDifference(picePointer, prices[i]);
+    // console.log("Price: ", prices[i], change);
     if (percentageThreshold <= change) {
-      changes.push(change);
+      // console.log("A", prices[i]);
+      if ((changes[0] || -1) < 0) changes.push(change);
       picePointer = prices[i];
     } else if (change <= -percentageThreshold) {
-      changes.push(change);
+      // console.log("B", prices[i]);
+      if ((changes[0] || 1) > 0) changes.push(change);
       picePointer = prices[i];
     }
   }
@@ -143,15 +147,14 @@ function countPriceChanges(prices, percentageThreshold) {
 }
 
 // This calculates the earnings from an investment given the current price, previous price, and invested amount.
-function calculateEarnings(currentPrice, previousPrice, investedAmount) {
-  const investedAmountIncludedProfit = (investedAmount / previousPrice) * currentPrice;
-  const earnings = investedAmountIncludedProfit - investedAmount;
-  return +earnings.toFixed(8);
+function calcInvestmentProfit(previousPrice, currentPrice, investedAmount) {
+  const earningsIncludedProfit = (investedAmount / previousPrice) * currentPrice;
+  return +(earningsIncludedProfit - investedAmount).toFixed(8); // Return the Profit;
 }
 // This calculates the profit from a transaction given the current price, order price, and volume of cryptoCur.
-function calculateProfit(currentPrice, orderPrice, cryptoVolume, feePercentage) {
-  const cost = orderPrice * cryptoVolume + calculateFee(orderPrice * cryptoVolume, feePercentage);
-  const revenue = currentPrice * cryptoVolume - calculateFee(currentPrice * cryptoVolume, feePercentage);
+function calcTransactionProfit(previousPrice, currentPrice, assetVolume, feePercentage) {
+  const cost = previousPrice * assetVolume + calculateFee(previousPrice * assetVolume, feePercentage);
+  const revenue = currentPrice * assetVolume - calculateFee(currentPrice * assetVolume, feePercentage);
   return revenue - cost; // profit
 }
 function calculateFee(amount, feePercentage) {
@@ -171,11 +174,11 @@ module.exports = {
   simpleMovingAverage,
   calculateRSI,
   findHighLowPriceChanges,
-  calculateAveragePrice,
+  calcAveragePrice,
   calcPercentageDifference,
   countPriceChanges,
-  calculateEarnings,
-  calculateProfit,
+  calcInvestmentProfit,
+  calcTransactionProfit,
   calculateFee,
   adjustPrice,
   isOlderThen,

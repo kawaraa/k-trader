@@ -6,6 +6,7 @@ import PageHeader from "../components/page-header";
 import Loader from "../components/loader";
 import ChartCanvas from "../components/chart-canvas";
 import pairs from "../../src/pairs";
+import { calcInvestmentProfit, calcPercentageDifference } from "../../src/trend-analysis";
 
 export default function CryptoChart() {
   const router = useRouter();
@@ -44,8 +45,8 @@ export default function CryptoChart() {
   }, [pair]);
 
   useEffect(() => {
-    window.profit = (ask, bid, amt = 9) => (amt / ask) * bid * 0.992;
-    window.percentage = (cur, past) => `${(((cur - past) / (past || 0)) * 100).toFixed(2)}%`;
+    window.profit = (ask, bid, amt = 9) => (calcInvestmentProfit(ask, bid, amt) + amt) * 0.992;
+    window.percentage = (past, current) => `${calcPercentageDifference(past, current)}%`;
 
     request("/api/auth")
       .catch(() => router.replace("/signin"))

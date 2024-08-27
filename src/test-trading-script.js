@@ -21,8 +21,8 @@ const mode = process.argv[8] || "non-strict";
   console.log(`Started new analysis with ${pair}.\n`);
 
   let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);
-  const counts = countPriceChanges(prices, minPercentagePriceChange);
-  console.log(counts.length, JSON.stringify(counts));
+  // const counts = countPriceChanges(prices, minPercentagePriceChange);
+  // console.log(counts.length, JSON.stringify(counts));
   if (!prices[0]?.tradePrice) prices = prices.map((p) => adjustPrice(p, askBidSpreadPercentage));
 
   try {
@@ -37,7 +37,8 @@ const mode = process.argv[8] || "non-strict";
       "|",
       result.crypto,
       "=>",
-      +((result.balance - capital) / 2).toFixed(2)
+      +((result.balance - capital) / 2).toFixed(2),
+      `Transactions: ${result.transactions}`
     );
   } catch (error) {
     console.log("Error with ", pair, "===>", error);
@@ -46,12 +47,16 @@ const mode = process.argv[8] || "non-strict";
 })();
 
 async function testStrategy(pair, prices, capital, investment, range, priceChange) {
+  let transactions = 0;
   const pricesOffset = (range * 24 * 60) / 5;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset);
   const info = { capital, investment, priceChange, strategyRange: range, mode };
   const trader = new DailyTrader(ex, pair, info);
   trader.listener = (p, event, info) => {
-    event == "sell" && ex.removeOrder(info);
+    if (event == "sell") {
+      ex.removeOrder(info);
+      transactions++;
+    }
     // event == "log" && console.log(pair, info);
   };
 
@@ -68,5 +73,6 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
     range,
     balance: +(await ex.balance()).eur.toFixed(2),
     crypto,
+    transactions,
   };
 }
