@@ -120,7 +120,7 @@ class Bot {
     this.investment = +this.#parseValue(info.investment);
     this.priceChange = +this.#parseValue(info.priceChange);
     this.strategyRange = +this.#parseValue(info.strategyRange);
-    this.mode = info.mode;
+    this.mode = this.#parseValue(info.mode);
     this.timeInterval = +this.#parseValue(info.timeInterval);
     this.balance = +(this.#parseValue(info.balance) || 0);
     this.earnings = +(this.#parseValue(info.earnings) || 0);
