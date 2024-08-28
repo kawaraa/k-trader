@@ -132,14 +132,11 @@ function countPriceChanges(prices, percentageThreshold) {
 
   for (let i = 1; i < prices.length; i++) {
     const change = calcPercentageDifference(picePointer, prices[i]);
-    // console.log("Price: ", prices[i], change);
-    if (percentageThreshold <= change) {
-      // console.log("A", prices[i]);
-      if ((changes[0] || -1) < 0) changes.push(change);
+    if (percentageThreshold <= change && (changes.at(-1) || -1) <= 0) {
+      changes.push(change);
       picePointer = prices[i];
-    } else if (change <= -percentageThreshold) {
-      // console.log("B", prices[i]);
-      if ((changes[0] || 1) > 0) changes.push(change);
+    } else if (change <= -percentageThreshold && (changes.at(-1) || 1) > 0) {
+      changes.push(change);
       picePointer = prices[i];
     }
   }
