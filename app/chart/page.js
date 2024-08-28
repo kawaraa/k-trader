@@ -114,15 +114,7 @@ export default function CryptoChart() {
               // borderDash: [3, 2],
             },
           ]}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            elements: {
-              point: {
-                radius: 2, // Smaller points for mobile
-              },
-            },
-          }}
+          options={{ responsive: true, maintainAspectRatio: false }}
         />
       </main>
 

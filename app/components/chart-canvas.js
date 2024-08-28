@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 
 export default function ChartCanvas({ type = "line", labels, datasets, options }) {
-  const maxLevel = datasets[0]?.data?.length || 0;
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
-  const [zoomLevel, setZoomLevel] = useState(maxLevel);
+  const [maxLevel, setMaxLevel] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(0);
 
   const data = {
     labels: labels.slice(-zoomLevel),
@@ -17,6 +17,12 @@ export default function ChartCanvas({ type = "line", labels, datasets, options }
       chartInstanceRef.current.data = data;
       chartInstanceRef.current.options = options;
       chartInstanceRef.current.update();
+    }
+
+    if (maxLevel <= 0) {
+      const max = data.datasets[0]?.data?.length || 0;
+      setMaxLevel(max);
+      setZoomLevel(max);
     }
   }, [data, options]);
 

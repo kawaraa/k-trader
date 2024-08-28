@@ -1277,5 +1277,401 @@
   "GMTEUR": { "askBidSpreadPercentage": 0.86 },
   "GSTEUR": { "askBidSpreadPercentage": 8.33 },
   "HONEYEUR": { "askBidSpreadPercentage": 1.54 },
-  "ICXEUR": { "askBidSpreadPercentage": 0.78 }
+  "ICXEUR": { "askBidSpreadPercentage": 0.78 },
+  "BCHEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "BLZEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "BNTEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "BODENEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "BONKEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "CELREUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "COMPEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "COTIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "CRVEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "CTSIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "DAIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "DASHEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "DENTEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "DOTEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "DYDXEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "DYMEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "MANAEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "MATICEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "MKREUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "MOVREUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "NEAREUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "OMGEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "OXTEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "QTUMEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "RARIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "RENEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "SANDEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "SCRTEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "SNXEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "SUSHIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "TLMEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "TRXEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "UNIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "USDCEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "USDTEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "WOOEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "XTZEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "XMREUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "YFIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "OCEANEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "CFGEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "BOBAEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "WBTCEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "CVXEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "RLCEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "MOONEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "GHSTEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "FLOKIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "LCXEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "NYMEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "PAXGEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "WENEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "MLNEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "ARPAEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "BNCEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "CHREUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "CHZEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "EULEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "EURTEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "FARMEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "FISEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "FORTHEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "MIREUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "OXYEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "TUSDEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  },
+  "CVCEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.1,
+    "mode": "non-strict"
+  }
 }
