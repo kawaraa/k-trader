@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function PageHeader({ pair, children }) {
   return (
-    <header className="flex px-3 md:px-5 py-4 mb-6 border-b-[1px] border-neutral-300 dark:border-neutral-600">
+    <header className="flex px-3 sm:px-5 py-4 mb-6 border-b-[1px] border-neutral-300 dark:border-neutral-600">
       <Link
         href="/"
         className="w-12 h-12 justify-self-start ml-2 p-1 flex items-center justify-center rounded-3xl"
@@ -14,7 +14,7 @@ export default function PageHeader({ pair, children }) {
         </svg>
       </Link>
 
-      <h1 class="mx-auto text-2xl md:text-3xl font-bold">
+      <h1 class="mx-auto text-xl sm:text-2xl font-bold">
         ✨{" "}
         <Link
           href={`https://pro.kraken.com/app/trade/${pair?.replace("EUR", "").toLowerCase()}-eur`}

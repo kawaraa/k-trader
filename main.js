@@ -29,13 +29,13 @@ async function fetchStorePrices() {
   console.log("Started recording prices", pairs.length);
   for (const pair of pairs) {
     try {
-      // await kraken.currentPrices(pair);
+      await kraken.currentPrices(pair);
     } catch (error) {
       console.log(`Error with ${pair}`, error.message);
     }
   }
   console.log("Finish recording prices, will start again after 5 mins");
-  setTimeout(fetchStorePrices, 60000 * 5);
+  if (!prod) setTimeout(fetchStorePrices, 60000 * 5);
 }
 
 if (!isValidPair(pair)) {

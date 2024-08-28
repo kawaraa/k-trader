@@ -65,6 +65,17 @@
     "earnings": 17,
     "note": "With €100, €9, 6, 16% return €18 | With €500, €249, 5, 16% return €97"
   },
+  "XRPEUR": {
+    "becameAvailable": "2013-01-01",
+    "capital": 100,
+    "investment": 9,
+    "strategyRange": 3,
+    "priceChange": 24,
+    "mode": "non-strict",
+    "askBidSpreadPercentage": 0.1,
+    "earnings": 15,
+    "note": "With €100, €9, 0.5, 16% return €9 | With €500, €19, 3, 24% return €75"
+  },
   "AAVEEUR": {
     "becameAvailable": "2020-12-01",
     "capital": 100,
@@ -75,17 +86,6 @@
     "askBidSpreadPercentage": 0.1,
     "earnings": 12,
     "note": "With €100, €2, 8, 1.3% return €10 | With €500, €2, 8, 1.5% return €85"
-  },
-
-  "XRPEUR": {
-    "becameAvailable": "2013-01-01",
-    "capital": 100,
-    "investment": 9,
-    "strategyRange": 3,
-    "priceChange": 12,
-    "mode": "non-strict",
-    "askBidSpreadPercentage": 0,
-    "earnings": 205
   },
 
   "LUNAEUR": {

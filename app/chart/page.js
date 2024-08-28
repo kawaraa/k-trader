@@ -25,7 +25,13 @@ export default function CryptoChart() {
     tradePrices.push(p.tradePrice);
     askPrices.push(p.askPrice);
     bidPrices.push(p.bidPrice);
-    labels.push(i * 5 < 60 ? i * 5 : ((i * 5) / 60).toFixed(2)); // Time labels
+    labels.push(
+      i * 5 < 60
+        ? parseInt(i * 5) + " M"
+        : i * 5 < 1440
+        ? parseInt((i * 5) / 60) + " H"
+        : ((i * 5) / 60 / 24).toFixed(1) + " D"
+    ); // Time labels
   });
 
   const changePair = (p) => router.push(`/chart?pair=${p}`);
@@ -61,7 +67,7 @@ export default function CryptoChart() {
             name="pair"
             onChange={(e) => changePair(e.target.value)}
             defaultValue={pair}
-            className="mr-5 text-[#334155] text-lg bg-amber-100 py-1 px-3 appearance-none outline-none border-[1px] focus:border-blue rounded-md"
+            className="mr-5 text-[#334155] text-center sm:text-lg bg-amber-100 py-1 px-3 appearance-none outline-none border-[1px] focus:border-blue rounded-md"
           >
             {pairs.map((pair, i) => (
               <option value={pair} key={i}>
@@ -75,41 +81,48 @@ export default function CryptoChart() {
 
         <ChartCanvas
           type="line"
-          data={{
-            labels,
-            datasets: [
-              {
-                label: "Ask Price",
-                borderColor: "rgba(255, 0, 0, 1)",
-                backgroundColor: "rgba(255, 0, 0, 0.2)",
-                fill: false,
-                data: askPrices,
-                pointStyle: false,
-                // borderDash: [3, 2],
-                // fill: "+2",
+          labels={labels}
+          datasets={[
+            {
+              label: "Ask Price",
+              borderColor: "#FFA500",
+              fill: false,
+              data: askPrices,
+              pointStyle: false,
+              borderWidth: 1, // Adjust the line thickness
+              // pointRadius: 0, // Adjust the size of the points on the line
+              // borderDash: [3, 2],
+              // fill: "+2",
+            },
+            {
+              label: "Trade Price",
+              borderColor: "#008080",
+              fill: false,
+              data: tradePrices,
+              hidden: true,
+              pointStyle: false,
+              borderWidth: 1, // Adjust the line thickness
+              // borderDash: [3, 2],
+            },
+            {
+              label: "Bid Price",
+              borderColor: "#800080",
+              fill: false,
+              data: bidPrices,
+              pointStyle: false,
+              borderWidth: 1, // Adjust the line thickness
+              // borderDash: [3, 2],
+            },
+          ]}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            elements: {
+              point: {
+                radius: 2, // Smaller points for mobile
               },
-              {
-                label: "Trade Price",
-                borderColor: "rgba(0, 128, 0, 1)",
-                backgroundColor: "rgba(0, 128, 0, 0.2)",
-                fill: false,
-                data: tradePrices,
-                hidden: true,
-                pointStyle: false,
-                // borderDash: [3, 2],
-              },
-              {
-                label: "Bid Price",
-                borderColor: "rgba(0, 0, 255, 1)",
-                backgroundColor: "rgba(0, 0, 255, 0.2)",
-                fill: false,
-                data: bidPrices,
-                pointStyle: false,
-                // borderDash: [3, 2],
-              },
-            ],
+            },
           }}
-          options={{ responsive: true }}
         />
       </main>
 

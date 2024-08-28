@@ -98,7 +98,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="no-select flex px-3 md:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
+      <header className="no-select flex px-3 sm:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
         <strong className="text-3xl font-bold text-emerald-500">€{parseInt(balance)}</strong>
         <div className="flex items-end">
           <strong>
@@ -116,7 +116,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="no-select px-3 md:px-5 py-6 mb-8 max-w-2xl mx-auto">
+      <main className="no-select px-3 sm:px-5 py-6 mb-8 max-w-2xl mx-auto">
         <div className="flex no-srl-bar">
           <span className="flex-1 w-1/5 font-medium">Crypto</span>
           <span className="flex-1 w-1/5 font-medium">Capital</span>
