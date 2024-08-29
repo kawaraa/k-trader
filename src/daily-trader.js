@@ -78,7 +78,7 @@ module.exports = class DailyTrader {
         const lowestAsk = askPrices.toSorted()[0];
         shouldBuy = calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
 
-        if (shouldBuy && balance.eur - this.#investingCapital * 3 <= 0) {
+        if (shouldBuy && balance.eur - this.#investingCapital * 2 <= 0) {
           const order = orders.find((o) => 0.5 <= calcPercentageDifference(o.price, bidPrice));
           if (order) await this.#sell(order, balance.crypto, bidPrice);
         }
@@ -100,7 +100,7 @@ module.exports = class DailyTrader {
           const sell = this.#percentageThreshold <= calcPercentageDifference(price, bidPrice);
           // Backlog: Sell accumulated orders that has been more than 5 days if the current price is higher then highest price in the lest 4 hours.
           // Todo: add the this for live || isOlderThen(createdAt, 20)
-          if (sell) await this.#sell({ id, volume, cost }, balance.crypto, bidPrice);
+          if (sell) await this.#sell({ id, volume, cost, price }, balance.crypto, bidPrice);
         }
       }
 
@@ -115,7 +115,7 @@ module.exports = class DailyTrader {
     }
   }
 
-  async #sell({ id, volume, cost }, cryptoBalance, bidPrice) {
+  async #sell({ id, volume, cost, price }, cryptoBalance, bidPrice) {
     const amount = Math.min(+volume, cryptoBalance);
     const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
     const c = bidPrice * amount + calculateFee(bidPrice * amount, 0.4);
@@ -123,7 +123,7 @@ module.exports = class DailyTrader {
     this.dispatch("sell", id);
     this.dispatch("earnings", profit);
     this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
-    // console.log("Sold", profit);
+    // console.log("Profit: => ", profit, "Prices: ", price, bidPrice);
   }
 
   stop() {

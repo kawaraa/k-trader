@@ -11,10 +11,8 @@ const minStrategyRange = +process.argv[6] || 0.25; // Is a Range of the strategy
 const minPercentagePriceChange = +process.argv[7] || 1.25;
 const mode = process.argv[8] || "non-strict";
 // const strategyInvestments = [9, 19, 32, 49, 99]; // strategySettings
-
 // investment is and investing Amount in EUR that will be used every time to by crypto
 // priceChange is a price Percentage Threshold, value from 0 to 100
-
 // Command example: node test-trading-script.js ETHEUR 0.9 0.25 100 60 > database/log/all.log 2>&1
 
 (async () => {
@@ -22,17 +20,12 @@ const mode = process.argv[8] || "non-strict";
 
   let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);
 
-  const changes = countPriceChanges(prices, minPercentagePriceChange);
-  if (changes.at(-1) < 1) changes.pop();
-  const transactions = changes.filter((p) => p < -1).length;
-  console.log(
-    "Prices:",
-    prices.length,
-    "Transactions:",
-    transactions,
-    "Profit:",
-    parseInt((minPercentagePriceChange * transactions) / 2)
-  );
+  // const offset = parseInt((minStrategyRange * 24 * 60) / 5);
+  // const result = countPriceChanges(prices, minPercentagePriceChange, offset);
+  // if (result.changes.at(-1) < 1) result.changes.pop();
+  // const pricesChanges = result.changes.filter((p) => p < -1).length / 2;
+  // const profit = parseInt(minPercentagePriceChange * pricesChanges);
+  // console.log("Prices:", prices.length, "PricesChanges:", pricesChanges, "Profit:", profit);
 
   if (!prices[0]?.tradePrice) prices = prices.map((p) => adjustPrice(p, askBidSpreadPercentage));
 
@@ -49,7 +42,7 @@ const mode = process.argv[8] || "non-strict";
       result.crypto,
       "=>",
       +((result.balance - capital) / 2).toFixed(2),
-      `Transactions: ${result.transactions}`
+      `Transactions: ${result.transactions / 2}`
     );
   } catch (error) {
     console.log("Error with ", pair, "===>", error);

@@ -19,9 +19,16 @@ Kraken says the fees is up to `0.25%` but they are charging around `0.40%`. this
 1. _NOT VALID_ (current) Buy when the average price drops 1.5% and sell the bought order only when the current price is 1.5% higher then the order price
 1. Buy ETH/USDT using 10% of starting capital. Add an additional 10% of available cash to the position at every 1% drop in price. Sell at 1.5% profit or 10% loss.
 
-### Strategy Test Settings Commands Structure
+### Testing cryptocurrency steps
 
-1. `pair capital investment strategyRange pricePercentageChange`
+These steps help finding the right Strategy Settings for a specific currency.
+
+#### Commands
+
+1. Check the prices: `node src/prices-analysis-script.js XXX database/logs/all.log 2>&1`
+1. Get the prices: `node src/prices-data-script.js XXX database/logs/all.log 2>&1`
+1. Analyze the prices: `node src/prices-analysis-script.js XXX database/logs/all.log 2>&1`
+1. Test trading strategies: `node src/test-trading-script.js XXX 0.1 100 9 0.25 X`
 
 ## Getting Started / Running the App
 

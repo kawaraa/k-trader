@@ -126,21 +126,21 @@ function calcPercentageDifference(oldPrice, newPrice) {
   return +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2);
 }
 
-function countPriceChanges(prices, percentageThreshold) {
+function countPriceChanges(prices, percentageThreshold, offset = 864) {
   const changes = [];
-  let picePointer = prices[0];
+  // Find the lowest price in the last 3 days (864) based on 5 mins interval
+  let picePointer = prices.slice(0, offset).toSorted()[0];
 
-  for (let i = 1; i < prices.length; i++) {
+  for (let i = offset - 10; i < prices.length; i++) {
     const change = calcPercentageDifference(picePointer, prices[i]);
-    if (percentageThreshold <= change && (changes.at(-1) || -1) <= 0) {
-      changes.push(change);
-      picePointer = prices[i];
-    } else if (change <= -percentageThreshold && (changes.at(-1) || 1) > 0) {
+    const negative = change >= percentageThreshold && (changes.at(-1) || -1) <= 0;
+    const positive = -percentageThreshold >= change && (changes.at(-1) || 1) > 0;
+    if (negative || positive) {
       changes.push(change);
       picePointer = prices[i];
     }
   }
-  return changes;
+  return { changes, avgPeriod: +((prices.length * 5) / changes.length / 60 / 24).toFixed(2) };
 }
 
 // This calculates the earnings from an investment given the current price, previous price, and invested amount.
