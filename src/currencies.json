@@ -23,6 +23,18 @@
     "earnings": 10,
     "note": "With €500, €49, 3, 1.4% returns €51"
   },
+  "FIDAEUR": {
+    "becameAvailable": "2020-12-01",
+    "capital": 100,
+    "investment": 4,
+    "strategyRange": 0.25,
+    "pricePercentageChange": 2,
+    "mode": "strict",
+    "askBidSpreadPercentage": 0.45,
+    "pricesChanges": 10,
+    "earnings": 28,
+    "note": ""
+  },
   "ADAEUR": {
     "becameAvailable": "2017-09-29",
     "capital": 100,
@@ -819,16 +831,6 @@
   },
   "HONEYEUR": { "askBidSpreadPercentage": 0.41 },
   "NYMEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.41, "mode": "" },
-  "FIDAEUR": {
-    "becameAvailable": "2020-12-01",
-    "capital": 100,
-    "investment": 32,
-    "strategyRange": 2,
-    "pricePercentageChange": 10,
-    "mode": "",
-    "askBidSpreadPercentage": 0.45,
-    "earnings": 110
-  },
   "GMTEUR": { "askBidSpreadPercentage": 0.47 },
   "CVXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.47, "mode": "" },
   "C98EUR": {
