@@ -25,7 +25,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
         name="investment"
         type="number"
         placeholder="Investment"
-        step="0.5"
+        step="0.1"
         defaultValue={bot?.info?.investment}
         required
         className={inputCls}

@@ -76,7 +76,7 @@ else
   # Additional commands for application setup
   rm -f ~/.pm2/logs/*
   npm install --production
-  NODE_ENV=production pm2 restart app --update-env || NODE_ENV=production pm2 start main.js --name app --update-env 
+  NODE_ENV=production pm2 restart app --update-env || NODE_ENV=production pm2 start main.js --name app --update-env
   pm2 save # save the current PM2 process list to ensure that your application restarts on boot
   sudo pm2 startup # Generate Startup Script so it restarts on boot
   systemctl restart nginx
