@@ -13,8 +13,10 @@ const fileNames = pairArg ? [`${pairArg}.json`] : readdirSync(pricesFolderPath);
 for (const fileName of fileNames) {
   const pair = fileName.replace(".json", "");
   let prices = require(`${pricesFolderPath}${fileName}`);
-  if (prices.length < 18000 && currencies[pair].pricesChanges > 0) continue;
-  console.log(`Started prices analysis for "${pair}"`);
+
+  console.log("There are", prices.length, "prices");
+  if (prices.length < 18000 || currencies[pair].pricesChanges > 0) continue;
+  console.log(`Started prices analysis for "${pair}" with ${prices.length} prices`);
 
   let percentage = minPercentageChange;
   while (percentage <= 25) {

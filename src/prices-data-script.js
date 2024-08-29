@@ -9,11 +9,12 @@ const cryptocurrencies = pair ? { [pair]: pair } : require(`./currencies.json`);
   for (const pair in cryptocurrencies) {
     const filePath = `${process.cwd()}/database/test-prices/${pair}.json`;
 
+    const usdPair = pair.replace("EUR", "USDT");
     if (existsSync(filePath)) {
       console.log(`The prices file for ${pair} already exists.\n`);
-      console.log(JSON.stringify(await getBinanceData(pair, minTestPeriod)));
+      console.log(JSON.stringify(await getBinanceData(usdPair, minTestPeriod)));
     } else {
-      writeFileSync(filePath, JSON.stringify(await getBinanceData(pair, minTestPeriod)));
+      writeFileSync(filePath, JSON.stringify(await getBinanceData(usdPair, minTestPeriod)));
       console.log(`Finished fetching prices for ${pair}`);
     }
   }
