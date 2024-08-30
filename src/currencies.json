@@ -59,6 +59,17 @@
     "earnings": 28,
     "note": "With €500 €9, 0.25, 4 return €180 tns:426"
   },
+  "STRKEUR": {
+    "becameAvailable": "2021-09-01",
+    "capital": 100,
+    "investment": 9,
+    "strategyRange": 0.25,
+    "pricePercentageChange": 3,
+    "mode": "strict",
+    "askBidSpreadPercentage": 0.1,
+    "earnings": 28,
+    "note": "STRKEUR 0.1 100 99 0.25 1.1 strict => 25.86 Transactions: 17.5 | STRKEUR 0.1 100 99 0.5 1.1 strict => 25 Transactions: 15 | STRKEUR 0.1 100 9 0.25 3 strict => 28.36 Transactions: 102.5 | STRKEUR 0.1 100 9 0.5 8 strict => 38.34 Transactions: 53.5 | STRKEUR 0.1 500 19 0.25 3 strict => 137.13 Transactions: 233 |STRKEUR 0.1 500 19 0.5 8 strict => 185.3 Transactions: 115.5"
+  },
   "TLMEUR": {
     "becameAvailable": "20xx-xx-xx",
     "capital": 100,
@@ -275,7 +286,7 @@
     "askBidSpreadPercentage": 0.03,
     "transactions": 0.5,
     "earnings": 24,
-    "note": "With €500, €9, 3, 24% return €121"
+    "note": "With €500, €9, 3, 24% return €121 | ARBEUR 0.1 100 4.9 0.25 3 strict => 15.02 Transactions: 134.5 | ARBEUR 0.1 100 9 0.5 6 strict => 17 Transactions: 40 | ARBEUR 0.1 100 99 3 24 strict => 20.11 Transactions: 5 | ARBEUR 0.1 100 9 3 24 strict => 24.25 Transactions: 11"
   },
   "AAVEEUR": {
     "becameAvailable": "2020-12-01",
@@ -307,17 +318,6 @@
     "mode": "",
     "askBidSpreadPercentage": 0.03,
     "earnings": 80
-  },
-  "STRKEUR": {
-    "becameAvailable": "2021-09-01",
-    "capital": 100,
-    "investment": 9,
-    "strategyRange": 2.5,
-    "pricePercentageChange": 6,
-    "mode": "",
-    "askBidSpreadPercentage": 0.03,
-    "earnings": 65,
-    "note": "With €99, 6, 2.5 return €74"
   },
   "STXEUR": {
     "becameAvailable": "2019-10-01",
@@ -765,7 +765,13 @@
     "askBidSpreadPercentage": 0.18,
     "earnings": 85
   },
-  "COTIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.18, "mode": "" },
+  "COTIEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "capital": 100,
+    "askBidSpreadPercentage": 0.18,
+    "mode": "",
+    "note": "COTIEUR 0.2 100 4.9 0.25 3 strict => 13.19 Transactions: 131"
+  },
 
   "ENAEUR": {
     "becameAvailable": "2020-12-01",
@@ -884,7 +890,8 @@
     "pricePercentageChange": 9,
     "mode": "",
     "askBidSpreadPercentage": 0.32,
-    "earnings": 255
+    "earnings": 0,
+    "note": "less then €1"
   },
   "RAYEUR": {
     "becameAvailable": "2021-03-01",

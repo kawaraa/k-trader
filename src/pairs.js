@@ -19,8 +19,8 @@ module.exports = [
   "JASMYEUR",
   "XRPEUR",
   "CTSIEUR",
-
   "COTIEUR",
+
   "STRKEUR",
   "BCHEUR",
   "STORJEUR",
