@@ -44,8 +44,7 @@ module.exports = class LocalState {
     this.update(state);
   }
 
-  getLocalPrices(pair, limit = 864) {
-    limit = limit > 864 ? 864 : limit; // Limit Storing prices to 3 days
+  getLocalPrices(pair, limit = 288 /* Default to 1 day */) {
     try {
       const data = JSON.parse(readFileSync(this.#getPricesFilePath(pair), "utf8")).slice(-limit);
       return data && data[0]?.askPrice ? data : [];
@@ -53,12 +52,8 @@ module.exports = class LocalState {
       return [];
     }
   }
-  updateLocalPrices(pair, prices) {
-    // const data = this.getLocalPrices(pair);
-    let data = [];
-    try {
-      data = JSON.parse(readFileSync(this.#getPricesFilePath(pair), "utf8")).slice(-8640);
-    } catch (error) {}
+  async updateLocalPrices(pair, prices) {
+    const data = await this.getLocalPrices(pair).slice(-8640); // Limit Storing prices to 30 days (8640)
     data.push(prices);
     return writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
   }
