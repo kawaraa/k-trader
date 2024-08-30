@@ -15,6 +15,7 @@ const mode = process.argv[8] || "non-strict";
 // priceChange is a price Percentage Threshold, value from 0 to 100
 // Command example: node test-trading-script.js ETHEUR 0.9 0.25 100 60 > database/log/all.log 2>&1
 
+if (!mode.includes("strict")) throw new Error("Invalid mode!");
 (async () => {
   console.log(`Started new trading with ${pair}.\n`);
 

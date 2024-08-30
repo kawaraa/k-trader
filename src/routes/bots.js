@@ -107,7 +107,7 @@ class BotInfo {
   constructor(info) {
     this.capital = this.setNumber(info.capital, 0, "capital", true);
     this.investment = this.setNumber(info.investment, 1, "investment", true);
-    this.priceChange = this.setNumber(info.priceChange, 1.5, "priceChange", true);
+    this.priceChange = this.setNumber(info.priceChange, 1.1, "priceChange", true);
     this.strategyRange = this.setNumber(info.strategyRange, 0.25, "strategyRange", true);
     this.mode = this.validateMode(info.mode);
     this.timeInterval = this.setNumber(info.timeInterval, 3, "timeInterval", true);
