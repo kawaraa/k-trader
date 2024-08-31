@@ -59,6 +59,7 @@ module.exports = class DailyTrader {
       const askPercentageChange = calcPercentageDifference(avgAskPrice, askPrice);
       const bidPercentageChange = calcPercentageDifference(avgBidPrice, bidPrice);
       const highestBidPr = bidPrices.toSorted().at(-1);
+      const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
 
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto} - Price: ${tradePrice}`);
@@ -78,7 +79,7 @@ module.exports = class DailyTrader {
         const lowestAsk = askPrices.toSorted()[0];
         shouldBuy = calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
 
-        if (shouldBuy && balance.eur - this.#investingCapital * 2 <= 0) {
+        if (shouldBuy && this.#capital <= totalInvestedAmount + this.#investingCapital * 2) {
           const order = orders.find((o) => 0.5 <= calcPercentageDifference(o.price, bidPrice));
           if (order) await this.#sell(order, balance.crypto, bidPrice);
         }
@@ -87,7 +88,6 @@ module.exports = class DailyTrader {
       if (prices.length >= (this.strategyRange * 24 * 60) / 5 && shouldBuy) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${askPrices.toSorted()[0]}`);
 
-        const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);
 
         if (balance.eur > 0 && totalInvestedAmount < this.#capital && remaining > this.#tradingAmount / 2) {
