@@ -20,7 +20,6 @@ module.exports = [
   "XRPEUR",
   "CTSIEUR",
   "COTIEUR",
-
   "STRKEUR",
   "BCHEUR",
   "STORJEUR",
@@ -28,6 +27,7 @@ module.exports = [
   "SUPEREUR",
   "BONKEUR",
   "ENAEUR",
+
   "LSKEUR",
   "GMXEUR",
   "MATICEUR",
