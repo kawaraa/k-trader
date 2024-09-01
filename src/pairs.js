@@ -1,4 +1,6 @@
+// Started accumulating prices data from 1 September.
 module.exports = [
+  // class 1 (Tested)
   "KP3REUR",
   "FIDAEUR",
   "ALTEUR",
@@ -54,6 +56,7 @@ module.exports = [
   "SPELLEUR",
   "DASHEUR",
 
+  // class 2 (Tested)
   "ACAEUR",
   "TRUEUR",
   "FISEUR",
@@ -62,6 +65,7 @@ module.exports = [
   "IDEXEUR",
   "AUDIOEUR",
 
+  // class 3 (Not Tested)
   "DOTEUR",
   "GHSTEUR",
   "INJEUR",
@@ -137,8 +141,7 @@ module.exports = [
   "TRXEUR",
   "TUSDEUR",
   "USDCEUR",
-
-  // These hase no prices data yet
+  // These has no prices data in Binance
   "BTCEUR",
   "ETHEUR",
   "APTEUR",
@@ -211,8 +214,6 @@ module.exports = [
   "REPEUR",
   "SRMEUR",
   "WAXLEUR",
-
-  // => 1 September Starting accumlating prices data for the following pairs.
   "BITEUR",
   "ACHEUR",
   "AEVOEUR",
