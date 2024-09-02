@@ -6,7 +6,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "transactions": 2,
     "earnings": 7,
     "note": "With €100, €99, 1.5, 5% returns €9 | With €500, €249, 1.5, 5% returns €45"
@@ -18,7 +18,7 @@
     "strategyRange": 3,
     "pricePercentageChange": 1.4,
     "mode": "",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "transactions": 9,
     "earnings": 10,
     "note": "With €500, €49, 3, 1.4% returns €51"
@@ -30,7 +30,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 3,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.12,
+    "askBidSpreadPercentage": 0.29,
     "earnings": 39,
     "note": "KP3REUR 0.12 100 99 0.25 1.4 strict 0 => 30.1 Transactions: 15.5 | KP3REUR 0.12 100 9 0.25 3 strict 0 => 39.28 Transactions: 130"
   },
@@ -41,7 +41,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 5,
     "mode": "strict",
-    "askBidSpreadPercentage": 1.23,
+    "askBidSpreadPercentage": 1.1,
     "transactions": 68,
     "earnings": 30,
     "note": "With €100 €9, 0.25, 3 return €24 tns:89 | With €500 €19, 0.25, 5 return €162 tns:159"
@@ -65,7 +65,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 2,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.45,
+    "askBidSpreadPercentage": 0.29,
     "transactions": 10,
     "earnings": 28,
     "note": "With €500 €9, 0.25, 4 return €180 tns:426"
@@ -77,7 +77,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 3,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 28,
     "note": "STRKEUR 0.1 100 99 0.25 1.1 strict => 25.86 Transactions: 17.5 | STRKEUR 0.1 100 99 0.5 1.1 strict => 25 Transactions: 15 | STRKEUR 0.1 100 9 0.25 3 strict => 28.36 Transactions: 102.5 | STRKEUR 0.1 100 9 0.5 8 strict => 38.34 Transactions: 53.5 | STRKEUR 0.1 500 19 0.25 3 strict => 137.13 Transactions: 233 |STRKEUR 0.1 500 19 0.5 8 strict => 185.3 Transactions: 115.5"
   },
@@ -88,7 +88,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 1.5,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.2,
+    "askBidSpreadPercentage": 0.33,
     "earnings": 26,
     "note": "ENAEUR 0.2 100 99 0.25 1.5 strict 0 => 28.71 Transactions: 16.5 | ENAEUR 0.2 100 9 0.25 1.5 strict 0 => 26.52 Transactions: 130 | ENAEUR 0.2 100 9 0.25 9 strict 185.15179993999996 => 38.39 Transactions: 50.5 | ENAEUR 0.2 500 99 0.25 1.5 strict 0 => 138.21 Transactions: 66 | ENAEUR 0.2 500 9 0.25 9 strict 891.67319149 => 187.07 Transactions: 197"
   },
@@ -99,7 +99,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 0.14,
+    "askBidSpreadPercentage": 0.2,
     "earnings": 140,
     "note": "YGGEUR 0.14 100 99 0.5 1.1 strict 172.11280252 => 10.59 Transactions: 7.5 | YGGEUR 0.14 100 9 0.5 4 strict 170.49124738000003 => 25.63 Transactions: 67"
   },
@@ -110,7 +110,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 4,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.13,
+    "askBidSpreadPercentage": 0.15,
     "transactions": 131,
     "earnings": 24,
     "note": "With €500 €19, 0.25, 4 return €127 tns:175"
@@ -122,7 +122,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 0.23,
+    "askBidSpreadPercentage": 0.17,
     "earnings": 25,
     "note": "BICOEUR 0.23 100 99 0.25 1.2 strict 0 => 17.42 Transactions: 11 | BICOEUR 0.23 100 4.9 0.25 5 strict 88.39148951 => 25.96 Transactions: 106"
   },
@@ -133,12 +133,11 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 6.5,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.11,
     "transactions": 56,
     "earnings": 25,
     "note": "With €500 €19, 0.25, 6 return €117 tns:112 | With €500 €19, 0.5, 8 return €124 tns:94"
   },
-
   "API3EUR": {
     "becameAvailable": "2021-11-01",
     "capital": 100,
@@ -146,7 +145,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 3,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.07,
+    "askBidSpreadPercentage": 0.17,
     "earnings": 20,
     "note": "API3EUR 0.1 100 99 0.25 1.1 strict 44.21148811 => 16.38 Transactions: 14 | API3EUR 0.1 100 4.9 0.25 3 strict 8.7500543 => 20.56 Transactions: 138"
   },
@@ -169,7 +168,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 4,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.14,
+    "askBidSpreadPercentage": 0.2,
     "transactions": 92,
     "earnings": 17,
     "note": "With €500, €19, 0.25, 4% returns €85 tns:118"
@@ -181,7 +180,7 @@
     "strategyRange": 3,
     "pricePercentageChange": 1.1,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "transactions": 77,
     "earnings": 17,
     "note": "With €500, €32, 3, 1.1% returns €82 tns:95 | With €500, €19, 3, 2% returns €79 tns:136"
@@ -193,7 +192,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 4,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.3,
+    "askBidSpreadPercentage": 0.35,
     "transactions": 87,
     "earnings": 13,
     "note": "With €500, €9, 0.25, 4% returns €70 tns:242"
@@ -201,11 +200,10 @@
   "MOVREUR": {
     "becameAvailable": "20xx-xx-xx",
     "capital": 100,
-    "askBidSpreadPercentage": 0.15,
+    "askBidSpreadPercentage": 0.19,
     "mode": "",
     "note": "MOVREUR 0.15 100 99 0.75 1.1 strict 8.88235443 => 11.27 Transactions: 9 | MOVREUR 0.15 100 9 0.75 2 strict 8.888841480000002 => 14.19 Transactions: 77"
   },
-
   "FETEUR": {
     "becameAvailable": "2021-05-01",
     "capital": 100,
@@ -213,21 +211,21 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 9.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.03,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 105,
     "note": "FETEUR 0.1 100 99 0.5 1.9 strict 0 => 22.45 Transactions: 7.5"
   },
   "BONKEUR": {
     "becameAvailable": "20xx-xx-xx",
     "capital": 100,
-    "askBidSpreadPercentage": 0.04,
+    "askBidSpreadPercentage": 0.05,
     "mode": "",
     "note": "BONKEUR 0.1 100 99 0.75 1.1 strict => 9.16 Transactions: 8.5 | BONKEUR 0.1 100 9 0.75 12 strict => 19.94 Transactions: 31"
   },
   "FLOKIEUR": {
     "becameAvailable": "20xx-xx-xx",
     "capital": 100,
-    "askBidSpreadPercentage": 0.13,
+    "askBidSpreadPercentage": 0.14,
     "mode": "",
     "note": "FLOKIEUR 0.13 100 9 0.25 3.5 strict => 13.95 Transactions: 66"
   },
@@ -238,7 +236,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 0.93,
+    "askBidSpreadPercentage": 0.15,
     "earnings": 10,
     "note": "PENDLEEUR 0.93 100 99 0.5 1.5 strict => 9.83 Transactions: 7.5 | PENDLEEUR 0.93 100 9 0.5 3 strict => 10.7 Transactions: 40.5 | PENDLEEUR 0.93 100 9 0.5 7 strict => 16.16 Transactions: 30.5"
   },
@@ -249,12 +247,12 @@
     "strategyRange": 2,
     "pricePercentageChange": 11,
     "mode": "",
-    "askBidSpreadPercentage": 0.11,
+    "askBidSpreadPercentage": 0.22,
     "earnings": 130,
     "note": "GMXEUR 0.11 100 99 0.5 1.2 strict 3.07306463 => 9.2 Transactions: 8 | GMXEUR 0.11 100 9 0.5 4 strict 2.9988622599999997 => 14.74 Transactions: 56"
   },
   "IMXEUR": {
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.14,
     "note": "IMXEUR 0.1 100 4.9 0.5 4 strict => 9.35 Transactions: 59"
   },
   "SOLEUR": {
@@ -264,7 +262,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 145,
     "note": "SOLEUR 0.1 100 99 3 3 => 4.29 Transactions: 6"
   },
@@ -275,11 +273,11 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 8,
     "mode": "",
-    "askBidSpreadPercentage": 0.09,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 90,
     "note": "SEIEUR 0.1 100 99 0.25 1.2 strict => 9.83 Transactions: 10 | SEIEUR 0.1 100 4.9 0.25 9.5 strict => 9 Transactions: 37"
   },
-  "ARPAEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 2.37, "mode": "" },
+  "ARPAEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.13, "mode": "" },
   "ZROEUR": {
     "becameAvailable": "2020-08-01",
     "capital": 100,
@@ -287,7 +285,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 9,
     "mode": "",
-    "askBidSpreadPercentage": 0.13,
+    "askBidSpreadPercentage": 0.05,
     "transactions": 0,
     "earnings": 100,
     "note": "Can not find its chart on Kreken"
@@ -299,7 +297,7 @@
     "strategyRange": 5,
     "pricePercentageChange": 15,
     "mode": "",
-    "askBidSpreadPercentage": 0.01,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 17,
     "note": "With €100, €9, 6, 16% return €18 | With €500, €249, 5, 16% return €97"
   },
@@ -310,7 +308,7 @@
     "strategyRange": 3,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 10,
     "note": "XRPEUR 0.1 100 9 3 4 strict => 10.11 Transactions: 39 | XRPEUR 0.1 500 19 3 4 strict => 48.98 Transactions: 88"
   },
@@ -321,7 +319,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 0.01,
+    "askBidSpreadPercentage": 0.12,
     "earnings": 110
   },
   "XLMEUR": {
@@ -331,19 +329,19 @@
     "strategyRange": 3,
     "pricePercentageChange": 10,
     "mode": "",
-    "askBidSpreadPercentage": 0.01,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 105
   },
-  "FILEUR": { "askBidSpreadPercentage": 0.01 },
-  "LINKEUR": { "askBidSpreadPercentage": 0.01 },
-  "LTCEUR": { "askBidSpreadPercentage": 0.01 },
-  "BCHEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.01, "mode": "" },
-  "DAIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.01, "mode": "" },
-  "DOTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.01, "mode": "" },
-  "MATICEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.01, "mode": "" },
-  "NEAREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.01, "mode": "" },
-  "USDCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.01, "mode": "" },
-  "USDTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.01, "mode": "" },
+  "FILEUR": { "askBidSpreadPercentage": 0.05 },
+  "LINKEUR": { "askBidSpreadPercentage": 0.05 },
+  "LTCEUR": { "askBidSpreadPercentage": 0.05 },
+  "BCHEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "DAIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "DOTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "MATICEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "NEAREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.11, "mode": "" },
+  "USDCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "USDTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
   "APTEUR": {
     "becameAvailable": "2022-12-01",
     "capital": 100,
@@ -351,7 +349,7 @@
     "strategyRange": 2,
     "pricePercentageChange": 8,
     "mode": "",
-    "askBidSpreadPercentage": 0.02,
+    "askBidSpreadPercentage": 0.05,
     "transactions": 1.5,
     "earnings": 20,
     "note": "With €100, €9, 28% return €20 | With €500, €9, 2, 8% return €103"
@@ -363,11 +361,11 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 60,
     "note": "ICPEUR 0.1 100 99 3 2 strict => 4.75 Transactions: 4.5"
   },
-  "TRXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.02, "mode": "" },
+  "TRXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
   "ARBEUR": {
     "becameAvailable": "2023-04-23",
     "capital": 100,
@@ -375,7 +373,7 @@
     "strategyRange": 3,
     "pricePercentageChange": 24,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.03,
+    "askBidSpreadPercentage": 0.05,
     "transactions": 0.5,
     "earnings": 24,
     "note": "With €500, €9, 3, 24% return €121 | ARBEUR 0.1 100 4.9 0.25 3 strict => 15.02 Transactions: 134.5 | ARBEUR 0.1 100 9 0.5 6 strict => 17 Transactions: 40 | ARBEUR 0.1 100 99 3 24 strict => 20.11 Transactions: 5 | ARBEUR 0.1 100 9 3 24 strict => 24.25 Transactions: 11"
@@ -387,7 +385,7 @@
     "strategyRange": 8,
     "pricePercentageChange": 1.5,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.03,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 12,
     "note": "With €100, €2, 8, 1.3% return €10 | With €500, €2, 8, 1.5% return €85"
   },
@@ -398,7 +396,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 0.03,
+    "askBidSpreadPercentage": 0.11,
     "earnings": 80
   },
   "STXEUR": {
@@ -408,7 +406,7 @@
     "strategyRange": 2,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 0.03,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 55
   },
   "JUPEUR": {
@@ -418,13 +416,13 @@
     "strategyRange": 3,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 0.03,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 55,
     "note": "With €99, 6, 2.5 return €60"
   },
-  "MANAEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.03, "mode": "" },
-  "UNIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.03, "mode": "" },
-  "XMREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.03, "mode": "" },
+  "MANAEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "UNIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "XMREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.14, "mode": "" },
   "ATOMEUR": {
     "becameAvailable": "2019-03-14",
     "capital": 100,
@@ -432,12 +430,12 @@
     "strategyRange": 3,
     "pricePercentageChange": 20,
     "mode": "strict",
-    "askBidSpreadPercentage": 0.04,
+    "askBidSpreadPercentage": 0.05,
     "transactions": 0.5,
     "earnings": 20,
     "note": "With €500, €9, 3, 20% return €100 | With €500, €9, 4, 22% return €104"
   },
-  "EGLDEUR": { "askBidSpreadPercentage": 0.04 },
+  "EGLDEUR": { "askBidSpreadPercentage": 0.05 },
   "ZECEUR": {
     "becameAvailable": "2016-10-01",
     "capital": 100,
@@ -445,7 +443,7 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 12,
     "mode": "",
-    "askBidSpreadPercentage": 0.04,
+    "askBidSpreadPercentage": 0.15,
     "earnings": 215,
     "note": "With €99, 12, 0.5 return €300"
   },
@@ -456,7 +454,7 @@
     "strategyRange": 3,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 0.04,
+    "askBidSpreadPercentage": 0.17,
     "earnings": 70
   },
   "GRTEUR": {
@@ -466,7 +464,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.04,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 70,
     "note": "GRTEUR 0.1 100 99 0.25 1.1 strict 487.19753153 => 7.51 Transactions: 11.5 | GRTEUR 0.1 100 9 0.5 5 strict 486.31189374999997 => 10.05 Transactions: 39"
   },
@@ -477,15 +475,15 @@
     "strategyRange": 2,
     "pricePercentageChange": 5.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.04,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 65,
     "note": "SHIBEUR 0.1 100 99 0.5 1.8 strict 5790462.46493553 => 8.02 Transactions: 6 | SHIBEUR 0.1 100 9 0.25 3 strict 5687646.77758172 => 9.87 Transactions: 70"
   },
-  "EOSEUR": { "askBidSpreadPercentage": 0.04 },
-  "FTMEUR": { "askBidSpreadPercentage": 0.04 },
-  "COMPEUR": { "becameAvailable": "2021-06-01", "capital": 100, "askBidSpreadPercentage": 0.04, "mode": "" },
-  "MKREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.04, "mode": "" },
-  "SANDEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.04, "mode": "" },
+  "EOSEUR": { "askBidSpreadPercentage": 0.05 },
+  "FTMEUR": { "askBidSpreadPercentage": 0.12 },
+  "COMPEUR": { "becameAvailable": "2021-06-01", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "MKREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.11, "mode": "" },
+  "SANDEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
   "ALGOEUR": {
     "becameAvailable": "2019-06-19",
     "capital": 100,
@@ -493,7 +491,7 @@
     "strategyRange": 1,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 0.05,
+    "askBidSpreadPercentage": 0.11,
     "earnings": 60
   },
   "BANDEUR": {
@@ -503,12 +501,12 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 8,
     "mode": "",
-    "askBidSpreadPercentage": 0.05,
+    "askBidSpreadPercentage": 0.15,
     "earnings": 100
   },
-  "LDOEUR": { "askBidSpreadPercentage": 0.05 },
-  "DYDXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
-  "XTZEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "LDOEUR": { "askBidSpreadPercentage": 0.1 },
+  "DYDXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.11, "mode": "" },
+  "XTZEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.13, "mode": "" },
   "ZETAEUR": {
     "becameAvailable": "2022-04-01",
     "capital": 100,
@@ -516,7 +514,7 @@
     "strategyRange": 1,
     "pricePercentageChange": 9,
     "mode": "",
-    "askBidSpreadPercentage": 0.06,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 115
   },
   "BATEUR": {
@@ -526,7 +524,7 @@
     "strategyRange": 0.75,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 0.06,
+    "askBidSpreadPercentage": 0.14,
     "earnings": 60
   },
   "REQEUR": {
@@ -536,16 +534,16 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 0.06,
+    "askBidSpreadPercentage": 0.12,
     "earnings": 55
   },
-  "KNCEUR": { "askBidSpreadPercentage": 0.06 },
+  "KNCEUR": { "askBidSpreadPercentage": 0.12 },
   "KSMEUR": {
-    "askBidSpreadPercentage": 0.06,
+    "askBidSpreadPercentage": 0.11,
     "note": "KSMEUR 0.1 100 99 0.5 1.1 strict 4.12259687 => 8.24 Transactions: 6.5 | KSMEUR 0.1 100 9 0.5 4 strict 4.11745066 => 10.38 Transactions: 29"
   },
-  "LMWREUR": { "askBidSpreadPercentage": 0.06 },
-  "OCEANEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.06, "mode": "" },
+  "LMWREUR": { "askBidSpreadPercentage": 0.11 },
+  "OCEANEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
   "BADGEREUR": {
     "becameAvailable": "2020-12-03",
     "capital": 100,
@@ -553,7 +551,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.07,
+    "askBidSpreadPercentage": 0.11,
     "earnings": 115
   },
   "BLUREUR": {
@@ -563,7 +561,7 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 9,
     "mode": "",
-    "askBidSpreadPercentage": 0.07,
+    "askBidSpreadPercentage": 0.12,
     "earnings": 145
   },
   "TRUEUR": {
@@ -573,7 +571,7 @@
     "strategyRange": 2,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 0.07,
+    "askBidSpreadPercentage": 1.04,
     "earnings": 95,
     "note": "With €49, 3, 2 return €100"
   },
@@ -584,7 +582,7 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.07,
+    "askBidSpreadPercentage": 0.17,
     "earnings": 90
   },
   "ETCEUR": {
@@ -594,7 +592,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.07,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 75,
     "note": "With €49, 9, 1.5 return €95"
   },
@@ -605,7 +603,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 2,
     "mode": "",
-    "askBidSpreadPercentage": 0.07,
+    "askBidSpreadPercentage": 0.12,
     "earnings": 60
   },
   "KEYEUR": {
@@ -615,16 +613,15 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 0.07,
+    "askBidSpreadPercentage": 0.21,
     "earnings": 55
   },
-  "KAVAEUR": { "askBidSpreadPercentage": 0.07 },
-  "OMGEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.07, "mode": "" },
-  "QTUMEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.07, "mode": "" },
-  "SNXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.07, "mode": "" },
-  "WOOEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.07, "mode": "" },
-  "YFIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.07, "mode": "" },
-
+  "KAVAEUR": { "askBidSpreadPercentage": 0.11 },
+  "OMGEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.27, "mode": "" },
+  "QTUMEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.13, "mode": "" },
+  "SNXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
+  "WOOEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.13, "mode": "" },
+  "YFIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.12, "mode": "" },
   "AXSEUR": {
     "becameAvailable": "2020-11-04",
     "capital": 100,
@@ -632,7 +629,7 @@
     "strategyRange": 1,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.08,
+    "askBidSpreadPercentage": 0.11,
     "earnings": 80
   },
   "MNTEUR": {
@@ -642,7 +639,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 6.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.08,
+    "askBidSpreadPercentage": 0.14,
     "earnings": 75
   },
   "MASKEUR": {
@@ -652,10 +649,10 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 5.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.08,
+    "askBidSpreadPercentage": 0.16,
     "earnings": 70
   },
-  "PAXGEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.08, "mode": "" },
+  "PAXGEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.15, "mode": "" },
   "ALPHAEUR": {
     "becameAvailable": "2021-08-01",
     "capital": 100,
@@ -663,7 +660,7 @@
     "strategyRange": 1,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 0.09,
+    "askBidSpreadPercentage": 0.4,
     "earnings": 160
   },
   "SUPEREUR": {
@@ -673,12 +670,12 @@
     "strategyRange": 2,
     "pricePercentageChange": 8,
     "mode": "",
-    "askBidSpreadPercentage": 0.09,
+    "askBidSpreadPercentage": 0.17,
     "earnings": 90,
     "note": "With €49, 8, 2 return €95"
   },
-  "ENSEUR": { "askBidSpreadPercentage": 0.09 },
-  "SUSHIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.09, "mode": "" },
+  "ENSEUR": { "askBidSpreadPercentage": 0.15 },
+  "SUSHIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.15, "mode": "" },
   "UNFIEUR": {
     "becameAvailable": "2021-03-01",
     "capital": 100,
@@ -686,7 +683,7 @@
     "strategyRange": 2,
     "pricePercentageChange": 12.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.25,
     "earnings": 160
   },
   "LPTEUR": {
@@ -696,7 +693,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 11,
     "mode": "",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 140
   },
   "XDGEUR": {
@@ -706,14 +703,14 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 8,
     "mode": "",
-    "askBidSpreadPercentage": 0.1,
+    "askBidSpreadPercentage": 0.05,
     "earnings": 90
   },
-  "FLOWEUR": { "askBidSpreadPercentage": 0.1 },
+  "FLOWEUR": { "askBidSpreadPercentage": 0.15 },
   "BLZEUR": { "becameAvailable": "2021-03-01", "capital": 100, "askBidSpreadPercentage": 0.1, "mode": "" },
-  "DASHEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.1, "mode": "" },
-  "WBTCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.1, "mode": "" },
-  "CHZEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.1, "mode": "" },
+  "DASHEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.15, "mode": "" },
+  "WBTCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.14, "mode": "" },
+  "CHZEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.15, "mode": "" },
   "EWTEUR": {
     "becameAvailable": "2022-01-01",
     "capital": 100,
@@ -721,11 +718,11 @@
     "strategyRange": 1,
     "pricePercentageChange": 4.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.11,
+    "askBidSpreadPercentage": 0.81,
     "earnings": 165,
     "note": "With €99, 2, 1 return €180"
   },
-  "ETHWEUR": { "askBidSpreadPercentage": 0.11 },
+  "ETHWEUR": { "askBidSpreadPercentage": 0.28 },
   "STGEUR": {
     "becameAvailable": "2020-09-01",
     "capital": 100,
@@ -733,7 +730,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 12.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.12,
+    "askBidSpreadPercentage": 0.86,
     "earnings": 160
   },
   "LUNA2EUR": {
@@ -743,7 +740,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 9.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.12,
+    "askBidSpreadPercentage": 0.22,
     "earnings": 110
   },
   "MINAEUR": {
@@ -753,20 +750,20 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 6.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.12,
+    "askBidSpreadPercentage": 0.18,
     "earnings": 75,
     "note": "MINAEUR 0.12 100 99 0.5 1.1 strict 178.8736295 => 8.82 Transactions: 6 | MINAEUR 0.12 100 9 0.5 2 strict 178.30191063 => 9.59 Transactions: 56"
   },
-  "FXSEUR": { "askBidSpreadPercentage": 0.12 },
-  "ICXEUR": { "askBidSpreadPercentage": 0.12 },
+  "FXSEUR": { "askBidSpreadPercentage": 0.14 },
+  "ICXEUR": { "askBidSpreadPercentage": 0.14 },
   "CTSIEUR": {
     "becameAvailable": "2022-11-01",
     "capital": 100,
-    "askBidSpreadPercentage": 0.12,
+    "askBidSpreadPercentage": 0.22,
     "mode": "",
     "note": "CTSIEUR 0.12 100 4.9 0.75 5 strict => 11.16 Transactions: 45 | CTSIEUR 0.12 500 19 0.75 5 strict => 54.31 Transactions: 57 | CTSIEUR 0.12 500 32 0.75 5 strict => 57.32 Transactions: 35"
   },
-  "RENEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.12, "mode": "" },
+  "RENEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.32, "mode": "" },
   "ORCAEUR": {
     "becameAvailable": "2021-10-01",
     "capital": 100,
@@ -774,7 +771,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 7.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.13,
+    "askBidSpreadPercentage": 0.19,
     "earnings": 95
   },
   "LSKEUR": {
@@ -784,12 +781,12 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 5.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.13,
+    "askBidSpreadPercentage": 0.17,
     "earnings": 60,
     "note": "LSKEUR 0.13 100 99 0.25 1.1 strict 91.37843539 => 7.3 Transactions: 8.5 | LSKEUR 0.13 100 9 0.25 2 strict 91.62623545 => 10.08 Transactions: 63.5 | LSKEUR 0.13 100 9 0.25 3 strict 92.46139797 => 11.04 Transactions: 51.5"
   },
-  "DENTEUR": { "becameAvailable": "2022-04-01", "capital": 100, "askBidSpreadPercentage": 0.15, "mode": "" },
-  "DYMEUR": { "becameAvailable": "2022-01-01", "capital": 100, "askBidSpreadPercentage": 0.16, "mode": "" },
+  "DENTEUR": { "becameAvailable": "2022-04-01", "capital": 100, "askBidSpreadPercentage": 0.21, "mode": "" },
+  "DYMEUR": { "becameAvailable": "2022-01-01", "capital": 100, "askBidSpreadPercentage": 0.21, "mode": "" },
   "ZRXEUR": {
     "becameAvailable": "2017-08-01",
     "capital": 100,
@@ -797,10 +794,10 @@
     "strategyRange": 2,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 0.17,
+    "askBidSpreadPercentage": 0.24,
     "earnings": 75
   },
-  "CRVEUR": { "becameAvailable": "2020-08-01", "capital": 100, "askBidSpreadPercentage": 0.17, "mode": "" },
+  "CRVEUR": { "becameAvailable": "2020-08-01", "capital": 100, "askBidSpreadPercentage": 0.25, "mode": "" },
   "TEEREUR": {
     "becameAvailable": "2021-10-01",
     "capital": 100,
@@ -808,13 +805,13 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.18,
+    "askBidSpreadPercentage": 0.24,
     "earnings": 85
   },
   "COTIEUR": {
     "becameAvailable": "20xx-xx-xx",
     "capital": 100,
-    "askBidSpreadPercentage": 0.18,
+    "askBidSpreadPercentage": 0.12,
     "mode": "",
     "note": "COTIEUR 0.2 100 4.9 0.25 3 strict => 13.19 Transactions: 131"
   },
@@ -825,11 +822,11 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 10,
     "mode": "",
-    "askBidSpreadPercentage": 0.2,
+    "askBidSpreadPercentage": 0.26,
     "earnings": 125,
     "note": "SPELLEUR 0.1 100 99 0.75 1.2 strict 143148.21088594 => 11.2 Transactions: 7.5 | SPELLEUR 0.1 100 9 0.75 3 strict 143627.18705541 => 12.77 Transactions: 44"
   },
-  "RLCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.2, "mode": "" },
+  "RLCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.19, "mode": "" },
   "1INCHEUR": {
     "becameAvailable": "2021-08-01",
     "capital": 100,
@@ -837,11 +834,11 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 0.21,
+    "askBidSpreadPercentage": 0.28,
     "earnings": 80,
     "note": "1INCHEUR 0.21 100 99 0.25 1.1  230.50054987 => 13.16 Transactions: 13.5 | 1INCHEUR 0.21 100 99 0.5 1.3  231.90736074 => 15.34 Transactions: 13.5 | 1INCHEUR 0.21 100 99 0.25 1.2 strict 230.33932309 => 10.92 Transactions: 13 | 1INCHEUR 0.21 100 9 0.25 5 strict 235.66118366000003 => 17.82 Transactions: 66"
   },
-  "BNTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.22, "mode": "" },
+  "BNTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.28, "mode": "" },
   "BONDEUR": {
     "becameAvailable": "2022-08-01",
     "capital": 100,
@@ -849,7 +846,7 @@
     "strategyRange": 2,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 0.23,
+    "askBidSpreadPercentage": 0.47,
     "earnings": 70
   },
   "SGBEUR": {
@@ -859,10 +856,10 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 0.24,
+    "askBidSpreadPercentage": 0.36,
     "earnings": 170
   },
-  "OXTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.24, "mode": "" },
+  "OXTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.27, "mode": "" },
   "NANOEUR": {
     "becameAvailable": "2015-03-01",
     "capital": 100,
@@ -870,10 +867,10 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 8.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.25,
+    "askBidSpreadPercentage": 0.29,
     "earnings": 180
   },
-  "FLREUR": { "askBidSpreadPercentage": 0.26 },
+  "FLREUR": { "askBidSpreadPercentage": 0.12 },
   "BALEUR": {
     "becameAvailable": "2020-06-23",
     "capital": 100,
@@ -881,10 +878,10 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.27,
+    "askBidSpreadPercentage": 0.35,
     "earnings": 80
   },
-  "SCRTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.27, "mode": "" },
+  "SCRTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.68, "mode": "" },
   "LUNAEUR": {
     "becameAvailable": "2019-08-01",
     "capital": 100,
@@ -892,7 +889,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 12,
     "mode": "",
-    "askBidSpreadPercentage": 0.3,
+    "askBidSpreadPercentage": 0.63,
     "earnings": 230
   },
   "GLMREUR": {
@@ -902,11 +899,10 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 0.3,
+    "askBidSpreadPercentage": 0.74,
     "earnings": 90,
     "note": "With €99, 4, 1 return €100"
   },
-
   "EURTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.3, "mode": "" },
   "RAREEUR": {
     "becameAvailable": "2021-06-01",
@@ -915,7 +911,7 @@
     "strategyRange": 0.75,
     "pricePercentageChange": 9,
     "mode": "",
-    "askBidSpreadPercentage": 0.32,
+    "askBidSpreadPercentage": 0.21,
     "earnings": 0,
     "note": "less then €1"
   },
@@ -926,7 +922,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 0.33,
+    "askBidSpreadPercentage": 0.39,
     "earnings": 65
   },
   "ETHFIEUR": {
@@ -936,7 +932,7 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 11,
     "mode": "",
-    "askBidSpreadPercentage": 0.34,
+    "askBidSpreadPercentage": 0.39,
     "earnings": 140
   },
   "GTCEUR": {
@@ -946,7 +942,7 @@
     "strategyRange": 12.5,
     "pricePercentageChange": 9,
     "mode": "",
-    "askBidSpreadPercentage": 0.34,
+    "askBidSpreadPercentage": 1.4,
     "earnings": 95
   },
   "PERPEUR": {
@@ -956,7 +952,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 5.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.34,
+    "askBidSpreadPercentage": 0.54,
     "earnings": 70
   },
   "ENJEUR": {
@@ -966,13 +962,13 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 5.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.38,
+    "askBidSpreadPercentage": 0.85,
     "earnings": 60
   },
-  "HONEYEUR": { "askBidSpreadPercentage": 0.41 },
-  "NYMEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.41, "mode": "" },
-  "GMTEUR": { "askBidSpreadPercentage": 0.47 },
-  "CVXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.47, "mode": "" },
+  "HONEYEUR": { "askBidSpreadPercentage": 0.38 },
+  "NYMEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.32, "mode": "" },
+  "GMTEUR": { "askBidSpreadPercentage": 0.53 },
+  "CVXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.58, "mode": "" },
   "C98EUR": {
     "becameAvailable": "2021-07-01",
     "capital": 100,
@@ -980,7 +976,7 @@
     "strategyRange": 3,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.48,
+    "askBidSpreadPercentage": 1.43,
     "earnings": 80
   },
   "AGLDEUR": {
@@ -990,11 +986,11 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 0.55,
+    "askBidSpreadPercentage": 0.39,
     "earnings": 135
   },
-  "GHSTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.55, "mode": "" },
-  "BOBAEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.56, "mode": "" },
+  "GHSTEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.58, "mode": "" },
+  "BOBAEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.6, "mode": "" },
   "ATLASEUR": {
     "becameAvailable": "2021-03-01",
     "capital": 100,
@@ -1002,10 +998,10 @@
     "strategyRange": 1.75,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 0.6,
+    "askBidSpreadPercentage": 0.35,
     "earnings": 70
   },
-  "LCXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.61, "mode": "" },
+  "LCXEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.27, "mode": "" },
   "KAREUR": {
     "becameAvailable": "2021-02-01",
     "capital": 100,
@@ -1013,7 +1009,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 10,
     "mode": "",
-    "askBidSpreadPercentage": 0.74,
+    "askBidSpreadPercentage": 1.9,
     "earnings": 120
   },
   "REPV2EUR": {
@@ -1023,7 +1019,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 0.77,
+    "askBidSpreadPercentage": 1.89,
     "earnings": 120,
     "note": "With €99, 6, 2.5 return €145"
   },
@@ -1034,12 +1030,12 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 4.8,
     "mode": "",
-    "askBidSpreadPercentage": 0.79,
+    "askBidSpreadPercentage": 1.27,
     "earnings": 200,
     "note": "With €99, 4.8, 2.5 return €255"
   },
-  "EULEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.86, "mode": "" },
-  "CFGEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.87, "mode": "" },
+  "EULEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.62, "mode": "" },
+  "CFGEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.05, "mode": "" },
   "PHAEUR": {
     "becameAvailable": "2020-08-01",
     "capital": 100,
@@ -1047,7 +1043,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 0.91,
+    "askBidSpreadPercentage": 0.46,
     "earnings": 60,
     "note": "PHAEUR 0.91 100 99 0.25 1.1 strict 659.7661349 => 5.9 Transactions: 7.5 | PHAEUR 0.91 100 4.9 0.25 4 strict 725.42024873 => 16.8 Transactions: 85"
   },
@@ -1058,12 +1054,12 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 9,
     "mode": "",
-    "askBidSpreadPercentage": 1.07,
+    "askBidSpreadPercentage": 2.9,
     "earnings": 140,
     "note": "With €99, 9, 2.5 return €190"
   },
-  "WENEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.07, "mode": "" },
-  "RARIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.11, "mode": "" },
+  "WENEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.7, "mode": "" },
+  "RARIEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.36, "mode": "" },
   "KUJIEUR": {
     "becameAvailable": "2022-09-01",
     "capital": 100,
@@ -1071,10 +1067,10 @@
     "strategyRange": 2,
     "pricePercentageChange": 2,
     "mode": "",
-    "askBidSpreadPercentage": 1.16,
+    "askBidSpreadPercentage": 1.27,
     "earnings": 145
   },
-  "BODENEUR": { "becameAvailable": "2022-05-01", "capital": 100, "askBidSpreadPercentage": 1.17, "mode": "" },
+  "BODENEUR": { "becameAvailable": "2022-05-01", "capital": 100, "askBidSpreadPercentage": 2.32, "mode": "" },
   "BTTEUR": {
     "becameAvailable": "2021-01-01",
     "capital": 100,
@@ -1082,10 +1078,10 @@
     "strategyRange": 2,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 1.18,
+    "askBidSpreadPercentage": 0.71,
     "earnings": 70
   },
-  "CHREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.34, "mode": "" },
+  "CHREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.61, "mode": "" },
   "MCEUR": {
     "becameAvailable": "2022-07-01",
     "capital": 100,
@@ -1093,10 +1089,10 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 10,
     "mode": "",
-    "askBidSpreadPercentage": 1.45,
+    "askBidSpreadPercentage": 6.55,
     "earnings": 205
   },
-  "TUSDEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.48, "mode": "" },
+  "TUSDEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.93, "mode": "" },
   "AKTEUR": {
     "becameAvailable": "2022-08-01",
     "capital": 100,
@@ -1104,7 +1100,7 @@
     "strategyRange": 1.25,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 1.58,
+    "askBidSpreadPercentage": 0.69,
     "earnings": 60,
     "note": "With €9, 7, 1 return €70"
   },
@@ -1115,7 +1111,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 1.59,
+    "askBidSpreadPercentage": 2.38,
     "earnings": 295,
     "note": "With €9, 3, 0.25 return €260"
   },
@@ -1126,11 +1122,11 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 1.72,
+    "askBidSpreadPercentage": 1.39,
     "earnings": 220,
     "note": "With €19, 4, 2 return €180"
   },
-  "MOONEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.81, "mode": "" },
+  "MOONEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 2.05, "mode": "" },
   "SBREUR": {
     "becameAvailable": "2020-03-01",
     "capital": 100,
@@ -1138,10 +1134,10 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 1.95,
+    "askBidSpreadPercentage": 0.72,
     "earnings": 195
   },
-  "CVCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 2, "mode": "" },
+  "CVCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 0.78, "mode": "" },
   "MNGOEUR": {
     "becameAvailable": "2020-07-01",
     "capital": 100,
@@ -1149,7 +1145,7 @@
     "strategyRange": 2,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 2.04,
+    "askBidSpreadPercentage": 1.81,
     "earnings": 160
   },
   "HNTEUR": {
@@ -1159,7 +1155,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 2.06,
+    "askBidSpreadPercentage": 1.37,
     "earnings": 200
   },
   "MPLEUR": {
@@ -1169,7 +1165,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 5.8,
     "mode": "",
-    "askBidSpreadPercentage": 2.13,
+    "askBidSpreadPercentage": 2.07,
     "earnings": 130
   },
   "SAMOEUR": {
@@ -1179,7 +1175,7 @@
     "strategyRange": 1,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 2.14,
+    "askBidSpreadPercentage": 2.82,
     "earnings": 170
   },
   "JUNOEUR": {
@@ -1189,7 +1185,7 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 2.15,
+    "askBidSpreadPercentage": 1.85,
     "earnings": 190,
     "note": "With €99,  4.8, 0.5 return €205"
   },
@@ -1200,10 +1196,10 @@
     "strategyRange": 3,
     "pricePercentageChange": 10,
     "mode": "",
-    "askBidSpreadPercentage": 2.19,
+    "askBidSpreadPercentage": 1.48,
     "earnings": 300
   },
-  "OXYEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 2.47, "mode": "" },
+  "OXYEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.31, "mode": "" },
   "KINEUR": {
     "becameAvailable": "2022-08-01",
     "capital": 100,
@@ -1211,7 +1207,7 @@
     "strategyRange": 1,
     "pricePercentageChange": 2,
     "mode": "",
-    "askBidSpreadPercentage": 2.63,
+    "askBidSpreadPercentage": 0.86,
     "earnings": 445,
     "note": "With €99, 3, 0.5 return €500"
   },
@@ -1222,7 +1218,7 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 2,
     "mode": "",
-    "askBidSpreadPercentage": 2.71,
+    "askBidSpreadPercentage": 2.14,
     "earnings": 60,
     "note": "With €49, 3, 0.5 return €71"
   },
@@ -1233,7 +1229,7 @@
     "strategyRange": 2,
     "pricePercentageChange": 10,
     "mode": "",
-    "askBidSpreadPercentage": 3.05,
+    "askBidSpreadPercentage": 3.49,
     "earnings": 155
   },
   "GNOEUR": {
@@ -1243,7 +1239,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 3.27,
+    "askBidSpreadPercentage": 2.48,
     "earnings": 90
   },
   "KINTEUR": {
@@ -1253,7 +1249,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 3.33,
+    "askBidSpreadPercentage": 2.99,
     "earnings": 260,
     "note": "With €99, 4, 0.25 return €315"
   },
@@ -1264,7 +1260,7 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 3.37,
+    "askBidSpreadPercentage": 2.63,
     "earnings": 125
   },
   "WAXLEUR": {
@@ -1274,7 +1270,7 @@
     "strategyRange": 1,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 3.44,
+    "askBidSpreadPercentage": 1.54,
     "earnings": 155
   },
   "SRMEUR": {
@@ -1284,10 +1280,10 @@
     "strategyRange": 2,
     "pricePercentageChange": 5,
     "mode": "",
-    "askBidSpreadPercentage": 3.45,
+    "askBidSpreadPercentage": 1.9,
     "earnings": 125
   },
-  "FARMEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 3.58, "mode": "" },
+  "FARMEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 3.15, "mode": "" },
   "TVKEUR": {
     "becameAvailable": "2019-09-01",
     "capital": 100,
@@ -1295,10 +1291,10 @@
     "strategyRange": 2,
     "pricePercentageChange": 7,
     "mode": "",
-    "askBidSpreadPercentage": 3.65,
+    "askBidSpreadPercentage": 2.35,
     "earnings": 95
   },
-  "BNCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 3.85, "mode": "" },
+  "BNCEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 3.66, "mode": "" },
   "KEEPEUR": {
     "becameAvailable": "2021-05-01",
     "capital": 100,
@@ -1306,7 +1302,7 @@
     "strategyRange": 3.5,
     "pricePercentageChange": 12,
     "mode": "",
-    "askBidSpreadPercentage": 4.01,
+    "askBidSpreadPercentage": 3.88,
     "earnings": 400,
     "note": "With €49, 7, 0.5 return €460"
   },
@@ -1317,7 +1313,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 4.03,
+    "askBidSpreadPercentage": 4.82,
     "earnings": 390
   },
   "IDEXEUR": {
@@ -1327,7 +1323,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 4.22,
+    "askBidSpreadPercentage": 0.7,
     "earnings": 80
   },
   "BRICKEUR": {
@@ -1337,7 +1333,7 @@
     "strategyRange": 1,
     "pricePercentageChange": 2.5,
     "mode": "",
-    "askBidSpreadPercentage": 4.31,
+    "askBidSpreadPercentage": 1.47,
     "earnings": 425,
     "note": "With €99, 2.8, 1 return €500"
   },
@@ -1348,7 +1344,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 12.8,
     "mode": "",
-    "askBidSpreadPercentage": 4.4,
+    "askBidSpreadPercentage": 2.46,
     "earnings": 170
   },
   "ADXEUR": {
@@ -1358,10 +1354,10 @@
     "strategyRange": 2,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 4.51,
+    "askBidSpreadPercentage": 2.36,
     "earnings": 90
   },
-  "GSTEUR": { "askBidSpreadPercentage": 4.54 },
+  "GSTEUR": { "askBidSpreadPercentage": 4.21 },
   "ACAEUR": {
     "becameAvailable": "2023-06-01",
     "capital": 100,
@@ -1369,7 +1365,7 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 3.7,
     "mode": "",
-    "askBidSpreadPercentage": 4.84,
+    "askBidSpreadPercentage": 2.77,
     "earnings": 160,
     "note": "Causes loss"
   },
@@ -1380,7 +1376,7 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 4.87,
+    "askBidSpreadPercentage": 5.05,
     "earnings": 220
   },
   "PSTAKEEUR": {
@@ -1390,10 +1386,10 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 4.98,
+    "askBidSpreadPercentage": 2.95,
     "earnings": 250
   },
-  "FORTHEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 4.99, "mode": "" },
+  "FORTHEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 4.11, "mode": "" },
   "HDXEUR": {
     "becameAvailable": "2022-11-01",
     "capital": 100,
@@ -1401,10 +1397,10 @@
     "strategyRange": 2.5,
     "pricePercentageChange": 6,
     "mode": "",
-    "askBidSpreadPercentage": 5.22,
+    "askBidSpreadPercentage": 2.01,
     "earnings": 210
   },
-  "MIREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 5.26, "mode": "" },
+  "MIREUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 3.62, "mode": "" },
   "MSOLEUR": {
     "becameAvailable": "2022-04-01",
     "capital": 100,
@@ -1412,7 +1408,7 @@
     "strategyRange": 1.5,
     "pricePercentageChange": 8,
     "mode": "",
-    "askBidSpreadPercentage": 5.41,
+    "askBidSpreadPercentage": 3.32,
     "earnings": 485,
     "note": ""
   },
@@ -1423,7 +1419,7 @@
     "strategyRange": 0.25,
     "pricePercentageChange": 4,
     "mode": "",
-    "askBidSpreadPercentage": 5.88,
+    "askBidSpreadPercentage": 4.34,
     "earnings": 445
   },
   "MULTIEUR": {
@@ -1433,10 +1429,10 @@
     "strategyRange": 0.5,
     "pricePercentageChange": 3,
     "mode": "",
-    "askBidSpreadPercentage": 5.92,
+    "askBidSpreadPercentage": 1.28,
     "earnings": 255
   },
-  "FISEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 6.16, "mode": "" },
+  "FISEUR": { "becameAvailable": "20xx-xx-xx", "capital": 100, "askBidSpreadPercentage": 1.91, "mode": "" },
   "ALICEEUR": {
     "becameAvailable": "2021-07-01",
     "capital": 100,
@@ -1444,9 +1440,84 @@
     "strategyRange": 2,
     "pricePercentageChange": 7.5,
     "mode": "",
-    "askBidSpreadPercentage": 4.46,
+    "askBidSpreadPercentage": 2.06,
     "transactions": 87,
     "earnings": 85,
     "note": "less then €1"
-  }
+  },
+  "ACHEUR": { "askBidSpreadPercentage": 0.12 },
+  "AEVOEUR": { "askBidSpreadPercentage": 0.12 },
+  "AIREUR": { "askBidSpreadPercentage": 2.48 },
+  "ALCXEUR": { "askBidSpreadPercentage": 0.33 },
+  "ANKREUR": { "askBidSpreadPercentage": 0.12 },
+  "APEEUR": { "askBidSpreadPercentage": 0.13 },
+  "ASTREUR": { "askBidSpreadPercentage": 0.23 },
+  "AUCTIONEUR": { "askBidSpreadPercentage": 0.23 },
+  "AVAXEUR": { "askBidSpreadPercentage": 0.05 },
+  "BITEUR": { "askBidSpreadPercentage": 3.88 },
+  "CLOUDEUR": { "askBidSpreadPercentage": 0.54 },
+  "CPOOLEUR": { "askBidSpreadPercentage": 2.94 },
+  "CQTEUR": { "askBidSpreadPercentage": 1.05 },
+  "CXTEUR": { "askBidSpreadPercentage": 0.36 },
+  "DRIFTEUR": { "askBidSpreadPercentage": 1.12 },
+  "JTOEUR": { "askBidSpreadPercentage": 0.38 },
+  "KILTEUR": { "askBidSpreadPercentage": 1.76 },
+  "KMNOEUR": { "askBidSpreadPercentage": 0.23 },
+  "L3EUR": { "askBidSpreadPercentage": 1.66 },
+  "LITEUR": { "askBidSpreadPercentage": 3.18 },
+  "LRCEUR": { "askBidSpreadPercentage": 0.14 },
+  "MEMEEUR": { "askBidSpreadPercentage": 0.28 },
+  "MOGEUR": { "askBidSpreadPercentage": 1.25 },
+  "MVEUR": { "askBidSpreadPercentage": 3.21 },
+  "MXCEUR": { "askBidSpreadPercentage": 0.22 },
+  "NMREUR": { "askBidSpreadPercentage": 0.82 },
+  "NODLEUR": { "askBidSpreadPercentage": 3.3 },
+  "NOSEUR": { "askBidSpreadPercentage": 0.57 },
+  "NTRNEUR": { "askBidSpreadPercentage": 0.34 },
+  "OGNEUR": { "askBidSpreadPercentage": 0.23 },
+  "ONDOEUR": { "askBidSpreadPercentage": 0.13 },
+  "OPEUR": { "askBidSpreadPercentage": 0.05 },
+  "PDAEUR": { "askBidSpreadPercentage": 0.7 },
+  "PEPEEUR": { "askBidSpreadPercentage": 0.05 },
+  "POLEUR": { "askBidSpreadPercentage": 6.26 },
+  "POLISEUR": { "askBidSpreadPercentage": 0.43 },
+  "POLSEUR": { "askBidSpreadPercentage": 4.25 },
+  "PONDEUR": { "askBidSpreadPercentage": 4.21 },
+  "PORTALEUR": { "askBidSpreadPercentage": 0.18 },
+  "POWREUR": { "askBidSpreadPercentage": 0.11 },
+  "PRCLEUR": { "askBidSpreadPercentage": 0.21 },
+  "PRIMEEUR": { "askBidSpreadPercentage": 0.21 },
+  "PYTHEUR": { "askBidSpreadPercentage": 0.11 },
+  "PYUSDEUR": { "askBidSpreadPercentage": 0.63 },
+  "RADEUR": { "askBidSpreadPercentage": 2.44 },
+  "RBCEUR": { "askBidSpreadPercentage": 4.66 },
+  "RENDEREUR": { "askBidSpreadPercentage": 0.17 },
+  "REZEUR": { "askBidSpreadPercentage": 2.49 },
+  "ROOKEUR": { "askBidSpreadPercentage": 2.58 },
+  "RPLEUR": { "askBidSpreadPercentage": 1.59 },
+  "SAFEEUR": { "askBidSpreadPercentage": 0.2 },
+  "SAGAEUR": { "askBidSpreadPercentage": 1.18 },
+  "SCEUR": { "askBidSpreadPercentage": 0.31 },
+  "SDNEUR": { "askBidSpreadPercentage": 0.41 },
+  "STRDEUR": { "askBidSpreadPercentage": 5.34 },
+  "SUIEUR": { "askBidSpreadPercentage": 0.05 },
+  "SYNEUR": { "askBidSpreadPercentage": 0.22 },
+  "TAOEUR": { "askBidSpreadPercentage": 0.18 },
+  "TBTCEUR": { "askBidSpreadPercentage": 3.7 },
+  "TEUR": { "askBidSpreadPercentage": 0.18 },
+  "TIAEUR": { "askBidSpreadPercentage": 0.14 },
+  "TNSREUR": { "askBidSpreadPercentage": 0.14 },
+  "TOKEEUR": { "askBidSpreadPercentage": 0.85 },
+  "TRACEUR": { "askBidSpreadPercentage": 0.17 },
+  "TREMPEUR": { "askBidSpreadPercentage": 6.36 },
+  "TURBOEUR": { "askBidSpreadPercentage": 0.36 },
+  "UMAEUR": { "askBidSpreadPercentage": 0.13 },
+  "USTEUR": { "askBidSpreadPercentage": 0.29 },
+  "WEUR": { "askBidSpreadPercentage": 0.36 },
+  "XBTEUR": { "askBidSpreadPercentage": 0.05 },
+  "XCNEUR": { "askBidSpreadPercentage": 2.45 },
+  "XRTEUR": { "askBidSpreadPercentage": 0.29 },
+  "ZEUSEUR": { "askBidSpreadPercentage": 1.31 },
+  "ZEXEUR": { "askBidSpreadPercentage": 0.2 },
+  "ZKEUR": { "askBidSpreadPercentage": 0.15 }
 }

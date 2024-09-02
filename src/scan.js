@@ -1,54 +1,20 @@
 // prices analysis script;
 
 const { readdirSync } = require("node:fs");
-const { countPriceChanges } = require("./trend-analysis");
+const { calcPercentageDifference } = require("./trend-analysis");
 const currencies = require("./currencies.json");
-const pricesFolderPath = `${process.cwd()}/database/test-prices/`;
-const pairArg = process.argv[2];
-const minProfitPercentage = process.argv[3] || 10;
-const minPercentageChange = process.argv[4] || 1.2;
-const fileNames = pairArg ? [`${pairArg}.json`] : readdirSync(pricesFolderPath);
 
-const cryptocurrenciesPricesChanges = [];
+const pricesFolderPath = `${process.cwd()}/database/prices/`;
+const fileNames = readdirSync(pricesFolderPath);
 
 for (const fileName of fileNames) {
   const pair = fileName.replace(".json", "");
-  let prices = require(`${pricesFolderPath}${fileName}`);
+  const { askPrice, bidPrice, tradePrice } = require(`${pricesFolderPath}${fileName}`)[0];
+  let difference = calcPercentageDifference(bidPrice, askPrice);
+  difference = +((difference < 0.1 ? 0.1 : difference + 0.1) / 2).toFixed(2);
 
-  console.log("There are", prices.length, "prices");
-  if (prices.length < 18000 || currencies[pair].pricesChanges > 0) continue;
-  console.log(`Started prices analysis for "${pair}" with ${prices.length} prices`);
-
-  let percentage = minPercentageChange;
-  let mostChanges = 0;
-  while (percentage <= 25) {
-    const result = countPriceChanges(prices, percentage);
-
-    if (result.changes.at(-1) < 1) result.changes.pop();
-    const pricesChanges = result.changes.filter((p) => p < -1).length / 2;
-    if (mostChanges < pricesChanges) mostChanges = pricesChanges;
-
-    const estimateProfitPercentage = parseInt(percentage * pricesChanges);
-
-    // if (estimateProfitPercentage >= minProfitPercentage) {
-    //   console.log(
-    //     "Pair:",
-    //     pair,
-    //     "Percentage:",
-    //     +percentage.toFixed(2),
-    //     "PricesChanges:",
-    //     pricesChanges,
-    //     "AvgPeriod:",
-    //     result.avgPeriod,
-    //     "EstimateProfitPercentage",
-    //     estimateProfitPercentage
-    //   );
-    // }
-    percentage += percentage < 2 ? 0.1 : 0.5;
-  }
-  cryptocurrenciesPricesChanges.push({ pair, changes: mostChanges });
+  if (!currencies[pair]) currencies[pair] = { askBidSpreadPercentage: difference };
+  else currencies[pair].askBidSpreadPercentage = difference;
 }
 
-console.log(
-  JSON.stringify(cryptocurrenciesPricesChanges.sort((a, b) => b.changes - a.changes).map((item) => item.pair))
-);
+console.log(JSON.stringify(currencies));
