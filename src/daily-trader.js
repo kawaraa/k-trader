@@ -79,11 +79,6 @@ module.exports = class DailyTrader {
       if (this.#mode.includes("near-low")) {
         const lowestAsk = askPrices.toSorted()[0];
         shouldBuy = calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
-
-        if (shouldBuy && this.#capital <= totalInvestedAmount + this.#investingCapital * 2) {
-          const order = orders.find((o) => 0.5 <= calcPercentageDifference(o.price, bidPrice));
-          if (order) await this.#sell(order, balance.crypto, bidPrice);
-        }
       }
 
       if (this.#mode.includes("partly-trade")) {
