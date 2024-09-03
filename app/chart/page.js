@@ -15,23 +15,23 @@ export default function CryptoChart() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [prices, setPrices] = useState([]);
+  const [since, setSince] = useState(0);
 
   const labels = [];
   const askPrices = [];
   const tradePrices = [];
   const bidPrices = [];
 
-  prices.forEach((p, i) => {
+  const sinceDate = new Date(since);
+  const ops = { hour12: false };
+  prices.forEach((p) => {
     tradePrices.push(p.tradePrice);
     askPrices.push(p.askPrice);
     bidPrices.push(p.bidPrice);
+    sinceDate.setMinutes(sinceDate.getMinutes() + 5);
     labels.push(
-      i * 5 < 60
-        ? parseInt(i * 5) + " M"
-        : i * 5 < 1440
-        ? parseInt((i * 5) / 60) + " H"
-        : ((i * 5) / 60 / 24).toFixed(1) + " D"
-    ); // Time labels
+      `${sinceDate.toJSON().substring(5, 10)} ${sinceDate.toLocaleTimeString([], ops).substring(0, 5)}`
+    );
   });
 
   const changePair = (p) => router.push(`/chart?pair=${p}`);
@@ -39,7 +39,12 @@ export default function CryptoChart() {
   const fetchPrices = async (pair) => {
     setLoading(true);
     try {
-      if (pair) setPrices(await request(`/api/prices/${pair}.json`));
+      const { prices, since } = await request(`/api/prices/${pair}`);
+
+      if (pair) {
+        setPrices(prices);
+        setSince(since);
+      }
     } catch (error) {
       setError(error.message);
     }

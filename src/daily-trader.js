@@ -73,15 +73,25 @@ module.exports = class DailyTrader {
       );
       // 💰 📊
 
+      // high-drop
       let shouldBuy = calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 1.2);
 
-      if (this.#mode == "strict") {
+      if (this.#mode.includes("near-low")) {
         const lowestAsk = askPrices.toSorted()[0];
         shouldBuy = calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
 
         if (shouldBuy && this.#capital <= totalInvestedAmount + this.#investingCapital * 2) {
           const order = orders.find((o) => 0.5 <= calcPercentageDifference(o.price, bidPrice));
           if (order) await this.#sell(order, balance.crypto, bidPrice);
+        }
+      }
+
+      if (this.#mode.includes("partly-trade")) {
+        // Pause buying if the bidPrice is higher then price of the last Order In the first or second Part
+        const thirdIndex = Math.round(this.#capital / this.#investingCapital / 3);
+        const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex - 1] || {};
+        if (price && -(this.#percentageThreshold / 2) < calcPercentageDifference(price, bidPrice)) {
+          shouldBuy = false;
         }
       }
 
@@ -135,19 +145,6 @@ module.exports = class DailyTrader {
 };
 
 /*
-========== Old code ==========
-
-// const lowerOrder = calcPercentageDifference(lastOrder.price, askPrice) < -this.#percentageThreshold;
-// if (!lowerOrder) shouldBuy = false;
-// else if (balance.eur < this.#investingCapital) {
-//   // console.log("lowerPrice", calcPercentageDifference(lastOrder.price, askPrice));
-//   // console.log(oldestOrder);
-//   await this.#sell(oldestOrder, balance.crypto, bidPrice);
-// }
-// if (highestPriceChange >= this.#percentageThreshold * 2) {
-//   shouldBuy =
-//     calcPercentageDifference(Math.max(highestAsk, highestBidPr), askPrice) <= -highestPriceChange;
-// }
 
 // // ========== Prices Changes Tests ==========
 // if (calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 2)) {
@@ -163,4 +160,5 @@ module.exports = class DailyTrader {
 //   this.lastPrice = bidPrice;
 //   console.log("profit", this.profit);
 // }
+
 */

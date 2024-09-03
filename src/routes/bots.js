@@ -4,7 +4,6 @@ const { parseError, isValidPair, isNumber } = require("../utilities");
 module.exports = (router, fireStoreProvider, authRequired, production) => {
   router.get("/bots", authRequired, async (request, response) => {
     try {
-      // const { pair } = req.params; // Todo: pass the pair as param
       const { pair } = request.query;
       const token = request.cookies?.idToken;
       if (pair) isValidPair(pair, true);
@@ -90,6 +89,17 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
+  router.put("/bots/orders", authRequired, async (request, response) => {
+    try {
+      const { pair } = request.query;
+      isValidPair(pair, true);
+      await BotsManager.sellAllOrders(pair);
+      response.json({ success: true });
+    } catch (error) {
+      response.status(500).json({ message: parseError(error) });
+    }
+  });
+
   router.get("/bots/logs", authRequired, async (request, response) => {
     try {
       const { pair } = request.query;
@@ -109,15 +119,11 @@ class BotInfo {
     this.investment = this.setNumber(info.investment, 1, "investment", true);
     this.priceChange = this.setNumber(info.priceChange, 1.1, "priceChange", true);
     this.strategyRange = this.setNumber(info.strategyRange, 0.25, "strategyRange", true);
-    this.mode = this.validateMode(info.mode);
+    this.mode = info.mode;
     this.timeInterval = this.setNumber(info.timeInterval, 3, "timeInterval", true);
   }
   setNumber(value, minValue, name, throwError) {
     if (isNumber(value, minValue)) return value;
     if (throwError) throw new Error(`"${value}" is invalid ${name}.`);
-  }
-  validateMode(value) {
-    if (["strict", "non-strict"].includes(value)) return value;
-    throw new Error(`"${value}" is invalid mode.`);
   }
 }

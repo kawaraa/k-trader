@@ -43,6 +43,17 @@ export default function Home() {
     setLoading(false);
   };
 
+  const sellAllOrders = async (pair) => {
+    if (!confirm(`Are you sure want to sell all the order for "${pair}" currency?`)) return;
+    setLoading(true);
+    try {
+      await request(`/api/bots/orders?pair=${pair}`, { method: "PUT" });
+    } catch (error) {
+      alert(JSON.stringify(error.message || error.error || error));
+    }
+    setLoading(false);
+  };
+
   const remove = async (pair) => {
     if (!confirm("Do you want to delete Bot?")) return;
     setLoading(true);
@@ -59,8 +70,9 @@ export default function Home() {
   const handleActions = async (action, pair) => {
     if (action == "edit") setBotToUpdate({ pair, info: bots[pair] });
     else if (action == "delete") remove(pair);
+    else if (action == "sell-all") sellAllOrders(pair);
     else if (action == "turn-on" || action == "turn-off") {
-      if (action == "turn-on" && !confirm(`Do you run "${pair}" Bot?`)) return;
+      if (!confirm(`Do you want to ${action} "${pair}" Bot?`)) return;
       setLoading(true);
       const url = `/api/bots?pair=${pair}&status=${action.replace("turn-", "")}`;
       await request(url, { method: "PATCH" }).catch(catchErr);
@@ -120,13 +132,13 @@ export default function Home() {
         <div className="flex no-srl-bar">
           <span className="flex-1 w-1/5 font-medium">Crypto</span>
           <span className="flex-1 w-1/5 font-medium">Capital</span>
-          <p className="relative flex-1 w-2/5">
+          <p className="relative flex-1 w-1/5">
             <span className={`${badgeCls} bg-emerald-400`}>
               {parseInt(Object.keys(bots).reduce((acc, p) => acc + bots[p].earnings, 0))}
             </span>
             <span className="block font-medium">Earings</span>
           </p>
-          <p className="relative flex-1 w-2/5">
+          <p className="relative flex-2 w-2/5">
             <span className={`${badgeCls} bg-rose-300`}>
               {Object.keys(bots).reduce((acc, p) => acc + bots[p].orders.length, 0)}
             </span>

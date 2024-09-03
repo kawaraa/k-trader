@@ -2,6 +2,7 @@
 const { adjustPrice, countPriceChanges } = require("./trend-analysis.js");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
+const modes = ["high-drop", "near-low", "high-drop-partly-trade", "near-low-partly-trade"];
 
 const pair = process.argv[2]; // The pair of the two currency that will be used for trading E.g. ETHEUR
 const askBidSpreadPercentage = +process.argv[3] || 0.1; // A number from 0 to 100, the prices difference percent
@@ -9,13 +10,13 @@ const capital = +process.argv[4] || 100; // Amount in EUR which is the total mon
 const investment = +process.argv[5] || 9;
 const minStrategyRange = +process.argv[6] || 0.25; // Is a Range of the strategy in days, min value from 0.25 day which equivalent to 6 hours
 const minPercentagePriceChange = +process.argv[7] || 1.25;
-const mode = process.argv[8] || "non-strict";
+const mode = process.argv[8] || modes[0];
 // const strategyInvestments = [9, 19, 32, 49, 99]; // strategySettings
 // investment is and investing Amount in EUR that will be used every time to by crypto
 // priceChange is a price Percentage Threshold, value from 0 to 100
 // Command example: node test-trading-script.js ETHEUR 0.9 0.25 100 60 > database/log/all.log 2>&1
 
-if (!mode.includes("strict")) throw new Error("Invalid mode!");
+if (!modes.includes(mode)) throw new Error("Invalid mode!");
 (async () => {
   console.log(`Started new trading with ${pair}.\n`);
 

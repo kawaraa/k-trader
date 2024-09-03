@@ -52,6 +52,14 @@ class BotsManager {
   static stop(pair) {
     this.#bots[pair].stop();
   }
+  static async sellAllOrders(pair) {
+    const crypto = (await ex.balance(pair)).crypto;
+    if (crypto > 0) await ex.createOrder("sell", "market", pair, crypto);
+    const bot = this.#bots[pair];
+    bot.sold += bot.orders.length;
+    bot.orders = [];
+    this.state.update(this.get());
+  }
   static async runAll(basePeriod = 5) {
     const pairs = Object.keys(this.#bots);
     this.#randomTimeInterval = (60000 * (Math.round(Math.random() * 3) + basePeriod)) / pairs.length;

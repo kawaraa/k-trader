@@ -11,18 +11,22 @@ export default function BotItem({ botInfo, onAction }) {
 
   return (
     <li className={`mb-3 p-2 overflow-y-auto no-srl-bar card rounded-md ${borderCls}`}>
-      <div className="flex cursor-pointer" onClick={() => setOpen(!open)}>
+      <div className="flex">
         <span className="flex-1 w-1/5">{botInfo.pair.replace("EUR", "")}</span>
         <span className="flex-1 w-1/5 text-orange">€{botInfo.capital}</span>
         <span className="flex-1 w-1/5 text-green">€{botInfo.earnings.toFixed(2)}</span>
-        <span className="flex-1 w-2/5 flex justify-between items-center">
+        <span className="flex-2 w-2/5 flex justify-between items-center">
           <span className="flex-auto text-red">{botInfo.orders.length}</span>
-          <span
-            className={`rounded-xl inline-flex w-4 h-4 ml-2 ${
-              botInfo.startedOn ? "bg-green" : "bg-blur dark:bg-slate-300"
+          <button
+            onClick={() => onAction(`turn-${status}`, botInfo.pair)}
+            className={`rounded-xl inline-flex aspect-square w-3.5 ml-2 mr-5 ${
+              !botInfo.startedOn ? "bg-blur dark:bg-slate-300" : "bg-emerald-400"
             }`}
-          ></span>
-          <button className={`h-6 w-6 -rotate-180 ${!open && "rotate-0"} duration-300`}>
+          ></button>
+          <button
+            onClick={() => setOpen(!open)}
+            className={`h-6 w-6 -rotate-180 ${!open && "rotate-0"} duration-300`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -51,6 +55,9 @@ export default function BotItem({ botInfo, onAction }) {
           <p className="mb-1">
             <strong>Strategy Range</strong>: <span>{botInfo.strategyRange} Days</span>
           </p>
+          <p className="mb-1">
+            <strong>Mode</strong>: <span>{botInfo.mode}</span>
+          </p>
           <hr />
           <p className="mt-1">
             <strong>Balance</strong>: <span>{botInfo.balance}</span>
@@ -58,14 +65,14 @@ export default function BotItem({ botInfo, onAction }) {
           <p className="">
             <strong>Sold / Transactions</strong>: <span>{botInfo.sold}</span>
           </p>
-          <p className="">
+          <div className="">
             <Link
               href={`/chart?pair=${botInfo.pair}`}
               className="font-bold underline text-pc underline-offset-4 "
             >
               Prices chart
             </Link>
-          </p>
+          </div>
         </div>
         <div className="flex items-center justify-between">
           <button onClick={() => onAction("delete", botInfo.pair)} className={`w-8 flex text-pc`}>
@@ -98,11 +105,8 @@ export default function BotItem({ botInfo, onAction }) {
               </g>
             </svg>
           </Link>
-          <button
-            onClick={() => onAction(`turn-${status}`, botInfo.pair)}
-            className={`${btnCls} ${botInfo.startedOn ? "bg-green" : "bg-red"}`}
-          >
-            Turn {status}
+          <button onClick={() => onAction("sell-all", botInfo.pair)} className={`${btnCls} !bg-rose-300`}>
+            Sell all
           </button>
         </div>
       </div>

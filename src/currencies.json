@@ -43,8 +43,8 @@
     "mode": "strict",
     "askBidSpreadPercentage": 1.1,
     "transactions": 68,
-    "earnings": 30,
-    "note": "With €100 €9, 0.25, 3 return €24 tns:89 | With €500 €19, 0.25, 5 return €162 tns:159"
+    "earnings": 33,
+    "note": "ALTEUR 1.1 100 99 0.25 1.5 strict 0 => 20.78 Transactions: 12 | ALTEUR 1.1 100 9 0.25 5 strict 0 => 33.11 Transactions: 76 | ALTEUR 1.1 500 32 0.25 5 strict 0 => 156.94 Transactions: 97.5"
   },
   "ARKMEUR": {
     "becameAvailable": "2022-07-01",
@@ -56,7 +56,7 @@
     "askBidSpreadPercentage": 0.2,
     "transactions": 59,
     "earnings": 29,
-    "note": "With €500 €33, 0.25, 5 return €149 tns:80"
+    "note": "ARKMEUR 0.2 100 99 0.25 1.2 strict 54.07903405 => 20.64 Transactions: 10.5 | With €500 €33, 0.25, 5 return €149 tns:80"
   },
   "FIDAEUR": {
     "becameAvailable": "2020-12-01",
@@ -113,7 +113,7 @@
     "askBidSpreadPercentage": 0.15,
     "transactions": 131,
     "earnings": 24,
-    "note": "With €500 €19, 0.25, 4 return €127 tns:175"
+    "note": "TLMEUR 0.15 100 4.9 0.5 4 strict 7523.81231142 => 14.85 Transactions: 74.5 | With €500 €19, 0.25, 4 return €127 tns:175"
   },
   "BICOEUR": {
     "becameAvailable": "2021-12-01",
