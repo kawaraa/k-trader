@@ -40,7 +40,7 @@ export default function ChartCanvas({ type = "line", labels, datasets, options }
       <canvas ref={chartRef}></canvas>
 
       <div className="absolute top-7 right-1 w-46 flex">
-        <strong>-</strong>
+        <strong>+</strong>
         <input
           id="zoom"
           type="range"
@@ -51,7 +51,7 @@ export default function ChartCanvas({ type = "line", labels, datasets, options }
           onChange={(e) => setZoomLevel(Number(e.target.value))}
           className="flex-auto card rounded-lg cursor-pointer"
         />
-        <strong>+</strong>
+        <strong>-</strong>
       </div>
     </div>
   );

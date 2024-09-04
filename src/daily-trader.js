@@ -26,18 +26,19 @@ module.exports = class DailyTrader {
   #pair;
   #capital;
   #investingCapital;
+  #strategyRange;
   #percentageThreshold;
   #tradingAmount;
   #mode;
-  constructor(exProvider, pair, { capital, investment, priceChange, strategyRange, mode }) {
+  constructor(exProvider, pair, { capital, investment, strategyRange, priceChange, mode }) {
     this.ex = exProvider;
     this.#pair = pair;
     this.#capital = capital;
     this.#investingCapital = investment; // investing Amount in ERU that will be used every time to by crypto
+    this.#strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
     this.#percentageThreshold = priceChange; // Percentage Change is the price Percentage Threshold
-    this.#tradingAmount = 0; // cryptoTradingAmount
-    this.strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
     this.#mode = mode;
+    this.#tradingAmount = 0; // cryptoTradingAmount
     this.listener = null;
   }
 
@@ -45,7 +46,7 @@ module.exports = class DailyTrader {
     try {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
-      const prices = await this.ex.prices(this.#pair, this.strategyRange); // For the last xxx days
+      const prices = await this.ex.prices(this.#pair, this.#strategyRange); // For the last xxx days
       this.#tradingAmount = +(this.#investingCapital / bidPrice).toFixed(8);
 
       const name = this.#pair.replace("EUR", "");
@@ -90,7 +91,7 @@ module.exports = class DailyTrader {
         }
       }
 
-      if (prices.length >= (this.strategyRange * 24 * 60) / 5 && shouldBuy) {
+      if (prices.length >= (this.#strategyRange * 24 * 60) / 5 && shouldBuy) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${askPrices.toSorted()[0]}`);
 
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);

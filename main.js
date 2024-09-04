@@ -93,7 +93,7 @@ const timeInterval = +process.argv[7] || 5; // 1 to 11440, time per mins E.g. 11
 if (isValidPair(pair)) {
   const DailyTrader = require("./src/daily-trader");
   state.update({ [pair]: { orders: [] } });
-  const trader = new DailyTrader(kraken, pair, { capital, investment, priceChange, strategyRange });
+  const trader = new DailyTrader(kraken, pair, { capital, investment, strategyRange, priceChange });
 
   trader.listener = (pair, event, info) => {
     if (event == "buy") state.addBotOrder(pair, info);

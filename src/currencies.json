@@ -37,14 +37,14 @@
     "strategies": [
       "€100 €99 >0.25< 1.5% near-low => €20 Remain: 0 Transactions: 12",
       "€100 €9 >0.25< 5.5% near-low => €36 Remain: 0 Transactions: 63",
-      "€500 €32 >0.25< 5.5% near-low => €177 Remain: 0 Transactions: 87"
+      "€500 €33 >0.25< 5.5% near-low => €177 Remain: 0 Transactions: 87"
     ]
   },
   "ARKMEUR": {
     "becameAvailable": "2022-07-01",
     "askBidSpreadPercentage": 0.2,
     "strategies": [
-      "€100 €9 >0.25< 1.2% near-low => €20 Remain: 54 Transactions: 10",
+      "€100 €99 >0.25< 1.2% near-low => €20 Remain: 54 Transactions: 10",
       "€100 €9 >0.25< 5% near-low => €29 Remain: 55 Transactions: 58",
       "€500 €33 >0.25< 5% near-low => €149 Remain: 279 Transactions: 80"
     ]
@@ -76,84 +76,79 @@
   },
   "ENAEUR": {
     "becameAvailable": "2020-12-01",
-    "capital": 100,
-    "investment": 9,
-    "strategyRange": 0.25,
-    "pricePercentageChange": 1.5,
-    "mode": "strict",
     "askBidSpreadPercentage": 0.33,
-    "earnings": 26,
-    "strategies": "ENAEUR 0.2 100 99 0.25 1.5 strict 0 => 28.71 Transactions: 16.5 | ENAEUR 0.2 100 9 0.25 1.5 strict 0 => 26.52 Transactions: 130 | ENAEUR 0.2 100 9 0.25 9 strict 185.15179993999996 => 38.39 Transactions: 50.5 | ENAEUR 0.2 500 99 0.25 1.5 strict 0 => 138.21 Transactions: 66 | ENAEUR 0.2 500 9 0.25 9 strict 891.67319149 => 187.07 Transactions: 197"
+    "strategies": [
+      "€100 €99 >0.25< 1.3% near-low => €28 Remain: 0 Transactions: 16",
+      "€100 €9 >0.25< 1.5% near-low => €25 Remain: 0 Transactions: 128",
+      "€100 €9 >0.25< 4% near-low => €30 Remain: 0 Transactions: 75",
+      "€500 €33 >0.25< 4% near-low => €153 Remain: 0 Transactions: 105"
+    ]
   },
   "YGGEUR": {
     "becameAvailable": "2021-07-01",
-    "capital": 100,
-    "investment": 9,
-    "strategyRange": 2.5,
-    "pricePercentageChange": 4,
-    "mode": "",
     "askBidSpreadPercentage": 0.2,
-    "earnings": 140,
-    "strategies": "YGGEUR 0.14 100 99 0.5 1.1 strict 172.11280252 => 10.59 Transactions: 7.5 | YGGEUR 0.14 100 9 0.5 4 strict 170.49124738000003 => 25.63 Transactions: 67"
+    "strategies": [
+      "€100 €99 >0.25< 1.1% near-low => €12 Remain: 168 Transactions: 7",
+      "€100 €9 >0.25< 3% near-low => €22 Remain: 168 Transactions: 73",
+      "€500 €19 >0.25< 3% near-low => €113 Remain: 844 Transactions: 185"
+    ]
   },
   "TLMEUR": {
     "becameAvailable": "20xx-xx-xx",
-    "capital": 100,
-    "investment": 4.9,
-    "strategyRange": 0.25,
-    "pricePercentageChange": 4,
-    "mode": "strict",
     "askBidSpreadPercentage": 0.15,
-    "transactions": 131,
-    "earnings": 24,
-    "strategies": "TLMEUR 0.15 100 4.9 0.5 4 strict 7523.81231142 => 14.85 Transactions: 74.5 | With €500 €19, 0.25, 4 return €127 tns:175"
+    "strategies": [
+      "€100 €99 >0.5< 1.1% near-low => €11 Remain: 7399 Transactions: 5",
+      "€100 €4.9 >0.25< 4% near-low => €23 Remain: 7102 Transactions: 127",
+      "€100 €4.9 >0.5< 7% near-low => €25 Remain: 7332 Transactions: 77",
+      "€500 €19 >0.25< 4% near-low => €126 Remain: 36029 Transactions: 173",
+      "€500 €19 >0.5< 7% near-low => €126 Remain: 37180 Transactions: 98"
+    ]
   },
   "BICOEUR": {
     "becameAvailable": "2021-12-01",
-    "capital": 100,
-    "investment": 4.9,
-    "strategyRange": 0.25,
-    "pricePercentageChange": 5,
-    "mode": "",
     "askBidSpreadPercentage": 0.17,
-    "earnings": 25,
-    "strategies": "BICOEUR 0.23 100 99 0.25 1.2 strict 0 => 17.42 Transactions: 11 | BICOEUR 0.23 100 4.9 0.25 5 strict 88.39148951 => 25.96 Transactions: 106"
+    "strategies": [
+      "€100 €99 >0.25< 1.3% near-low => €18 Remain: 0 Transactions: 11",
+      "€100 €9 >0.25< 2% near-low => €18 Remain: 0 Transactions: 90",
+      "€100 €9 >0.25< 4% near-low => €23 Remain: 23 Transactions: 66",
+      "€500 €33 >0.25< 2% near-low => €84 Remain: 0 Transactions: 111",
+      "€500 €49 >0.25< 2% near-low => €93 Remain: 0 Transactions: 84",
+      "€500 €33 >0.25< 4% near-low => €120 Remain: 85 Transactions: 91"
+    ]
   },
   "JASMYEUR": {
     "becameAvailable": "20xx-xx-xx",
-    "capital": 100,
-    "investment": 9,
-    "strategyRange": 0.25,
-    "pricePercentageChange": 6.5,
-    "mode": "strict",
     "askBidSpreadPercentage": 0.11,
-    "transactions": 56,
-    "earnings": 25,
-    "strategies": "With €500 €19, 0.25, 6 return €117 tns:112 | With €500 €19, 0.5, 8 return €124 tns:94"
+    "strategies": [
+      "€100 €99 >0.25< 1.5% near-low => €16 Remain: 3103 Transactions: 8",
+      "€100 €9 >0.25< 4% near-low => €16 Remain: 3102 Transactions: 55",
+      "€100 €9 >0.25< 5% near-low => €23 Remain: 3127 Transactions: 53",
+      "€500 €33 >0.25< 4% near-low => €80 Remain: 15508 Transactions: 71",
+      "€500 €33 >0.25< 5% near-low => €114 Remain: 15598 Transactions: 71"
+    ]
   },
   "API3EUR": {
     "becameAvailable": "2021-11-01",
-    "capital": 100,
-    "investment": 4.9,
-    "strategyRange": 0.25,
-    "pricePercentageChange": 3,
-    "mode": "strict",
     "askBidSpreadPercentage": 0.17,
-    "earnings": 20,
-    "strategies": "API3EUR 0.1 100 99 0.25 1.1 strict 44.21148811 => 16.38 Transactions: 14 | API3EUR 0.1 100 4.9 0.25 3 strict 8.7500543 => 20.56 Transactions: 138"
+    "strategies": [
+      "€100 €99 >0.25< 1.1% near-low => €16 Remain: 44 Transactions: 13",
+      "€100 €9 >0.25< 1.1% near-low => €15 Remain: 8 Transactions: 132",
+      "€100 €4.9 >0.25< 3% near-low => €20 Remain: 8 Transactions: 132",
+      "€500 €19 >0.25< 3% near-low => €102 Remain: 33 Transactions: 172"
+    ]
   },
   "MLNEUR": {
     "becameAvailable": "20xx-xx-xx",
-    "capital": 100,
-    "investment": 4.9,
-    "strategyRange": 0.5,
-    "pricePercentageChange": 2.5,
-    "mode": "strict",
     "askBidSpreadPercentage": 0.51,
-    "transactions": 151,
-    "earnings": 19,
-    "strategies": "With €500, €19, 0.5, 2% returns €100 tns:191"
+    "strategies": [
+      "€100 €99 >0.5< 1.4% near-low => €12 Remain: 4 Transactions: 10",
+      "€100 €9 >0.5< 1.4% near-low => €15 Remain: 5 Transactions: 114",
+      "€100 €4.9 >0.5< 2.5% near-low => €19 Remain: 5 Transactions: 151",
+      "€500 €19 >0.5< 1.4% near-low => €75 Remain: 13 Transactions: 233",
+      "€500 €19 >0.5< 2.5% near-low => €99 Remain: 27 Transactions: 191"
+    ]
   },
+
   "CELREUR": {
     "becameAvailable": "2021-03-01",
     "capital": 100,

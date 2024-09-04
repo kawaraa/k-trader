@@ -53,7 +53,7 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
   let transactions = 0;
   const pricesOffset = (range * 24 * 60) / 5;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset);
-  const info = { capital, investment, priceChange, strategyRange: range, mode };
+  const info = { capital, investment, strategyRange: range, priceChange, mode };
   const trader = new DailyTrader(ex, pair, info);
   trader.listener = (p, event, info) => {
     if (event == "sell") {
