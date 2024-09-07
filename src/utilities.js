@@ -21,6 +21,12 @@ function dateToString(date = new Date(), seconds) {
   const unWantedChar = seconds ? -5 : -8;
   return new Date(date).toISOString().slice(0, unWantedChar).replace("T", " ");
 }
+function toShortDate(date = new Date()) {
+  return date
+    .toString()
+    .replace(date.getFullYear() + " ", "")
+    .slice(4, 16);
+}
 
 function isValidPair(pair, throwError) {
   if (cryptocurrencies[pair]) return pair;
@@ -50,4 +56,13 @@ function request() {
     });
 }
 
-module.exports = { request, parseError, delay, dateToString, parseNumbers, isValidPair, isNumber };
+module.exports = {
+  request,
+  parseError,
+  delay,
+  dateToString,
+  toShortDate,
+  parseNumbers,
+  isValidPair,
+  isNumber,
+};

@@ -1,7 +1,7 @@
 const KrakenExchangeProvider = require("./kraken-ex-provider");
 const DailyTrader = require("./daily-trader");
 const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs");
-const { dateToString, delay } = require("./utilities");
+const { dateToString, toShortDate, delay } = require("./utilities");
 const LocalState = require("./local-state");
 
 const state = new LocalState("state");
@@ -83,12 +83,10 @@ class BotsManager {
   static updateBotProgress(pair, event, info) {
     if (event == "log") {
       const filePath = `database/logs/${pair}.log`;
-      const d = new Date();
-      const ops = { hour12: false };
+
       if (!info) info = "\n";
-      else {
-        info = `[${d.toJSON().substring(5, 10)} ${d.toLocaleTimeString([], ops).substring(0, 5)}] ${info}\n`;
-      }
+      else info = `[${toShortDate()}] ${info}\n`;
+
       if (!existsSync(filePath)) writeFileSync(filePath, info);
       else {
         const fileSizeInKB = statSync(filePath).size / 1024; // if file less then 200 KB append logs to file

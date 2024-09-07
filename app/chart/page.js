@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { request } from "../../src/utilities";
+import { toShortDate, request } from "../../src/utilities";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageHeader from "../components/page-header";
 import Loader from "../components/loader";
@@ -22,16 +22,13 @@ export default function CryptoChart() {
   const tradePrices = [];
   const bidPrices = [];
 
-  const sinceDate = new Date(since);
-  const ops = { hour12: false };
-  prices.forEach((p) => {
+  const interval = (Date.now() - new Date(since).getTime()) / prices.length;
+
+  prices.forEach((p, i) => {
     tradePrices.push(p.tradePrice);
     askPrices.push(p.askPrice);
     bidPrices.push(p.bidPrice);
-    sinceDate.setMinutes(sinceDate.getMinutes() + 5);
-    labels.push(
-      `${sinceDate.toJSON().substring(5, 10)} ${sinceDate.toLocaleTimeString([], ops).substring(0, 5)}`
-    );
+    labels.push(`${toShortDate(new Date(since + interval * i))}`);
   });
 
   const changePair = (p) => router.push(`/chart?pair=${p}`);
