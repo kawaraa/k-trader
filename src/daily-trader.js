@@ -103,7 +103,7 @@ module.exports = class DailyTrader {
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
-      } else if (70 <= bidPriceRsi && balance.crypto > 0 && orders[0]) {
+      } else if (60 < bidPriceRsi && balance.crypto > 0 && orders[0]) {
         for (const { id, price, volume, cost, createdAt } of orders) {
           const sell = this.#percentageThreshold <= calcPercentageDifference(price, bidPrice);
           // Backlog: Sell accumulated orders that has been more than 5 days if the current price is higher then highest price in the lest 4 hours.
