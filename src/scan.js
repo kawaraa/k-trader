@@ -1,6 +1,7 @@
 // const { readdirSync } = require("node:fs");
 // const { calcPercentageDifference } = require("./trend-analysis");
-// const currencies = require("./currencies.json");
+const currencies = require("./currencies.json");
+console.log(Object.keys(currencies).length); // 283
 
 // const pricesFolderPath = `${process.cwd()}/database/prices/`;
 // const fileNames = readdirSync(pricesFolderPath);

@@ -6,7 +6,7 @@ const fireStoreProvider = require("./src/firebase-provider");
 
 const { isValidPair, parseError } = require("./src/utilities.js");
 const LocalState = require("./src/local-state.js");
-const pairs = require("./src/pairs.js");
+const pairs = Object.keys(require("./src/currencies.json"));
 
 mkdirSync("database/logs", { recursive: true });
 mkdirSync("database/prices", { recursive: true });

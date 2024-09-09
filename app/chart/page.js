@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import PageHeader from "../components/page-header";
 import Loader from "../components/loader";
 import ChartCanvas from "../components/chart-canvas";
-import pairs from "../../src/pairs";
+const pairs = Object.keys(require("../../src/currencies.json"));
 import { calcInvestmentProfit, calcPercentageDifference } from "../../src/trend-analysis";
 
 export default function CryptoChart() {
