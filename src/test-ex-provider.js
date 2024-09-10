@@ -7,7 +7,6 @@ module.exports = class TestExchangeProvider {
     this.allPrices = prices;
     this.currentPriceIndex = priceIndex;
     this.orders = [];
-    this.timestamp = Date.now() - this.allPrices.length * 5 * 60 * 1000;
   }
 
   async balance() {
@@ -23,8 +22,7 @@ module.exports = class TestExchangeProvider {
   }
   async createOrder(tradingType, b, c, volume) {
     const { tradePrice, askPrice, bidPrice } = this.allPrices[this.currentPriceIndex - 1];
-    const createdAt = this.timestamp + this.currentPriceIndex * 5 * 60 * 1000;
-    const newOrder = { id: randomUUID(), type: tradingType, volume, createdAt };
+    const newOrder = { id: randomUUID(), type: tradingType, volume };
 
     if (newOrder.type == "buy") {
       const cost = volume * askPrice;

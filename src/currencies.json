@@ -2,7 +2,8 @@
   "BTCEUR": {
     "becameAvailable": "2009-01-01",
     "askBidSpreadPercentage": 0.05,
-    "strategies": "With €100, €99, 1.5, 5% returns €9 | With €500, €249, 1.5, 5% returns €45"
+    "strategies": "With €100, €99, 1.5, 5% returns €9 | With €500, €249, 1.5, 5% returns €45",
+    "note": "This is the beginning of group 1"
   },
   "ETHEUR": {
     "becameAvailable": "2015-07-01",
@@ -446,7 +447,11 @@
   "NTRNEUR": { "askBidSpreadPercentage": 0.34 },
   "USTEUR": { "askBidSpreadPercentage": 0.29 },
 
-  "ZEUSEUR": { "askBidSpreadPercentage": 1.31 },
+  "ZEUSEUR": {
+    "becameAvailable": "20xx-xx-xx",
+    "askBidSpreadPercentage": 1.31,
+    "note": "This is the beginning of group 2"
+  },
   "USDTEUR": { "becameAvailable": "20xx-xx-xx", "askBidSpreadPercentage": 0.05 },
   "USDCEUR": { "becameAvailable": "20xx-xx-xx", "askBidSpreadPercentage": 0.05 },
   "WENEUR": { "becameAvailable": "20xx-xx-xx", "askBidSpreadPercentage": 0.7 },
@@ -489,7 +494,11 @@
   "EWTEUR": { "becameAvailable": "2022-01-01", "askBidSpreadPercentage": 0.81 },
   "PENDLEEUR": { "becameAvailable": "2021-04-01", "askBidSpreadPercentage": 0.15 },
 
-  "SBREUR": { "becameAvailable": "2020-03-01", "askBidSpreadPercentage": 0.72 },
+  "SBREUR": {
+    "becameAvailable": "2020-03-01",
+    "askBidSpreadPercentage": 0.72,
+    "note": "This is the beginning of group 3"
+  },
   "KUJIEUR": { "becameAvailable": "2022-09-01", "askBidSpreadPercentage": 1.27 },
   "KAREUR": { "becameAvailable": "2021-02-01", "askBidSpreadPercentage": 1.9 },
   "MOONEUR": { "becameAvailable": "20xx-xx-xx", "askBidSpreadPercentage": 2.05 },

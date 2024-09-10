@@ -105,9 +105,11 @@ module.exports = class DailyTrader {
         }
       } else if (60 < bidPriceRsi && balance.crypto > 0 && orders[0]) {
         for (const { id, price, volume, cost, createdAt } of orders) {
-          const sell = this.#percentageThreshold <= calcPercentageDifference(price, bidPrice);
-          // Backlog: Sell accumulated orders that has been more than 5 days if the current price is higher then highest price in the lest 4 hours.
-          // Todo: add the this for live || isOlderThen(createdAt, 20)
+          const sell =
+            this.#percentageThreshold <= calcPercentageDifference(price, bidPrice) ||
+            (createdAt && isOlderThen(createdAt, 30));
+          // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest 4 hours.
+
           if (sell) await this.#sell({ id, volume, cost, price }, balance.crypto, bidPrice);
         }
       }
