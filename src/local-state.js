@@ -54,7 +54,7 @@ module.exports = class LocalState {
   }
   async updateLocalPrices(pair, prices) {
     // Limit Storing prices to 30 days (8640) or 60 days (17280) * 5 is the number of mins in 60 days.
-    const data = await this.getLocalPrices(pair, 8640);
+    const data = await this.getLocalPrices(pair, 17280);
     data.push(prices);
     return writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
   }

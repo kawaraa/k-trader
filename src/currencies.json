@@ -81,6 +81,38 @@
     ],
     "note": "This is the beginning of group 2"
   },
+  "TEEREUR": {
+    "becameAvailable": "2021-10-01",
+    "askBidSpreadPercentage": 0.24,
+    "strategies": [
+      "€100 €9 >0.25< 1.5% near-low-partly-trade => €27 Remain: 327 Transactions: 104",
+      "€100 €9 >0.25< 3% near-low-partly-trade => €26 Remain: 143 Transactions: 84",
+      "€100 €9 >0.25< 4% near-low-partly-trade => €28 Remain: 173 Transactions: 73",
+      "€100 €9 >0.25< 5.5% near-low-partly-trade => €28 Remain: 205 Transactions: 46",
+      "€100 €9 >0.25< 6.5% near-low-partly-trade => €33 Remain: 240 Transactions: 43",
+      "€100 €9 >0.25< 7% near-low-partly-trade => €39 Remain: 119 Transactions: 47"
+    ]
+  },
+  "KMNOEUR": {
+    "askBidSpreadPercentage": 0.23,
+    "strategies": [
+      "€100 €9 >0.5< 4.5% near-low-partly-trade => €29 Remain: 1050 Transactions: 78",
+      "€100 €9 >0.5< 5% near-low-partly-trade => €30 Remain: 785 Transactions: 72",
+      "€100 €9 >0.5< 5.5% near-low-partly-trade => €33 Remain: 521 Transactions: 71",
+      "€100 €9 >0.5< 6% near-low-partly-trade => €37 Remain: 525 Transactions: 72",
+      "€100 €9 >0.5< 7% near-low-partly-trade => €39 Remain: 526 Transactions: 63"
+    ]
+  },
+  "ZETAEUR": {
+    "becameAvailable": "2022-04-01",
+    "askBidSpreadPercentage": 0.05,
+    "strategeies": [
+      "€100 €9 >0.25< 4% near-low-partly-trade => €33 Remain: 110 Transactions: 102",
+      "€100 €9 >0.75< 6% near-low-partly-trade => €35 Remain: 27 Transactions: 63",
+      "€100 €9 >0.25< 5.5% near-low-partly-trade => €37 Remain: 110 Transactions: 74",
+      "€100 €9 >0.5< 5.5% near-low-partly-trade => €36 Remain: 0 Transactions: 72"
+    ]
+  },
 
   "ALTEUR": {
     "becameAvailable": "2022-03-01",
@@ -311,7 +343,6 @@
   "LDOEUR": { "askBidSpreadPercentage": 0.1 },
   "DYDXEUR": { "becameAvailable": "20xx-xx-xx", "askBidSpreadPercentage": 0.11 },
   "XTZEUR": { "becameAvailable": "20xx-xx-xx", "askBidSpreadPercentage": 0.13 },
-  "ZETAEUR": { "becameAvailable": "2022-04-01", "askBidSpreadPercentage": 0.05 },
   "BATEUR": { "becameAvailable": "2017-06-01", "askBidSpreadPercentage": 0.14 },
   "REQEUR": { "becameAvailable": "2017-08-01", "askBidSpreadPercentage": 0.12 },
   "KNCEUR": { "askBidSpreadPercentage": 0.12 },
@@ -384,7 +415,6 @@
   "DYMEUR": { "becameAvailable": "2022-01-01", "askBidSpreadPercentage": 0.21 },
   "ZRXEUR": { "becameAvailable": "2017-08-01", "askBidSpreadPercentage": 0.24 },
   "CRVEUR": { "becameAvailable": "2020-08-01", "askBidSpreadPercentage": 0.25 },
-  "TEEREUR": { "becameAvailable": "2021-10-01", "askBidSpreadPercentage": 0.24 },
   "COTIEUR": {
     "becameAvailable": "20xx-xx-xx",
     "askBidSpreadPercentage": 0.12,
@@ -440,7 +470,6 @@
   "CLOUDEUR": { "askBidSpreadPercentage": 0.54 },
   "CXTEUR": { "askBidSpreadPercentage": 0.36 },
   "JTOEUR": { "askBidSpreadPercentage": 0.38 },
-  "KMNOEUR": { "askBidSpreadPercentage": 0.23 },
   "LRCEUR": { "askBidSpreadPercentage": 0.14 },
   "MEMEEUR": { "askBidSpreadPercentage": 0.28 },
   "MXCEUR": { "askBidSpreadPercentage": 0.22 },
