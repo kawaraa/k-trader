@@ -281,7 +281,7 @@
       "€100 €9 >0.25< 2.5% near-low-partly-trade => €23 Remain: 0 Transactions: 132",
       "€100 €9 >0.25< 3% near-low-partly-trade => €25 Remain: 0 Transactions: 116",
       "€100 €9 >0.25< 4% near-low-partly-trade => €29 Remain: 0 Transactions: 95",
-      "€100 €9 >0.25< 5% near-low-partly-trade => €31 Remain: 0 Transactions: 75",
+      ">€100 €9 >0.25< 5% near-low-partly-trade => €31 Remain: 0 Transactions: 75",
       "€100 €9 >0.25< 5.5% near-low-partly-trade => €30 Remain: 0 Transactions: 65"
     ]
   },
