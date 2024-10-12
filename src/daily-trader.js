@@ -29,7 +29,6 @@ module.exports = class DailyTrader {
   #strategyRange;
   #percentageThreshold;
   #tradingAmount;
-  #mode;
   constructor(exProvider, pair, { capital, investment, strategyRange, priceChange, mode }) {
     this.ex = exProvider;
     this.#pair = pair;
@@ -37,7 +36,7 @@ module.exports = class DailyTrader {
     this.#investingCapital = investment; // investing Amount in ERU that will be used every time to by crypto
     this.#strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
     this.#percentageThreshold = priceChange; // Percentage Change is the price Percentage Threshold
-    this.#mode = mode;
+    this.mode = mode;
     this.#tradingAmount = 0; // cryptoTradingAmount
     this.listener = null;
   }
@@ -77,14 +76,14 @@ module.exports = class DailyTrader {
       // high-drop
       let shouldBuy = calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 1.2);
 
-      if (this.#mode.includes("near-low")) {
+      if (this.mode.includes("near-low")) {
         const lowestAsk = askPrices.toSorted()[0];
         shouldBuy =
           calcPercentageDifference(highestBidPr, askPrice) <= -(this.#percentageThreshold / 1.4) &&
           calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
       }
 
-      if (this.#mode.includes("partly-trade")) {
+      if (this.mode.includes("partly-trade")) {
         // Pause buying if the bidPrice is higher then price of the last Order In the first or second Part
         const thirdIndex = Math.round(this.#capital / this.#investingCapital / 3);
         const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex - 1] || {};

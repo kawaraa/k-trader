@@ -1,4 +1,7 @@
 const { readFileSync, writeFileSync } = require("node:fs");
+// In prod limit Storing prices to 30 days (8640) and in local to 60 days (17280)
+// dataLimit * 5 is the number of mins in 60 days.
+const dataLimit = process.env.NODE_ENV === "production" ? 8640 : 17280;
 
 module.exports = class LocalState {
   #databaseFolder;
@@ -53,8 +56,7 @@ module.exports = class LocalState {
     }
   }
   async updateLocalPrices(pair, prices) {
-    // Limit Storing prices to 30 days (8640) or 60 days (17280) * 5 is the number of mins in 60 days.
-    const data = await this.getLocalPrices(pair, 17280);
+    const data = await this.getLocalPrices(pair, dataLimit);
     data.push(prices);
     return writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
   }

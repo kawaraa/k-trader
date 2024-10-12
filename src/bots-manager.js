@@ -89,8 +89,9 @@ class BotsManager {
 
       if (!existsSync(filePath)) writeFileSync(filePath, info);
       else {
-        const fileSizeInKB = statSync(filePath).size / 1024; // if file less then 200 KB append logs to file
-        fileSizeInKB < 200 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
+        const fileSizeInKB = statSync(filePath).size / 1024; // Convert size from B to KB
+        // if file less then 500 KB append logs to file, else, overwrite the old logs
+        fileSizeInKB < 500 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
       }
     }
 
