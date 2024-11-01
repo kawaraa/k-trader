@@ -22,7 +22,7 @@ module.exports = class DailyTrader {
     this.#strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
     this.#percentageThreshold = priceChange; // Percentage Change is the price Percentage Threshold
     this.mode = mode;
-    this.period = timeInterval;
+    this.period = +timeInterval;
     this.#tradingAmount = 0; // cryptoTradingAmount
     this.listener = null;
     this.previousRSI = null;
@@ -47,7 +47,7 @@ module.exports = class DailyTrader {
       const bidPercentageChange = calcPercentageDifference(avgBidPrice, bidPrice);
       const highestBidPr = bidPrices.toSorted().at(-1);
       const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
-      const interval = this.period || process.env.botTimeInterval;
+      const interval = this.period || +process.env.botTimeInterval;
 
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto} - Price: ${tradePrice}`);
@@ -123,7 +123,7 @@ module.exports = class DailyTrader {
       this.dispatch("log", `Error running bot: ${error}`);
     }
 
-    if (this.period) this.timeoutID = setTimeout(() => this.start(), this.period);
+    if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
   }
 
   async #sell({ id, volume, cost, price }, cryptoBalance, bidPrice) {
