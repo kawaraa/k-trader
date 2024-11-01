@@ -61,24 +61,25 @@ class BotsManager {
     bot.orders = [];
     this.state.update(this.get());
   }
-  static async runAll() {
-    const pairs = Object.keys(this.#bots);
-    this.#randomTimeInterval = (60000 * (Math.round(Math.random() * 3) + basePeriod)) / pairs.length;
+  // static async runAll() {
+  //   // doNotUpdateTimestamp / doNotClearTimestamp
+  //   const pairs = Object.keys(this.#bots);
+  //   this.#randomTimeInterval = (60000 * (Math.round(Math.random() * 3) + basePeriod)) / pairs.length;
 
-    for (const pair of pairs) {
-      if (!this.#randomTimeInterval) this.#bots[pair].stop();
-      else {
-        if (!this.#bots[pair].startedOn) this.#bots[pair].startedOn = dateToString();
-        this.#bots[pair].stop(true);
-        this.#bots[pair].start();
-        await delay(this.#randomTimeInterval);
-      }
-    }
-    if (this.#randomTimeInterval) this.runAll(basePeriod);
-  }
-  static stopAll() {
-    this.#randomTimeInterval = 0;
-  }
+  //   for (const pair of pairs) {
+  //     if (!this.#randomTimeInterval) this.#bots[pair].stop();
+  //     else {
+  //       if (!this.#bots[pair].startedOn) this.#bots[pair].startedOn = dateToString();
+  //       this.#bots[pair].stop(true);
+  //       this.#bots[pair].start();
+  //       await delay(this.#randomTimeInterval);
+  //     }
+  //   }
+  //   if (this.#randomTimeInterval) this.runAll(basePeriod);
+  // }
+  // static stopAll() {
+  //   this.#randomTimeInterval = 0;
+  // }
 
   static updateBotProgress(pair, event, info) {
     if (event == "log") {
@@ -149,12 +150,12 @@ class Bot {
   }
 
   start() {
-    if (arguments[0]) this.startedOn = dateToString();
-    this.#trader.start(...arguments);
+    this.startedOn = dateToString();
+    this.#trader.start();
   }
   stop() {
-    if (!arguments[0]) this.startedOn = null;
-    this.#trader.stop(...arguments);
+    this.startedOn = null;
+    this.#trader.stop();
   }
 }
 
