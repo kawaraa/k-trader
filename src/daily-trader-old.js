@@ -1,3 +1,18 @@
+/*
+===> Todo: update the following:
+
+How DailyTrader works:
+- DailyTrader performs a strategy based on the provided settings. It analyzes the prices of the last xxx days on every xxx mins interval. It buys if the average price drops -1.1% and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
+Recommendation:
+- if it's daily trading strategy, buy when the current price is 1.5% lower than any price in the last 3 hours
+- if it's monthly trading strategy, buy when the current price is 1.5% lower than the average price in the last 4 or 5 days
+Note: this is how orders are managed.
+1. Check if there are buy order ID in state that has not been fulfilled, remove it from the state,
+2. If fulfilled buy orders have fulfilled sell order, calculate the profits and remove these orders from the state
+3. If it's good time to buy, place buy orders with 2 mins expire and store their IDs in the state.
+4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
+*/
+
 const {
   calculateRSI,
   calcAveragePrice,
@@ -14,7 +29,7 @@ module.exports = class DailyTrader {
   #strategyRange;
   #percentageThreshold;
   #tradingAmount;
-  constructor(exProvider, pair, { capital, investment, strategyRange, priceChange, mode, timeInterval }) {
+  constructor(exProvider, pair, { capital, investment, strategyRange, priceChange, mode }) {
     this.ex = exProvider;
     this.#pair = pair;
     this.#capital = capital;
@@ -22,43 +37,41 @@ module.exports = class DailyTrader {
     this.#strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
     this.#percentageThreshold = priceChange; // Percentage Change is the price Percentage Threshold
     this.mode = mode;
-    this.period = timeInterval;
     this.#tradingAmount = 0; // cryptoTradingAmount
     this.listener = null;
-    this.previousRSI = null;
   }
 
-  async start() {
+  async start(period) {
     try {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
-      const prices = await this.ex.price(this.#pair, this.#strategyRange); // For the last xxx days
+      const prices = await this.ex.prices(this.#pair, this.#strategyRange); // For the last xxx days
       this.#tradingAmount = +(this.#investingCapital / bidPrice).toFixed(8);
 
       const name = this.#pair.replace("EUR", "");
       const askPrices = prices.map((p) => p.askPrice);
       const bidPrices = prices.map((p) => p.bidPrice);
       const orders = await this.ex.getOrders(this.#pair);
-      const askPriceRSI = calculateRSI(askPrices);
-      const bidPriceRSI = calculateRSI(bidPrices);
+      const askPriceRsi = calculateRSI(askPrices);
+      const bidPriceRsi = calculateRSI(bidPrices);
       const avgAskPrice = calcAveragePrice(askPrices);
       const avgBidPrice = calcAveragePrice(bidPrices);
       const askPercentageChange = calcPercentageDifference(avgAskPrice, askPrice);
       const bidPercentageChange = calcPercentageDifference(avgBidPrice, bidPrice);
       const highestBidPr = bidPrices.toSorted().at(-1);
       const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
-      const interval = this.period || process.env.botTimeInterval;
 
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto} - Price: ${tradePrice}`);
       this.dispatch(
         "log",
-        `Ask Price: => RSI: ${askPriceRSI} - Cur: ${askPrice} Avg: ${avgAskPrice}% Chg: ${askPercentageChange}%`
+        `Ask Price: => RSI: ${askPriceRsi} - Cur: ${askPrice} Avg: ${avgAskPrice}% Chg: ${askPercentageChange}%`
       );
       this.dispatch(
         "log",
-        `Bid Price: => RSI: ${bidPriceRSI} - Cur: ${bidPrice} Avg: ${avgBidPrice}% Chg: ${bidPercentageChange}%`
+        `Bid Price: => RSI: ${bidPriceRsi} - Cur: ${bidPrice} Avg: ${avgBidPrice}% Chg: ${bidPercentageChange}%`
       );
+      // 💰 📊
 
       // high-drop
       let shouldBuy = calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 1.2);
@@ -66,33 +79,20 @@ module.exports = class DailyTrader {
       if (this.mode.includes("near-low")) {
         const lowestAsk = askPrices.toSorted()[0];
         shouldBuy =
-          calcPercentageDifference(highestBidPr, askPrice) <= -this.#percentageThreshold &&
+          calcPercentageDifference(highestBidPr, askPrice) <= -(this.#percentageThreshold / 1.4) &&
           calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
       }
-      if (this.mode.includes("on-increase")) {
-        shouldBuy = false;
-        if (bidPriceRSI <= 30 && this.previousRSI <= bidPriceRSI) {
-          shouldBuy = true;
-          this.previousRSI = bidPriceRSI;
-        }
-      }
+
       if (this.mode.includes("partly-trade")) {
         // Pause buying if the bidPrice is higher then price of the last Order In the first or second Part
         const thirdIndex = Math.round(this.#capital / this.#investingCapital / 3);
-        const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex] || orders[0] || {};
+        const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex - 1] || {};
         if (price && -(this.#percentageThreshold / 2) < calcPercentageDifference(price, bidPrice)) {
           shouldBuy = false;
         }
       }
-      if (this.mode.includes("slowly-trade")) {
-        // Pause buying if the bidPrice is not x% less then the last Order's price
-        const { price } = orders.at(-1) || {};
-        if (price && -(this.#percentageThreshold / 4) < calcPercentageDifference(price, bidPrice)) {
-          shouldBuy = false;
-        }
-      }
 
-      if (prices.length >= (this.#strategyRange * 24 * 60) / interval && shouldBuy) {
+      if (prices.length >= (this.#strategyRange * 24 * 60) / 5 && shouldBuy) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${askPrices.toSorted()[0]}`);
 
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);
@@ -102,18 +102,12 @@ module.exports = class DailyTrader {
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
-      } else if (60 < bidPriceRSI && balance.crypto > 0 && orders[0]) {
-        let sellableOrders = orders.filter((o) => {
-          return this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice);
-        });
-        if (!sellableOrders && balance.eur < 1) {
+      } else if (60 < bidPriceRsi && balance.crypto > 0 && orders[0]) {
+        for (const { id, price, volume, cost, createdAt } of orders) {
+          const priceChange = calcPercentageDifference(price, bidPrice);
+          const sell = this.#percentageThreshold <= priceChange || (createdAt && isOlderThen(createdAt, 20) && priceChange > 1);
           // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest 4 hours.
-          sellableOrders = orders.filter(({ price, createdAt }) => {
-            return createdAt && isOlderThen(createdAt, 2) && calcPercentageDifference(price, bidPrice) > 1;
-          });
-        }
-        for (const order of sellableOrders) {
-          await this.#sell(order, balance.crypto, bidPrice);
+          if (sell) await this.#sell({ id, volume, cost, price }, balance.crypto, bidPrice);
         }
       }
 
@@ -123,7 +117,9 @@ module.exports = class DailyTrader {
       this.dispatch("log", `Error running bot: ${error}`);
     }
 
-    if (this.period) this.timeoutID = setTimeout(() => this.start(), this.period);
+    if (period) {
+      this.timeoutID = setTimeout(() => this.start(period), Math.round(60000 * (Math.random() * 3 + period)));
+    }
   }
 
   async #sell({ id, volume, cost, price }, cryptoBalance, bidPrice) {
@@ -144,3 +140,22 @@ module.exports = class DailyTrader {
     if (this.listener) this.listener(this.#pair + "", event, info);
   }
 };
+
+/*
+
+// // ========== Prices Changes Tests ==========
+// if (calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 2)) {
+//   console.log("Should Buy:", askPrice, calcPercentageDifference(highestBidPr, askPrice)); // Buy
+//   this.lastPrice = askPrice;
+// } else if (
+//   this.lastPrice &&
+//   calcPercentageDifference(this.lastPrice, bidPrice) > this.#percentageThreshold
+// ) {
+//   console.log("Should Sell:", bidPrice, calcPercentageDifference(this.lastPrice, bidPrice)); // Sell
+//   if (!this.profit) this.profit = 0;
+//   this.profit += bidPrice - this.lastPrice;
+//   this.lastPrice = bidPrice;
+//   console.log("profit", this.profit);
+// }
+
+*/

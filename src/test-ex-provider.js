@@ -17,7 +17,10 @@ module.exports = class TestExchangeProvider {
     this.currentPriceIndex += 1;
     return price;
   }
-  async prices(pair, lastDays) {
+  async pricesData(pair) {
+    return this.allPrices.map((p) => p.tradePrice);
+  }
+  async price(pair, lastDays) {
     return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
   }
   async createOrder(tradingType, b, c, volume) {

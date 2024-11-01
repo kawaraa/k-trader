@@ -25,8 +25,8 @@ resource "digitalocean_ssh_key" "auth" {
 resource "digitalocean_droplet" "vm" {
   name   = "k-trader-app"
   region = "ams3"               # fra1, sgp1
-  image  = "ubuntu-23-10-x64"   # nodejs
-  size   = "s-1vcpu-512mb-10gb" # s-1vcpu-1gb
+  image  = "ubuntu-24-04-x64"   # nodejs
+  size   = "s-1vcpu-512mb-10gb" # s-1vcpu-512mb-10gb / s-1vcpu-1gb
   # disk     = "25"
   # monitoring = true
   # private_networking = true

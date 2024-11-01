@@ -4,6 +4,7 @@ const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs
 const { dateToString, toShortDate, delay } = require("./utilities");
 const LocalState = require("./local-state");
 
+const basePeriod = process.env.botTimeInterval;
 const state = new LocalState("state");
 const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
 
@@ -47,7 +48,7 @@ class BotsManager {
     this.state.update(this.#bots);
   }
   static run(pair) {
-    this.#bots[pair].start(this.#bots[pair].timeInterval);
+    this.#bots[pair].start();
   }
   static stop(pair) {
     this.#bots[pair].stop();
@@ -60,19 +61,18 @@ class BotsManager {
     bot.orders = [];
     this.state.update(this.get());
   }
-  static async runAll(basePeriod = 5) {
+  static async runAll() {
     const pairs = Object.keys(this.#bots);
     this.#randomTimeInterval = (60000 * (Math.round(Math.random() * 3) + basePeriod)) / pairs.length;
 
     for (const pair of pairs) {
-      if (!this.#randomTimeInterval) {
-        this.#bots[pair].stop();
-        continue;
+      if (!this.#randomTimeInterval) this.#bots[pair].stop();
+      else {
+        if (!this.#bots[pair].startedOn) this.#bots[pair].startedOn = dateToString();
+        this.#bots[pair].stop(true);
+        this.#bots[pair].start();
+        await delay(this.#randomTimeInterval);
       }
-      if (!this.#bots[pair].startedOn) this.#bots[pair].startedOn = dateToString();
-      this.#bots[pair].stop(true);
-      this.#bots[pair].start();
-      await delay(this.#randomTimeInterval);
     }
     if (this.#randomTimeInterval) this.runAll(basePeriod);
   }

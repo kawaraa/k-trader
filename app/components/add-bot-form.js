@@ -48,7 +48,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
         required
         className={inputCls}
       />
-      <select name="mode" defaultValue={bot?.mode} required className={inputCls}>
+      <select name="mode" defaultValue={bot?.info?.mode} required className={inputCls}>
         <option value="">Mode</option>
         <option value="near-low">Near low</option>
         <option value="high-drop">High drop</option>
