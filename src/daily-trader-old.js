@@ -58,7 +58,8 @@ module.exports = class DailyTrader {
       const avgBidPrice = calcAveragePrice(bidPrices);
       const askPercentageChange = calcPercentageDifference(avgAskPrice, askPrice);
       const bidPercentageChange = calcPercentageDifference(avgBidPrice, bidPrice);
-      const highestBidPr = bidPrices.toSorted().at(-1);
+      const highestBidPr = bidPrices.sort().at(-1);
+      const lowestAsk = askPrices.sort()[0];
       const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
 
       this.dispatch("balance", balance.crypto);
@@ -77,7 +78,6 @@ module.exports = class DailyTrader {
       let shouldBuy = calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 1.2);
 
       if (this.mode.includes("near-low")) {
-        const lowestAsk = askPrices.toSorted()[0];
         shouldBuy =
           calcPercentageDifference(highestBidPr, askPrice) <= -(this.#percentageThreshold / 1.4) &&
           calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
@@ -93,7 +93,7 @@ module.exports = class DailyTrader {
       }
 
       if (prices.length >= (this.#strategyRange * 24 * 60) / 5 && shouldBuy) {
-        this.dispatch("log", `Suggest buying: Lowest Ask Price is ${askPrices.toSorted()[0]}`);
+        this.dispatch("log", `Suggest buying: Lowest Ask Price is ${lowestAsk}`);
 
         const remaining = +(Math.min(this.#investingCapital, balance.eur) / askPrice).toFixed(8);
 
@@ -105,7 +105,9 @@ module.exports = class DailyTrader {
       } else if (60 < bidPriceRsi && balance.crypto > 0 && orders[0]) {
         for (const { id, price, volume, cost, createdAt } of orders) {
           const priceChange = calcPercentageDifference(price, bidPrice);
-          const sell = this.#percentageThreshold <= priceChange || (createdAt && isOlderThen(createdAt, 20) && priceChange > 1);
+          const sell =
+            this.#percentageThreshold <= priceChange ||
+            (createdAt && isOlderThen(createdAt, 20) && priceChange > 1);
           // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest 4 hours.
           if (sell) await this.#sell({ id, volume, cost, price }, balance.crypto, bidPrice);
         }

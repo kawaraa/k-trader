@@ -129,7 +129,7 @@ function calcPercentageDifference(oldPrice, newPrice) {
 function countPriceChanges(prices, percentageThreshold, offset = 864) {
   const changes = [];
   // Find the lowest price in the last 3 days (864) based on 5 mins interval
-  let picePointer = prices.slice(0, offset).toSorted()[0];
+  let picePointer = prices.slice(0, offset).sort()[0];
 
   for (let i = offset - 10; i < prices.length; i++) {
     const change = calcPercentageDifference(picePointer, prices[i]);
