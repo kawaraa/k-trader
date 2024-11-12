@@ -12,7 +12,7 @@ const modes = [
 
 const pair = process.argv[2];
 const capital = +process.argv[3] || 100;
-const investment = +process.argv[4] || 9;
+const investment = +process.argv[4] || 10;
 const minStrategyRange = +process.argv[5] || 0.25;
 const minPercentagePriceChange = +process.argv[6] || 1.25;
 const mode = process.argv[7] || modes[0];
@@ -34,14 +34,14 @@ if (!modes.includes(mode)) throw new Error("Invalid mode!");
     for (let range = minStrategyRange; range <= 1; range += 0.25) {
       for (let priceChange = minPercentagePriceChange; priceChange <= 7; priceChange += 0.5) {
         const result = await testStrategy(pair, prices, capital, investment, range, priceChange);
-        const remain = parseInt(result.crypto);
-        const transactions = parseInt(result.transactions);
+        const remain = parseInt(result.crypto) / 2;
+        const transactions = parseInt(result.transactions) / 2;
 
         if (maxBalance < result.balance + 3) {
           maxBalance = result.balance;
           console.log(
             `€${capital} €${result.investment} >${result.range}< ${result.priceChange}% ${mode} =>`,
-            `€${parseInt(result.balance - capital)} Remain: ${remain} Transactions: ${transactions}`
+            `€${parseInt(result.balance - capital) / 2} Remain: ${remain} Transactions: ${transactions}`
           );
         }
       }
@@ -49,7 +49,7 @@ if (!modes.includes(mode)) throw new Error("Invalid mode!");
   } catch (error) {
     console.log("Error with ", pair, "=>", error);
   }
-  console.log(`\n\n`);
+  console.log(`\n`);
 })();
 
 async function testStrategy(pair, prices, capital, investment, range, priceChange) {

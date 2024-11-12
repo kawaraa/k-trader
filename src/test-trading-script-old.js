@@ -1,4 +1,5 @@
 // test-trading-script is a price-history-analysis-script
+const { readFileSync } = require("fs");
 const { adjustPrice, countPriceChanges } = require("./trend-analysis.js");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
@@ -15,7 +16,7 @@ const modes = [
 
 // const pair = process.argv[2]; // The pair of the two currency that will be used for trading E.g. ETHEUR
 const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
-const investment = +process.argv[4] || 9;
+const investment = +process.argv[4] || 10;
 const minStrategyRange = +process.argv[5] || 0.25; // Is a Range of the strategy in days, min value from 0.25 day which equivalent to 6 hours
 const minPercentagePriceChange = +process.argv[6] || 1.5;
 const mode = process.argv[7] || modes[0];
@@ -28,20 +29,21 @@ const timeInterval = 5;
 
 if (!modes.includes(mode)) throw new Error("Invalid mode!");
 
-const pairs = Object.keys(currencies).slice(0); // 2 - 19
+const pairs = Object.keys(currencies); // .slice();
+
 (async () => {
   for (const pair of pairs) {
     console.log(`Started new trading with ${pair}:`);
-
+    if (currencies[pair].note?.includes("stable")) continue;
     // const offset = parseInt((minStrategyRange * 24 * 60) / 5);
     // const result = countPriceChanges(prices, minPercentagePriceChange, offset);
     // if (result.changes.at(-1) < 1) result.changes.pop();
     // const pricesChanges = result.changes.filter((p) => p < -1).length / 2;
     // const profit = parseInt(minPercentagePriceChange * pricesChanges);
     // console.log("Prices:", prices.length, "PricesChanges:", pricesChanges, "Profit:", profit);
-
+    let prices = null;
     try {
-      let prices = require(`${process.cwd()}/database/prices/${pair}.json`);
+      prices = JSON.parse(readFileSync(`${process.cwd()}/database/prices/${pair}.json`, "utf-8"));
       // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
       // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
 
@@ -54,17 +56,13 @@ const pairs = Object.keys(currencies).slice(0); // 2 - 19
         for (let priceChange = minPercentagePriceChange; priceChange <= 9; priceChange += 0.5) {
           const result = await testStrategy(pair, prices, capital, investment, range, priceChange);
           const remain = parseInt(result.crypto);
-          // const transactions = parseInt(result.transactions / 2);
-          // const b = parseInt((result.balance - capital) / 2)
-          const transactions = parseInt(result.transactions);
+          const transactions = parseInt(result.transactions / 2);
 
           if (maxBalance < result.balance + 3) {
             maxBalance = result.balance;
             console.log(
               `€${capital} €${result.investment} >${result.range}< ${result.priceChange}% ${mode} =>`,
-              `€${parseInt(result.balance - capital) / 2} Remain: ${remain / 2} Transactions: ${
-                transactions / 2
-              }`
+              `€${parseInt(result.balance - capital) / 2} Remain: ${remain / 2} Transactions: ${transactions}`
             );
           }
         }
@@ -73,6 +71,8 @@ const pairs = Object.keys(currencies).slice(0); // 2 - 19
       console.log("Error with ", pair, "=>", error);
     }
     console.log(`\n`);
+
+    if (global.gc) global.gc(); // Forces garbage collection
   }
 })();
 
