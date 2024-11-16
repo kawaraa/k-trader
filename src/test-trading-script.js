@@ -10,13 +10,13 @@ const modes = [
   "on-increase",
 ];
 
-const pair = process.argv[2];
+const pair = process.argv[2]?.replace(".json", "");
 const capital = +process.argv[3] || 100;
 const investment = +process.argv[4] || 10;
 const minStrategyRange = +process.argv[5] || 0.25;
 const minPercentagePriceChange = +process.argv[6] || 1.25;
 const mode = process.argv[7] || modes[0];
-const timeInterval = 5;
+const timeInterval = (process.env.botTimeInterval = 5);
 
 // Command example: node test-trading-script.js ETHEUR 100 99 0.25 1.1 near-low > database/log/all.log 2>&1
 
@@ -56,7 +56,7 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
   let transactions = 0;
   const pricesOffset = (range * 24 * 60) / timeInterval;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset);
-  const info = { capital, investment, strategyRange: range, priceChange, mode, timeInterval };
+  const info = { capital, investment, strategyRange: range, priceChange, mode };
   const trader = new DailyTrader(ex, pair, info);
   trader.listener = (p, event, info) => {
     if (event == "sell") {

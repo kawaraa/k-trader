@@ -37,6 +37,7 @@ class BotsManager {
     this.#bots[pair] = new Bot(info, new DailyTrader(ex, pair, info));
     this.state.update(this.#bots);
     writeFileSync(`database/logs/${pair}.log`, "");
+    writeFileSync(`database/prices/${pair}.json`, "[]");
   }
   static update(pair, info) {
     this.#bots[pair].stop();

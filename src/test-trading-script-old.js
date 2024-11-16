@@ -23,7 +23,7 @@ const mode = process.argv[7] || modes[0];
 // const strategyInvestments = [9, 19, 32, 49, 99]; // strategySettings
 // investment is and investing Amount in EUR that will be used every time to by crypto
 // priceChange is a price Percentage Threshold, value from 0 to 100
-const timeInterval = 5;
+const timeInterval = (process.env.botTimeInterval = 5);
 
 // Command example: node test-trading-script.js ETHEUR 100 99 0.25 1.1 near-low > database/log/all.log 2>&1
 
@@ -41,9 +41,9 @@ const pairs = Object.keys(currencies); // .slice();
     // const pricesChanges = result.changes.filter((p) => p < -1).length / 2;
     // const profit = parseInt(minPercentagePriceChange * pricesChanges);
     // console.log("Prices:", prices.length, "PricesChanges:", pricesChanges, "Profit:", profit);
-    let prices = null;
+
     try {
-      prices = JSON.parse(readFileSync(`${process.cwd()}/database/prices/${pair}.json`, "utf-8"));
+      let prices = JSON.parse(readFileSync(`${process.cwd()}/database/prices/${pair}.json`, "utf-8"));
       // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
       // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
 
@@ -72,7 +72,7 @@ const pairs = Object.keys(currencies); // .slice();
     }
     console.log(`\n`);
 
-    if (global.gc) global.gc(); // Forces garbage collection
+    // if (global.gc) global.gc(); // Forces garbage collection
   }
 })();
 
@@ -80,7 +80,7 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
   let transactions = 0;
   const pricesOffset = (range * 24 * 60) / timeInterval;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset);
-  const info = { capital, investment, strategyRange: range, priceChange, mode, timeInterval };
+  const info = { capital, investment, strategyRange: range, priceChange, mode };
   const trader = new DailyTrader(ex, pair, info);
   trader.listener = (p, event, info) => {
     if (event == "sell") {
