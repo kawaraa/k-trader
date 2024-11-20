@@ -148,7 +148,8 @@ export default function Home() {
 
         <ul className="pt-4">
           {Object.keys(bots)
-            .sort((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
+            // .sort((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
+            .sort((p1, p2) => bots[p2].earnings - bots[p1].earnings)
             .map((pair) => (
               <BotItem botInfo={{ pair, ...bots[pair] }} onAction={handleActions} key={pair} />
             ))}
