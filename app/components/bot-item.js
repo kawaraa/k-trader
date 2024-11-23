@@ -7,7 +7,7 @@ export default function BotItem({ botInfo, onAction }) {
   const [open, setOpen] = useState(false);
   const cls = open ? "max-h-[1000px] py-2 mt-2 border-t-[1px] border-slate-200" : "max-h-[0px]";
   const status = botInfo.startedOn ? "off" : "on";
-  const btnCls = "bg-pc text-white rounded-md py-1 px-2";
+  const btnCls = "text-white rounded-md py-1 px-2 bg-amber-600"; // bg-pc
 
   return (
     <li className={`mb-3 p-2 overflow-y-auto no-srl-bar card rounded-md ${borderCls}`}>
@@ -75,7 +75,7 @@ export default function BotItem({ botInfo, onAction }) {
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <button onClick={() => onAction("delete", botInfo.pair)} className={`w-8 flex text-pc`}>
+          <button onClick={() => onAction("delete", botInfo.pair)} className="w-8 flex text-red">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="64 64 896 896"
@@ -86,7 +86,7 @@ export default function BotItem({ botInfo, onAction }) {
               <path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"></path>
             </svg>
           </button>
-          <button onClick={() => onAction("edit", botInfo.pair)} className={`w-8 h-8 flex text-pc`}>
+          <button onClick={() => onAction("edit", botInfo.pair)} className="w-8 h-8 flex text-pc">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -98,14 +98,14 @@ export default function BotItem({ botInfo, onAction }) {
             </svg>
           </button>
 
-          <Link href={`/bot?pair=${botInfo.pair}`} className={`w-8 h-8 flex text-pc`}>
+          <Link href={`/bot?pair=${botInfo.pair}`} className="w-8 h-8 flex text-pc">
             <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
               <g fill="currentColor">
                 <path d="M5.314 1.256a.75.75 0 01-.07 1.058L3.889 3.5l1.355 1.186a.75.75 0 11-.988 1.128l-2-1.75a.75.75 0 010-1.128l2-1.75a.75.75 0 011.058.07zM7.186 1.256a.75.75 0 00.07 1.058L8.611 3.5 7.256 4.686a.75.75 0 10.988 1.128l2-1.75a.75.75 0 000-1.128l-2-1.75a.75.75 0 00-1.058.07zM2.75 7.5a.75.75 0 000 1.5h10.5a.75.75 0 000-1.5H2.75zM2 11.25a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75zM2.75 13.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"></path>
               </g>
             </svg>
           </Link>
-          <button onClick={() => onAction("sell-all", botInfo.pair)} className={`${btnCls} !bg-rose-300`}>
+          <button onClick={() => onAction("sell-all", botInfo.pair)} className={btnCls}>
             Sell all
           </button>
         </div>
