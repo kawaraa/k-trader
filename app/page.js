@@ -80,8 +80,8 @@ export default function Home() {
         const startedOn = action == "turn-off" ? null : dateToString();
         const copy = { ...bots };
         copy[pair].startedOn = startedOn;
+        setBots(copy);
       }
-      setBots(copy);
       setLoading(false);
     }
   };
