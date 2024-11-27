@@ -117,13 +117,13 @@ export default function Home() {
         <div className="flex text-white">
           <button
             onClick={() => handleActions("turn-off-all", "all")}
-            className={`${btnCls.replace("bg-pc", "bg-rose-400")} !w-auto min-w-20 mr-3`}
+            className={`${btnCls.replace("bg-pc", "bg-rose-400")} !w-auto !py-0 !px-[4px] mr-3`}
           >
             Stop all
           </button>
           <button
             onClick={() => handleActions("turn-on-all", "all")}
-            className={`${btnCls.replace("bg-pc", "bg-emerald-400")} !w-auto min-w-20`}
+            className={`${btnCls.replace("bg-pc", "bg-emerald-400")} !w-auto !py-0 !px-[4px]`}
           >
             Run all
           </button>
