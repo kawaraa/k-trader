@@ -69,7 +69,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
 
       if (status == "on") BotsManager.run(pair);
       if (status == "off") BotsManager.stop(pair);
-      if (status == "on-all") await BotsManager.runAll();
+      if (status == "on-all") BotsManager.runAll();
       if (status == "off-all") BotsManager.stopAll();
       response.json({ success: true });
     } catch (error) {
