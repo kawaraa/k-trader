@@ -65,12 +65,12 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
   router.patch("/bots", authRequired, async (request, response) => {
     try {
       const { pair, status } = request.query;
-      isValidPair(pair, true);
+      if (pair != "all") isValidPair(pair, true);
 
       if (status == "on") BotsManager.run(pair);
       if (status == "off") BotsManager.stop(pair);
-      // if (status == "on-all") BotsManager.runAll(5);
-      // if (status == "off-all") BotsManager.stopAll();
+      if (status == "on-all") await BotsManager.runAll();
+      if (status == "off-all") BotsManager.stopAll();
       response.json({ success: true });
     } catch (error) {
       response.status(500).json({ message: parseError(error) });

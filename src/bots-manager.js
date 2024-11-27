@@ -56,32 +56,27 @@ class BotsManager {
     this.#bots[pair].stop();
   }
   static async sellAllOrders(pair) {
-    const crypto = (await ex.balance(pair)).crypto;
-    if (crypto > 0) await ex.createOrder("sell", "market", pair, crypto);
+    await this.#bots[pair].sellAll();
     const bot = this.#bots[pair];
-    bot.sold += bot.orders.length;
+    bot.sold += 1;
     bot.orders = [];
     this.state.update(this.get());
   }
-  // static async runAll() {
-  //   // doNotUpdateTimestamp / doNotClearTimestamp
-  //   const pairs = Object.keys(this.#bots);
-  //   this.#randomTimeInterval = (60000 * (Math.round(Math.random() * 3) + basePeriod)) / pairs.length;
-
-  //   for (const pair of pairs) {
-  //     if (!this.#randomTimeInterval) this.#bots[pair].stop();
-  //     else {
-  //       if (!this.#bots[pair].startedOn) this.#bots[pair].startedOn = dateToString();
-  //       this.#bots[pair].stop(true);
-  //       this.#bots[pair].start();
-  //       await delay(this.#randomTimeInterval);
-  //     }
-  //   }
-  //   if (this.#randomTimeInterval) this.runAll(basePeriod);
-  // }
-  // static stopAll() {
-  //   this.#randomTimeInterval = 0;
-  // }
+  static async runAll() {
+    for (const pair of this.#bots) {
+      if (!this.#bots[pair].startedOn) {
+        await delay(5000);
+        this.#bots[pair].start();
+        this.#bots[pair].startedOn = dateToString();
+      }
+    }
+  }
+  static stopAll() {
+    for (const pair of this.#bots) {
+      this.#bots[pair].stop();
+      this.#bots[pair].startedOn = null;
+    }
+  }
 
   static updateBotProgress(pair, event, info) {
     if (event == "log") {

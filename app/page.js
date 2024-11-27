@@ -71,14 +71,16 @@ export default function Home() {
     if (action == "edit") setBotToUpdate({ pair, info: bots[pair] });
     else if (action == "delete") remove(pair);
     else if (action == "sell-all") sellAllOrders(pair);
-    else if (action == "turn-on" || action == "turn-off") {
+    else if (["turn-on", "turn-off"].includes(action.replace("-all", ""))) {
       if (!confirm(`Do you want to ${action} "${pair}" Bot?`)) return;
       setLoading(true);
       const url = `/api/bots?pair=${pair}&status=${action.replace("turn-", "")}`;
       await request(url, { method: "PATCH" }).catch(catchErr);
-      const startedOn = action == "turn-off" ? null : dateToString();
-      const copy = { ...bots };
-      copy[pair].startedOn = startedOn;
+      if (!["turn-on-all", "turn-off-all"].includes(action)) {
+        const startedOn = action == "turn-off" ? null : dateToString();
+        const copy = { ...bots };
+        copy[pair].startedOn = startedOn;
+      }
       setBots(copy);
       setLoading(false);
     }
@@ -112,6 +114,20 @@ export default function Home() {
     <>
       <header className="no-select flex px-3 sm:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
         <strong className="text-3xl font-bold text-emerald-500">€{parseInt(balance)}</strong>
+        <div className="flex text-white">
+          <button
+            onClick={() => handleActions("turn-off-all", "all")}
+            className={`${btnCls.replace("bg-pc", "bg-rose-400")} !w-auto min-w-20 mr-3`}
+          >
+            Stop all
+          </button>
+          <button
+            onClick={() => handleActions("turn-on-all", "all")}
+            className={`${btnCls.replace("bg-pc", "bg-emerald-400")} !w-auto min-w-20`}
+          >
+            Run all
+          </button>
+        </div>
         <div className="flex items-end">
           <strong>
             <span className="text-green">{botsPairs.filter((p) => bots[p].startedOn).length}</span>
