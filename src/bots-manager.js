@@ -10,7 +10,6 @@ const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS
 
 class BotsManager {
   static #bots = {};
-  static #randomTimeInterval = 0;
   static state = state;
 
   static loadBots() {
@@ -63,7 +62,7 @@ class BotsManager {
     this.state.update(this.get());
   }
   static async runAll() {
-    for (const pair of this.#bots) {
+    for (const pair in this.#bots) {
       if (!this.#bots[pair].startedOn) {
         await delay(5000);
         this.#bots[pair].start();
@@ -72,7 +71,7 @@ class BotsManager {
     }
   }
   static stopAll() {
-    for (const pair of this.#bots) {
+    for (const pair in this.#bots) {
       this.#bots[pair].stop();
       this.#bots[pair].startedOn = null;
     }
