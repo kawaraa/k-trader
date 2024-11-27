@@ -56,11 +56,6 @@ class BotsManager {
   }
   static async sellAllOrders(pair) {
     const bot = this.#bots[pair];
-    if (1 > 0)
-      throw new Error(
-        `${pair} is not a valid pair ${JSON.stringify(bot)} - ${bot?.sellAll} - ${JSON.stringify(this.#bots)}`
-      );
-
     await bot.sellAll();
     bot.sold += 1;
     bot.orders = [];
@@ -71,14 +66,12 @@ class BotsManager {
       if (!this.#bots[pair].startedOn) {
         await delay(5000);
         this.#bots[pair].start();
-        this.#bots[pair].startedOn = dateToString();
       }
     }
   }
   static stopAll() {
     for (const pair in this.#bots) {
       this.#bots[pair].stop();
-      this.#bots[pair].startedOn = null;
     }
   }
 
@@ -150,6 +143,9 @@ class Bot {
     return value?.stringValue || value?.integerValue || value?.doubleValue || value;
   }
 
+  sellAll() {
+    return this.#trader.sellAll();
+  }
   start() {
     this.startedOn = dateToString();
     this.#trader.start();
