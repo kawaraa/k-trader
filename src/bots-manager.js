@@ -55,8 +55,8 @@ class BotsManager {
     this.#bots[pair].stop();
   }
   static async sellAllOrders(pair) {
-    await this.#bots[pair].sellAll();
     const bot = this.#bots[pair];
+    await bot.sellAll();
     bot.sold += 1;
     bot.orders = [];
     this.state.update(this.get());
