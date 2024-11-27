@@ -55,8 +55,11 @@ class BotsManager {
     this.#bots[pair].stop();
   }
   static async sellAllOrders(pair) {
+    if (!pair) throw new Error(`${pair} is not a valid pair 1`);
+    else if (1 > 0) throw new Error(`${pair} is not a valid pair 2`);
+
+    await this.#bots[pair].sellAll();
     const bot = this.#bots[pair];
-    await bot.sellAll();
     bot.sold += 1;
     bot.orders = [];
     this.state.update(this.get());
