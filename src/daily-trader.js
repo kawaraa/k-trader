@@ -47,8 +47,9 @@ module.exports = class DailyTrader {
       const bidPercentageChange = calcPercentageDifference(avgBidPrice, bidPrice);
       const highestBidPr = bidPrices.sort().at(-1);
       const lowestAsk = askPrices.sort()[0];
-      const totalInvestedAmount = orders.reduce((acc, o) => acc + o.cost, 0) + this.#investingCapital;
+      const orderLimit = parseInt(this.#capital / this.#investingCapital) - 1;
       const interval = this.period || +process.env.botTimeInterval;
+      const enoughPricesData = prices.length >= (this.#strategyRange * 24 * 60) / interval;
 
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto} - Price: ${tradePrice}`);
@@ -77,7 +78,7 @@ module.exports = class DailyTrader {
 
       if (this.mode.includes("partly-trade")) {
         // Pause buying if the bidPrice is higher then price of the last Order In the first or second Part
-        const thirdIndex = Math.round(this.#capital / this.#investingCapital / 3);
+        const thirdIndex = Math.round((orderLimit + 1) / 3);
         const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex - 1] || {};
         if (
           price &&
@@ -97,14 +98,14 @@ module.exports = class DailyTrader {
         }
       }
 
-      if (prices.length >= (this.#strategyRange * 24 * 60) / interval && shouldBuy && askPriceRSI < 30) {
+      if (enoughPricesData && shouldBuy && askPriceRSI < 30) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${lowestAsk}`);
-        const investingVolume = +(
-          (this.#investingCapital - calculateFee(this.#investingCapital, 0.4)) /
-          askPrice
-        ).toFixed(8);
 
-        if (balance.eur > 0 && totalInvestedAmount <= this.#capital) {
+        if (!orders[orderLimit] && balance.eur > 0) {
+          const investingVolume = +(
+            (this.#investingCapital - calculateFee(this.#investingCapital, 0.4)) /
+            askPrice
+          ).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
@@ -114,7 +115,7 @@ module.exports = class DailyTrader {
           return this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice);
         });
 
-        if (!sellableOrders[0] && totalInvestedAmount > this.#capital / 3 && 85 < bidPriceRSI) {
+        if (!sellableOrders[0] && orders[orderLimit] && 85 < bidPriceRSI) {
           // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest 4 hours.
           sellableOrders = orders.filter(({ price, createdAt }) => {
             return (
