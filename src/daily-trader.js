@@ -115,7 +115,7 @@ module.exports = class DailyTrader {
           return this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice);
         });
 
-        if (!sellableOrders[0] && orders[orderLimit] && 85 < bidPriceRSI) {
+        if (!sellableOrders[0] && orders[orderLimit] && 70 < bidPriceRSI) {
           // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest 4 hours.
           sellableOrders = orders.filter(({ price, createdAt }) => {
             return (
