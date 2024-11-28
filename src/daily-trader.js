@@ -119,7 +119,7 @@ module.exports = class DailyTrader {
           // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest 4 hours.
           sellableOrders = orders.filter(({ price, createdAt }) => {
             return (
-              isOlderThen(createdAt, 25) ||
+              isOlderThen(createdAt, 10) ||
               (isOlderThen(createdAt, 1) && calcPercentageDifference(price, bidPrice) > 1.5)
             );
           });
