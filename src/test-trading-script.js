@@ -26,7 +26,7 @@ async function runTradingTest(pair, capital, investment, minStrategyRange, minPr
         const remain = parseInt(res.crypto) / 2;
         const transactions = parseInt(res.transactions) / 2;
 
-        if (maxBalance >= 10 && maxBalance < res.balance + 3) {
+        if (res.balance >= 10 && maxBalance < res.balance + 3) {
           maxBalance = res.balance;
           console.log(
             `€${capital} €${res.investment} >${res.range}< ${res.priceChange}% ${mode} =>`,
