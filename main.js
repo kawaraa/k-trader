@@ -11,7 +11,6 @@ const { isValidPair, parseError } = require("./src/utilities.js");
 mkdirSync("database/logs", { recursive: true });
 mkdirSync("database/prices", { recursive: true });
 
-process.env.botTimeInterval = 5;
 const prod = process.env.NODE_ENV === "production";
 const port = 3000;
 const server = express();
@@ -80,10 +79,3 @@ try {
 } catch (error) {
   console.log("App error: ", error);
 }
-
-// const pair = process.argv[2]; // The pair of the two currency that will be used for trading E.g. ETHEUR
-// const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
-// const investment = +process.argv[4] || 9; // Amount in EUR that will be used every time to by crypto
-// const priceChange = +process.argv[5] || 2; // price Percentage Threshold 0 to 100, default is 1.5
-// const strategyRange = +process.argv[6] || 0.5; // Range of the strategy in days, Default is 0.5 day
-// const timeInterval = +process.argv[7] || 5; // 1 to 11440, time per mins E.g. 11440 would be every 24 hours

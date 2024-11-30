@@ -32,7 +32,7 @@ module.exports = class DailyTrader {
     try {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
-      const prices = await this.ex.price(this.#pair, this.#strategyRange); // For the last xxx days
+      const prices = await this.ex.prices(this.#pair, this.#strategyRange); // For the last xxx days
       this.#tradingAmount = +(this.#investingCapital / bidPrice).toFixed(8);
 
       const name = this.#pair.replace("EUR", "");
@@ -48,7 +48,7 @@ module.exports = class DailyTrader {
       const highestBidPr = bidPrices.sort().at(-1);
       const lowestAsk = askPrices.sort()[0];
       const orderLimit = parseInt(this.#capital / this.#investingCapital) - 1;
-      const interval = this.period || +process.env.botTimeInterval;
+      const interval = this.period || this.timeInterval; // this.timeInterval is used only in test trading
       const enoughPricesData = prices.length >= (this.#strategyRange * 24 * 60) / interval;
 
       this.dispatch("balance", balance.crypto);

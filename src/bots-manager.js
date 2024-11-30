@@ -4,7 +4,6 @@ const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs
 const { dateToString, toShortDate, delay } = require("./utilities");
 const LocalState = require("./local-state");
 
-const basePeriod = process.env.botTimeInterval;
 const state = new LocalState("state");
 const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
 

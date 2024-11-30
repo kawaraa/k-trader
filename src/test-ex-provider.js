@@ -2,11 +2,12 @@ const { randomUUID } = require("node:crypto");
 const { calculateFee } = require("./trend-analysis");
 
 module.exports = class TestExchangeProvider {
-  constructor(balance, prices, priceIndex) {
+  constructor(balance, prices, priceIndex, timeInterval) {
     this.currentBalance = balance;
     this.allPrices = prices;
     this.currentPriceIndex = priceIndex;
     this.orders = [];
+    this.interval = timeInterval;
   }
 
   async balance() {
@@ -20,8 +21,9 @@ module.exports = class TestExchangeProvider {
   async pricesData(pair, period) {
     return this.allPrices.map((p) => p.tradePrice);
   }
-  async price(pair, lastDays) {
-    return this.allPrices.slice(this.currentPriceIndex - (lastDays * 24 * 60) / 5, this.currentPriceIndex);
+  async prices(pair, lastDays) {
+    const offset = this.currentPriceIndex - (lastDays * 24 * 60) / this.interval;
+    return this.allPrices.slice(offset, this.currentPriceIndex);
   }
   async createOrder(tradingType, b, c, volume) {
     const { tradePrice, askPrice, bidPrice } = this.allPrices[this.currentPriceIndex - 1];
