@@ -50,11 +50,9 @@ export default function AddBotFrom({ bot, onSubmit }) {
       />
       <select name="mode" defaultValue={bot?.info?.mode} required className={inputCls}>
         <option value="">Mode</option>
-        <option value="on-increase">On increase</option>
-        <option value="near-low">Near low</option>
-        <option value="high-drop">High drop</option>
         <option value="near-low-partly-trade">Near low and partly trade</option>
         <option value="high-drop-partly-trade">High drop and partly trade</option>
+        <option value="on-increase">On increase</option>
       </select>
 
       <input

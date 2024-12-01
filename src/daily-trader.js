@@ -1,3 +1,25 @@
+/*
+
+===> How DailyTrader works <===
+
+- DailyTrader performs trading based on the provided strategy and settings. It analyzes the prices of the last xxx days on every xxx mins interval. every strategy has its settings.
+
+- There are a currently 5 strategies:
+1. high-drop-partly-trade: It buys if the current price drops -xxx% and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
+2. high-drop-slowly-trade: the same except it does not use all the capital to buy, it buys on specific amount provide in the settings called "investment" and when the prices drops again, it buys again til it spend the whole amount of "capital"
+3. near-low-partly-trade: It buys if the current price drops -xxx% and near the lowest price in the last xxx days and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
+4. near-low-slowly-trade: 
+5. on-increase: It buys if the RSI is less than 30 and increasing, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
+
+- Settings: are used to control whether it's a long term strategy or short term trading / daily trading strategy, you can set it up using the "strategy range" field. if it's a day or less then obviously it's a short term trading strategy. 
+
+- Note: this is how limit orders are managed:
+1. Check if there are buy order ID in state that has not been fulfilled, remove it from the state,
+2. If fulfilled buy orders have fulfilled sell order, calculate the profits and remove these orders from the state
+3. If it's good time to buy, place buy orders with 2 mins expire and store their IDs in the state.
+4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
+*/
+
 const {
   calculateRSI,
   calcAveragePrice,
@@ -63,7 +85,8 @@ module.exports = class DailyTrader {
       );
 
       // 1. On price drop
-      let shouldBuy = calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 1.2);
+      const HighDropChange = calcPercentageDifference(highestBidPr, askPrice);
+      let shouldBuy = HighDropChange < -(this.#percentageThreshold * 1.2);
       // 2. On price increase
       if (this.mode.includes("on-increase")) {
         shouldBuy = askPriceRSI < 30 && this.previousRSI <= bidPriceRSI;
@@ -71,34 +94,30 @@ module.exports = class DailyTrader {
       }
       // 3. On price reach lowest price
       if (this.mode.includes("near-low")) {
-        shouldBuy =
-          calcPercentageDifference(highestBidPr, askPrice) <= -this.#percentageThreshold &&
-          calcPercentageDifference(lowestAsk, askPrice) < this.#percentageThreshold / 8;
+        const nearLow = calcPercentageDifference(lowestAsk, askPrice);
+        shouldBuy = HighDropChange <= -this.#percentageThreshold && nearLow < this.#percentageThreshold / 8;
       }
 
       if (this.mode.includes("partly-trade")) {
         // Pause buying if the bidPrice is higher then price of the last Order In the first or second Part
         const thirdIndex = Math.round((orderLimit + 1) / 3);
         const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex - 1] || {};
-        if (
-          price &&
-          -Math.max(this.#percentageThreshold / 2, 2) < calcPercentageDifference(price, bidPrice)
-        ) {
-          shouldBuy = false;
-        }
+        const threshold = -Math.max(this.#percentageThreshold / 2, 2);
+
+        if (price && threshold < calcPercentageDifference(price, bidPrice)) shouldBuy = false;
       }
       if (this.mode.includes("slowly-trade")) {
         // Pause buying if the bidPrice is not x% less then the last Order's price
         const { price } = orders.at(-1) || {};
-        if (
-          price &&
-          -Math.max(this.#percentageThreshold / 4, 1.5) < calcPercentageDifference(price, bidPrice)
-        ) {
-          shouldBuy = false;
-        }
+        const threshold = -Math.max(this.#percentageThreshold / 4, 1.5);
+
+        if (price && threshold < calcPercentageDifference(price, bidPrice)) shouldBuy = false;
       }
 
-      if (enoughPricesData && shouldBuy && askPriceRSI < 30) {
+      // Safety check
+      if (HighDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
+
+      if (enoughPricesData && shouldBuy && askPriceRSI < 50) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${lowestAsk}`);
 
         if (!orders[orderLimit] && balance.eur > 0) {
@@ -174,3 +193,22 @@ module.exports = class DailyTrader {
     if (this.listener) this.listener(this.#pair + "", event, info);
   }
 };
+
+/*
+
+// // ========== Prices Changes Tests ==========
+// if (calcPercentageDifference(highestBidPr, askPrice) < -(this.#percentageThreshold * 2)) {
+//   console.log("Should Buy:", askPrice, calcPercentageDifference(highestBidPr, askPrice)); // Buy
+//   this.lastPrice = askPrice;
+// } else if (
+//   this.lastPrice &&
+//   calcPercentageDifference(this.lastPrice, bidPrice) > this.#percentageThreshold
+// ) {
+//   console.log("Should Sell:", bidPrice, calcPercentageDifference(this.lastPrice, bidPrice)); // Sell
+//   if (!this.profit) this.profit = 0;
+//   this.profit += bidPrice - this.lastPrice;
+//   this.lastPrice = bidPrice;
+//   console.log("profit", this.profit);
+// }
+
+*/

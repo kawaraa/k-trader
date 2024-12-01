@@ -2,9 +2,7 @@
 const { readFileSync } = require("fs");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
-const modes = [
-  "high-drop",
-  "near-low",
+const supportedModes = [
   "high-drop-partly-trade",
   "high-drop-slowly-trade",
   "near-low-partly-trade",
@@ -12,26 +10,43 @@ const modes = [
   "on-increase",
 ];
 
-async function runTradingTest(pair, capital, investment, minStrategyRange, minPriceChange, mode, interval) {
-  if (!modes.includes(mode)) throw new Error("Invalid mode!");
-  console.log(`Started new trading with ${pair} based on ${interval} mins time interval.\n`);
+const pair = process.argv[2]; // The currency pair E.g. ETHEUR
+const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
+const investment = +process.argv[4] || 10; // investing Amount in EUR that will be used every time to by crypto
+const minStrategyRange = +process.argv[5] || 0.25; // In days, min value 0.25 day which equivalent to 6 hours
+const minPercentagePriceChange = +process.argv[6] || 1.25; // Price Percentage Threshold, min value 1.25
+const modes = process.argv[7];
+const interval = +process.argv[8] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
+const maxStrategyRange = +process.argv[9] || 1;
+const maxPriceChange = +process.argv[10] || 10;
+const showLogs = !!process.argv[11];
+
+async function runTradingTest(pair, capital, investment, minStrategyRange, minPriceChange, modes, interval) {
+  if (modes == "all") modes = supportedModes;
+  else if (supportedModes.includes(modes)) modes = [modes];
+  else throw new Error("Invalid mode!");
+  if (capital == investment) modes = modes.filter((m) => !m.includes("slowly-trade"));
+
+  console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
   try {
     const prices = getPrices(pair, interval / 5);
 
     let maxBalance = 0;
-    for (let range = minStrategyRange; range <= 1; range += 0.25) {
-      for (let priceChange = minPriceChange; priceChange <= 10; priceChange += 0.5) {
-        const res = await testStrategy(pair, prices, capital, investment, range, priceChange, mode, interval);
-        const remain = parseInt(res.crypto) / 2;
-        const transactions = parseInt(res.transactions) / 2;
+    for (mode of modes) {
+      for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
+        for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
+          const r = await testStrategy(pair, prices, capital, investment, range, priceChange, mode, interval);
+          const remain = parseInt(r.crypto) / 2;
+          const transactions = parseInt(r.transactions) / 2;
 
-        if (res.balance >= 10 && maxBalance < res.balance + 3) {
-          maxBalance = res.balance;
-          console.log(
-            `€${capital} €${res.investment} >${res.range}< ${res.priceChange}% ${mode} =>`,
-            `€${parseInt(res.balance - capital) / 2} Remain: ${remain} Transactions: ${transactions}`
-          );
+          if (maxBalance < r.balance + 3) {
+            maxBalance = r.balance;
+            console.log(
+              `€${capital} €${r.investment} >${r.range}< ${r.priceChange}% ${mode} =>`,
+              `€${parseInt(r.balance - capital) / 2} Remain: ${remain} Transactions: ${transactions}`
+            );
+          }
         }
       }
     }
@@ -53,7 +68,7 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
       ex.removeOrder(info);
       transactions++;
     }
-    // event == "log" && console.log(pair, info);
+    if (showLogs) event == "log" && console.log(pair, info);
   };
 
   for (const i in prices) {
@@ -84,15 +99,7 @@ module.exports = runTradingTest;
 
 // Run the runTradingTest function if the script is executed directly
 if (require.main === module) {
-  const pair = process.argv[2]; // The currency pair E.g. ETHEUR
-  const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
-  const investment = +process.argv[4] || 10; // investing Amount in EUR that will be used every time to by crypto
-  const minStrategyRange = +process.argv[5] || 0.25; // In days, min value 0.25 day which equivalent to 6 hours
-  const minPercentagePriceChange = +process.argv[6] || 1.25; // Price Percentage Threshold, min value 1.25
-  const mode = process.argv[7] || modes[0];
-  const interval = +process.argv[8] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
-
-  runTradingTest(pair, capital, investment, minStrategyRange, minPercentagePriceChange, mode, interval).then(
+  runTradingTest(pair, capital, investment, minStrategyRange, minPercentagePriceChange, modes, interval).then(
     () => null
   );
 }
