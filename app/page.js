@@ -21,6 +21,7 @@ export default function Home() {
   const close = () => setShowAddBotForm(false) + setBotToUpdate(null);
   const catchErr = (er) => alert(er.message || er.error || er);
   const botsPairs = Object.keys(bots);
+  const stringKeys = ["pair", "mode", "rsiMode"];
 
   const add = async (e) => {
     e.preventDefault();
@@ -28,7 +29,9 @@ export default function Home() {
     const data = {};
     let method = "POST";
     try {
-      new FormData(e.target).forEach((v, k) => (data[k] = k == "pair" || k == "mode" ? v : +v));
+      new FormData(e.target).forEach((v, k) => (data[k] = stringKeys.includes(k) ? v : +v));
+      data.mode = `${data.mode}-${data.rsiMode}`;
+      delete data.rsiMode;
       if (bots[data.pair]) method = "PUT";
       const newBot = await request("/api/bots", {
         headers: { "Content-Type": "application/json" },

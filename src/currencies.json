@@ -4,9 +4,8 @@
     "askBidSpreadPercentage": 0.05,
     "strategies": [
       ">€100 €100 >0.25< 5.5% on-increase => €12.5 Remain: 0 Transactions: 2.5",
-      "€100 €33 >0.25< 5.5% on-increase => €10.5 Remain: 0 Transactions: 6.5",
-      "€100 €100 >0.25< 3.5% near-low-partly-trade => €10 Remain: 0 Transactions: 3.5",
-      "€100 €100 >0.75< 3% high-drop-partly-trade => €8 Remain: 0 Transactions: 3.5"
+      "€100 €100 >0.25< 5% on-increase => €11 Remain: 0 Transactions: 2.5",
+      "€100 €100 >0.25< 3.5% near-low-partly-trade => €10 Remain: 0 Transactions: 3.5"
     ]
   },
   "ETHEUR": {
@@ -26,11 +25,15 @@
     "strategies": [
       ">€100 €100 >0.75< 7.5% on-increase => €20 Remain: 0 Transactions: 2.5",
       "€100 €33 >0.25< 5% on-increase => €19 Remain: 0 Transactions: 12.5",
-      "€100 €100 >0.5< 5% near-low-partly-trade => €15.5 Remain: 0 Transactions: 3.5",
-      "€100 €100 >0.5< 4% high-drop-partly-trade => €13.5 Remain: 0 Transactions: 4"
+      "€100 €100 >0.5< 4.5% near-low-partly-trade => €18.5 Remain: 0 Transactions: 4.5",
+      "€100 €100 >0.75< 5% high-drop-partly-trade => €16 Remain: 0 Transactions: 3.5"
     ]
   },
-  "XRPEUR": { "becameAvailable": "2013-01-01", "askBidSpreadPercentage": 0.05, "strategies": [] },
+  "XRPEUR": {
+    "becameAvailable": "2013-01-01",
+    "askBidSpreadPercentage": 0.05,
+    "strategies": ["€100 €100 >0.75< 1.5% near-low-partly-trade => €5 Remain: 99.5 Transactions: 5"]
+  },
   "DOGEUR": {
     "becameAvailable": "2014-01-01",
     "askBidSpreadPercentage": 0.0,
@@ -42,7 +45,8 @@
     "askBidSpreadPercentage": 0.05,
     "strategies": [
       ">€100 €100 >1< 7% high-drop-partly-trade => €13.5 Remain: 0 Transactions: 2",
-      "€100 €100 >0.75< 5.5% high-drop-partly-trade => €12.5 Remain: 0 Transactions: 2.5"
+      "€100 €100 >0.75< 5.5% high-drop-partly-trade => €12.5 Remain: 0 Transactions: 2.5",
+      "€100 €33 >0.75< 6% near-low-slowly-trade => €10 Remain: 101.5 Transactions: 5.5"
     ]
   },
   "TRXEUR": { "becameAvailable": "2017-10-01", "askBidSpreadPercentage": 0.05, "strategies": [] },
@@ -50,9 +54,8 @@
     "becameAvailable": "2020-10-01",
     "askBidSpreadPercentage": 0.05,
     "strategies": [
-      ">€100 €100 >0.5< 5.5% near-low-partly-trade => €20.5 Remain: 0 Transactions: 4",
-      "€100 €100 >0.5< 5% high-drop-partly-trade => €16.5 Remain: 0 Transactions: 3.5",
-      "€100 €100 >0.75< 5% high-drop-partly-trade => €18 Remain: 2 Transactions: 3.5"
+      ">€100 €100 >0.5< 5.5% near-low-partly-trade => €21 Remain: 0 Transactions: 4",
+      "€100 €33 >0.25< 10% on-increase => €11 Remain: 1.5 Transactions: 4.5"
     ]
   },
   "SHIBEUR": {

@@ -117,7 +117,7 @@ module.exports = class DailyTrader {
       // Safety check
       if (HighDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
 
-      if (enoughPricesData && shouldBuy && askPriceRSI < 50) {
+      if (enoughPricesData && shouldBuy && askPriceRSI < (this.mode.includes("hard") ? 30 : 45)) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${lowestAsk}`);
 
         if (!orders[orderLimit] && balance.eur > 0) {

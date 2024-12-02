@@ -3,6 +3,8 @@ import { btnCls, inputCls } from "./tailwind-classes";
 const cryptocurrencies = require("../../src/currencies.json");
 
 export default function AddBotFrom({ bot, onSubmit }) {
+  const mode = bot?.info?.mode || "";
+
   return (
     <form onSubmit={onSubmit} className="w-full max-w-md mx-auto space-y-2 flex flex-col">
       <select name="pair" defaultValue={bot?.pair} required className={inputCls}>
@@ -48,12 +50,32 @@ export default function AddBotFrom({ bot, onSubmit }) {
         required
         className={inputCls}
       />
-      <select name="mode" defaultValue={bot?.info?.mode} required className={inputCls}>
-        <option value="">Mode</option>
+
+      <select name="mode" defaultValue={mode.replace("hard", "")} required className={inputCls}>
+        <option value="">Trading mode</option>
         <option value="near-low-partly-trade">Near low and partly trade</option>
         <option value="high-drop-partly-trade">High drop and partly trade</option>
-        <option value="on-increase">On increase</option>
+        <option value="on-increase-partly-trade">On increase and partly trade</option>
       </select>
+
+      {/* text-sm */}
+      <div className="flex items-center mb-4">
+        <strong
+          title="Relative Strength Index (RSI) or momentum oscillator is a method is designed to measure the speed and change of price movements"
+          className="flex-auto mr-3"
+        >
+          RSI Mode:
+        </strong>
+        <label for="hard" className="flex items-center flex-auto">
+          <input required id="hard" type="radio" value="hard" name="rsiMode" className="w-4 h-4" />
+          <span className="ml-2">Hard</span>
+        </label>
+
+        <label for="soft" className="flex items-center flex-auto">
+          <input required id="soft" type="radio" value="soft" name="rsiMode" className="w-4 h-4" />
+          <span className="ml-2">Soft</span>
+        </label>
+      </div>
 
       <input
         name="timeInterval"
