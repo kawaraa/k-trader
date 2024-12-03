@@ -16,6 +16,8 @@ module.exports = class TestExchangeProvider {
   async currentPrices() {
     const price = this.allPrices[this.currentPriceIndex] || this.allPrices[this.allPrices.length - 1];
     this.currentPriceIndex += 1;
+
+    this.orders.forEach((o) => (o.createdAt -= this.interval * 60000));
     return price;
   }
   async pricesData(pair, period) {
@@ -27,7 +29,7 @@ module.exports = class TestExchangeProvider {
   }
   async createOrder(tradingType, b, c, volume) {
     const { tradePrice, askPrice, bidPrice } = this.allPrices[this.currentPriceIndex - 1];
-    const newOrder = { id: randomUUID(), type: tradingType, volume };
+    const newOrder = { id: randomUUID(), type: tradingType, volume, createdAt: Date.now() };
 
     if (newOrder.type == "buy") {
       const cost = volume * askPrice;

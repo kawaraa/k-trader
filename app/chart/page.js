@@ -22,7 +22,7 @@ export default function CryptoChart() {
   const tradePrices = [];
   const bidPrices = [];
 
-  const interval = (Date.now() - new Date(since).getTime()) / prices.length;
+  const interval = 5 * 60000;
 
   prices.forEach((p, i) => {
     tradePrices.push(p.tradePrice);

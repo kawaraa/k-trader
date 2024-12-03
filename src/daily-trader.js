@@ -46,8 +46,11 @@ module.exports = class DailyTrader {
     this.mode = mode;
     this.period = +timeInterval;
     this.#tradingAmount = 0; // cryptoTradingAmount
+    this.hard = mode?.includes("hard");
+    this.maxRSI = this.hard ? 30 : 45;
     this.listener = null;
-    this.previousRSI = null;
+    this.previousLowBidRSI = null;
+    this.previousHighBidRSI = null;
   }
 
   async start() {
@@ -89,8 +92,8 @@ module.exports = class DailyTrader {
       let shouldBuy = HighDropChange < -(this.#percentageThreshold * 1.2);
       // 2. On price increase
       if (this.mode.includes("on-increase")) {
-        shouldBuy = askPriceRSI < 30 && this.previousRSI <= bidPriceRSI;
-        this.previousRSI = bidPriceRSI;
+        shouldBuy = shouldBuy && askPriceRSI < this.maxRSI && this.previousLowBidRSI <= bidPriceRSI;
+        this.previousLowBidRSI = bidPriceRSI;
       }
       // 3. On price reach lowest price
       if (this.mode.includes("near-low")) {
@@ -117,7 +120,7 @@ module.exports = class DailyTrader {
       // Safety check
       if (HighDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
 
-      if (enoughPricesData && shouldBuy && askPriceRSI < (this.mode.includes("hard") ? 30 : 45)) {
+      if (enoughPricesData && shouldBuy && askPriceRSI < this.maxRSI) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${lowestAsk}`);
 
         if (!orders[orderLimit] && balance.eur > 0) {
@@ -134,18 +137,21 @@ module.exports = class DailyTrader {
           return this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice);
         });
 
-        if (!sellableOrders[0] && orders[orderLimit] && 70 < bidPriceRSI) {
-          // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest 4 hours.
-          sellableOrders = orders.filter(({ price, createdAt }) => {
-            return (
-              isOlderThen(createdAt, 10) ||
-              (isOlderThen(createdAt, 1) && calcPercentageDifference(price, bidPrice) > 1.5)
+        if (85 < bidPriceRSI) {
+          if (!sellableOrders[0] && this.previousHighBidRSI >= bidPriceRSI && this.hard) {
+            const threshold = Math.min(this.#percentageThreshold / 1.5, 1.5);
+
+            sellableOrders = orders.filter(
+              (o) => isOlderThen(o.createdAt, 1) && threshold <= calcPercentageDifference(o.price, bidPrice)
             );
-          });
-          this.dispatch(
-            "log",
-            `Backlog orders: createdAt: ${sellableOrders[0]?.createdAt} price: ${sellableOrders[0]?.price}`
-          );
+          }
+          this.previousHighBidRSI = bidPriceRSI;
+
+          // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
+          if (!sellableOrders[0] && orders[orderLimit]) {
+            const limit = this.hard ? 10 : 15;
+            sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, limit));
+          }
         }
 
         this.dispatch("log", `Suggest selling: there are (${sellableOrders.length}) orders to sell`);
@@ -164,14 +170,15 @@ module.exports = class DailyTrader {
     if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
   }
 
-  async #sell({ id, volume, cost, price }, cryptoBalance, bidPrice) {
+  async #sell({ id, volume, cost, price, createdAt }, cryptoBalance, bidPrice) {
     const amount = Math.min(+volume, cryptoBalance);
     const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
     const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.8);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
+    const orderAge = ((Date.now() - createdAt) / 60000 / 60 / 24).toFixed(1);
     this.dispatch("sell", id);
     this.dispatch("earnings", profit);
-    this.dispatch("log", `Sold crypto with profit: ${profit} - ID: "${id}"`);
+    this.dispatch("log", `Sold crypto with profit: ${profit} - Age: ${orderAge} - ID: "${id}"`);
   }
 
   async sellAll() {

@@ -39,7 +39,7 @@ export default function ChartCanvas({ type = "line", labels, datasets, options }
     <div className="relative h-[inherit]">
       <canvas ref={chartRef}></canvas>
 
-      <label className="absolute top-8 right-4 w-96 flex items-center">
+      <label className="absolute top-8 right-4 w-1/2 flex items-center">
         <strong>+</strong>
         <input
           id="zoom"

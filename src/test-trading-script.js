@@ -22,18 +22,18 @@ const maxPriceChange = +process.argv[9] || 10;
 const showLogs = !!process.argv[10];
 
 async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, modes, interval) {
-  if (modes == "all") modes = supportedModes;
-  else if (supportedModes.includes(modes)) modes = [modes];
-  else throw new Error("Invalid mode!");
-
-  console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
-
   try {
+    if (modes == "all") modes = supportedModes;
+    else if (supportedModes.includes(modes)) modes = [modes];
+    else throw new Error(`"${modes}" is Invalid mode!`);
+
+    console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
+
     const prices = getPrices(pair, interval / 5);
 
     let maxBalance = 0;
-    for (investment of [capital, capital / 3]) {
-      for (rsiMode of ["hard", "soft"]) {
+    for (investment of [capital, parseInt(capital / 3)]) {
+      for (rsiMode of ["soft", "hard"]) {
         for (mode of modes) {
           if (investment == capital && mode.includes("slowly-trade")) continue;
           const m = `${mode}-${rsiMode}`;
@@ -67,6 +67,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
   } catch (error) {
     console.log("Error with ", pair, "=>", error);
   }
+
   console.log(`\n`);
 }
 
@@ -113,7 +114,7 @@ module.exports = runTradingTest;
 
 // Run the runTradingTest function if the script is executed directly
 if (require.main === module) {
-  runTradingTest(pair, capital, minStrategyRange, minPercentagePriceChange, modes, interval).then(() => null);
+  runTradingTest(pair, capital, minStrategyRange, minPercentagePriceChange, modes, interval);
 }
 
 // Command example: node test-trading-script.js ETHEUR 100 100 0.25 1.5 near-low > database/logs/all.log 2>&1
