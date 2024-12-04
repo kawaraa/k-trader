@@ -15,7 +15,7 @@ const pairs = Object.keys(currencies); // .slice();
 
 (async () => {
   for (const pair of pairs) {
-    if (currencies[pair].note?.includes("stable") || currencies[pair].note?.includes("no prices")) continue;
+    if (/stable|no price|ready/gim.test(currencies[pair].note)) continue;
     await runTradingTest(pair, capital, minStrategyRange, minPercentPriceChange, modes, interval);
 
     // if (global.gc) global.gc(); // Forces garbage collection

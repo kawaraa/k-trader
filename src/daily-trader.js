@@ -171,9 +171,9 @@ module.exports = class DailyTrader {
   }
 
   async #sell({ id, volume, cost, price, createdAt }, cryptoBalance, bidPrice) {
-    const amount = Math.min(+volume, cryptoBalance);
+    const amount = bidPrice * (cryptoBalance - volume) < 5 ? cryptoBalance : volume;
     const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
-    const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.8);
+    const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.4);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60 / 24).toFixed(1);
     this.dispatch("sell", id);
