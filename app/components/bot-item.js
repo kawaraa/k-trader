@@ -8,7 +8,7 @@ export default function BotItem({ botInfo, onAction }) {
   const cls = open ? "max-h-[1000px] py-2 mt-2 border-t-[1px] border-slate-200" : "max-h-[0px]";
   const status = botInfo.startedOn ? "off" : "on";
   const btnCls = "text-white rounded-md py-1 px-2 bg-amber-600"; // bg-pc
-  const age = ((Date.now() - new Date(botInfo.createTime).getTime()) / (60000 * 60 * 24)).toFixed(1);
+  const age = ((Date.now() - Date.parse(botInfo.createTime)) / (60000 * 60 * 24)).toFixed(1);
 
   return (
     <li className={`mb-3 p-2 overflow-y-auto no-srl-bar card rounded-md ${borderCls}`}>
