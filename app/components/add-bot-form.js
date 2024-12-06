@@ -71,10 +71,10 @@ export default function AddBotFrom({ bot, onSubmit }) {
         >
           RSI Mode:
         </strong>
-        <label for="hard" className="flex items-center flex-auto">
+        <label for="hard" className="flex items-center mr-12">
           <input
             required
-            checked={mode.includes("hard")}
+            defaultChecked={mode.includes("hard")}
             id="hard"
             type="radio"
             value="hard"
@@ -84,10 +84,10 @@ export default function AddBotFrom({ bot, onSubmit }) {
           <span className="ml-2">Hard</span>
         </label>
 
-        <label for="soft" className="flex items-center flex-auto">
+        <label for="soft" className="flex items-center">
           <input
             required
-            checked={mode.includes("soft")}
+            defaultChecked={mode.includes("soft")}
             id="soft"
             type="radio"
             value="soft"

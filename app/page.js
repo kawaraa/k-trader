@@ -18,10 +18,15 @@ export default function Home() {
   const [bots, setBots] = useState({});
   const [botToUpdate, setBotToUpdate] = useState(null);
   const [showAddBotForm, setShowAddBotForm] = useState(false);
+  const [orderbyTime, setOrderbyTime] = useState(false);
   const close = () => setShowAddBotForm(false) + setBotToUpdate(null);
   const catchErr = (er) => alert(er.message || er.error || er);
   const botsPairs = Object.keys(bots);
   const stringKeys = ["pair", "mode", "rsiMode"];
+
+  const sortedBots = orderbyTime
+    ? botsPairs.toSorted((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
+    : botsPairs.toSorted((p1, p2) => bots[p2].earnings - bots[p1].earnings);
 
   const add = async (e) => {
     e.preventDefault();
@@ -115,7 +120,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="no-select flex px-3 sm:px-5 py-6 mb-8 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
+      <header className="no-select flex px-3 sm:px-5 py-6 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
         <strong className="text-3xl font-bold text-emerald-500">€{parseInt(balance)}</strong>
         <div className="flex text-white">
           <button
@@ -147,6 +152,20 @@ export default function Home() {
         </div>
       </header>
 
+      <div className="flex justify-end">
+        <label for="orderby" className="flex items-center m-2">
+          <input
+            id="orderby"
+            type="checkbox"
+            value="orderby"
+            name="orderby"
+            className="w-4 h-4"
+            onChange={(e) => setOrderbyTime(e.target.checked)}
+          />
+          <span className="ml-1">Orderby time</span>
+        </label>
+      </div>
+
       <main className="no-select px-3 sm:px-5 py-6 mb-8 max-w-2xl mx-auto">
         <div className="flex no-srl-bar">
           <span className="flex-1 w-1/5 font-medium">Crypto</span>
@@ -166,12 +185,9 @@ export default function Home() {
         </div>
 
         <ul className="pt-4">
-          {Object.keys(bots)
-            // .sort((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
-            .sort((p1, p2) => bots[p2].earnings - bots[p1].earnings)
-            .map((pair) => (
-              <BotItem botInfo={{ pair, ...bots[pair] }} onAction={handleActions} key={pair} />
-            ))}
+          {sortedBots.map((pair) => (
+            <BotItem botInfo={{ pair, ...bots[pair] }} onAction={handleActions} key={pair} />
+          ))}
         </ul>
       </main>
 
