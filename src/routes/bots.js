@@ -40,7 +40,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
 
       isValidPair(pair, true);
       const { fields, createTime, updateTime } = await fireStoreProvider.addDoc(token, "bots", pair, data);
-      BotsManager.add(pair, { ...fields, createTime, updateTime });
+      BotsManager.add(pair, new Bot({ ...fields, createTime, updateTime }));
       response.json(BotsManager.get(pair));
     } catch (error) {
       response.status(500).json({ message: parseError(error) });
