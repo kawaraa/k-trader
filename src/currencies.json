@@ -684,7 +684,12 @@
       ">€100 €100 >0.5< 9% near-low-partly-trade-soft => €13.5 Remain: 0 Transactions: 1.5"
     ]
   },
-  "XLMEUR": { "becameAvailable": "2014-07-01", "askBidSpreadPercentage": 0.05, "note": "ready", "strategies": [] },
+  "XLMEUR": {
+    "becameAvailable": "2014-07-01",
+    "askBidSpreadPercentage": 0.05,
+    "note": "ready",
+    "strategies": []
+  },
   "NEAREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,

@@ -82,7 +82,7 @@ class FireStoreProvider {
 
 class Doc {
   constructor(data) {
-    const mutableField = (k) => !["createTime", "updateTime"].includes(k);
+    const mutableField = (k) => !["updateTime"].includes(k); // "createTime"
     Object.keys(data).forEach((k) => mutableField(k) && (this[k] = this.#getTypedValue(data[k])));
   }
   #getTypedValue(value) {
