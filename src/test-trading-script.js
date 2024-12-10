@@ -7,6 +7,7 @@ const supportedModes = [
   "high-drop-slowly-trade",
   "near-low-partly-trade",
   "near-low-slowly-trade",
+  "on-increase-partly-trade",
   "on-increase-slowly-trade",
 ];
 

@@ -138,6 +138,15 @@
       "€100 €100 >0.5< 6% near-low-partly-trade-soft => €38 Remain: 0 Transactions: 6"
     ]
   },
+  "CXTEUR": {
+    "name": "Covalent X Token",
+    "askBidSpreadPercentage": 0.36,
+    "note": "In migration process from CQTEUR (CQT Covalent) - ready",
+    "strategies": [
+      "€100 €100 >0.5< 7% near-low-partly-trade-soft => €39.5 Remain: 0 Transactions: 6",
+      ">€100 €100 >0.75< 7% near-low-partly-trade-hard => €41.5 Remain: 0 Transactions: 5.5"
+    ]
+  },
   "MOGEUR": {
     "becameAvailable": "2023-07-22",
     "askBidSpreadPercentage": 1.25,
@@ -300,10 +309,10 @@
     "askBidSpreadPercentage": 2.94,
     "note": "ready",
     "strategies": [
-      ">€100 €33 >1< 5% high-drop-slowly-trade-soft => €31.5 Remain: 0 Transactions: 15",
+      "€100 €33 >1< 5% high-drop-slowly-trade-soft => €31.5 Remain: 0 Transactions: 15",
       "€100 €100 >1< 8% near-low-partly-trade-soft => €30.5 Remain: 0 Transactions: 3",
       "€100 €100 >1< 6% near-low-partly-trade-soft => €29.5 Remain: 0 Transactions: 4",
-      "€100 €100 >1< 5% high-drop-partly-trade-soft => €29.5 Remain: 0 Transactions: 5"
+      ">€100 €100 >1< 5% high-drop-partly-trade-soft => €29.5 Remain: 0 Transactions: 5"
     ]
   },
   "TEEREUR": {
@@ -514,6 +523,12 @@
       ">€100 €100 >0.25< 4% near-low-partly-trade-soft => €23 Remain: 0 Transactions: 6.5"
     ]
   },
+  "SDNEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.41,
+    "note": "ready",
+    "strategies": [">€100 €100 >0.5< 7.5% near-low-partly-trade-hard => €23 Remain: 0 Transactions: 3"]
+  },
   "MEMEEUR": {
     "becameAvailable": "2023-11-01",
     "askBidSpreadPercentage": 0.28,
@@ -560,6 +575,15 @@
     "note": "ready",
     "strategies": [">€100 €100 >0.5< 4% near-low-partly-trade-soft => €24.5 Remain: 78 Transactions: 7.5"]
   },
+  "PORTALEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.18,
+    "note": "ready",
+    "strategies": [
+      ">€100 €100 >1< 5% near-low-partly-trade-soft => €24.5 Remain: 183 Transactions: 6",
+      "€100 €100 >0.25< 1.5% near-low-partly-trade-soft => €12 Remain: 0 Transactions: 12"
+    ]
+  },
   "ACHEUR": {
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.12,
@@ -568,6 +592,12 @@
       "€100 €100 >0.75< 3.5% near-low-partly-trade-soft => €26.5 Remain: 2664.5 Transactions: 8.5",
       ">€100 €100 >0.5< 3.5% near-low-partly-trade-soft => €25 Remain: 0 Transactions: 8"
     ]
+  },
+  "AGLDEUR": {
+    "becameAvailable": "2021-09-01",
+    "askBidSpreadPercentage": 0.39,
+    "note": "ready",
+    "strategies": [">€100 €100 >0.25< 3% high-drop-partly-trade-soft => €26 Remain: 0 Transactions: 10"]
   },
   "MOVREUR": {
     "becameAvailable": "2021-08-01",
@@ -835,7 +865,33 @@
     "note": "In migration process from MCEUR (MC Merit Circle token ) - ready",
     "strategies": [">€100 €100 >1< 4.5% near-low-partly-trade-soft => €21.5 Remain: 0 Transactions: 4.5"]
   },
-
+  "WEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.36,
+    "note": "ready",
+    "strategies": [
+      ">€100 €100 >1< 10% near-low-partly-trade-hard => €21.5 Remain: 170.5 Transactions: 2.5",
+      "€100 €100 >0.25< 7% high-drop-partly-trade-soft => €16 Remain: 0 Transactions: 1.5"
+    ]
+  },
+  "LUNAEUR": {
+    "becameAvailable": "2019-08-01",
+    "askBidSpreadPercentage": 0.63,
+    "note": "ready",
+    "strategies": [
+      ">€100 €100 >0.5< 3.5% near-low-partly-trade-hard => €21.5 Remain: 0 Transactions: 6.5",
+      "€100 €100 >0.75< 3.5% near-low-partly-trade-soft => €21 Remain: 0 Transactions: 7"
+    ]
+  },
+  "XRTEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.29,
+    "note": "ready",
+    "strategies": [
+      ">€100 €33 >0.75< 8.5% on-increase-slowly-trade-soft => €21 Remain: 0 Transactions: 6",
+      "€100 €33 >0.5< 8.5% high-drop-slowly-trade-soft => €15 Remain: 0 Transactions: 4.5"
+    ]
+  },
   "TREMPEUR": {
     "becameAvailable": "2024-03-01",
     "askBidSpreadPercentage": 6.36,
@@ -902,25 +958,21 @@
   "BICOEUR": {
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "ready",
     "strategies": []
   },
   "GMXEUR": {
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 0.22,
-    "note": "ready",
     "strategies": []
   },
   "ARPAEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.13,
-    "note": "ready",
     "strategies": []
   },
   "ZROEUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
     "strategies": [
       "€100 €100 >0.75< 10% high-drop-partly-trade-soft => €20.5 Remain: 0 Transactions: 2",
       ">€100 €100 >0.75< 10% high-drop-partly-trade-hard => €20.5 Remain: 0 Transactions: 2"
@@ -929,67 +981,56 @@
   "MANAEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
     "strategies": []
   },
   "EGLDEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
     "strategies": []
   },
   "EOSEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
     "strategies": []
   },
   "COMPEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
     "strategies": []
   },
   "SANDEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
     "strategies": []
   },
   "BANDEUR": {
     "becameAvailable": "2020-11-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "ready",
     "strategies": []
   },
   "LDOEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.1,
-    "note": "ready",
     "strategies": []
   },
   "DYDXEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "ready",
     "strategies": [">€100 €100 >1< 3% near-low-partly-trade-soft => €19 Remain: 0 Transactions: 7.5"]
   },
   "XTZEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.13,
-    "note": "ready",
     "strategies": []
   },
   "FLOWEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "ready",
     "strategies": []
   },
   "BATEUR": {
     "becameAvailable": "2017-06-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "ready",
     "strategies": []
   },
   "REQEUR": { "becameAvailable": "2017-08-01", "askBidSpreadPercentage": 0.12, "strategies": [] },
@@ -1036,7 +1077,6 @@
   "ENJEUR": { "becameAvailable": "2021-06-01", "askBidSpreadPercentage": 0.85, "strategies": [] },
   "HONEYEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.38, "strategies": [] },
   "GMTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.53, "strategies": [] },
-  "AGLDEUR": { "becameAvailable": "2021-09-01", "askBidSpreadPercentage": 0.39, "strategies": [] },
   "BOBAEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.6, "strategies": [] },
   "ATLASEUR": {
     "becameAvailable": "2021-03-01",
@@ -1053,12 +1093,6 @@
   "ASTREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.23, "strategies": [] },
   "AUCTIONEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.23, "strategies": [] },
   "CLOUDEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.54, "strategies": [] },
-  "CXTEUR": {
-    "name": "Covalent X Token",
-    "askBidSpreadPercentage": 0.36,
-    "note": "In migration process from CQTEUR (CQT Covalent)",
-    "strategies": []
-  },
   "SKYEUR": {
     "name": "Sky",
     "becameAvailable": "20xx-xx-01",
@@ -1071,15 +1105,12 @@
   "NMREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.82, "strategies": [] },
   "OGNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.23, "strategies": [] },
   "PDAEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.7, "strategies": [] },
-  "PORTALEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.18, "strategies": [] },
   "POWREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.11, "strategies": [] },
   "SCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.31, "strategies": [] },
-  "SDNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.41, "strategies": [] },
   "SYNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.22, "strategies": [] },
   "TEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.18, "strategies": [] },
   "TRACEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.17, "strategies": [] },
   "UMAEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.13, "strategies": [] },
-  "WEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.36, "strategies": [] },
   "XBTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.05, "strategies": [] },
   "REZEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 2.49, "strategies": [] },
   "PAXGEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.15, "strategies": [] },
@@ -1089,7 +1120,6 @@
   "DRIFTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 1.12, "strategies": [] },
   "CVXEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.58, "strategies": [] },
   "OMGEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.27, "strategies": [] },
-  "LUNAEUR": { "becameAvailable": "2019-08-01", "askBidSpreadPercentage": 0.63, "strategies": [] },
   "PERPEUR": { "becameAvailable": "2020-08-01", "askBidSpreadPercentage": 0.54, "strategies": [] },
   "HNTEUR": { "becameAvailable": "2021-08-01", "askBidSpreadPercentage": 1.37, "strategies": [] },
   "BONDEUR": { "becameAvailable": "2022-08-01", "askBidSpreadPercentage": 0.47, "strategies": [] },
@@ -1154,7 +1184,6 @@
   "PONDEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 4.21, "strategies": [] },
   "PYUSDEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.63, "strategies": [] },
   "XCNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 2.45, "strategies": [] },
-  "XRTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.29, "strategies": [] },
   "TBTCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.7, "strategies": [] },
   "STRDEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 5.34, "strategies": [] },
   "RPLEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 1.59, "strategies": [] },

@@ -58,9 +58,12 @@ export default function AddBotFrom({ bot, onSubmit }) {
         className={inputCls}
       >
         <option value="">Trading mode</option>
-        <option value="near-low-partly-trade">Near low and partly trade</option>
         <option value="high-drop-partly-trade">High drop and partly trade</option>
+        <option value="near-low-partly-trade">Near low and partly trade</option>
         <option value="on-increase-partly-trade">On increase and partly trade</option>
+        <option value="high-drop-slowly-trade">High drop and slowly trade</option>
+        <option value="near-low-slowly-trade">Near low and slowly trade</option>
+        <option value="on-increase-slowly-trade">On increase and slowly trade</option>
       </select>
 
       {/* text-sm */}
