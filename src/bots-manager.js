@@ -63,7 +63,7 @@ class BotsManager {
   static async runAll() {
     for (const pair in this.#bots) {
       if (!this.#bots[pair].startedOn) {
-        await delay(5000);
+        await delay(3500);
         this.#bots[pair].start();
       }
     }
