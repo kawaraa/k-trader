@@ -29,12 +29,6 @@
     "note": "ready",
     "strategies": []
   },
-  "DOGEUR": {
-    "becameAvailable": "2014-01-01",
-    "askBidSpreadPercentage": 0.0,
-    "strategies": [],
-    "note": "no prices data"
-  },
   "ADAEUR": {
     "becameAvailable": "2017-09-29",
     "askBidSpreadPercentage": 0.05,
@@ -334,6 +328,7 @@
     ]
   },
   "XDGEUR": {
+    "name": "DOGE",
     "becameAvailable": "2013-12-06",
     "askBidSpreadPercentage": 0.05,
     "note": "ready",
@@ -453,7 +448,7 @@
   "WENEUR": {
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.7,
-    "note": "ready",
+    "note": "WEN trading restricted for NL - ready",
     "strategies": [">€100 €100 >0.75< 4% near-low-partly-trade-soft => €27.5 Remain: 0 Transactions: 7.5"]
   },
   "PRIMEEUR": {
@@ -973,6 +968,7 @@
   "ZROEUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 0.05,
+    "note": "ZRO trading restricted for NL - ready",
     "strategies": [
       "€100 €100 >0.75< 10% high-drop-partly-trade-soft => €20.5 Remain: 0 Transactions: 2",
       ">€100 €100 >0.75< 10% high-drop-partly-trade-hard => €20.5 Remain: 0 Transactions: 2"

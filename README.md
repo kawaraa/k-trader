@@ -1,6 +1,8 @@
 # K Trader
 
-K Trader is a Cryptocurrency Trading Bots and Bots Manager
+K Trader is a Cryptocurrency Trading Bots Manager
+
+Goal: Dropping and earning at the same time with less remaining
 
 ## Trading fees calculation
 
