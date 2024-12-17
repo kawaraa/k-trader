@@ -17,6 +17,14 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function splitIntoChunks(data) {
+  const chunkSize = Math.ceil(data.length / Math.ceil(data.length / 100)); // Calculate chunk size to get around 100 tasks
+  const result = [];
+  for (let i = 0; i < data.length; i += chunkSize) {
+    result.push(data.slice(i, i + chunkSize));
+  }
+  return result;
+}
 function dateToString(date = new Date(), seconds) {
   const unWantedChar = seconds ? -5 : -8;
   return new Date(date).toISOString().slice(0, unWantedChar).replace("T", " ");
@@ -60,6 +68,7 @@ module.exports = {
   request,
   parseError,
   delay,
+  splitIntoChunks,
   dateToString,
   toShortDate,
   parseNumbers,

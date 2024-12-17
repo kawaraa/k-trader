@@ -46,8 +46,8 @@ module.exports = class DailyTrader {
     this.mode = mode;
     this.period = +timeInterval;
     this.#tradingAmount = 0; // cryptoTradingAmount
-    this.lowRSI = mode?.includes("hard") ? 30 : 40;
-    this.highRSI = mode?.includes("hard") ? 80 : 70;
+    this.hard = mode?.includes("hard");
+    this.maxRSI = this.hard ? 30 : 45;
     this.listener = null;
     this.previousLowBidRSI = null;
     this.previousHighBidRSI = null;
@@ -90,64 +90,70 @@ module.exports = class DailyTrader {
       // 1. On price drop
       const HighDropChange = calcPercentageDifference(highestBidPr, askPrice);
       let shouldBuy = HighDropChange < -(this.#percentageThreshold * 1.2);
-
       // 2. On price increase
       if (this.mode.includes("on-increase")) {
-        shouldBuy = shouldBuy && this.previousLowBidRSI <= bidPriceRSI;
+        shouldBuy = shouldBuy && askPriceRSI < this.maxRSI && this.previousLowBidRSI <= bidPriceRSI;
         this.previousLowBidRSI = bidPriceRSI;
       }
-
       // 3. On price reach lowest price
       if (this.mode.includes("near-low")) {
         const nearLow = calcPercentageDifference(lowestAsk, askPrice);
         shouldBuy = HighDropChange <= -this.#percentageThreshold && nearLow < this.#percentageThreshold / 8;
       }
 
-      // 4. Pause buying if the bidPrice is higher then price of the last Order In the first or second Part
       if (this.mode.includes("partly-trade")) {
+        // Pause buying if the bidPrice is higher then price of the last Order In the first or second Part
         const thirdIndex = Math.round((orderLimit + 1) / 3);
         const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex - 1] || {};
         const threshold = -Math.max(this.#percentageThreshold / 2, 2);
 
         if (price && threshold < calcPercentageDifference(price, bidPrice)) shouldBuy = false;
       }
-
-      // 5. Pause buying if the bidPrice is not x% less then the last Order's price
       if (this.mode.includes("slowly-trade")) {
+        // Pause buying if the bidPrice is not x% less then the last Order's price
         const { price } = orders.at(-1) || {};
         const threshold = -Math.max(this.#percentageThreshold / 4, 1.5);
 
         if (price && threshold < calcPercentageDifference(price, bidPrice)) shouldBuy = false;
       }
 
-      // 6. Safety check
+      // Safety check
       if (HighDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
 
-      // Buy
-      if (enoughPricesData && shouldBuy && askPriceRSI < this.lowRSI) {
+      if (enoughPricesData && shouldBuy && askPriceRSI < this.maxRSI) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${lowestAsk}`);
 
         if (!orders[orderLimit] && balance.eur > 0) {
-          const cost = this.#investingCapital - calculateFee(this.#investingCapital, 0.4);
-          const investingVolume = +(cost / askPrice).toFixed(8);
+          const investingVolume = +(
+            (this.#investingCapital - calculateFee(this.#investingCapital, 0.4)) /
+            askPrice
+          ).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
           this.dispatch("buy", orderId);
           this.dispatch("log", `Bought crypto with order ID "${orderId}"`);
         }
-
-        // Sell
       } else if (60 < bidPriceRSI && balance.crypto > 0 && orders[0]) {
         let sellableOrders = orders.filter((o) => {
           return this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice);
         });
 
-        // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
-        const goingDown = this.highRSI < bidPriceRSI && this.previousHighBidRSI >= bidPriceRSI;
-        if (!sellableOrders[0] && orders[orderLimit] && goingDown) {
-          sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, 4.5)); // 5, 6
+        if (85 < bidPriceRSI) {
+          if (!sellableOrders[0] && this.previousHighBidRSI >= bidPriceRSI && this.hard) {
+            const threshold = Math.min(this.#percentageThreshold / 1.5, 1.5);
+
+            sellableOrders = orders.filter(
+              (o) => isOlderThen(o.createdAt, 1) && threshold <= calcPercentageDifference(o.price, bidPrice)
+            );
+          }
+          this.previousHighBidRSI = bidPriceRSI;
+
+          // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
+          if (!sellableOrders[0] && orders[orderLimit]) {
+            const limit = this.hard ? 10 : 15;
+            sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, limit));
+          }
         }
 
-        this.previousHighBidRSI = bidPriceRSI;
         this.dispatch("log", `Suggest selling: there are (${sellableOrders.length}) orders to sell`);
 
         for (const order of sellableOrders) {
@@ -179,11 +185,9 @@ module.exports = class DailyTrader {
     const cryptoBalance = (await this.ex.balance(this.#pair)).crypto;
     const orders = await this.ex.getOrders(this.#pair);
     const bidPrice = (await this.ex.currentPrices(this.#pair)).bidPrice;
-    const orderId = await this.ex.createOrder("sell", "market", this.#pair, cryptoBalance);
-    const c = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.4);
-    const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
-    const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
-
+    await this.ex.createOrder("sell", "market", this.#pair, cryptoBalance);
+    const cost = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.4);
+    const profit = +(cost - orders.reduce((totalCost, { cost }) => totalCost + cost, 0)).toFixed(2);
     this.dispatch("earnings", profit);
     this.dispatch("log", `Sold all crypto asset with profit: ${profit}`);
   }

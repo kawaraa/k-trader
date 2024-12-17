@@ -89,7 +89,7 @@ module.exports = class KrakenExchangeProvider {
       return { id, price: +price, volume: +vol_exec, cost: +cost, createdAt: +opentm * 1000 };
     });
     if (orders[0]?.cost || times > 1) return orders;
-    await delay(30000);
+    // await delay(1000);
     return this.getOrders(pair, orderIds, times + 1);
   }
   async getOpenClosedOrders(state) {
