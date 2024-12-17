@@ -100,6 +100,15 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
+  router.put("/bots/rest", authRequired, async (request, response) => {
+    try {
+      BotsManager.restState(request.query.pair);
+      response.json({ success: true });
+    } catch (error) {
+      response.status(500).json({ message: parseError(error) });
+    }
+  });
+
   router.get("/bots/logs", authRequired, async (request, response) => {
     try {
       const { pair } = request.query;

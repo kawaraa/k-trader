@@ -2,14 +2,14 @@
   "BTCEUR": {
     "becameAvailable": "2009-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.25< 3.5% near-low-partly-trade-soft => €10 Remain: 0 Transactions: 3.5"]
   },
   "ETHEUR": {
     "becameAvailable": "2015-07-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 6% near-low-partly-trade-soft => €14 Remain: 0 Transactions: 2.5"]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 6% near-low-partly-trade-soft => €11.5 Remain: 0 Transactions: 2.5"]
   },
   "USDTEUR": { "becameAvailable": "2015-01-01", "askBidSpreadPercentage": 0.05, "note": "stable" },
   "USDCEUR": { "becameAvailable": "2018-10-01", "askBidSpreadPercentage": 0.05, "note": "stable" },
@@ -17,22 +17,19 @@
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >0.5< 4.5% near-low-partly-trade-soft => €18.5 Remain: 0 Transactions: 4.5",
-      "€100 €100 >0.5< 3.5% near-low-partly-trade-soft => €18.5 Remain: 0 Transactions: 6"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.75< 5% high-drop-partly-trade-soft => €16 Remain: 0 Transactions: 4"]
   },
   "XRPEUR": {
     "becameAvailable": "2013-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "ADAEUR": {
     "becameAvailable": "2017-09-29",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €100 >1< 7% high-drop-partly-trade-soft => €13.5 Remain: 0 Transactions: 2",
       "€100 €100 >0.75< 5.5% high-drop-partly-trade-soft => €12.5 Remain: 0 Transactions: 2.5"
@@ -41,20 +38,23 @@
   "TRXEUR": {
     "becameAvailable": "2017-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "AVAXEUR": {
     "becameAvailable": "2020-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 5.5% near-low-partly-trade-soft => €21 Remain: 0 Transactions: 4"]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 5.5% near-low-partly-trade-hard => €20.5 Remain: 0 Transactions: 4"]
   },
   "SHIBEUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.75< 3.5% high-drop-partly-trade-hard => €18.5 Remain: 0 Transactions: 7"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >0.75< 3.5% high-drop-partly-trade-hard => €18.5 Remain: 0 Transactions: 7",
+      "€100 €100 >0.5< 3% high-drop-partly-trade-hard => €17.5 Remain: 0 Transactions: 8"
+    ]
   },
   "TONEUR": {
     "becameAvailable": "2021-08-01",
@@ -65,554 +65,541 @@
   "WBTCEUR": {
     "becameAvailable": "2019-01-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "SUIEUR": {
     "becameAvailable": "2023-05-05",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.25< 4.5% near-low-partly-trade-soft => €39 Remain: 0 Transactions: 11.5"]
+    "note": "",
+    "strategies": [">€100 €100 >0.25< 4.5% near-low-partly-trade-soft => €43.5 Remain: 0 Transactions: 11.5"]
   },
 
   "TURBOEUR": {
     "becameAvailable": "2023-05-05",
     "askBidSpreadPercentage": 0.36,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >1< 4.5% high-drop-partly-trade-soft => €46.5 Remain: 5563 Transactions: 13",
-      "€100 €100 >0.5< 4.5% high-drop-partly-trade-soft => €44 Remain: 5563 Transactions: 13"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.75< 5% high-drop-partly-trade-soft => €46 Remain: 5584 Transactions: 12"]
   },
   "BIGTIMEEUR": {
     "becameAvailable": "2023-10-12",
     "askBidSpreadPercentage": 1.39,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.75< 10% near-low-partly-trade-hard => €58.5 Remain: 0 Transactions: 5.5"]
   },
   "PRCLEUR": {
     "becameAvailable": "2024-04-15",
     "askBidSpreadPercentage": 0.21,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €100 >0.5< 9.5% near-low-partly-trade-hard => €66 Remain: 0 Transactions: 7.5",
-      "€100 €100 >0.5< 9.5% near-low-partly-trade-soft => €64.5 Remain: 0 Transactions: 8.5"
+      "€100 €100 >0.5< 9.5% near-low-partly-trade-soft => €67.5 Remain: 0 Transactions: 8.5",
+      ">€100 €100 >0.5< 9.5% near-low-partly-trade-hard => €66 Remain: 0 Transactions: 7.5"
     ]
   },
   "SUPEREUR": {
     "becameAvailable": "2021-02-20",
     "askBidSpreadPercentage": 0.17,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.25< 5% near-low-partly-trade-hard => €38.5 Remain: 40 Transactions: 8"]
+    "note": "",
+    "strategies": [
+      "€100 €100 >0.25< 4.5% near-low-partly-trade-hard => €38 Remain: 40 Transactions: 8.5",
+      ">€100 €100 >0.5< 8% high-drop-partly-trade-soft => €33.5 Remain: 0 Transactions: 4"
+    ]
   },
   "TNSREUR": {
     "becameAvailable": "2024-04-10",
     "askBidSpreadPercentage": 0.14,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >0.25< 3.5% on-increase-partly-trade-soft => €41 Remain: 112.5 Transactions: 13.5",
-      ">€100 €100 >0.5< 3.5% on-increase-partly-trade-soft => €40.5 Remain: 0 Transactions: 13",
-      "€100 €100 >0.25< 4.5% near-low-partly-trade-soft => €38.5 Remain: 112 Transactions: 11.5"
+      "€100 €100 >0.5< 3.5% on-increase-partly-trade-soft => €43 Remain: 0 Transactions: 13",
+      "€100 €100 >0.75< 9.5% near-low-partly-trade-soft => €42 Remain: 120.5 Transactions: 5",
+      ">€100 €100 >0.5< 6% near-low-partly-trade-soft => €38.5 Remain: 0 Transactions: 8.5",
+      "€100 €100 >0.5< 4% high-drop-partly-trade-soft => €38 Remain: 0 Transactions: 12"
     ]
   },
   "CXTEUR": {
     "name": "Covalent X Token",
     "askBidSpreadPercentage": 0.36,
-    "note": "In migration process from CQTEUR (CQT Covalent) - ready",
+    "note": "In migration process from CQTEUR (CQT Covalent) - ",
     "strategies": [
-      ">€100 €100 >0.75< 6% high-drop-partly-trade-hard => €46.5 Remain: 0 Transactions: 8.5",
-      "€100 €100 >0.5< 6% high-drop-partly-trade-hard => €45.5 Remain: 0 Transactions: 7.5",
-      "€100 €100 >0.5< 7% near-low-partly-trade-soft => €44 Remain: 0 Transactions: 6.5"
+      ">€100 €100 >0.75< 6% high-drop-partly-trade-hard => €49 Remain: 0 Transactions: 8.5",
+      "€100 €100 >0.5< 7% near-low-partly-trade-soft => €47 Remain: 0 Transactions: 6.5"
     ]
   },
   "MOGEUR": {
     "becameAvailable": "2023-07-22",
     "askBidSpreadPercentage": 1.25,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €100 >0.75< 10% high-drop-partly-trade-hard => €37 Remain: 0 Transactions: 3.5",
-      "€100 €100 >1< 8% near-low-partly-trade-soft => €30 Remain: 0 Transactions: 5.5"
+      "€100 €100 >1< 8% near-low-partly-trade-soft => €33 Remain: 0 Transactions: 5.5"
     ]
   },
   "RAYEUR": {
     "becameAvailable": "2021-02-20",
     "askBidSpreadPercentage": 0.39,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €100 >0.5< 4.5% on-increase-partly-trade-soft => €28 Remain: 16 Transactions: 7.5",
-      "€100 €100 >0.75< 6% near-low-partly-trade-hard => €27 Remain: 0 Transactions: 5.5"
+      ">€100 €100 >0.75< 6% near-low-partly-trade-soft => €30 Remain: 16.5 Transactions: 6",
+      "€100 €100 >0.75< 6% near-low-partly-trade-hard => €28.5 Remain: 0 Transactions: 5.5"
     ]
   },
   "WIFEUR": {
     "becameAvailable": "2023-12-20",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >0.75< 7% high-drop-partly-trade-soft => €32.5 Remain: 0 Transactions: 6",
-      ">€100 €100 >0.25< 4.5% near-low-partly-trade-soft => €35 Remain: 21 Transactions: 11"
+      ">€100 €100 >0.25< 4.5% near-low-partly-trade-soft => €39.5 Remain: 21 Transactions: 11",
+      "€100 €100 >0.75< 7% high-drop-partly-trade-soft => €30.5 Remain: 0 Transactions: 5.5"
     ]
   },
   "APTEUR": {
     "becameAvailable": "2022-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >0.25< 4% near-low-partly-trade-soft => €33.5 Remain: 5 Transactions: 10",
-      "€100 €100 >0.25< 3.5% near-low-partly-trade-soft => €27 Remain: 5 Transactions: 9.5"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.25< 4% near-low-partly-trade-soft => €26 Remain: 0 Transactions: 11"]
   },
   "BONKEUR": {
     "becameAvailable": "2023-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [">€100 €100 >1< 7% near-low-partly-trade-soft => €33 Remain: 0 Transactions: 6.5"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >1< 5.5% near-low-partly-trade-soft => €33.5 Remain: 0 Transactions: 7.5",
+      "€100 €100 >1< 8% near-low-partly-trade-soft => €33 Remain: 0 Transactions: 5.5"
+    ]
   },
   "TAOEUR": {
     "becameAvailable": "2023-03-01",
     "askBidSpreadPercentage": 0.18,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.25< 8.5% near-low-partly-trade-soft => €35 Remain: 0 Transactions: 4"]
+    "note": "",
+    "strategies": [">€100 €100 >0.25< 8.5% near-low-partly-trade-soft => €33.5 Remain: 0 Transactions: 4"]
   },
   "SEIEUR": {
     "becameAvailable": "2021-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €100 >0.5< 7% near-low-partly-trade-soft => €27 Remain: 142.5 Transactions: 3.5",
-      "€100 €100 >0.5< 6.5% high-drop-partly-trade-soft => €16.5 Remain: 0 Transactions: 2.5"
+      ">€100 €100 >0.5< 6.5% near-low-partly-trade-soft => €24.5 Remain: 142.5 Transactions: 5.5",
+      "€100 €100 >0.25< 4% near-low-partly-trade-soft => €19 Remain: 0 Transactions: 11.5"
     ]
   },
   "FTMEUR": {
     "becameAvailable": "2018-10-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "In migration process to SONIC ready",
-    "strategies": [">€100 €100 >0.25< 6% near-low-partly-trade-soft => €34.5 Remain: 0 Transactions: 5.5"]
+    "note": "In migration process to SONIC ",
+    "strategies": [">€100 €100 >0.75< 8% near-low-partly-trade-soft => €36.5 Remain: 0 Transactions: 5"]
   },
   "ENAEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 0.33,
-    "note": "ready",
-    "strategies": [
-      "€100 €100 >0.25< 4.5% near-low-partly-trade-hard => €30.5 Remain: 142.5 Transactions: 7",
-      ">€100 €100 >0.25< 6.5% near-low-partly-trade-hard => €29.5 Remain: 0 Transactions: 4.5"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.25< 6.5% near-low-partly-trade-hard => €29 Remain: 0 Transactions: 4.5"]
   },
   "JUPEUR": {
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >1< 6% high-drop-partly-trade-hard => €22 Remain: 52.5 Transactions: 3.5",
-      "€100 €100 >0.75< 6.5% near-low-partly-trade-soft => €22 Remain: 52.5 Transactions: 3",
-      ">€100 €100 >0.75< 6% high-drop-partly-trade-soft => €21 Remain: 0 Transactions: 3.5"
+      ">€100 €100 >0.75< 6% high-drop-partly-trade-hard => €20.5 Remain: 0 Transactions: 3.5",
+      "€100 €100 >1< 6% high-drop-partly-trade-hard => €21 Remain: 52.5 Transactions: 3.5"
     ]
   },
   "PYTHEUR": {
     "becameAvailable": "2023-11-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.75< 5.5% near-low-partly-trade-soft => €28.5 Remain: 0 Transactions: 5.5"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >0.75< 4% high-drop-partly-trade-hard => €23 Remain: 0 Transactions: 6.5",
+      "€100 €100 >0.75< 5.5% near-low-partly-trade-soft => €23 Remain: 0 Transactions: 6.5"
+    ]
   },
   "CSMEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 4.82,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >0.25< 1.5% near-low-partly-trade-hard => €25 Remain: 0 Transactions: 1",
-      "€100 €33 >0.5< 1.5% high-drop-partly-trade-soft => €26 Remain: 0 Transactions: 4.5"
-    ]
+    "note": "",
+    "strategies": [">€100 €33 >1< 8.5% near-low-partly-trade-soft => €19 Remain: 0 Transactions: 1.5"]
   },
   "USTEUR": {
     "becameAvailable": "2022-08-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "ready",
-    "strategies": ["€100 €100 >0.5< 5% near-low-partly-trade-soft => €33.5 Remain: 0 Transactions: 6.5"]
+    "note": "",
+    "strategies": ["€100 €100 >0.5< 4.5% near-low-partly-trade-soft => €33 Remain: 0 Transactions: 8"]
   },
   "KMNOEUR": {
     "becameAvailable": "2024-04-30",
     "askBidSpreadPercentage": 0.23,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >1< 7.5% on-increase-partly-trade-soft => €35 Remain: 0 Transactions: 6.5",
-      ">€100 €100 >1< 8% high-drop-partly-trade-hard => €35.5 Remain: 0 Transactions: 5.5"
+      ">€100 €100 >0.75< 7.5% on-increase-partly-trade-soft => €41.5 Remain: 0 Transactions: 5.5",
+      "€100 €100 >0.5< 7.5% high-drop-partly-trade-soft => €33 Remain: 0 Transactions: 4.5"
     ]
   },
   "PENDLEEUR": {
     "becameAvailable": "2021-04-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.75< 3.5% high-drop-partly-trade-soft => €20.5 Remain: 0 Transactions: 9"]
+    "note": "",
+    "strategies": [">€100 €100 >0.75< 6% on-increase-partly-trade-soft => €21.5 Remain: 0 Transactions: 4"]
   },
   "NOSEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.57,
-    "note": "ready",
-    "strategies": [">€100 €100 >1< 10% high-drop-partly-trade-soft => €39 Remain: 13 Transactions: 3.5"]
+    "note": "",
+    "strategies": [
+      "€100 €100 >0.75< 10% high-drop-partly-trade-soft => €35 Remain: 13.5 Transactions: 4",
+      ">€100 €100 >1< 10% high-drop-partly-trade-soft => €37 Remain: 13 Transactions: 4"
+    ]
   },
   "ORCAEUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 0.19,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €100 >0.75< 8.5% near-low-partly-trade-soft => €34.5 Remain: 19 Transactions: 4",
-      "€100 €100 >1< 7% high-drop-partly-trade-soft => €33.5 Remain: 19 Transactions: 5"
+      "€100 €100 >1< 7% near-low-partly-trade-soft => €31.5 Remain: 18.5 Transactions: 5.5",
+      ">€100 €100 >1< 7% high-drop-partly-trade-soft => €30 Remain: 19 Transactions: 5",
+      "€100 €100 >0.75< 6% high-drop-partly-trade-soft => €30 Remain: 19 Transactions: 6"
     ]
   },
   "BLUREUR": {
     "becameAvailable": "2022-02-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.25< 5.5% near-low-partly-trade-hard => €37.5 Remain: 0 Transactions: 7"]
   },
   "OXYEUR": {
     "becameAvailable": "2021-03-20",
     "askBidSpreadPercentage": 1.31,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.75< 5.5% high-drop-partly-trade-soft => €38.5 Remain: 1596 Transactions: 7"]
+    "note": "",
+    "strategies": [
+      "€100 €100 >0.75< 5.5% high-drop-partly-trade-soft => €31 Remain: 1596 Transactions: 6.5",
+      ">€100 €100 >0.5< 5.5% on-increase-partly-trade-soft => €35.5 Remain: 0 Transactions: 6.5"
+    ]
   },
   "BSXEUR": {
     "becameAvailable": "2022-03-01",
     "askBidSpreadPercentage": 1.48,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.75< 8.5% high-drop-partly-trade-soft => €34 Remain: 0 Transactions: 2.5"]
+    "note": "",
+    "strategies": [">€100 €100 >1< 7.5% near-low-partly-trade-soft => €21 Remain: 0 Transactions: 3.5"]
   },
   "CPOOLEUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 2.94,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €33 >1< 5% high-drop-slowly-trade-soft => €31.5 Remain: 0 Transactions: 15",
-      "€100 €100 >1< 8% near-low-partly-trade-soft => €30.5 Remain: 0 Transactions: 3",
-      "€100 €100 >1< 6% near-low-partly-trade-soft => €29.5 Remain: 0 Transactions: 4",
-      ">€100 €100 >1< 5% high-drop-partly-trade-soft => €29.5 Remain: 0 Transactions: 5"
+      "€100 €100 >1< 6% near-low-partly-trade-soft => €22.5 Remain: 0 Transactions: 4.5",
+      ">€100 €100 >1< 7% near-low-partly-trade-soft => €23.5 Remain: 0 Transactions: 3.5"
     ]
   },
   "TEEREUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 0.24,
-    "note": "ready",
-    "strategies": [
-      "€100 €100 >0.25< 9.5% high-drop-partly-trade-soft => €35 Remain: 0 Transactions: 2",
-      ">€100 €100 >0.5< 8.5% high-drop-partly-trade-soft => €34.5 Remain: 0 Transactions: 2.5"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 8.5% high-drop-partly-trade-hard => €34.5 Remain: 0 Transactions: 2.5"]
   },
   "YGGEUR": {
     "becameAvailable": "2021-07-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "ready",
-    "strategies": [
-      "€100 €100 >0.75< 4.5% near-low-partly-trade-soft => €34 Remain: 107.5 Transactions: 7.5",
-      ">€100 €100 >0.5< 4% near-low-partly-trade-hard => €33 Remain: 0 Transactions: 9"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 4% near-low-partly-trade-hard => €33 Remain: 0 Transactions: 9"]
   },
   "XDGEUR": {
     "name": "DOGE",
     "becameAvailable": "2013-12-06",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [
-      "€100 €100 >0.75< 5% near-low-partly-trade-soft => €30.5 Remain: 0 Transactions: 5.5",
-      ">€100 €100 >0.75< 5% near-low-partly-trade-hard => €30.5 Remain: 0 Transactions: 5.5"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.75< 5% near-low-partly-trade-hard => €30.5 Remain: 0 Transactions: 5.5"]
   },
   "ZETAEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.75< 8.5% high-drop-partly-trade-hard => €31 Remain: 0 Transactions: 3.5"]
   },
   "SAGAEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 1.18,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.75< 4.5% on-increase-partly-trade-soft => €31.5 Remain: 0 Transactions: 11"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >0.75< 8.5% high-drop-partly-trade-soft => €34 Remain: 26.5 Transactions: 5",
+      "€100 €100 >0.75< 4.5% on-increase-partly-trade-soft => €34 Remain: 0 Transactions: 11",
+      "€100 €100 >0.25< 8.5% near-low-partly-trade-soft => €33 Remain: 26.5 Transactions: 5"
+    ]
   },
   "PEPEEUR": {
     "becameAvailable": "2023-04-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >0.75< 7% high-drop-partly-trade-soft => €29 Remain: 0 Transactions: 4",
-      "€100 €100 >0.25< 5.5% near-low-partly-trade-hard => €28 Remain: 0 Transactions: 6"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.25< 5.5% near-low-partly-trade-hard => €28 Remain: 0 Transactions: 6"]
   },
   "UNIEUR": {
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >1< 4% near-low-partly-trade-soft => €26.5 Remain: 6.5 Transactions: 7",
-      "€100 €100 >0.5< 3.5% near-low-partly-trade-soft => €25 Remain: 6.5 Transactions: 8",
       ">€100 €100 >0.5< 3.5% near-low-partly-trade-hard => €25 Remain: 6.5 Transactions: 8",
-      "€100 €100 >0.75< 6.5% near-low-partly-trade-soft => €25 Remain: 7 Transactions: 3.5",
-      "€100 €100 >0.5< 5% high-drop-partly-trade-soft => €14 Remain: 0 Transactions: 3"
+      "€100 €100 >0.5< 4% near-low-partly-trade-hard => €25 Remain: 6.5 Transactions: 7"
     ]
   },
   "FETEUR": {
     "becameAvailable": "2021-05-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.75< 4% near-low-partly-trade-soft => €24 Remain: 38 Transactions: 7"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >0.5< 5.5% on-increase-partly-trade-hard => €21 Remain: 0 Transactions: 4",
+      "€100 €100 >0.5< 6% near-low-partly-trade-soft => €18 Remain: 0 Transactions: 6.5"
+    ]
   },
   "STXEUR": {
     "becameAvailable": "2019-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.75< 5% near-low-partly-trade-hard => €24 Remain: 0 Transactions: 5"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >0.75< 9% near-low-partly-trade-hard => €19.5 Remain: 0 Transactions: 2.5",
+      "€100 €100 >1< 7.5% near-low-partly-trade-hard => €19 Remain: 0 Transactions: 3.5"
+    ]
   },
   "INJEUR": {
     "becameAvailable": "2021-04-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 3.5% near-low-partly-trade-soft => €34.5 Remain: 2.5 Transactions: 11.5"]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 3.5% near-low-partly-trade-soft => €30.5 Remain: 0 Transactions: 11.5"]
   },
   "FLOKIEUR": {
     "becameAvailable": "2021-07-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 5.5% high-drop-partly-trade-soft => €23.5 Remain: 0 Transactions: 4.5"]
+    "note": "",
+    "strategies": [
+      "€100 €100 >0.5< 5.5% high-drop-partly-trade-hard => €23 Remain: 0 Transactions: 4.5",
+      ">€100 €100 >0.5< 5% on-increase-partly-trade-hard => €24 Remain: 0 Transactions: 5"
+    ]
   },
   "TIAEUR": {
     "becameAvailable": "2023-11-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "ready",
-    "strategies": [
-      "€100 €100 >0.5< 9% high-drop-partly-trade-soft => €28 Remain: 10 Transactions: 3",
-      ">€100 €100 >0.5< 9.5% near-low-partly-trade-hard => €28.5 Remain: 10 Transactions: 3"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 9% high-drop-partly-trade-hard => €27.5 Remain: 10 Transactions: 3"]
   },
   "RUNEEUR": {
     "becameAvailable": "2020-07-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 5% near-low-partly-trade-hard => €30 Remain: 0 Transactions: 6"]
+    "note": "",
+    "strategies": [">€100 €100 >0.75< 6.5% near-low-partly-trade-hard => €30 Remain: 0 Transactions: 6"]
   },
   "GALAEUR": {
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.35,
-    "note": "In migration process to a new contract address from the old contract address - ready",
-    "strategies": [
-      ">€100 €100 >0.5< 7% near-low-partly-trade-soft => €21 Remain: 2580 Transactions: 3",
-      "€100 €100 >0.5< 2% near-low-partly-trade-soft => €14 Remain: 0 Transactions: 8.5"
-    ]
+    "note": "In migration process to a new contract address from the old contract address - ",
+    "strategies": [">€100 €100 >0.75< 3% near-low-partly-trade-soft => €17 Remain: 0 Transactions: 7"]
   },
   "DYMEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.21,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 9.5% near-low-partly-trade-hard => €30.5 Remain: 36.5 Transactions: 3"]
+    "note": "",
+    "strategies": [">€100 €100 >1< 9.5% on-increase-partly-trade-soft => €31 Remain: 37 Transactions: 3.5"]
   },
   "STEPEUR": {
     "becameAvailable": "2021-04-01",
     "askBidSpreadPercentage": 3.49,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >0.75< 7.5% near-low-partly-trade-soft => €29.5 Remain: 1082.5 Transactions: 3",
-      "€100 €100 >0.75< 6% near-low-partly-trade-soft => €22.5 Remain: 0 Transactions: 3"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >1< 7% near-low-partly-trade-soft => €28 Remain: 1082.5 Transactions: 3.5"]
   },
   "ZEXEUR": {
     "becameAvailable": "2024-07-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 4.5% high-drop-partly-trade-hard => €32 Remain: 0 Transactions: 6.5"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >0.5< 4.5% on-increase-partly-trade-hard => €32.5 Remain: 0 Transactions: 6",
+      "€100 €100 >0.5< 4.5% high-drop-partly-trade-hard => €28.5 Remain: 0 Transactions: 7"
+    ]
   },
   "WENEUR": {
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.7,
-    "note": "WEN trading restricted for NL - ready",
+    "note": "WEN trading restricted for NL - ",
     "strategies": [">€100 €100 >0.75< 4% near-low-partly-trade-soft => €27.5 Remain: 0 Transactions: 7.5"]
   },
   "PRIMEEUR": {
     "becameAvailable": "2023-03-01",
     "askBidSpreadPercentage": 0.21,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €100 >0.75< 5.5% high-drop-partly-trade-soft => €26.5 Remain: 5 Transactions: 5.5",
-      "€100 €100 >0.25< 7% high-drop-partly-trade-soft => €15 Remain: 0 Transactions: 2"
+      ">€100 €100 >0.75< 6% near-low-partly-trade-soft => €24.5 Remain: 0 Transactions: 6.5",
+      "€100 €100 >0.75< 6.5% near-low-partly-trade-soft => €25 Remain: 0 Transactions: 6"
     ]
   },
   "SAFEEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "ready",
-    "strategies": [">€100 €100 >1< 2% high-drop-partly-trade-soft => €23.5 Remain: 0 Transactions: 6.5"]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 9% near-low-partly-trade-soft => €25.5 Remain: 44 Transactions: 1.5"]
   },
   "ARKMEUR": {
     "becameAvailable": "2023-07-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >1< 6% near-low-partly-trade-hard => €25.5 Remain: 32.5 Transactions: 4.5",
-      ">€100 €100 >0.75< 4.5% high-drop-partly-trade-hard => €23 Remain: 0 Transactions: 5.5"
+      ">€100 €100 >1< 5% high-drop-partly-trade-soft => €27 Remain: 32.5 Transactions: 8",
+      "€100 €100 >0.5< 3% high-drop-partly-trade-soft => €17 Remain: 0 Transactions: 14"
     ]
   },
   "CELREUR": {
     "becameAvailable": "2021-03-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "ready",
-    "strategies": [
-      "€100 €100 >1< 9% high-drop-partly-trade-soft => €22 Remain: 4720.5 Transactions: 2",
-      ">€100 €100 >0.75< 9% high-drop-partly-trade-soft => €18 Remain: 0 Transactions: 2"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.75< 8.5% high-drop-partly-trade-hard => €22 Remain: 0 Transactions: 2.5"]
   },
   "ZECEUR": {
     "becameAvailable": "2016-10-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "ready",
+    "note": "",
     "strategies": [
       "€100 €100 >1< 6.5% high-drop-partly-trade-hard => €24 Remain: 1 Transactions: 3.5",
-      "€100 €100 >1< 8% near-low-partly-trade-hard => €22.5 Remain: 0 Transactions: 3",
-      ">€100 €100 >0.5< 4.5% high-drop-partly-trade-hard => €22 Remain: 0 Transactions: 5.5"
+      ">€100 €100 >1< 6.5% near-low-partly-trade-soft => €17 Remain: 0 Transactions: 4"
     ]
   },
   "ETHFIEUR": {
     "becameAvailable": "2022-03-01",
     "askBidSpreadPercentage": 0.39,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >0.5< 9.5% near-low-partly-trade-soft => €24.5 Remain: 0 Transactions: 2.5",
-      ">€100 €100 >0.25< 6% near-low-partly-trade-hard => €23.5 Remain: 0 Transactions: 4"
+      "€100 €100 >0.25< 3.5% high-drop-partly-trade-soft => €20.5 Remain: 36 Transactions: 9.5",
+      ">€100 €100 >0.5< 3.5% high-drop-partly-trade-hard => €22 Remain: 35 Transactions: 7.5"
     ]
   },
   "ZKEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.25< 4% high-drop-partly-trade-soft => €21 Remain: 0 Transactions: 5.5"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >0.75< 5.5% near-low-partly-trade-hard => €22.5 Remain: 0 Transactions: 6.5",
+      "€100 €100 >0.25< 4.5% near-low-partly-trade-hard => €20.5 Remain: 0 Transactions: 7",
+      "€100 €100 >0.5< 4% high-drop-partly-trade-soft => €20 Remain: 0 Transactions: 9"
+    ]
   },
   "JTOEUR": {
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.38,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >0.5< 3.5% near-low-partly-trade-soft => €23.5 Remain: 22 Transactions: 7.5",
-      ">€100 €100 >0.25< 4% near-low-partly-trade-soft => €23 Remain: 0 Transactions: 6.5"
+      ">€100 €100 >0.5< 7% high-drop-partly-trade-hard => €20 Remain: 0 Transactions: 3.5",
+      "€100 €100 >0.5< 8% near-low-partly-trade-hard => €20 Remain: 0 Transactions: 3.5"
     ]
   },
   "SDNEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.41,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.5< 7.5% near-low-partly-trade-hard => €23 Remain: 0 Transactions: 3"]
   },
   "MEMEEUR": {
     "becameAvailable": "2023-11-01",
     "askBidSpreadPercentage": 0.28,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >0.75< 8.5% high-drop-partly-trade-hard => €28.5 Remain: 0 Transactions: 3",
-      "€100 €100 >0.25< 3% near-low-partly-trade-soft => €21 Remain: 0 Transactions: 7"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.75< 6.5% high-drop-partly-trade-soft => €23.5 Remain: 0 Transactions: 5"]
   },
   "ALTEUR": {
     "becameAvailable": "2022-03-01",
     "askBidSpreadPercentage": 1.1,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >0.75< 8.5% high-drop-partly-trade-hard => €22.5 Remain: 0 Transactions: 2.5",
-      ">€100 €100 >0.5< 5% near-low-partly-trade-soft => €24 Remain: 431 Transactions: 7",
-      "€100 €100 >0.5< 6.5% near-low-partly-trade-hard => €24 Remain: 436.5 Transactions: 5"
+      ">€100 €100 >0.5< 5% near-low-partly-trade-soft => €27 Remain: 529.5 Transactions: 7.5",
+      "€100 €100 >0.25< 7% near-low-partly-trade-soft => €20.5 Remain: 0 Transactions: 5.5"
     ]
   },
   "HFTEUR": {
     "becameAvailable": "2022-09-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.5< 5% high-drop-partly-trade-hard => €22.5 Remain: 384.5 Transactions: 5"]
   },
   "MASKEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 0.16,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.25< 5.5% near-low-partly-trade-hard => €22.5 Remain: 0 Transactions: 4"]
   },
   "RLCEUR": {
     "becameAvailable": "2017-04-01",
     "askBidSpreadPercentage": 0.19,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >0.5< 8% near-low-partly-trade-soft => €21 Remain: 0 Transactions: 2.5",
-      "€100 €100 >0.75< 7.5% high-drop-partly-trade-soft => €20 Remain: 0 Transactions: 2.5"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 8% near-low-partly-trade-soft => €17 Remain: 0 Transactions: 2.5"]
   },
   "GTCEUR": {
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 1.4,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 4% near-low-partly-trade-soft => €24.5 Remain: 78 Transactions: 7.5"]
+    "note": "",
+    "strategies": [
+      "€100 €100 >0.75< 6.5% near-low-partly-trade-soft => €19 Remain: 76 Transactions: 3.5",
+      ">€100 €100 >0.25< 4% near-low-partly-trade-hard => €18 Remain: 0 Transactions: 5"
+    ]
   },
   "PORTALEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.18,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €100 >1< 5% near-low-partly-trade-soft => €24.5 Remain: 183 Transactions: 6",
-      "€100 €100 >0.25< 1.5% near-low-partly-trade-soft => €12 Remain: 0 Transactions: 12"
+      ">€100 €100 >1< 5% near-low-partly-trade-soft => €27 Remain: 183 Transactions: 6.5",
+      "€100 €100 >0.5< 5% near-low-partly-trade-soft => €16.5 Remain: 0 Transactions: 8"
     ]
   },
   "ACHEUR": {
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "ready",
-    "strategies": [
-      "€100 €100 >0.75< 3.5% near-low-partly-trade-soft => €26.5 Remain: 2664.5 Transactions: 8.5",
-      ">€100 €100 >0.5< 3.5% near-low-partly-trade-soft => €25 Remain: 0 Transactions: 8"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.75< 6% near-low-partly-trade-soft => €29 Remain: 0 Transactions: 6"]
   },
   "AGLDEUR": {
     "becameAvailable": "2021-09-01",
     "askBidSpreadPercentage": 0.39,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.25< 3% high-drop-partly-trade-soft => €26 Remain: 0 Transactions: 10"]
+    "note": "",
+    "strategies": [">€100 €100 >0.25< 3% high-drop-partly-trade-soft => €21.5 Remain: 0 Transactions: 8.5"]
   },
   "MOVREUR": {
     "becameAvailable": "2021-08-01",
     "askBidSpreadPercentage": 0.19,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >0.75< 6.5% near-low-partly-trade-soft => €21 Remain: 5.5 Transactions: 3.5",
-      ">€100 €100 >0.5< 5.5% near-low-partly-trade-soft => €15.5 Remain: 0 Transactions: 3.5"
+      ">€100 €100 >1< 5.5% on-increase-partly-trade-hard => €19 Remain: 5.5 Transactions: 3.5",
+      "€100 €100 >0.5< 4.5% on-increase-partly-trade-soft => €16 Remain: 0 Transactions: 4.5",
+      "€100 €100 >0.5< 5.5% near-low-partly-trade-soft => €15.5 Remain: 0 Transactions: 4.5"
     ]
   },
   "NTRNEUR": {
     "becameAvailable": "2023-06-01",
     "askBidSpreadPercentage": 0.34,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.5< 7% near-low-partly-trade-soft => €22.5 Remain: 0 Transactions: 2"]
   },
   "SAMOEUR": {
     "becameAvailable": "2021-05-01",
     "askBidSpreadPercentage": 2.82,
-    "note": "ready",
-    "strategies": [">€100 €100 >1< 7% near-low-partly-trade-soft => €20 Remain: 0 Transactions: 2.5"]
+    "note": "",
+    "strategies": [">€100 €100 >1< 6.5% high-drop-partly-trade-hard => €17 Remain: 0 Transactions: 2.5"]
   },
   "MLNEUR": {
     "becameAvailable": "2017-02-01",
     "askBidSpreadPercentage": 0.51,
-    "note": "In migration process (Melon is rebranded as Enzyme. Read more about this) - ready",
-    "strategies": [">€100 €100 >0.75< 4% near-low-partly-trade-soft => €21 Remain: 0 Transactions: 4.5"]
+    "note": "In migration process (Melon is rebranded as Enzyme. Read more about this) - ",
+    "strategies": [">€100 €100 >1< 6% near-low-partly-trade-soft => €19.5 Remain: 3 Transactions: 2.5"]
   },
   "AEVOEUR": {
     "becameAvailable": "2024-03-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      "€100 €100 >1< 8% near-low-partly-trade-hard => €18 Remain: 167 Transactions: 3",
-      "€100 €100 >0.5< 8.5% near-low-partly-trade-soft => €16 Remain: 168.5 Transactions: 2",
-      ">€100 €100 >0.25< 6.5% near-low-partly-trade-soft => €14.5 Remain: 0 Transactions: 3"
+      ">€100 €100 >0.25< 4% on-increase-partly-trade-hard => €17.5 Remain: 160 Transactions: 4.5",
+      "€100 €100 >0.5< 8% near-low-partly-trade-soft => €15.5 Remain: 167 Transactions: 2.5",
+      "€100 €100 >0.5< 6.5% high-drop-partly-trade-soft => €13.5 Remain: 0 Transactions: 3"
     ]
   },
   "CRVEUR": {
     "becameAvailable": "2020-08-01",
-    "note": "ready",
+    "note": "",
     "askBidSpreadPercentage": 0.25,
     "strategies": [">€100 €100 >0.5< 4.5% high-drop-partly-trade-soft => €14.5 Remain: 0 Transactions: 5"]
   },
   "BODENEUR": {
     "becameAvailable": "2022-05-01",
     "askBidSpreadPercentage": 2.32,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €33 >0.75< 3.5% on-increase-slowly-trade-hard => €14.5 Remain: 2739 Transactions: 13",
       "€100 €100 >0.25< 5% near-low-partly-trade-soft => €12.5 Remain: 5472.5 Transactions: 5.5"
@@ -621,13 +608,13 @@
   "JASMYEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.75< 3% near-low-partly-trade-hard => €14.5 Remain: 2793 Transactions: 5.5"]
   },
   "QNTEUR": {
     "becameAvailable": "2018-08-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €100 >0.5< 7% near-low-partly-trade-hard => €11.5 Remain: 0 Transactions: 2",
       "€100 €100 >0.75< 6% high-drop-partly-trade-hard => €10 Remain: 0 Transactions: 2"
@@ -636,7 +623,7 @@
   "LINKEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €100 >0.25< 3.5% near-low-partly-trade-soft => €11.5 Remain: 0 Transactions: 4",
       "€100 €100 >0.75< 6% high-drop-partly-trade-soft => €11.5 Remain: 0 Transactions: 2"
@@ -645,7 +632,7 @@
   "BCHEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €100 >1< 7.5% near-low-partly-trade-soft => €15 Remain: 0 Transactions: 2",
       "€100 €100 >0.5< 3% near-low-partly-trade-soft => €12.5 Remain: 0 Transactions: 5"
@@ -654,19 +641,19 @@
   "DOTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.5< 6.5% near-low-partly-trade-soft => €12 Remain: 0 Transactions: 2"]
   },
   "WOOEUR": {
     "becameAvailable": "2020-10-01",
     "askBidSpreadPercentage": 0.13,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 5.5% near-low-partly-trade-hard => €22.5 Remain: 0 Transactions: 4.5"]
+    "note": "",
+    "strategies": [">€100 €100 >0.25< 4.5% high-drop-partly-trade-hard => €17.5 Remain: 0 Transactions: 4.5"]
   },
   "UNFIEUR": {
     "becameAvailable": "2020-11-01",
     "askBidSpreadPercentage": 0.25,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €100 >1< 6.5% near-low-partly-trade-hard => €34 Remain: 0 Transactions: 3",
       "€100 €33 >0.5< 6% near-low-slowly-trade-hard => €33 Remain: 0 Transactions: 8"
@@ -675,28 +662,25 @@
   "LITEUR": {
     "becameAvailable": "2021-02-05",
     "askBidSpreadPercentage": 3.18,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >1< 7% near-low-partly-trade-soft => €10 Remain: 0 Transactions: 1.5"]
   },
   "ZEUSEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 1.31,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.75< 8.5% near-low-partly-trade-soft => €18 Remain: 182 Transactions: 2"]
   },
   "MVEUR": {
     "becameAvailable": "2022-02-01",
     "askBidSpreadPercentage": 3.21,
-    "note": "ready",
-    "strategies": [
-      "€100 €100 >1< 4% high-drop-partly-trade-hard => €20.5 Remain: 6640 Transactions: 2",
-      ">€100 €100 >1< 4.5% high-drop-partly-trade-hard => €19.5 Remain: 0 Transactions: 2"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 2.5% near-low-partly-trade-hard => €21.5 Remain: 0 Transactions: 4"]
   },
   "MINAEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 0.18,
-    "note": "ready",
+    "note": "",
     "strategies": [
       "€100 €100 >0.75< 4% near-low-partly-trade-soft => €17 Remain: 90 Transactions: 6",
       ">€100 €100 >0.5< 9% near-low-partly-trade-soft => €13.5 Remain: 0 Transactions: 1.5"
@@ -705,13 +689,13 @@
   "XLMEUR": {
     "becameAvailable": "2014-07-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "NEAREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "ready",
+    "note": "",
     "strategies": [
       "€100 €100 >0.75< 7% near-low-partly-trade-hard => €19.5 Remain: 12 Transactions: 3",
       ">€100 €100 >0.5< 7% high-drop-partly-trade-hard => €15 Remain: 0 Transactions: 2.5"
@@ -720,7 +704,7 @@
   "LTCEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.25< 2.5% near-low-partly-trade-soft => €13.5 Remain: 0 Transactions: 6.5"]
   },
   "USDSEUR": {
@@ -732,13 +716,13 @@
   "ICPEUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.5< 2% near-low-partly-trade-hard => €11 Remain: 0 Transactions: 7.5"]
   },
   "RENDEREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "In migration process: Render (RNDR) will be migrated and rebranded to Render (RENDER) - ready",
+    "note": "In migration process: Render (RNDR) will be migrated and rebranded to Render (RENDER) - ",
     "strategies": [">€100 €100 >0.25< 3.5% near-low-partly-trade-soft => €16.5 Remain: 8.5 Transactions: 8.5"]
   },
   "KASEUR": {
@@ -751,55 +735,55 @@
     "name": "Polygon Ecosystem Token",
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 6.26,
-    "note": "In migration process from MATICEUR (MATIC Polygon) - ready",
+    "note": "In migration process from MATICEUR (MATIC Polygon) - ",
     "strategies": [">€100 €100 >0.25< 7% near-low-partly-trade-soft => €12.5 Remain: 0 Transactions: 2"]
   },
   "ETCEUR": {
     "becameAvailable": "2016-07-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.75< 4% near-low-partly-trade-soft => €12 Remain: 0 Transactions: 3.5"]
   },
   "XMREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "ARBEUR": {
     "becameAvailable": "2023-04-23",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.5< 8% near-low-partly-trade-soft => €16 Remain: 0 Transactions: 2"]
   },
   "FILEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >1< 8.5% near-low-partly-trade-soft => €17.5 Remain: 0 Transactions: 2"]
   },
   "ATOMEUR": {
     "becameAvailable": "2019-03-14",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.75< 7% high-drop-partly-trade-soft => €12.5 Remain: 12 Transactions: 1.5"]
   },
   "MNTEUR": {
     "becameAvailable": "2022-10-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.25< 4.5% near-low-partly-trade-soft => €12 Remain: 0 Transactions: 3"]
   },
   "AAVEEUR": {
     "becameAvailable": "2020-12-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >1< 8.5% near-low-partly-trade-soft => €18 Remain: 0 Transactions: 2"]
   },
   "IMXEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "ready",
+    "note": "",
     "strategies": [
       "€100 €100 >0.75< 9.5% near-low-partly-trade-soft => €18 Remain: 41 Transactions: 1.5",
       "€100 €100 >0.75< 8% high-drop-partly-trade-soft => €14 Remain: 0 Transactions: 2"
@@ -808,13 +792,13 @@
   "OPEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >1< 9.5% near-low-partly-trade-soft => €18.5 Remain: 0 Transactions: 2"]
   },
   "GRTEUR": {
     "becameAvailable": "2020-12-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €100 >0.5< 6.5% high-drop-partly-trade-soft => €16 Remain: 0 Transactions: 2.5",
       "€100 €100 >0.5< 6.5% near-low-partly-trade-hard => €15.5 Remain: 0 Transactions: 3"
@@ -823,14 +807,17 @@
   "ALGOEUR": {
     "becameAvailable": "2019-06-19",
     "askBidSpreadPercentage": 0.11,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.75< 5.5% high-drop-partly-trade-hard => €9.5 Remain: 0 Transactions: 2.5"]
   },
   "STGEUR": {
     "becameAvailable": "2020-09-01",
-    "note": "ready",
+    "note": "",
     "askBidSpreadPercentage": 0.86,
-    "strategies": [">€100 €100 >0.25< 3.5% on-increase-partly-trade-soft => €9.5 Remain: 0 Transactions: 3.5"]
+    "strategies": [
+      ">€100 €100 >0.25< 3.5% on-increase-partly-trade-soft => €10.5 Remain: 0 Transactions: 3.5",
+      "€100 €100 >0.75< 5.5% near-low-partly-trade-soft => €10 Remain: 201.5 Transactions: 2.5"
+    ]
   },
   "POPCATEUR": {
     "becameAvailable": "2024-01-01",
@@ -841,7 +828,7 @@
   "ONDOEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.13,
-    "note": "ready",
+    "note": "",
     "strategies": [
       ">€100 €100 >0.75< 8% high-drop-partly-trade-soft => €16.5 Remain: 0 Transactions: 2",
       "€100 €100 >1< 8% high-drop-partly-trade-soft => €19 Remain: 79 Transactions: 2"
@@ -850,104 +837,104 @@
   "MSOLEUR": {
     "becameAvailable": "2022-04-01",
     "askBidSpreadPercentage": 3.32,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "BEAMEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 2.46,
-    "note": "In migration process from MCEUR (MC Merit Circle token ) - ready",
-    "strategies": [">€100 €100 >1< 4.5% near-low-partly-trade-soft => €21.5 Remain: 0 Transactions: 4.5"]
+    "note": "In migration process from MCEUR (MC Merit Circle token ) - ",
+    "strategies": [">€100 €100 >0.5< 4.5% near-low-partly-trade-soft => €21.5 Remain: 2762 Transactions: 5"]
   },
   "WEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.36,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €100 >1< 10% near-low-partly-trade-hard => €21.5 Remain: 170.5 Transactions: 2.5",
-      "€100 €100 >0.25< 7% high-drop-partly-trade-soft => €16 Remain: 0 Transactions: 1.5"
+      ">€100 €100 >0.5< 9% near-low-partly-trade-soft => €28.5 Remain: 226.5 Transactions: 3",
+      "€100 €100 >0.25< 5% high-drop-partly-trade-soft => €17.5 Remain: 0 Transactions: 4.5"
     ]
   },
   "LUNAEUR": {
     "becameAvailable": "2019-08-01",
     "askBidSpreadPercentage": 0.63,
-    "note": "ready",
-    "strategies": [
-      ">€100 €100 >0.5< 3.5% near-low-partly-trade-hard => €21.5 Remain: 0 Transactions: 6.5",
-      "€100 €100 >0.75< 3.5% near-low-partly-trade-soft => €21 Remain: 0 Transactions: 7"
-    ]
+    "note": "",
+    "strategies": [">€100 €100 >0.5< 3.5% near-low-partly-trade-hard => €21.5 Remain: 0 Transactions: 6.5"]
   },
   "XRTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €33 >0.75< 8.5% on-increase-slowly-trade-soft => €21 Remain: 0 Transactions: 6",
-      "€100 €33 >0.5< 8.5% high-drop-slowly-trade-soft => €15 Remain: 0 Transactions: 4.5"
+      ">€100 €33 >0.75< 9% high-drop-slowly-trade-soft => €14 Remain: 0 Transactions: 6",
+      "€100 €33 >0.75< 9% on-increase-slowly-trade-soft => €14 Remain: 0 Transactions: 6"
     ]
   },
   "TREMPEUR": {
     "becameAvailable": "2024-03-01",
     "askBidSpreadPercentage": 6.36,
-    "note": "is not available in to trade with EUR) - ready",
+    "note": "is not available in to trade with EUR) - ",
     "strategies": [">€100 €100 >0.75< 9.5% high-drop-partly-trade-soft => €53.5 Remain: 0 Transactions: 4.5"]
   },
   "FIDAEUR": {
     "becameAvailable": "2020-12-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >0.75< 6.5% near-low-partly-trade-soft => €9.5 Remain: 156.5 Transactions: 2"]
   },
   "POLISEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.43,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "KILTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 1.76,
-    "note": "ready",
+    "note": "",
     "strategies": [">€100 €100 >1< 6% high-drop-partly-trade-soft => €10 Remain: 0 Transactions: 2.5"]
   },
   "EWTEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.81,
-    "note": "ready",
+    "note": "",
     "strategies": [
-      ">€100 €100 >0.5< 4% near-low-partly-trade-hard => €10.5 Remain: 0 Transactions: 5.5",
-      "€100 €100 >0.25< 10% near-low-partly-trade-hard => €10.5 Remain: 0 Transactions: 1"
+      ">€100 €100 >0.5< 4% near-low-partly-trade-hard => €11.5 Remain: 0 Transactions: 5.5",
+      "€100 €100 >0.5< 3.5% near-low-partly-trade-hard => €11.5 Remain: 0 Transactions: 6"
     ]
   },
   "KINEUR": {
     "becameAvailable": "2022-08-01",
-    "note": "ready",
+    "note": "",
     "askBidSpreadPercentage": 0.86,
     "strategies": [">€100 €100 >0.75< 10% near-low-partly-trade-hard => €10.5 Remain: 0 Transactions: 1"]
   },
   "STRKEUR": {
     "becameAvailable": "2021-09-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "TLMEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "API3EUR": {
     "becameAvailable": "2021-11-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "ready",
+    "note": "",
     "strategies": []
   },
   "KP3REUR": {
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "ready",
-    "strategies": [">€100 €100 >0.5< 6% high-drop-partly-trade-hard => €28.5 Remain: 0 Transactions: 2.5"]
+    "note": "",
+    "strategies": [
+      ">€100 €100 >0.5< 5.5% on-increase-partly-trade-hard => €20.5 Remain: 0 Transactions: 3",
+      "€100 €33 >0.5< 6% high-drop-slowly-trade-hard => €20 Remain: 0 Transactions: 5"
+    ]
   },
   "BICOEUR": {
     "becameAvailable": "2021-12-01",
@@ -967,7 +954,7 @@
   "ZROEUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ZRO trading restricted for NL - ready",
+    "note": "ZRO trading restricted for NL - ",
     "strategies": [
       "€100 €100 >0.75< 10% high-drop-partly-trade-soft => €20.5 Remain: 0 Transactions: 2",
       ">€100 €100 >0.75< 10% high-drop-partly-trade-hard => €20.5 Remain: 0 Transactions: 2"

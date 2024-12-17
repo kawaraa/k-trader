@@ -76,7 +76,8 @@ export default function Home() {
   };
 
   const handleActions = async (action, pair) => {
-    if (action == "edit") setBotToUpdate({ pair, info: bots[pair] });
+    if (action == "rest") restState(pair);
+    else if (action == "edit") setBotToUpdate({ pair, info: bots[pair] });
     else if (action == "delete") remove(pair);
     else if (action == "sell-all") sellAllOrders(pair);
     else if (["turn-on", "turn-off"].includes(action.replace("-all", ""))) {
@@ -98,6 +99,28 @@ export default function Home() {
     request("/api/auth", { method: "DELETE" })
       .then(() => router.replace("/signin"))
       .catch(catchErr);
+  };
+
+  const restState = async (pair) => {
+    if (!confirm(`Are you sure want to rest the state of "${pair || "all"}" pair?`)) return;
+    setLoading(true);
+    try {
+      await request(`/api/bots/rest?pair=${pair}`, { method: "PUT" });
+      const copy = { ...bots };
+      if (copy[pair]) {
+        copy[pair].sold = 0;
+        copy[pair].earnings = 0;
+      } else {
+        for (const p in copy) {
+          copy[p].sold = 0;
+          copy[p].earnings = 0;
+        }
+      }
+      setBots(copy);
+    } catch (error) {
+      alert(JSON.stringify(error.message || error.error || error));
+    }
+    setLoading(false);
   };
 
   const fetchBots = async () => {
@@ -153,7 +176,7 @@ export default function Home() {
       </header>
 
       <div className="flex justify-end">
-        <label for="orderby" className="flex items-center m-2">
+        <label for="orderby" className="flex items-center m-2 cursor-pointer">
           <input
             id="orderby"
             type="checkbox"
@@ -171,9 +194,9 @@ export default function Home() {
           <span className="flex-1 w-1/5 font-medium">Crypto</span>
           <span className="flex-1 w-1/5 font-medium">Capital</span>
           <p className="relative flex-1 w-1/5">
-            <span className={`${badgeCls} bg-emerald-400`}>
+            <button onClick={() => restState()} className={`${badgeCls} bg-emerald-400`}>
               {parseInt(Object.keys(bots).reduce((acc, p) => acc + bots[p].earnings, 0))}
-            </span>
+            </button>
             <span className="block font-medium">Earings</span>
           </p>
           <p className="relative flex-2 w-2/5">

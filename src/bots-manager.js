@@ -60,6 +60,19 @@ class BotsManager {
     bot.orders = [];
     this.state.update(this.get());
   }
+  static restState(pair) {
+    const bot = this.#bots[pair];
+    if (bot) {
+      bot.sold = 0;
+      bot.earnings = 0;
+      return;
+    }
+    for (const p in this.#bots) {
+      this.#bots[p].sold = 0;
+      this.#bots[p].earnings = 0;
+    }
+    this.state.update(this.#bots);
+  }
   static async runAll() {
     for (const pair in this.#bots) {
       if (!this.#bots[pair].startedOn) {

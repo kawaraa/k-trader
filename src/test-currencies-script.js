@@ -12,69 +12,87 @@ const interval = +process.argv[6] || 5; // from 5 to 11440, time per mins E.g. 1
 
 // Command example: node test-trading-script.js ETHEUR 100 99 0.25 1.1 near-low > database/log/all.log 2>&1
 
-// const pairs = Object.keys(currencies); // .slice();
-const readyPairs = [
-  // "CRVEUR",
-  // "CXTEUR",
-  // "EWTEUR",
-  // "STGEUR",
-  // "KINEUR",
-  // "SHIBEUR",
-  // "TURBOEUR",
-  // "MOGEUR",
-  // "WIFEUR",
-  // "BIGTIMEEUR",
-  // "KMNOEUR",
-  // "PENDLEEUR",
-  // "PRCLEUR",
-  // "SAGAEUR",
-  // "SUIEUR",
-  // "SUPEREUR",
-  // "ZETAEUR",
-  // "TNSREUR",
-  // "RAYEUR",
-  // "OXYEUR",
-  // "BONKEUR",
-  // "CSMEUR",
-  // "CPOOLEUR",
-  // "TAOEUR",
-  // "STEPEUR",
-  // "NOSEUR",
-  // "ORCAEUR",
-  // "BLUREUR",
-  // "BSXEUR",
-  // "ENAEUR",
-  // "TEEREUR",
-  // "PEPEEUR",
-  // "APTEUR",
-  // "TIAEUR",
-  // "YGGEUR",
-  // "DYMEUR",
-  // "SEIEUR",
-  // "FTMEUR",
-  // "JUPEUR",
-  // "PYTHEUR",
-  // "USTEUR",
-  // "XDGEUR",
-  // "STXEUR",
-  // "FLOKIEUR",
-  // "RUNEEUR",
-  // "ZEXEUR",
-  // "ZKEUR",
-  // "PRIMEEUR",
-  // "ETHFIEUR",
-  // "JTOEUR",
-  // "MEMEEUR",
-  // "HFTEUR",
-  // "RLCEUR",
-  // "GTCEUR",
-  // "ACHEUR",
-  // "NTRNEUR",
-  // "SAMOEUR",
-  // "AEVOEUR",
-  // "ETHEUR",
-  // "SOLEUR",
+const pairs = Object.keys(currencies); // .slice();
 
+(async () => {
+  for (const pair of pairs) {
+    if (alreadyInProgress(pair)) continue;
+    if (/stable|no price/gim.test(currencies[pair].note)) continue;
+    await runTradingTest(pair, capital, minStrategyRange, minPercentPriceChange, modes, interval);
+
+    // if (global.gc) global.gc(); // Forces garbage collection
+  }
+})();
+
+function alreadyInProgress(pair) {
+  const getFilePath = (name) => `${process.cwd()}/database/logs/${name}.log`;
+  return (
+    readFileSync(getFilePath("all")).includes(pair) ||
+    readFileSync(getFilePath("result-1")).includes(pair) ||
+    readFileSync(getFilePath("result-2")).includes(pair)
+  );
+}
+
+const getReadyPairs = () => [
+  "CRVEUR",
+  "CXTEUR",
+  "EWTEUR",
+  "STGEUR",
+  "KINEUR",
+  "SHIBEUR",
+  "TURBOEUR",
+  "MOGEUR",
+  "WIFEUR",
+  "BIGTIMEEUR",
+  "KMNOEUR",
+  "PENDLEEUR",
+  "PRCLEUR",
+  "SAGAEUR",
+  "SUIEUR",
+  "SUPEREUR",
+  "ZETAEUR",
+  "TNSREUR",
+  "RAYEUR",
+  "OXYEUR",
+  "BONKEUR",
+  "CSMEUR",
+  "CPOOLEUR",
+  "TAOEUR",
+  "STEPEUR",
+  "NOSEUR",
+  "ORCAEUR",
+  "BLUREUR",
+  "BSXEUR",
+  "ENAEUR",
+  "TEEREUR",
+  "PEPEEUR",
+  "APTEUR",
+  "TIAEUR",
+  "YGGEUR",
+  "DYMEUR",
+  "SEIEUR",
+  "FTMEUR",
+  "JUPEUR",
+  "PYTHEUR",
+  "USTEUR",
+  "XDGEUR",
+  "STXEUR",
+  "FLOKIEUR",
+  "RUNEEUR",
+  "ZEXEUR",
+  "ZKEUR",
+  "PRIMEEUR",
+  "JTOEUR",
+  "MEMEEUR",
+  "HFTEUR",
+  "RLCEUR",
+  "GTCEUR",
+  "ACHEUR",
+  "NTRNEUR",
+  "SAMOEUR",
+  "AEVOEUR",
+  "ETHEUR",
+  "SOLEUR",
   "INJEUR",
   "UNFIEUR",
   "KP3REUR",
@@ -101,18 +119,3 @@ const readyPairs = [
   "LUNAEUR",
   "XRTEUR",
 ];
-
-(async () => {
-  for (const pair of readyPairs) {
-    if (alreadyInProgress(pair)) continue;
-    // if (/stable|no price|ready/gim.test(currencies[pair].note)) continue;
-    await runTradingTest(pair, capital, minStrategyRange, minPercentPriceChange, modes, interval);
-
-    // if (global.gc) global.gc(); // Forces garbage collection
-  }
-})();
-
-function alreadyInProgress(pair) {
-  const getFilePath = (number) => `${process.cwd()}/database/logs/result-${number}.log`;
-  return readFileSync(getFilePath(1)).includes(pair) || readFileSync(getFilePath(2)).includes(pair);
-}
