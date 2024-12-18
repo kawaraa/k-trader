@@ -3,7 +3,7 @@
     "becameAvailable": "2009-01-01",
     "askBidSpreadPercentage": 0.05,
     "note": "",
-    "strategies": [">€100 €100 >0.25< 3.5% near-low-partly-trade-soft => €10 Remain: 0 Transactions: 3.5"]
+    "strategies": [">€100 €100 >0.25< 3.5% near-low-partly-trade-hard => €9.5 Remain: 0 Transactions: 3"]
   },
   "ETHEUR": {
     "becameAvailable": "2015-07-01",
@@ -414,7 +414,7 @@
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.7,
     "note": "WEN trading restricted for NL - ",
-    "strategies": [">€100 €100 >0.75< 4% near-low-partly-trade-soft => €27.5 Remain: 0 Transactions: 7.5"]
+    "strategies": [">€100 €100 >0.75< 6% high-drop-partly-trade-soft => €27 Remain: 0 Transactions: 6.5"]
   },
   "PRIMEEUR": {
     "becameAvailable": "2023-03-01",
@@ -723,7 +723,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.17,
     "note": "In migration process: Render (RNDR) will be migrated and rebranded to Render (RENDER) - ",
-    "strategies": [">€100 €100 >0.25< 3.5% near-low-partly-trade-soft => €16.5 Remain: 8.5 Transactions: 8.5"]
+    "strategies": [">€100 €100 >0.25< 3.5% near-low-partly-trade-soft => €23 Remain: 0 Transactions: 12.55"]
   },
   "KASEUR": {
     "becameAvailable": "20xx-xx-01",
@@ -784,10 +784,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.14,
     "note": "",
-    "strategies": [
-      "€100 €100 >0.75< 9.5% near-low-partly-trade-soft => €18 Remain: 41 Transactions: 1.5",
-      "€100 €100 >0.75< 8% high-drop-partly-trade-soft => €14 Remain: 0 Transactions: 2"
-    ]
+    "strategies": [">€100 €100 >0.75< 9.5% near-low-partly-trade-soft => €20.5 Remain: 41 Transactions: 2"]
   },
   "OPEUR": {
     "becameAvailable": "20xx-xx-01",
@@ -955,10 +952,7 @@
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 0.05,
     "note": "ZRO trading restricted for NL - ",
-    "strategies": [
-      "€100 €100 >0.75< 10% high-drop-partly-trade-soft => €20.5 Remain: 0 Transactions: 2",
-      ">€100 €100 >0.75< 10% high-drop-partly-trade-hard => €20.5 Remain: 0 Transactions: 2"
-    ]
+    "strategies": [">€100 €100 >0.75< 9.5% near-low-partly-trade-hard => €21 Remain: 0 Transactions: 2.5"]
   },
   "MANAEUR": {
     "becameAvailable": "20xx-xx-01",
