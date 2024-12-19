@@ -5,10 +5,8 @@
 - DailyTrader performs trading based on the provided strategy and settings. It analyzes the prices of the last xxx days on every xxx mins interval. every strategy has its settings.
 
 - There are a currently 5 strategies:
-1. high-drop-partly-trade: It buys if the current price drops -xxx% and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
-2. high-drop-slowly-trade: the same except it does not use all the capital to buy, it buys on specific amount provide in the settings called "investment" and when the prices drops again, it buys again til it spend the whole amount of "capital"
-3. near-low-partly-trade: It buys if the current price drops -xxx% and near the lowest price in the last xxx days and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
-4. near-low-slowly-trade: 
+1. high-drop: It buys if the current price drops -xxx% and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
+3. near-low: It buys if the current price drops -xxx% and near the lowest price in the last xxx days and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
 5. on-increase: It buys if the RSI is less than 30 and increasing, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
 
 - Settings: are used to control whether it's a long term strategy or short term trading / daily trading strategy, you can set it up using the "strategy range" field. if it's a day or less then obviously it's a short term trading strategy. 
@@ -46,8 +44,8 @@ module.exports = class DailyTrader {
     this.mode = mode;
     this.period = +timeInterval;
     this.#tradingAmount = 0; // cryptoTradingAmount
-    this.lowRSI = mode?.includes("hard") ? 30 : 40;
-    this.highRSI = mode?.includes("hard") ? 80 : 70;
+    this.lowRSI = mode?.includes("hard") ? 30 : 45;
+    this.highRSI = mode?.includes("hard") ? 85 : 80;
     this.listener = null;
     this.previousLowBidRSI = null;
     this.previousHighBidRSI = null;
@@ -75,6 +73,7 @@ module.exports = class DailyTrader {
       const orderLimit = parseInt(this.#capital / this.#investingCapital) - 1;
       const interval = this.period || this.timeInterval; // this.timeInterval is used only in test trading
       const enoughPricesData = prices.length >= (this.#strategyRange * 24 * 60) / interval;
+      const partlyTrade = this.#investingCapital != this.#capital;
 
       this.dispatch("balance", balance.crypto);
       this.dispatch("log", `💰 EUR: ${balance.eur} <|> ${name}: ${balance.crypto} - Price: ${tradePrice}`);
@@ -104,24 +103,16 @@ module.exports = class DailyTrader {
       }
 
       // 4. Pause buying if the bidPrice is higher then price of the last Order In the first or second Part
-      if (this.mode.includes("partly-trade")) {
+      if (partlyTrade) {
         const thirdIndex = Math.round((orderLimit + 1) / 3);
         const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex - 1] || {};
-        const threshold = -Math.max(this.#percentageThreshold / 2, 2);
+        const threshold = -Math.max(this.#percentageThreshold / 3, 1.5);
 
         if (price && threshold < calcPercentageDifference(price, bidPrice)) shouldBuy = false;
+      } else {
+        // 6. Safety check
+        if (HighDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
       }
-
-      // 5. Pause buying if the bidPrice is not x% less then the last Order's price
-      if (this.mode.includes("slowly-trade")) {
-        const { price } = orders.at(-1) || {};
-        const threshold = -Math.max(this.#percentageThreshold / 4, 1.5);
-
-        if (price && threshold < calcPercentageDifference(price, bidPrice)) shouldBuy = false;
-      }
-
-      // 6. Safety check
-      if (HighDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
 
       // Buy
       if (enoughPricesData && shouldBuy && askPriceRSI < this.lowRSI) {

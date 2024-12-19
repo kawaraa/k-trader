@@ -16,8 +16,8 @@ const pairs = Object.keys(currencies); // .slice();
 
 (async () => {
   for (const pair of pairs) {
-    if (alreadyInProgress(pair)) continue;
-    if (/stable|no price/gim.test(currencies[pair].note)) continue;
+    if (alreadyInProgress(pair) || /stable|no price/gim.test(currencies[pair].note)) continue;
+    // if (!/down/gim.test(currencies[pair].note)) continue;
     await runTradingTest(pair, capital, minStrategyRange, minPercentPriceChange, modes, interval);
 
     // if (global.gc) global.gc(); // Forces garbage collection
@@ -27,7 +27,7 @@ const pairs = Object.keys(currencies); // .slice();
 function alreadyInProgress(pair) {
   const getFilePath = (name) => `${process.cwd()}/database/logs/${name}.log`;
   return (
-    readFileSync(getFilePath("all")).includes(pair) ||
+    // readFileSync(getFilePath("all")).includes(pair) ||
     readFileSync(getFilePath("result-1")).includes(pair) ||
     readFileSync(getFilePath("result-2")).includes(pair)
   );

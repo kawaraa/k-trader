@@ -3,14 +3,7 @@ const { Worker, parentPort, workerData, isMainThread } = require("worker_threads
 const { readFileSync } = require("fs");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
-const supportedModes = [
-  "high-drop-partly-trade",
-  "high-drop-slowly-trade",
-  "near-low-partly-trade",
-  "near-low-slowly-trade",
-  "on-increase-partly-trade",
-  "on-increase-slowly-trade",
-];
+const supportedModes = ["high-drop", "near-low", "on-increase"];
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
@@ -38,7 +31,6 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
     for (const investment of [capital, parseInt(capital / 3)]) {
       for (const rsiMode of !modes[1] ? rsiModes : ["soft", "hard"]) {
         for (let mode of modes) {
-          if (investment == capital && mode.includes("slowly-trade")) continue;
           const m = `${mode}-${rsiMode}`;
           let workers = [];
 
@@ -52,7 +44,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
           (await Promise.all(workers)).forEach((r) => {
             const remain = parseInt(r.crypto) / 2;
             const transactions = parseInt(r.transactions) / 2;
-            if (r.balance - r.capital >= 19 && maxBalance < r.balance + 3) {
+            if (r.balance - r.capital >= 10 && maxBalance < r.balance + 3) {
               maxBalance = r.balance;
               console.log(
                 `€${r.capital} €${r.investment} >${r.range}< ${r.priceChange}% ${r.mode} =>`,
