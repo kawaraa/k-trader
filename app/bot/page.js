@@ -16,7 +16,7 @@ export default function Bot() {
 
   const fetchLogContent = async () => {
     setLoading(true);
-    logsRef.current.innerText = await request(`/api/bots/logs?pair=${pair}`).catch((err) => err.message);
+    logsRef.current.innerText = await request(`/api/bots/logs/${pair}`).catch((err) => err.message);
     logsRef.current?.scroll({ top: logsRef.current?.scrollHeight, behavior: "smooth" });
     setLoading(false);
   };

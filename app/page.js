@@ -22,7 +22,7 @@ export default function Home() {
   const close = () => setShowAddBotForm(false) + setBotToUpdate(null);
   const catchErr = (er) => alert(er.message || er.error || er);
   const botsPairs = Object.keys(bots);
-  const stringKeys = ["pair", "mode", "rsiMode"];
+  const stringKeys = ["pair", "mode"];
 
   const sortedBots = orderbyTime
     ? botsPairs.toSorted((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
@@ -35,8 +35,6 @@ export default function Home() {
     let method = "POST";
     try {
       new FormData(e.target).forEach((v, k) => (data[k] = stringKeys.includes(k) ? v : +v));
-      data.mode = `${data.mode}-${data.rsiMode}`;
-      delete data.rsiMode;
       if (bots[data.pair]) method = "PUT";
       const newBot = await request("/api/bots", {
         headers: { "Content-Type": "application/json" },
@@ -55,7 +53,7 @@ export default function Home() {
     if (!confirm(`Are you sure want to sell all the order for "${pair}" currency?`)) return;
     setLoading(true);
     try {
-      await request(`/api/bots/orders?pair=${pair}`, { method: "PUT" });
+      await request(`/api/bots/orders/${pair}`, { method: "PUT" });
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
@@ -105,7 +103,7 @@ export default function Home() {
     if (!confirm(`Are you sure want to rest the state of "${pair || "all"}" pair?`)) return;
     setLoading(true);
     try {
-      await request(`/api/bots/rest?pair=${pair}`, { method: "PUT" });
+      await request(`/api/bots/reset?pair=${pair}`, { method: "PUT" });
       const copy = { ...bots };
       if (copy[pair]) {
         copy[pair].sold = 0;

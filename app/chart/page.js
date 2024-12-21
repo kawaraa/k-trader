@@ -36,12 +36,9 @@ export default function CryptoChart() {
   const fetchPrices = async (pair) => {
     setLoading(true);
     try {
-      const { prices, since } = await request(`/api/prices/${pair}`);
-
-      if (pair) {
-        setPrices(prices);
-        setSince(since);
-      }
+      const { prices, since } = await request(`/api/bots/prices/${pair}`);
+      setPrices(prices);
+      setSince(since);
     } catch (error) {
       setError(error.message);
     }

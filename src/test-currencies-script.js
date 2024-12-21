@@ -7,17 +7,13 @@ const capital = +process.argv[2] || 100; // Amount in EUR which is the total mon
 // const investment = +process.argv[3] || 10; // investing Amount in EUR that will be used every time to by crypto
 const minStrategyRange = +process.argv[3] || 0.25; // In days, min value 0.25 day which equivalent to 6 hours
 const minPercentPriceChange = +process.argv[4] || 1.25; // Price Percentage Threshold, min value 1.25
-const modes = process.argv[5];
+const modes = [process.argv[5]];
 const interval = +process.argv[6] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
-
-// Command example: node test-trading-script.js ETHEUR 100 99 0.25 1.1 near-low > database/log/all.log 2>&1
-
-const pairs = Object.keys(currencies); // .slice();
+const pairs = Object.keys(currencies);
 
 (async () => {
   for (const pair of pairs) {
-    if (alreadyInProgress(pair) || /stable|no price/gim.test(currencies[pair].note)) continue;
-    // if (!/down/gim.test(currencies[pair].note)) continue;
+    if (alreadyInProgress(pair) || /stable|no price|ready/gim.test(currencies[pair].note)) continue;
     await runTradingTest(pair, capital, minStrategyRange, minPercentPriceChange, modes, interval);
 
     // if (global.gc) global.gc(); // Forces garbage collection
@@ -27,10 +23,8 @@ const pairs = Object.keys(currencies); // .slice();
 function alreadyInProgress(pair) {
   const getFilePath = (name) => `${process.cwd()}/database/logs/${name}.log`;
   return (
-    // readFileSync(getFilePath("all")).includes(pair) ||
+    readFileSync(getFilePath("all")).includes(pair) ||
     readFileSync(getFilePath("result-1")).includes(pair) ||
     readFileSync(getFilePath("result-2")).includes(pair)
   );
 }
-
-const getReadyPairs = () => [];

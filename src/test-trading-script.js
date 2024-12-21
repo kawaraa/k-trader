@@ -3,25 +3,23 @@ const { Worker, parentPort, workerData, isMainThread } = require("worker_threads
 const { readFileSync } = require("fs");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
-const supportedModes = ["high-drop", "near-low", "on-increase"];
+const strategyModes = require("./trend-analysis").getSupportedModes();
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
 // const investment = +process.argv[4] || 10; // investing Amount in EUR that will be used every time to by crypto
 const minStrategyRange = +process.argv[4] || 0.25; // In days, min value 0.25 day which equivalent to 6 hours
 const minPercentagePriceChange = +process.argv[5] || 1.25; // Price Percentage Threshold, min value 1.25
-let modes = process.argv[6];
+const modes = [process.argv[6]];
 const interval = +process.argv[7] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 const maxStrategyRange = +process.argv[8] || 1;
 const maxPriceChange = +process.argv[9] || 10;
 const showLogs = !!process.argv[10];
-const rsiModes = [modes?.includes("hard") ? "hard" : "soft"];
-modes = [modes?.replace(/-?(hard|soft)/gim, "")];
 
 async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, modes, interval) {
   try {
-    if (modes == "all") modes = supportedModes;
-    else if (!supportedModes.includes(modes[0])) throw new Error(`"${modes[0]}" is Invalid mode!`);
+    if ((modes || modes[0]) == "all") modes = strategyModes;
+    else if (!strategyModes.includes(modes[0])) throw new Error(`"${modes[0]}" is Invalid mode!`);
 
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
@@ -29,30 +27,26 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
     let maxBalance = 0;
 
     for (const investment of [capital, parseInt(capital / 3)]) {
-      for (const rsiMode of !modes[1] ? rsiModes : ["soft", "hard"]) {
-        for (let mode of modes) {
-          const m = `${mode}-${rsiMode}`;
-          let workers = [];
-
-          for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
-            for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
-              // workers.push(runWorker([pair, prices, capital, investment, range, priceChange, m, interval]));
-              workers.push(testStrategy(pair, prices, capital, investment, range, priceChange, m, interval));
-            }
+      for (const mode of modes) {
+        let workers = [];
+        for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
+          for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
+            // workers.push(runWorker([pair, prices, capital, investment, range, priceChange, mode, interval]));
+            workers.push(testStrategy(pair, prices, capital, investment, range, priceChange, mode, interval));
           }
-
-          (await Promise.all(workers)).forEach((r) => {
-            const remain = parseInt(r.crypto) / 2;
-            const transactions = parseInt(r.transactions) / 2;
-            if (r.balance - r.capital >= 10 && maxBalance < r.balance + 3) {
-              maxBalance = r.balance;
-              console.log(
-                `€${r.capital} €${r.investment} >${r.range}< ${r.priceChange}% ${r.mode} =>`,
-                `€${parseInt(r.balance - r.capital) / 2} Remain: ${remain} Transactions: ${transactions}`
-              );
-            }
-          });
         }
+
+        (await Promise.all(workers)).forEach((r) => {
+          const remain = parseInt(r.crypto) / 2;
+          const transactions = parseInt(r.transactions) / 2;
+          if (r.balance - r.capital >= 10 && maxBalance < r.balance + 3) {
+            maxBalance = r.balance;
+            console.log(
+              `€${r.capital} €${r.investment} >${r.range}< ${r.priceChange}% ${r.mode} =>`,
+              `€${parseInt(r.balance - r.capital) / 2} Remain: ${remain} Transactions: ${transactions}`
+            );
+          }
+        });
       }
     }
   } catch (error) {
@@ -119,9 +113,9 @@ function runWorker(workerData) {
 if (require.main === module && isMainThread) {
   runTradingTest(pair, capital, minStrategyRange, minPercentagePriceChange, modes, interval);
 } else if (!isMainThread && workerData) {
-  const [p, prices, capital, invmt, minStrategyRange, minPercentPriceChange, modes, interval] = workerData;
-  testStrategy(p, prices, capital, invmt, minStrategyRange, minPercentPriceChange, modes, interval).then(
-    (r) => parentPort.postMessage(r)
+  const [p, prices, capital, invmt, minStrategyRange, minPercentPriceChange, mode, interval] = workerData;
+  testStrategy(p, prices, capital, invmt, minStrategyRange, minPercentPriceChange, mode, interval).then((r) =>
+    parentPort.postMessage(r)
   );
 } else {
   module.exports = runTradingTest; // Export the runTradingTest function for use as a module

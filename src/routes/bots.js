@@ -1,7 +1,9 @@
+const { statSync, existsSync, readFileSync } = require("node:fs");
 const { Bot, BotsManager } = require("../bots-manager");
 const { parseError, isValidPair, isNumber } = require("../utilities");
 
 module.exports = (router, fireStoreProvider, authRequired, production) => {
+  // Get bots
   router.get("/bots", authRequired, async (request, response) => {
     try {
       const { pair } = request.query;
@@ -27,6 +29,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
+  // Create bot
   router.post("/bots", authRequired, async (request, response) => {
     try {
       let { pair, ...data } = request.body;
@@ -47,6 +50,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
+  // Update bot
   router.put("/bots", authRequired, async (request, response) => {
     try {
       const { pair, ...data } = request.body;
@@ -77,6 +81,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
+  // Delete bot
   router.delete("/bots", authRequired, async (request, response) => {
     try {
       const { pair } = request.query;
@@ -89,9 +94,10 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
-  router.put("/bots/orders", authRequired, async (request, response) => {
+  // Sell all orders
+  router.put("/bots/orders/:pair", authRequired, async (request, response) => {
     try {
-      const { pair } = request.query;
+      const { pair } = request.params;
       isValidPair(pair, true);
       await BotsManager.sellAllOrders(pair);
       response.json({ success: true });
@@ -100,7 +106,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
-  router.put("/bots/rest", authRequired, async (request, response) => {
+  router.put("/bots/reset", authRequired, async (request, response) => {
     try {
       BotsManager.restState(request.query.pair);
       response.json({ success: true });
@@ -109,9 +115,26 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
-  router.get("/bots/logs", authRequired, async (request, response) => {
+  // Get bot prices history
+  router.get("/bots/prices/:pair", authRequired, (request, response) => {
     try {
-      const { pair } = request.query;
+      const { pair } = request.params;
+      const filePath = `${process.cwd()}/database/prices/${pair}.json`;
+
+      isValidPair(pair, true);
+      if (!existsSync(filePath)) throw new Error(`No prices data for ${pair} pair`);
+      const prices = JSON.parse(readFileSync(`${process.cwd()}/database/prices/${pair}.json`, "utf8"));
+      const since = Date.parse(statSync(`${process.cwd()}/database/prices/${pair}.json`).birthtime);
+      response.json({ since, prices });
+    } catch (error) {
+      response.status(500).json({ message: parseError(error) });
+    }
+  });
+
+  // Get bot logs
+  router.get("/bots/logs/:pair", authRequired, async (request, response) => {
+    try {
+      const { pair } = request.params;
       isValidPair(pair, true);
       response.sendFile(`${process.cwd()}/database/logs/${pair}.log`);
     } catch (error) {

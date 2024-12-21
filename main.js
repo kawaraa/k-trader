@@ -1,4 +1,4 @@
-const { statSync, existsSync, mkdirSync, readFileSync } = require("node:fs");
+const { mkdirSync } = require("node:fs");
 const express = require("express");
 const { rateLimiter, cookiesParser, isAuthenticated } = require("./src/routes/middlewares.js");
 // const KrakenExchangeProvider = require("./src/kraken-ex-provider.js");
@@ -46,19 +46,6 @@ try {
   const apiRouter = express.Router();
   require("./src/routes/auth")(apiRouter, fireStoreProvider, authRequired, cookieOptions);
   require("./src/routes/bots")(apiRouter, fireStoreProvider, authRequired, prod);
-
-  apiRouter.get("/prices/:pair", authRequired, ({ params: { pair } }, response) => {
-    const filePath = `${process.cwd()}/database/prices/${pair}.json`;
-    try {
-      isValidPair(pair, true);
-      if (!existsSync(filePath)) throw new Error(`No prices data for ${pair} pair`);
-      const prices = JSON.parse(readFileSync(`${process.cwd()}/database/prices/${pair}.json`, "utf8"));
-      const since = Date.parse(statSync(`${process.cwd()}/database/prices/${pair}.json`).birthtime);
-      response.json({ since, prices });
-    } catch (error) {
-      response.status(500).json({ message: parseError(error) });
-    }
-  });
 
   server.use("/api", apiRouter);
 
