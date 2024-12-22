@@ -1,12 +1,7 @@
 const { mkdirSync } = require("node:fs");
 const express = require("express");
 const { rateLimiter, cookiesParser, isAuthenticated } = require("./src/routes/middlewares.js");
-// const KrakenExchangeProvider = require("./src/kraken-ex-provider.js");
 const fireStoreProvider = require("./src/firebase-provider");
-
-const { isValidPair, parseError } = require("./src/utilities.js");
-// const LocalState = require("./src/local-state.js");
-// const pairs = Object.keys(require("./src/currencies.json"));
 
 mkdirSync("database/logs", { recursive: true });
 mkdirSync("database/prices", { recursive: true });
@@ -14,22 +9,6 @@ mkdirSync("database/prices", { recursive: true });
 const prod = process.env.NODE_ENV === "production";
 const port = 3000;
 const server = express();
-// const state = new LocalState("cli-state");
-// const kraken = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CREDENTIALS, state);
-
-// async function fetchStorePrices() {
-//   if (prod) return;
-//   console.log("Started recording prices", pairs.length);
-//   for (const pair of pairs) {
-//     try {
-//       await kraken.currentPrices(pair);
-//     } catch (error) {
-//       console.log(`Error with ${pair}`, error.message);
-//     }
-//   }
-//   console.log("Finish recording prices, will start again after 5 mins");
-//   setTimeout(fetchStorePrices, 60000 * 5);
-// }
 
 // const maxAge = 60 * 60 * 24 * 7; // 1 week (weekSec)
 const maxAge = 30 * 24 * 3600 * 1000; // 30 days

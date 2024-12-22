@@ -1,9 +1,8 @@
 // test-trading-script is a price-history-analysis-script
-const { Worker, parentPort, workerData, isMainThread } = require("worker_threads");
 const { readFileSync } = require("fs");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
-const strategyModes = require("./trend-analysis").getSupportedModes();
+const strategyModes = require("./trend-analysis.js").getSupportedModes();
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
@@ -23,7 +22,8 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
 
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
-    const prices = getPrices(pair, interval / 5, "");
+    const prices = getPrices(pair, interval / 5);
+    const prices1 = getPrices(pair, interval / 5, "bots/");
     let maxBalance = 0;
 
     for (const investment of [capital, parseInt(capital / 3)]) {
@@ -31,22 +31,53 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
         let workers = [];
         for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
           for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
-            // workers.push(runWorker([pair, prices, capital, investment, range, priceChange, mode, interval]));
-            workers.push(testStrategy(pair, prices, capital, investment, range, priceChange, mode, interval));
+            const worker = async () => {
+              const result = await testStrategy(
+                pair,
+                prices,
+                capital,
+                investment,
+                range,
+                priceChange,
+                mode,
+                interval
+              );
+              const result1 = await testStrategy(
+                pair,
+                prices1,
+                capital,
+                investment,
+                range,
+                priceChange,
+                mode,
+                interval
+              );
+
+              const profit1 = parseInt((result.balance - capital) / 2);
+              const profit2 = parseInt(result1.balance - capital);
+
+              result.balance += profit2;
+              result.crypto += result1.crypto;
+              result.transactions += result1.transactions;
+
+              const remain = parseInt(result.crypto / 3);
+              const transactions = parseInt(result.transactions / 3);
+              const totalProfit = parseInt((result.balance - capital) / 3);
+
+              if (totalProfit >= 10 && maxBalance < result.balance + 3) {
+                maxBalance = result.balance;
+                console.log(
+                  `€${capital} €${investment} >${range}< ${priceChange}% ${mode} =>`,
+                  `€${totalProfit} Remain: ${remain} Transactions: ${transactions} Gainer: ${profit1} Loser: ${profit2}`
+                );
+              }
+              return result;
+            };
+            workers.push(worker());
           }
         }
 
-        (await Promise.all(workers)).forEach((r) => {
-          const remain = parseInt(r.crypto) / 2;
-          const transactions = parseInt(r.transactions) / 2;
-          if (r.balance - r.capital >= 10 && maxBalance < r.balance + 3) {
-            maxBalance = r.balance;
-            console.log(
-              `€${r.capital} €${r.investment} >${r.range}< ${r.priceChange}% ${r.mode} =>`,
-              `€${parseInt(r.balance - r.capital) / 2} Remain: ${remain} Transactions: ${transactions}`
-            );
-          }
-        });
+        await Promise.all(workers);
       }
     }
   } catch (error) {
@@ -88,39 +119,7 @@ function getPrices(pair, skip = 1, path = "") {
       return index % skip === 0;
     }
   );
-
-  // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
-  // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
-
-  // let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);
-  // const askBidSpread = currencies[pair].askBidSpreadPercentage; //the prices difference percent between ask and bid prices
-  // if (!prices[0]?.tradePrice) prices = prices.map((p) => adjustPrice(p, askBidSpread));
-}
-
-function runWorker(workerData) {
-  return new Promise((resolve, reject) => {
-    const worker = new Worker("./src/test-trading-script.js", { workerData });
-
-    worker.on("message", resolve); // Resolve the promise with the worker's message
-    worker.on("error", reject); // Reject on worker error
-    worker.on("exit", (code) => {
-      if (code !== 0) {
-        reject(new Error(`Worker stopped with exit code ${code}`));
-      }
-    });
-  });
 }
 
 // Run the runTradingTest function if the script is executed directly
-if (require.main === module && isMainThread) {
-  runTradingTest(pair, capital, minStrategyRange, minPercentagePriceChange, modes, interval);
-} else if (!isMainThread && workerData) {
-  const [p, prices, capital, invmt, minStrategyRange, minPercentPriceChange, mode, interval] = workerData;
-  testStrategy(p, prices, capital, invmt, minStrategyRange, minPercentPriceChange, mode, interval).then((r) =>
-    parentPort.postMessage(r)
-  );
-} else {
-  module.exports = runTradingTest; // Export the runTradingTest function for use as a module
-}
-
-// Command example: node test-trading-script.js ETHEUR 100 100 0.25 1.5 near-low > database/logs/all.log 2>&1
+runTradingTest(pair, capital, minStrategyRange, minPercentagePriceChange, modes, interval);

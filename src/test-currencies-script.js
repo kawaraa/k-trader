@@ -2,6 +2,7 @@
 const { readFileSync } = require("fs");
 const currencies = require("./currencies.json");
 const runTradingTest = require("./test-trading-script.js");
+// const runTradingTest = require("./test-trading-script-loser.js");
 
 const capital = +process.argv[2] || 100; // Amount in EUR which is the total money that can be used for trading
 // const investment = +process.argv[3] || 10; // investing Amount in EUR that will be used every time to by crypto

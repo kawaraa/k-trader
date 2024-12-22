@@ -86,17 +86,17 @@ module.exports = class DailyTrader {
         `Bid Price: => RSI: ${bidPriceRSI} - Cur: ${bidPrice} Avg: ${avgBidPrice}% Chg: ${bidPercentageChange}%`
       );
 
-      // 1. On price drop
+      // 1. On price drop mode
       const HighDropChange = calcPercentageDifference(highestBidPr, askPrice);
       let shouldBuy = HighDropChange < -(this.#percentageThreshold * 1.2);
 
-      // 2. On price increase
+      // 2. On price increase mode
       if (this.mode.includes("on-increase")) {
         shouldBuy = shouldBuy && this.previousLowBidRSI <= bidPriceRSI;
         this.previousLowBidRSI = bidPriceRSI;
       }
 
-      // 3. On price reach lowest price
+      // 3. On price reach lowest price mode
       if (this.mode.includes("near-low")) {
         const nearLow = calcPercentageDifference(lowestAsk, askPrice);
         shouldBuy = HighDropChange <= -this.#percentageThreshold && nearLow < this.#percentageThreshold / 8;
@@ -106,11 +106,11 @@ module.exports = class DailyTrader {
       if (partlyTrade) {
         const thirdIndex = Math.round((orderLimit + 1) / 3);
         const { price } = orders[thirdIndex * 2 - 1] || orders[thirdIndex - 1] || {};
-        const threshold = -Math.max(this.#percentageThreshold / 3, 1.5);
+        const threshold = -Math.max(this.#percentageThreshold / 2, 1.5);
 
         if (price && threshold < calcPercentageDifference(price, bidPrice)) shouldBuy = false;
       } else {
-        // 6. Safety check
+        // 5. Safety check, pause buying if the price is dropping too much or fast
         if (HighDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
       }
 
@@ -148,7 +148,6 @@ module.exports = class DailyTrader {
 
       this.dispatch("log", "");
     } catch (error) {
-      // console.log(`Error running bot: ${error}`);
       this.dispatch("log", `Error running bot: ${error}`);
     }
 
