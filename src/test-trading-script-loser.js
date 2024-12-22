@@ -4,17 +4,6 @@ const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
 const strategyModes = require("./trend-analysis.js").getSupportedModes();
 
-const pair = process.argv[2]; // The currency pair E.g. ETHEUR
-const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
-// const investment = +process.argv[4] || 10; // investing Amount in EUR that will be used every time to by crypto
-const minStrategyRange = +process.argv[4] || 0.25; // In days, min value 0.25 day which equivalent to 6 hours
-const minPercentagePriceChange = +process.argv[5] || 1.25; // Price Percentage Threshold, min value 1.25
-const modes = [process.argv[6]];
-const interval = +process.argv[7] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
-const maxStrategyRange = +process.argv[8] || 1;
-const maxPriceChange = +process.argv[9] || 10;
-const showLogs = !!process.argv[10];
-
 async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, modes, interval) {
   try {
     if ((modes || modes[0]) == "all") modes = strategyModes;
@@ -29,8 +18,8 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
     for (const investment of [capital, parseInt(capital / 3)]) {
       for (const mode of modes) {
         let workers = [];
-        for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
-          for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
+        for (let range = minStrategyRange; range <= 1; range += 0.25) {
+          for (let priceChange = minPriceChange; priceChange <= 10; priceChange += 0.5) {
             const worker = async () => {
               const result = await testStrategy(
                 pair,
@@ -99,7 +88,7 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
       ex.removeOrder(info);
       transactions++;
     }
-    if (showLogs) event == "log" && console.log(pair, info);
+    // event == "log" && console.log(pair, info);
   };
 
   for (const i in prices) {
@@ -121,5 +110,4 @@ function getPrices(pair, skip = 1, path = "") {
   );
 }
 
-// Run the runTradingTest function if the script is executed directly
-runTradingTest(pair, capital, minStrategyRange, minPercentagePriceChange, modes, interval);
+module.exports = runTradingTest; // Export the runTradingTest function for use as a module
