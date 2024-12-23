@@ -118,7 +118,7 @@ module.exports = class DailyTrader {
       if (enoughPricesData && shouldBuy && askPriceRSI < this.lowRSI) {
         this.dispatch("log", `Suggest buying: Lowest Ask Price is ${lowestAsk}`);
 
-        if (!orders[orderLimit] && balance.eur > 0) {
+        if (!orders[orderLimit] && balance.eur >= this.#investingCapital) {
           const cost = this.#investingCapital - calculateFee(this.#investingCapital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
@@ -128,6 +128,7 @@ module.exports = class DailyTrader {
 
         // Sell
       } else if (60 < bidPriceRSI && balance.crypto > 0 && orders[0]) {
+        this.dispatch("log", `Suggest selling orders`);
         let sellableOrders = orders.filter((o) => {
           return this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice);
         });
@@ -136,10 +137,12 @@ module.exports = class DailyTrader {
         const goingDown = this.highRSI < bidPriceRSI && this.previousHighBidRSI >= bidPriceRSI;
         if (!sellableOrders[0] && orders[orderLimit] && goingDown) {
           sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, 4.5)); // 5, 6
+          this.dispatch("log", `There are (${sellableOrders.length}) backlog orders`);
+        } else {
+          this.dispatch("log", `There are (${sellableOrders.length}) sellable orders`);
         }
 
         this.previousHighBidRSI = bidPriceRSI;
-        this.dispatch("log", `Suggest selling: there are (${sellableOrders.length}) orders to sell`);
 
         for (const order of sellableOrders) {
           await this.#sell(order, balance.crypto, bidPrice);

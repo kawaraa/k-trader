@@ -127,8 +127,7 @@
     "askBidSpreadPercentage": 0.29,
     "note": "loser - ready",
     "strategies": [
-      ">€100 €100 >0.25< 3.5% high-drop => €22 Remain: 2938 Transactions: 11 Gainer: 31 Loser: 6",
-      "€100 €100 >0.75< 5% near-low => €35.5 Remain: 2431.5 Transactions: 6.5"
+      ">€100 €100 >0.25< 3.5% high-drop => €22 Remain: 2938 Transactions: 11 Gainer: 31 Loser: 6"
     ]
   },
   "BSXEUR": {
