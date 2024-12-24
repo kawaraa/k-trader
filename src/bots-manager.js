@@ -54,17 +54,15 @@ class BotsManager {
     this.#bots[pair].stop();
   }
   static async sellAllOrders(pair) {
-    const bot = this.#bots[pair];
-    await bot.sellAll();
-    bot.sold += 1;
-    bot.orders = [];
+    await this.#bots[pair].sellAll();
+    this.#bots[pair].sold += 1;
+    this.#bots[pair].orders = [];
     this.state.update(this.get());
   }
   static restState(pair) {
-    const bot = this.#bots[pair];
-    if (bot) {
-      bot.sold = 0;
-      bot.earnings = 0;
+    if (this.#bots[pair]) {
+      this.#bots[pair].sold = 0;
+      this.#bots[pair].earnings = 0;
       return;
     }
     for (const p in this.#bots) {
@@ -76,7 +74,7 @@ class BotsManager {
   static async runAll() {
     for (const pair in this.#bots) {
       if (!this.#bots[pair].startedOn) {
-        await delay(3500);
+        await delay(4000);
         this.#bots[pair].start();
       }
     }
@@ -102,15 +100,14 @@ class BotsManager {
       }
     }
 
-    const bot = this.#bots[pair];
     if (event == "buy") {
-      bot.bought += 1;
-      bot.orders.push(info);
+      this.#bots[pair].bought += 1;
+      this.#bots[pair].orders.push(info);
     } else if (event == "sell") {
-      bot.sold += 1;
-      bot.orders = bot.orders.filter((id) => id != info);
-    } else if (event == "earnings") bot.earnings += info;
-    else if (event == "balance") bot.balance = info;
+      this.#bots[pair].sold += 1;
+      this.#bots[pair].orders = this.#bots[pair].orders.filter((id) => id != info);
+    } else if (event == "earnings") this.#bots[pair].earnings += info;
+    else if (event == "balance") this.#bots[pair].balance = info;
 
     this.state.update(this.get());
   }

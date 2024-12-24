@@ -507,7 +507,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.38,
     "note": "Moving down - ready",
-    "strategies": ["€100 €100 >1< 7.5% high-drop => €16 Remain: 974.5 Transactions: 3"]
+    "strategies": [">€100 €100 >1< 7.5% high-drop => €16 Remain: 974.5 Transactions: 3"]
   },
   "L3EUR": {
     "becameAvailable": "20xx-xx-01",
