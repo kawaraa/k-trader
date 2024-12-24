@@ -70,7 +70,7 @@ module.exports = class DailyTrader {
       const bidPercentageChange = calcPercentageDifference(avgBidPrice, bidPrice);
       const highestBidPr = bidPrices.sort().at(-1);
       const lowestAsk = askPrices.sort()[0];
-      const orderLimit = parseInt(this.#capital / this.#investingCapital) - 1;
+      const orderLimit = (parseInt(this.#capital / this.#investingCapital) || 1) - 1;
       const interval = this.period || this.timeInterval; // this.timeInterval is used only in test trading
       const enoughPricesData = prices.length >= (this.#strategyRange * 24 * 60) / interval;
       const partlyTrade = this.#investingCapital != this.#capital;
