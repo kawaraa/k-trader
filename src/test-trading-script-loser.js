@@ -15,59 +15,57 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
     const prices1 = getPrices(pair, interval / 5, "bots/");
     let maxBalance = 0;
 
-    for (const investment of [capital, parseInt(capital / 3)]) {
-      for (const mode of modes) {
-        let workers = [];
-        for (let range = minStrategyRange; range <= 1; range += 0.25) {
-          for (let priceChange = minPriceChange; priceChange <= 10; priceChange += 0.5) {
-            const worker = async () => {
-              const result = await testStrategy(
-                pair,
-                prices,
-                capital,
-                investment,
-                range,
-                priceChange,
-                mode,
-                interval
+    for (const mode of modes) {
+      let workers = [];
+      for (let range = minStrategyRange; range <= 1; range += 0.25) {
+        for (let priceChange = minPriceChange; priceChange <= 10; priceChange += 0.5) {
+          const worker = async () => {
+            const result = await testStrategy(
+              pair,
+              prices,
+              capital,
+              capital,
+              range,
+              priceChange,
+              mode,
+              interval
+            );
+            const result1 = await testStrategy(
+              pair,
+              prices1,
+              capital,
+              capital,
+              range,
+              priceChange,
+              mode,
+              interval
+            );
+
+            const profit1 = parseInt((result.balance - capital) / 2);
+            const profit2 = parseInt(result1.balance - capital);
+
+            result.balance += profit2;
+            result.crypto += result1.crypto;
+            result.transactions += result1.transactions;
+
+            const remain = parseInt(result.crypto / 3);
+            const transactions = parseInt(result.transactions / 3);
+            const totalProfit = parseInt((result.balance - capital) / 3);
+
+            if (totalProfit >= 10 && maxBalance < result.balance + 3) {
+              maxBalance = result.balance;
+              console.log(
+                `€${capital} €${capital} >${range}< ${priceChange}% ${mode} =>`,
+                `€${totalProfit} Remain: ${remain} Transactions: ${transactions} Gainer: ${profit1} Loser: ${profit2}`
               );
-              const result1 = await testStrategy(
-                pair,
-                prices1,
-                capital,
-                investment,
-                range,
-                priceChange,
-                mode,
-                interval
-              );
-
-              const profit1 = parseInt((result.balance - capital) / 2);
-              const profit2 = parseInt(result1.balance - capital);
-
-              result.balance += profit2;
-              result.crypto += result1.crypto;
-              result.transactions += result1.transactions;
-
-              const remain = parseInt(result.crypto / 3);
-              const transactions = parseInt(result.transactions / 3);
-              const totalProfit = parseInt((result.balance - capital) / 3);
-
-              if (totalProfit >= 10 && maxBalance < result.balance + 3) {
-                maxBalance = result.balance;
-                console.log(
-                  `€${capital} €${investment} >${range}< ${priceChange}% ${mode} =>`,
-                  `€${totalProfit} Remain: ${remain} Transactions: ${transactions} Gainer: ${profit1} Loser: ${profit2}`
-                );
-              }
-              return result;
-            };
-            workers.push(worker());
-          }
+            }
+            return result;
+          };
+          workers.push(worker());
         }
-
-        await Promise.all(workers);
       }
+
+      await Promise.all(workers);
     }
   } catch (error) {
     console.log("Error with ", pair, "=>", error);

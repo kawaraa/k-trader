@@ -166,7 +166,7 @@ function isOlderThen(timestamp, days) {
   return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 / 24 > days;
 }
 function getSupportedModes() {
-  return ["high-drop", "near-low", "on-increase", "high-drop-hard", "near-low-hard", "on-increase-hard"];
+  return ["on-increase", "on-increase-hard", "high-drop", "high-drop-hard", "near-low", "near-low-hard"];
 }
 
 module.exports = {

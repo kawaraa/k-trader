@@ -26,28 +26,26 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
     const prices = getPrices(pair, interval / 5, "");
     let maxBalance = 0;
 
-    for (const investment of [capital, parseInt(capital / 3)]) {
-      for (const mode of modes) {
-        let workers = [];
-        for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
-          for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
-            // workers.push(runWorker([pair, prices, capital, investment, range, priceChange, mode, interval]));
-            workers.push(testStrategy(pair, prices, capital, investment, range, priceChange, mode, interval));
-          }
+    for (const mode of modes) {
+      let workers = [];
+      for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
+        for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
+          // workers.push(runWorker([pair, prices, capital, investment, range, priceChange, mode, interval]));
+          workers.push(testStrategy(pair, prices, capital, capital, range, priceChange, mode, interval));
         }
-
-        (await Promise.all(workers)).forEach((r) => {
-          const remain = parseInt(r.crypto) / 2;
-          const transactions = parseInt(r.transactions) / 2;
-          if (r.balance - r.capital >= 10 && maxBalance < r.balance + 3) {
-            maxBalance = r.balance;
-            console.log(
-              `€${r.capital} €${r.investment} >${r.range}< ${r.priceChange}% ${r.mode} =>`,
-              `€${parseInt(r.balance - r.capital) / 2} Remain: ${remain} Transactions: ${transactions}`
-            );
-          }
-        });
       }
+
+      (await Promise.all(workers)).forEach((r) => {
+        const remain = parseInt(r.crypto) / 2;
+        const transactions = parseInt(r.transactions) / 2;
+        if (r.balance - r.capital >= 10 && maxBalance < r.balance + 3) {
+          maxBalance = r.balance;
+          console.log(
+            `€${r.capital} €${r.investment} >${r.range}< ${r.priceChange}% ${r.mode} =>`,
+            `€${parseInt(r.balance - r.capital) / 2} Remain: ${remain} Transactions: ${transactions}`
+          );
+        }
+      });
     }
   } catch (error) {
     console.log("Error with ", pair, "=>", error);

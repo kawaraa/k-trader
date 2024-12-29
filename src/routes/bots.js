@@ -123,9 +123,10 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
 
       isValidPair(pair, true);
       if (!existsSync(filePath)) throw new Error(`No prices data for ${pair} pair`);
-      const prices = JSON.parse(readFileSync(`${process.cwd()}/database/prices/${pair}.json`, "utf8"));
-      const since = Date.parse(statSync(`${process.cwd()}/database/prices/${pair}.json`).birthtime);
-      response.json({ since, prices });
+      // const prices = JSON.parse(readFileSync(`${process.cwd()}/database/prices/${pair}.json`, "utf8"));
+      // const since = Date.parse(statSync(`${process.cwd()}/database/prices/${pair}.json`).birthtime);
+      // response.json({ since, prices });
+      response.sendFile(filePath);
     } catch (error) {
       response.status(500).json({ message: parseError(error) });
     }

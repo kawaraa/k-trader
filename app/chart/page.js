@@ -15,7 +15,6 @@ export default function CryptoChart() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [prices, setPrices] = useState([]);
-  const [since, setSince] = useState(0);
 
   const labels = [];
   const askPrices = [];
@@ -23,6 +22,7 @@ export default function CryptoChart() {
   const bidPrices = [];
 
   const interval = 5 * 60000;
+  const since = Date.now() - prices.length * interval;
 
   prices.forEach((p, i) => {
     tradePrices.push(p.tradePrice);
@@ -36,9 +36,8 @@ export default function CryptoChart() {
   const fetchPrices = async (pair) => {
     setLoading(true);
     try {
-      const { prices, since } = await request(`/api/bots/prices/${pair}`);
+      const prices = await request(`/api/bots/prices/${pair}`);
       setPrices(prices);
-      setSince(since);
     } catch (error) {
       setError(error.message);
     }

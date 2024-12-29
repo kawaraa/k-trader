@@ -795,19 +795,13 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
     "note": "",
-    "strategies": [
-      ">€100 €100 >0.25< 3.5% near-low => €11.5 Remain: 0 Transactions: 4",
-      "€100 €100 >0.75< 6% high-drop => €11.5 Remain: 0 Transactions: 2"
-    ]
+    "strategies": []
   },
   "BCHEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
     "note": "",
-    "strategies": [
-      ">€100 €100 >1< 7.5% near-low => €15 Remain: 0 Transactions: 2",
-      "€100 €100 >0.5< 3% near-low => €12.5 Remain: 0 Transactions: 5"
-    ]
+    "strategies": []
   },
   "WOOEUR": {
     "becameAvailable": "2020-10-01",
@@ -852,7 +846,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
     "note": "",
-    "strategies": [">€100 €100 >0.25< 2.5% near-low => €13.5 Remain: 0 Transactions: 6.5"]
+    "strategies": []
   },
   "USDSEUR": {
     "becameAvailable": "20xx-xx-01",
