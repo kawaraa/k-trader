@@ -66,7 +66,10 @@ export default function BotItem({ botInfo, onAction }) {
             <strong>Created</strong>: <span>{age} ago</span>
           </p>
           <p className="mt-1">
-            <strong>Balance</strong>: <span>{botInfo.balance}</span>
+            <strong>Balance</strong>:{" "}
+            <span>
+              {botInfo.balance} {botInfo.pair.replace("EUR", "")}
+            </span>
           </p>
           <p className="">
             <strong>Sold / Transactions</strong>: <span>{botInfo.sold}</span>

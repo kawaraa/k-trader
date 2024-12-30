@@ -118,8 +118,9 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
   // Get bot prices history
   router.get("/bots/prices/:pair", authRequired, (request, response) => {
     try {
-      const { pair } = request.params;
-      const filePath = `${process.cwd()}/database/prices/${pair}.json`;
+      const pair = request.params.pair;
+      const loser = request.query.loser;
+      const filePath = `${process.cwd()}/database/prices/${loser == "true" ? "bots/" : ""}${pair}.json`;
 
       isValidPair(pair, true);
       if (!existsSync(filePath)) throw new Error(`No prices data for ${pair} pair`);
