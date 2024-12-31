@@ -66,7 +66,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
       }
 
       await Promise.all(workers);
-      console.log(`Processed (${workers.length}) tests on "${mode}" mode.`);
+      // console.log(`Processed (${workers.length}) tests on "${mode}" mode.`);
     }
   } catch (error) {
     console.log("Error with ", pair, "=>", error);
