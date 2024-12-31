@@ -47,7 +47,7 @@ module.exports = class DailyTrader {
     this.hard = this.mode.includes("hard");
     this.lowRSI = this.hard ? 30 : 45;
     this.sellOnRSI = this.hard ? 65 : 60;
-    this.onBuySellThreshold = this.#percentageThreshold / (this.hard ? 4 : 5);
+    this.onBuySellThreshold = this.#percentageThreshold / 5;
     this.stopLossLimit = Math.max(this.#strategyRange * 4, 2.5);
 
     this.previouslyDropped = false;
@@ -112,7 +112,7 @@ module.exports = class DailyTrader {
       if (enoughPricesData && shouldBuy) {
         this.dispatch("log", `Suggest buying: TradePrice Price is ${tradePrice}`);
 
-        if (!orders[0] && balance.eur > this.#capital) {
+        if (!orders[0] && balance.eur >= this.#capital) {
           const cost = this.#capital - calculateFee(this.#capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
@@ -128,13 +128,13 @@ module.exports = class DailyTrader {
         });
 
         if (this.mode.includes("on-increase")) {
-          if (!goingDown || (!this.hard && !rsiGoingDown)) sellableOrders = [];
+          if ((this.hard && !goingDown) || (!this.hard && !rsiGoingDown)) sellableOrders = [];
         } else if (!rsiGoingDown) {
           sellableOrders = [];
         }
 
         // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
-        if (!sellableOrders[0] && orders[0] && (goingDown || (!this.hard && rsiGoingDown))) {
+        if (!sellableOrders[0] && orders[0] && ((this.hard && goingDown) || (!this.hard && rsiGoingDown))) {
           sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, this.stopLossLimit));
           orderType = " backlog";
         }

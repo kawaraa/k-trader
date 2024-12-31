@@ -34,11 +34,11 @@ module.exports = class DailyTrader {
   #strategyRange;
   #percentageThreshold;
   #tradingAmount;
-  constructor(exProvider, pair, { capital, investment, strategyRange, priceChange, mode, timeInterval }) {
+  constructor(exProvider, pair, { capital, strategyRange, priceChange, mode, timeInterval }) {
     this.ex = exProvider;
     this.#pair = pair;
     this.#capital = capital;
-    this.#investingCapital = investment; // investing Amount in ERU that will be used every time to by crypto
+    this.#investingCapital = capital; // investing Amount in ERU that will be used every time to by crypto
     this.#strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
     this.#percentageThreshold = priceChange; // Percentage Change is the price Percentage Threshold
     this.mode = mode;

@@ -30,7 +30,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
       for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
         for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
           // workers.push(runWorker([pair, prices, capital, range, priceChange, mode, interval]));
-          workers.push(testStrategy(pair, prices, capital, capital, range, priceChange, mode, interval));
+          workers.push(testStrategy(pair, prices, capital, range, priceChange, mode, interval));
         }
       }
 
@@ -57,7 +57,7 @@ async function testStrategy(pair, prices, capital, range, priceChange, mode, int
   let transactions = 0;
   const pricesOffset = (range * 24 * 60) / interval;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset, interval);
-  const info = { capital, strategyRange: range, priceChange, mode };
+  const info = { capital, strategyRange: range, priceChange, mode, timeInterval: interval };
   const trader = new DailyTrader(ex, pair, info);
   delete trader.period;
   trader.listener = (p, event, info) => {
