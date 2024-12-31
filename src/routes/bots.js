@@ -150,7 +150,6 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
 class BotInfo {
   constructor(info) {
     this.capital = this.setNumber(info.capital, 0, "capital", true);
-    this.investment = this.setNumber(info.investment, 1, "investment", true);
     this.strategyRange = this.setNumber(info.strategyRange, 0.25, "strategyRange", true);
     this.priceChange = this.setNumber(info.priceChange, 1.1, "priceChange", true);
     this.mode = info.mode;

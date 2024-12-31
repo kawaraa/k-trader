@@ -49,9 +49,6 @@ export default function BotItem({ botInfo, onAction }) {
 
       <div className={`flex flex-col overflow-hidden px-2 transition-all duration-300 ease-in-out ${cls}`}>
         <div className="flex flex-col mb-5">
-          <p className="">
-            <strong>Investment</strong>: <span>{botInfo.investment}</span>
-          </p>
           <p className="mb-1">
             <strong>Strategy Range</strong>: <span>{botInfo.strategyRange} Days</span>
           </p>

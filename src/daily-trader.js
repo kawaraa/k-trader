@@ -30,15 +30,13 @@ const {
 module.exports = class DailyTrader {
   #pair;
   #capital;
-  #investingCapital;
   #strategyRange;
   #percentageThreshold;
   #tradingAmount;
-  constructor(exProvider, pair, { capital, investment, strategyRange, priceChange, mode, timeInterval }) {
+  constructor(exProvider, pair, { capital, strategyRange, priceChange, mode, timeInterval }) {
     this.ex = exProvider;
     this.#pair = pair;
-    this.#capital = capital;
-    this.#investingCapital = investment; // investing Amount in ERU that will be used every time to by crypto
+    this.#capital = capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
     this.#strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
     this.#percentageThreshold = priceChange; // Percentage Change is the price Percentage Threshold
     this.mode = mode;
@@ -51,7 +49,6 @@ module.exports = class DailyTrader {
     this.sellOnRSI = this.hard ? 65 : 60;
     this.onBuySellThreshold = this.#percentageThreshold / (this.hard ? 4 : 5);
     this.stopLossLimit = Math.max(this.#strategyRange * 4, 2.5);
-    this.orderLimit = (parseInt(this.#capital / this.#investingCapital) || 1) - 1;
 
     this.previouslyDropped = false;
     this.previousBidRSI = null;
@@ -62,7 +59,7 @@ module.exports = class DailyTrader {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
       const prices = await this.ex.prices(this.#pair, this.#strategyRange); // For the last xxx days
-      this.#tradingAmount = +(this.#investingCapital / bidPrice).toFixed(8);
+      this.#tradingAmount = +(this.#capital / bidPrice).toFixed(8);
 
       const askPrices = prices.map((p) => p.askPrice);
       const bidPrices = prices.map((p) => p.bidPrice);
@@ -115,8 +112,8 @@ module.exports = class DailyTrader {
       if (enoughPricesData && shouldBuy) {
         this.dispatch("log", `Suggest buying: TradePrice Price is ${tradePrice}`);
 
-        if (!orders[this.orderLimit] && balance.eur >= this.#investingCapital) {
-          const cost = this.#investingCapital - calculateFee(this.#investingCapital, 0.4);
+        if (!orders[0] && balance.eur > this.#capital) {
+          const cost = this.#capital - calculateFee(this.#capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
           this.dispatch("buy", orderId);
@@ -137,7 +134,7 @@ module.exports = class DailyTrader {
         }
 
         // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
-        if (!sellableOrders[0] && orders[this.orderLimit] && (goingDown || (!this.hard && rsiGoingDown))) {
+        if (!sellableOrders[0] && orders[0] && (goingDown || (!this.hard && rsiGoingDown))) {
           sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, this.stopLossLimit));
           orderType = " backlog";
         }

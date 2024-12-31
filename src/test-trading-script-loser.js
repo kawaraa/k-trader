@@ -29,26 +29,8 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
       for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
         for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
           const worker = async () => {
-            const result = await testStrategy(
-              pair,
-              prices,
-              capital,
-              capital,
-              range,
-              priceChange,
-              mode,
-              interval
-            );
-            const result1 = await testStrategy(
-              pair,
-              prices1,
-              capital,
-              capital,
-              range,
-              priceChange,
-              mode,
-              interval
-            );
+            const result = await testStrategy(pair, prices, capital, range, priceChange, mode, interval);
+            const result1 = await testStrategy(pair, prices1, capital, range, priceChange, mode, interval);
 
             const profit1 = parseInt((result.balance - capital) / 2);
             const profit2 = parseInt(result1.balance - capital);
@@ -84,11 +66,11 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
   console.log(`\n`);
 }
 
-async function testStrategy(pair, prices, capital, investment, range, priceChange, mode, interval) {
+async function testStrategy(pair, prices, capital, range, priceChange, mode, interval) {
   let transactions = 0;
   const pricesOffset = (range * 24 * 60) / interval;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset, interval);
-  const info = { capital, investment, strategyRange: range, priceChange, mode, timeInterval: interval };
+  const info = { capital, strategyRange: range, priceChange, mode, timeInterval: interval };
   const trader = new DailyTrader(ex, pair, info);
   delete trader.period;
 
@@ -108,7 +90,7 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
   if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
   const balance = +(await ex.balance()).eur.toFixed(2);
 
-  return { investment, priceChange, range, balance, crypto, transactions, capital, mode };
+  return { priceChange, range, balance, crypto, transactions, capital, mode };
 }
 
 function getPrices(pair, skip = 1, path = "") {

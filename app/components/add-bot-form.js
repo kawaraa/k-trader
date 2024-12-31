@@ -19,17 +19,9 @@ export default function AddBotFrom({ bot, onSubmit }) {
       <input
         name="capital"
         type="number"
-        placeholder="Capital amount in EUR"
+        placeholder="Investment Capital amount in EUR"
+        step="5"
         defaultValue={bot?.info?.capital}
-        required
-        className={inputCls}
-      />
-      <input
-        name="investment"
-        type="number"
-        placeholder="Investment"
-        step="0.1"
-        defaultValue={bot?.info?.investment}
         required
         className={inputCls}
       />

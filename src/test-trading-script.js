@@ -7,7 +7,6 @@ const strategyModes = require("./trend-analysis").getSupportedModes();
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const capital = +process.argv[3] || 100; // Amount in EUR which is the total money that can be used for trading
-// const investment = +process.argv[4] || 10; // investing Amount in EUR that will be used every time to by crypto
 const minStrategyRange = +process.argv[4] || 0.25; // In days, min value 0.25 day which equivalent to 6 hours
 const minPercentagePriceChange = +process.argv[5] || 1.25; // Price Percentage Threshold, min value 1.25
 const modes = [process.argv[6]];
@@ -30,7 +29,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
       let workers = [];
       for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
         for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
-          // workers.push(runWorker([pair, prices, capital, investment, range, priceChange, mode, interval]));
+          // workers.push(runWorker([pair, prices, capital, range, priceChange, mode, interval]));
           workers.push(testStrategy(pair, prices, capital, capital, range, priceChange, mode, interval));
         }
       }
@@ -41,7 +40,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
         if (r.balance - r.capital >= 10 && maxBalance < r.balance + 3) {
           maxBalance = r.balance;
           console.log(
-            `€${r.capital} €${r.investment} >${r.range}< ${r.priceChange}% ${r.mode} =>`,
+            `€${r.capital} >${r.range}< ${r.priceChange}% ${r.mode} =>`,
             `€${parseInt(r.balance - r.capital) / 2} Remain: ${remain} Transactions: ${transactions}`
           );
         }
@@ -54,11 +53,11 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
   console.log(`\n`);
 }
 
-async function testStrategy(pair, prices, capital, investment, range, priceChange, mode, interval) {
+async function testStrategy(pair, prices, capital, range, priceChange, mode, interval) {
   let transactions = 0;
   const pricesOffset = (range * 24 * 60) / interval;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset, interval);
-  const info = { capital, investment, strategyRange: range, priceChange, mode };
+  const info = { capital, strategyRange: range, priceChange, mode };
   const trader = new DailyTrader(ex, pair, info);
   delete trader.period;
   trader.listener = (p, event, info) => {
@@ -77,7 +76,7 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
   if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
   const balance = +(await ex.balance()).eur.toFixed(2);
 
-  return { investment, priceChange, range, balance, crypto, transactions, capital, mode };
+  return { priceChange, range, balance, crypto, transactions, capital, mode };
 }
 
 function getPrices(pair, skip = 1, path = "") {
@@ -113,8 +112,8 @@ function runWorker(workerData) {
 if (require.main === module && isMainThread) {
   runTradingTest(pair, capital, minStrategyRange, minPercentagePriceChange, modes, interval);
 } else if (!isMainThread && workerData) {
-  const [p, prices, capital, invmt, minStrategyRange, minPercentPriceChange, mode, interval] = workerData;
-  testStrategy(p, prices, capital, invmt, minStrategyRange, minPercentPriceChange, mode, interval).then((r) =>
+  const [p, prices, capital, minStrategyRange, minPercentPriceChange, mode, interval] = workerData;
+  testStrategy(p, prices, capital, minStrategyRange, minPercentPriceChange, mode, interval).then((r) =>
     parentPort.postMessage(r)
   );
 } else {

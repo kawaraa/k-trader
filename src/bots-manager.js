@@ -128,7 +128,6 @@ class Bot {
   #trader;
   constructor(info, trader) {
     this.capital = +this.#parseValue(info.capital);
-    this.investment = +this.#parseValue(info.investment);
     this.strategyRange = +this.#parseValue(info.strategyRange);
     this.priceChange = +this.#parseValue(info.priceChange);
     this.mode = this.#parseValue(info.mode);
