@@ -60,7 +60,7 @@ async function testStrategy(pair, prices, capital, investment, range, priceChang
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset, interval);
   const info = { capital, investment, strategyRange: range, priceChange, mode };
   const trader = new DailyTrader(ex, pair, info);
-  trader.timeInterval = interval;
+  delete trader.period;
   trader.listener = (p, event, info) => {
     if (event == "sell") {
       ex.removeOrder(info);
