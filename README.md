@@ -16,21 +16,36 @@ Kraken says the fees is up to `0.25%` but they are charging around `0.40%`. this
 
 ## Strategies
 
-### Description
+1. **on-increase:**
+1. **high-drop:**
+1. **near-low:**
+1. **on-increase-hard:**
+1. **high-drop-hard:**
+1. **near-low-hard:**
 
-1. _NOT VALID_ (current) Buy when the average price drops 1.5% and sell the bought order only when the current price is 1.5% higher then the order price
-1. Buy ETH/USDT using 10% of starting capital. Add an additional 10% of available cash to the position at every 1% drop in price. Sell at 1.5% profit or 10% loss.
+## RSI Description
+
+- **RSI: 22 > 48** When the price goes Up fast or the currency is over bought, the RSI may go from **22** to **48**
+- **RSI: 80 > 53** When the price goes Down fast or the currency is over sold, the RSI may go from **80** to **53**
 
 ### Testing cryptocurrency steps
 
 These steps help finding the right Strategy Settings for a specific currency.
 
-#### Commands
+### Analyzing & Running analysis Commands
 
-1. Check the prices: `node src/prices-analysis-script.js XXX database/logs/all.log 2>&1`
-1. Get the prices: `node src/prices-data-script.js XXX database/logs/all.log 2>&1`
-1. Analyze the prices: `node src/prices-analysis-script.js XXX database/logs/all.log 2>&1`
-1. Test trading strategies: `node src/test-trading-script.js XXX 0.1 100 9 0.25 X`
+1. Get the prices: `node src/prices-data-script.js XXX`
+1. Run test trading of specific currency: `node src/test-trading-script.js BTCEUR 100 0.25 1.5 all 5`
+1. Run test trading for all currencies: `node src/test-currencies-script.js BTCEUR 100 0.25 1.5 all 5`
+1. Test trading strategies: `node src/test-trading-script.js BTCEUR 100 0.25 1.5 all 5`
+
+#### Parameters description:
+
+- _BTCEUR_ is the pair of the currency
+- _100_ is the investment capital or investing amount that will be used to buy cryptocurrency
+- _0.25_ is the strategy range, min _0.25_ and max _1_
+- _1.5_ is the the price percentage change which will be used to decide whether to buy if the price drops _X%_ and sell if the price increase _X%_, min 1.5 and max 10
+- _all_ is the [strategy](#strategies),
 
 ## Getting Started / Running the App
 
@@ -52,6 +67,11 @@ pm2 start npm --name "nextjs-app" -- start
 - #aea1ea
 - cornflowerblue
 - #9bface Or #7dffe6
+
+# The following is no updated:
+
+1. _NOT VALID_ (current) Buy when the average price drops 1.5% and sell the bought order only when the current price is 1.5% higher then the order price
+1. Buy ETH/USDT using 10% of starting capital. Add an additional 10% of available cash to the position at every 1% drop in price. Sell at 1.5% profit or 10% loss.
 
 ===> How DailyTrader works <===
 
