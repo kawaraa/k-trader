@@ -90,6 +90,14 @@
       "€100 >1< 10% high-drop => €42 Remain: 447 Transactions: 5 Gainer: 47 Loser: 31"
     ]
   },
+  "KMNOEUR": {
+    "becameAvailable": "2024-04-30",
+    "askBidSpreadPercentage": 0.23,
+    "note": "loser - G1",
+    "strategies": [
+      "€100 >0.75< 7.5% on-increase-hard => €52 Remain: 558 Transactions: 5 Gainer: 61 Loser: 36"
+    ]
+  },
   "TURBOEUR": {
     "becameAvailable": "2023-05-05",
     "askBidSpreadPercentage": 0.36,
@@ -101,12 +109,29 @@
       "€100 >1< 7.5% on-increase => €28 Remain: 3502 Transactions: 7 Gainer: 31 Loser: 24"
     ]
   },
-  "KMNOEUR": {
-    "becameAvailable": "2024-04-30",
-    "askBidSpreadPercentage": 0.23,
+  "ORCAEUR": {
+    "becameAvailable": "2021-10-01",
+    "askBidSpreadPercentage": 0.19,
     "note": "loser - G1",
     "strategies": [
-      "€100 >0.75< 7.5% on-increase-hard => €52 Remain: 558 Transactions: 5 Gainer: 61 Loser: 36"
+      "€100 >0.25< 8.5% on-increase-hard => €31 Remain: 10 Transactions: 2 Gainer: 0 Loser: 95",
+      "€100 >0.25< 6% on-increase => €23 Remain: 21 Transactions: 3 Gainer: 10 Loser: 50",
+      "€100 >1< 6% on-increase => €20 Remain: 12 Transactions: 4 Gainer: 35 Loser: -9"
+    ]
+  },
+  "TNSREUR": {
+    "becameAvailable": "2024-04-10",
+    "askBidSpreadPercentage": 0.14,
+    "note": "loser - G1",
+    "strategies": ["€100 >0.75< 9.5% near-low-hard => €32 Remain: 156 Transactions: 5 Gainer: 37 Loser: 22"]
+  },
+  "FTMEUR": {
+    "becameAvailable": "2018-10-01",
+    "askBidSpreadPercentage": 0.12,
+    "note": "In migration process to SONIC - loser - G1",
+    "strategies": [
+      "€100 >0.25< 6% near-low-hard => €32 Remain: 33 Transactions: 8 Gainer: 26 Loser: 46",
+      "€100 >0.25< 6.5% near-low-hard => €30 Remain: 33 Transactions: 6 Gainer: 15 Loser: 59"
     ]
   },
   "SUPEREUR": {
@@ -114,6 +139,12 @@
     "askBidSpreadPercentage": 0.17,
     "note": "loser - G1",
     "strategies": ["€100 >0.25< 6.5% on-increase => €30 Remain: 22 Transactions: 5 Gainer: 23 Loser: 44"]
+  },
+  "ZEXEUR": {
+    "becameAvailable": "2024-07-01",
+    "askBidSpreadPercentage": 0.2,
+    "note": "loser - G1",
+    "strategies": ["€100 >0.75< 5% high-drop-hard => €27 Remain: 403 Transactions: 7 Gainer: 24 Loser: 33"]
   },
   "CXTEUR": {
     "name": "Covalent X Token",
@@ -133,42 +164,11 @@
       "€100 >0.75< 8.5% on-increase => €45.5 Remain: 0 Transactions: 3.5"
     ]
   },
-  "ZEXEUR": {
-    "becameAvailable": "2024-07-01",
-    "askBidSpreadPercentage": 0.2,
-    "note": "loser - G1",
-    "strategies": ["€100 >0.75< 5% high-drop-hard => €27 Remain: 403 Transactions: 7 Gainer: 24 Loser: 33"]
-  },
-  "TNSREUR": {
-    "becameAvailable": "2024-04-10",
-    "askBidSpreadPercentage": 0.14,
-    "note": "loser - G1",
-    "strategies": ["€100 >0.75< 9.5% near-low-hard => €32 Remain: 156 Transactions: 5 Gainer: 37 Loser: 22"]
-  },
-  "ORCAEUR": {
-    "becameAvailable": "2021-10-01",
-    "askBidSpreadPercentage": 0.19,
-    "note": "loser - G1",
-    "strategies": [
-      "€100 >0.25< 8.5% on-increase-hard => €31 Remain: 10 Transactions: 2 Gainer: 0 Loser: 95",
-      "€100 >0.25< 6% on-increase => €23 Remain: 21 Transactions: 3 Gainer: 10 Loser: 50",
-      "€100 >1< 6% on-increase => €20 Remain: 12 Transactions: 4 Gainer: 35 Loser: -9"
-    ]
-  },
   "PRIMEEUR": {
     "becameAvailable": "2023-03-01",
     "askBidSpreadPercentage": 0.21,
     "note": "Moving down - G1",
     "strategies": ["€100 >0.75< 7% near-low => €33.5 Remain: 0 Transactions: 7.5"]
-  },
-  "FTMEUR": {
-    "becameAvailable": "2018-10-01",
-    "askBidSpreadPercentage": 0.12,
-    "note": "In migration process to SONIC - loser - G1",
-    "strategies": [
-      "€100 >0.25< 6% near-low-hard => €32 Remain: 33 Transactions: 8 Gainer: 26 Loser: 46",
-      "€100 >0.25< 6.5% near-low-hard => €30 Remain: 33 Transactions: 6 Gainer: 15 Loser: 59"
-    ]
   },
 
   "TAOEUR": {
