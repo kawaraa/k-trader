@@ -10,11 +10,12 @@ const minPercentPriceChange = +process.argv[4] || 1.25; // Price Percentage Thre
 const modes = [process.argv[5]];
 const interval = +process.argv[6] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 const pairs = Object.keys(currencies);
-// .filter((p) => currencies[p].note?.toLowerCase().includes("down"));
+// .filter((p) => currencies[p].note?.includes("G1"));
 
 (async () => {
   for (const pair of pairs) {
-    if (alreadyInProgress(pair) || /stable|no price|ready/gim.test(currencies[pair].note)) continue;
+    const shouldTest = currencies[pair].strategies[0] || /stable|no price/gim.test(currencies[pair].note);
+    if (alreadyInProgress(pair) || !shouldTest) continue;
     await runTradingTest(pair, capital, minStrategyRange, minPercentPriceChange, modes, interval);
 
     // if (global.gc) global.gc(); // Forces garbage collection
