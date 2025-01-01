@@ -1,0 +1,2866 @@
+=========================== Losers ===========================
+
+
+Started new trading with SOLEUR based on 5 mins time interval:
+€100 >1< 5.5% on-increase-hard => €10 Remain: 0 Transactions: 3 Gainer: 10 Loser: 10
+€100 >1< 5% on-increase-hard => €11 Remain: 0 Transactions: 4 Gainer: 12 Loser: 10
+€100 >0.75< 5% on-increase-hard => €12 Remain: 0 Transactions: 4 Gainer: 16 Loser: 4
+
+
+Started new trading with KMNOEUR based on 5 mins time interval:
+€100 >1< 10% on-increase => €15 Remain: 178 Transactions: 1 Gainer: 25 Loser: -6
+€100 >1< 9.5% on-increase => €19 Remain: 0 Transactions: 2 Gainer: 29 Loser: -2
+€100 >1< 8.5% on-increase => €28 Remain: 164 Transactions: 3 Gainer: 31 Loser: 22
+€100 >1< 8% on-increase => €34 Remain: 369 Transactions: 4 Gainer: 46 Loser: 11
+€100 >1< 7.5% on-increase => €39 Remain: 561 Transactions: 6 Gainer: 46 Loser: 25
+€100 >1< 8% on-increase-hard => €41 Remain: 365 Transactions: 4 Gainer: 57 Loser: 9
+€100 >1< 7.5% on-increase-hard => €49 Remain: 365 Transactions: 6 Gainer: 59 Loser: 29
+€100 >0.75< 7.5% on-increase-hard => €52 Remain: 558 Transactions: 5 Gainer: 61 Loser: 36
+
+
+Started new trading with ZEXEUR based on 5 mins time interval:
+€100 >0.5< 3% on-increase-hard => €17 Remain: 489 Transactions: 15 Gainer: 19 Loser: 13
+€100 >1< 8.5% high-drop-hard => €17 Remain: 1131 Transactions: 3 Gainer: 28 Loser: -4
+€100 >1< 3% high-drop-hard => €17 Remain: 620 Transactions: 4 Gainer: 5 Loser: 42
+€100 >1< 5% high-drop-hard => €17 Remain: 1080 Transactions: 7 Gainer: 30 Loser: -8
+€100 >0.75< 4.5% high-drop-hard => €21 Remain: 400 Transactions: 7 Gainer: 14 Loser: 36
+€100 >0.75< 5% high-drop-hard => €27 Remain: 403 Transactions: 7 Gainer: 24 Loser: 33
+
+
+Started new trading with WIFEUR based on 5 mins time interval:
+€100 >1< 9.5% on-increase => €10 Remain: 13 Transactions: 2 Gainer: 16 Loser: 0
+€100 >1< 9% on-increase => €10 Remain: 13 Transactions: 3 Gainer: 19 Loser: -7
+€100 >1< 8.5% on-increase => €13 Remain: 13 Transactions: 4 Gainer: 21 Loser: -2
+€100 >1< 8% on-increase => €13 Remain: 13 Transactions: 4 Gainer: 17 Loser: 4
+€100 >1< 5% on-increase => €12 Remain: 0 Transactions: 5 Gainer: 19 Loser: -3
+€100 >1< 7% on-increase => €14 Remain: 13 Transactions: 6 Gainer: 25 Loser: -8
+€100 >1< 6.5% on-increase => €16 Remain: 0 Transactions: 6 Gainer: 25 Loser: -2
+€100 >0.75< 7% on-increase => €16 Remain: 13 Transactions: 6 Gainer: 31 Loser: -14
+€100 >0.75< 5% on-increase => €17 Remain: 0 Transactions: 6 Gainer: 29 Loser: -6
+€100 >0.25< 4% on-increase => €17 Remain: 14 Transactions: 9 Gainer: 26 Loser: -1
+€100 >0.25< 3.5% on-increase => €17 Remain: 13 Transactions: 12 Gainer: 27 Loser: -3
+€100 >1< 5.5% on-increase-hard => €16 Remain: 0 Transactions: 5 Gainer: 25 Loser: -2
+€100 >1< 4% on-increase-hard => €17 Remain: 0 Transactions: 10 Gainer: 28 Loser: -3
+€100 >0.75< 7% on-increase-hard => €20 Remain: 0 Transactions: 4 Gainer: 32 Loser: -4
+
+
+Started new trading with SEIEUR based on 5 mins time interval:
+€100 >1< 10% on-increase => €10 Remain: 172 Transactions: 1 Gainer: 5 Loser: 20
+€100 >1< 8.5% on-increase => €12 Remain: 162 Transactions: 2 Gainer: 5 Loser: 25
+€100 >1< 8% on-increase => €11 Remain: 162 Transactions: 3 Gainer: 8 Loser: 19
+€100 >1< 6.5% on-increase => €10 Remain: 152 Transactions: 5 Gainer: 4 Loser: 23
+€100 >0.75< 8% on-increase => €11 Remain: 165 Transactions: 3 Gainer: 9 Loser: 16
+€100 >0.75< 7.5% on-increase => €11 Remain: 67 Transactions: 4 Gainer: 9 Loser: 16
+€100 >0.75< 7% on-increase => €17 Remain: 66 Transactions: 4 Gainer: 17 Loser: 17
+€100 >0.75< 6.5% on-increase => €17 Remain: 66 Transactions: 5 Gainer: 14 Loser: 23
+€100 >0.25< 7% on-increase => €17 Remain: 71 Transactions: 3 Gainer: 10 Loser: 32
+€100 >0.75< 9.5% on-increase-hard => €17 Remain: 172 Transactions: 2 Gainer: 13 Loser: 24
+€100 >0.75< 4.5% on-increase-hard => €22 Remain: 74 Transactions: 12 Gainer: 24 Loser: 17
+
+
+Started new trading with OXYEUR based on 5 mins time interval:
+€100 >1< 4% on-increase => €10 Remain: 1070 Transactions: 7 Gainer: 16 Loser: -2
+€100 >1< 4.5% on-increase => €10 Remain: 1070 Transactions: 7 Gainer: 20 Loser: -8
+€100 >1< 5% on-increase => €12 Remain: 1070 Transactions: 7 Gainer: 20 Loser: -4
+€100 >0.25< 10% on-increase => €12 Remain: 1031 Transactions: 2 Gainer: -1 Loser: 39
+€100 >0.25< 6.5% on-increase => €11 Remain: 994 Transactions: 3 Gainer: -1 Loser: 36
+€100 >0.75< 5% high-drop => €11 Remain: 0 Transactions: 3 Gainer: 19 Loser: -6
+€100 >0.5< 8.5% high-drop => €12 Remain: 994 Transactions: 3 Gainer: 6 Loser: 24
+€100 >1< 4.5% high-drop-hard => €11 Remain: 0 Transactions: 1 Gainer: 19 Loser: -4
+
+
+Started new trading with YGGEUR based on 5 mins time interval:
+€100 >1< 9.5% on-increase => €14 Remain: 142 Transactions: 1 Gainer: 12 Loser: 17
+€100 >0.5< 7.5% on-increase => €18 Remain: 65 Transactions: 4 Gainer: 17 Loser: 21
+€100 >0.5< 7.5% high-drop => €17 Remain: 64 Transactions: 4 Gainer: 16 Loser: 21
+€100 >0.5< 9.5% near-low => €20 Remain: 64 Transactions: 4 Gainer: 16 Loser: 29
+€100 >0.5< 9.5% near-low-hard => €21 Remain: 64 Transactions: 4 Gainer: 15 Loser: 33
+
+
+Started new trading with JTOEUR based on 5 mins time interval:
+€100 >1< 7% on-increase => €12 Remain: 10 Transactions: 4 Gainer: 14 Loser: 9
+€100 >1< 6.5% on-increase => €12 Remain: 10 Transactions: 5 Gainer: 15 Loser: 8
+€100 >1< 6% on-increase => €12 Remain: 25 Transactions: 5 Gainer: 14 Loser: 9
+€100 >0.75< 9% on-increase => €14 Remain: 12 Transactions: 2 Gainer: 5 Loser: 32
+€100 >0.75< 9.5% on-increase => €16 Remain: 12 Transactions: 2 Gainer: 6 Loser: 35
+€100 >0.75< 9.5% high-drop => €16 Remain: 12 Transactions: 2 Gainer: 6 Loser: 35
+
+
+Started new trading with MVEUR based on 5 mins time interval:
+
+
+Started new trading with PYTHEUR based on 5 mins time interval:
+€100 >1< 8.5% on-increase => €12 Remain: 80 Transactions: 3 Gainer: 8 Loser: 21
+€100 >0.75< 9% on-increase => €16 Remain: 90 Transactions: 2 Gainer: 4 Loser: 39
+€100 >0.75< 8% on-increase => €15 Remain: 80 Transactions: 3 Gainer: 8 Loser: 30
+€100 >0.75< 8.5% on-increase => €16 Remain: 80 Transactions: 3 Gainer: 8 Loser: 32
+€100 >0.5< 9% on-increase => €15 Remain: 90 Transactions: 2 Gainer: 4 Loser: 37
+€100 >0.5< 8.5% on-increase => €16 Remain: 89 Transactions: 2 Gainer: 8 Loser: 34
+€100 >0.5< 8% on-increase => €19 Remain: 89 Transactions: 2 Gainer: 8 Loser: 43
+€100 >0.75< 9.5% on-increase-hard => €19 Remain: 194 Transactions: 2 Gainer: 8 Loser: 41
+€100 >0.5< 8% high-drop => €19 Remain: 89 Transactions: 2 Gainer: 8 Loser: 43
+€100 >0.75< 10% near-low => €19 Remain: 80 Transactions: 3 Gainer: 9 Loser: 41
+€100 >0.75< 10% near-low-hard => €19 Remain: 80 Transactions: 3 Gainer: 7 Loser: 43
+
+
+Started new trading with WEUR based on 5 mins time interval:
+€100 >1< 10% on-increase => €13 Remain: 275 Transactions: 1 Gainer: 19 Loser: 2
+€100 >1< 9% on-increase => €13 Remain: 275 Transactions: 1 Gainer: 19 Loser: 2
+€100 >1< 9.5% on-increase => €14 Remain: 275 Transactions: 1 Gainer: 20 Loser: 2
+€100 >1< 7.5% on-increase => €13 Remain: 266 Transactions: 2 Gainer: 20 Loser: 0
+€100 >1< 8% on-increase => €14 Remain: 266 Transactions: 2 Gainer: 22 Loser: 0
+€100 >1< 8% high-drop => €14 Remain: 266 Transactions: 2 Gainer: 22 Loser: 0
+€100 >1< 10% near-low => €18 Remain: 267 Transactions: 2 Gainer: 27 Loser: 0
+€100 >1< 10% near-low-hard => €17 Remain: 267 Transactions: 2 Gainer: 26 Loser: 0
+
+
+Started new trading with TAOEUR based on 5 mins time interval:
+€100 >1< 9% on-increase => €12 Remain: 0 Transactions: 1 Gainer: -2 Loser: 44
+€100 >0.75< 8.5% on-increase => €11 Remain: 0 Transactions: 2 Gainer: -3 Loser: 43
+€100 >0.25< 8.5% on-increase => €15 Remain: 0 Transactions: 1 Gainer: 4 Loser: 36
+€100 >0.25< 8% on-increase => €17 Remain: 0 Transactions: 2 Gainer: 14 Loser: 24
+€100 >0.25< 7% on-increase => €21 Remain: 0 Transactions: 3 Gainer: 17 Loser: 28
+€100 >0.25< 6.5% on-increase => €23 Remain: 0 Transactions: 4 Gainer: 17 Loser: 36
+€100 >0.25< 6.5% on-increase-hard => €23 Remain: 0 Transactions: 5 Gainer: 13 Loser: 44
+€100 >0.25< 8.5% near-low => €25 Remain: 0 Transactions: 4 Gainer: 30 Loser: 14
+€100 >0.25< 7.5% near-low => €24 Remain: 0 Transactions: 6 Gainer: 15 Loser: 41
+€100 >0.25< 8.5% near-low-hard => €27 Remain: 0 Transactions: 4 Gainer: 30 Loser: 22
+
+
+Started new trading with JUPEUR based on 5 mins time interval:
+€100 >1< 6% on-increase-hard => €13 Remain: 34 Transactions: 3 Gainer: 19 Loser: 0
+
+
+Started new trading with CPOOLEUR based on 5 mins time interval:
+€100 >1< 9% on-increase => €15 Remain: 74 Transactions: 2 Gainer: 9 Loser: 27
+€100 >1< 9.5% on-increase => €23 Remain: 0 Transactions: 3 Gainer: 12 Loser: 44
+€100 >1< 10% on-increase => €27 Remain: 0 Transactions: 3 Gainer: 13 Loser: 56
+
+
+Started new trading with PEPEEUR based on 5 mins time interval:
+€100 >1< 5% on-increase-hard => €12 Remain: 3846599 Transactions: 5 Gainer: 19 Loser: -3
+€100 >1< 5.5% on-increase-hard => €12 Remain: 3977000 Transactions: 5 Gainer: 20 Loser: -3
+€100 >0.75< 5% on-increase-hard => €12 Remain: 3846599 Transactions: 5 Gainer: 21 Loser: -6
+
+
+Started new trading with INJEUR based on 5 mins time interval:
+€100 >0.75< 5.5% on-increase => €10 Remain: 0 Transactions: 3 Gainer: 16 Loser: -2
+€100 >0.5< 3.5% on-increase => €10 Remain: 0 Transactions: 6 Gainer: 20 Loser: -9
+€100 >1< 5.5% high-drop => €13 Remain: 1 Transactions: 3 Gainer: 22 Loser: -6
+€100 >0.5< 3.5% high-drop => €13 Remain: 0 Transactions: 6 Gainer: 24 Loser: -9
+€100 >0.5< 3% high-drop-hard => €13 Remain: 0 Transactions: 5 Gainer: 16 Loser: 7
+€100 >1< 6% near-low => €13 Remain: 0 Transactions: 4 Gainer: 23 Loser: -7
+€100 >0.5< 4% near-low => €16 Remain: 0 Transactions: 8 Gainer: 29 Loser: -10
+€100 >0.5< 3.5% near-low => €17 Remain: 0 Transactions: 9 Gainer: 33 Loser: -15
+€100 >0.5< 3.5% near-low-hard => €16 Remain: 0 Transactions: 9 Gainer: 32 Loser: -15
+
+
+Started new trading with DYMEUR based on 5 mins time interval:
+€100 >1< 10% on-increase => €11 Remain: 46 Transactions: 3 Gainer: 16 Loser: 3
+€100 >1< 9.5% on-increase => €17 Remain: 46 Transactions: 3 Gainer: 25 Loser: 1
+€100 >1< 9% on-increase => €20 Remain: 46 Transactions: 4 Gainer: 23 Loser: 16
+€100 >0.75< 8.5% on-increase => €20 Remain: 21 Transactions: 4 Gainer: 13 Loser: 34
+€100 >1< 9.5% on-increase-hard => €26 Remain: 45 Transactions: 4 Gainer: 22 Loser: 33
+
+
+Started new trading with ETHFIEUR based on 5 mins time interval:
+€100 >1< 7% on-increase => €15 Remain: 13 Transactions: 4 Gainer: 15 Loser: 15
+€100 >1< 7.5% on-increase-hard => €19 Remain: 39 Transactions: 4 Gainer: 19 Loser: 21
+
+
+Started new trading with MASKEUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase-hard => €16 Remain: 12 Transactions: 2 Gainer: 30 Loser: -11
+€100 >0.5< 5% on-increase-hard => €17 Remain: 12 Transactions: 3 Gainer: 31 Loser: -11
+€100 >0.25< 4.5% on-increase-hard => €18 Remain: 12 Transactions: 3 Gainer: 30 Loser: -5
+
+
+Started new trading with PORTALEUR based on 5 mins time interval:
+
+
+Started new trading with SAMOEUR based on 5 mins time interval:
+
+
+Started new trading with BEAMEUR based on 5 mins time interval:
+
+
+Started new trading with AVAXEUR based on 5 mins time interval:
+
+
+Started new trading with TURBOEUR based on 5 mins time interval:
+€100 >1< 8% on-increase => €14 Remain: 3526 Transactions: 5 Gainer: 13 Loser: 18
+€100 >1< 7.5% on-increase => €28 Remain: 3502 Transactions: 7 Gainer: 31 Loser: 24
+€100 >1< 5% on-increase => €29 Remain: 3722 Transactions: 9 Gainer: 45 Loser: -2
+€100 >1< 7.5% high-drop => €32 Remain: 3502 Transactions: 7 Gainer: 38 Loser: 21
+€100 >1< 6% high-drop => €33 Remain: 7204 Transactions: 9 Gainer: 45 Loser: 8
+€100 >0.75< 5.5% near-low => €33 Remain: 0 Transactions: 7 Gainer: 52 Loser: -6
+€100 >0.75< 6% near-low => €32 Remain: 0 Transactions: 7 Gainer: 52 Loser: -6
+€100 >0.5< 7% near-low => €31 Remain: 4059 Transactions: 9 Gainer: 39 Loser: 17
+€100 >0.75< 5.5% near-low-hard => €35 Remain: 0 Transactions: 6 Gainer: 55 Loser: -5
+
+
+Started new trading with USTEUR based on 5 mins time interval:
+€100 >0.5< 5.5% high-drop => €12 Remain: 1715 Transactions: 5 Gainer: 17 Loser: 3
+€100 >0.5< 3.5% high-drop => €12 Remain: 0 Transactions: 11 Gainer: 19 Loser: -1
+€100 >0.25< 5% high-drop => €12 Remain: 1715 Transactions: 4 Gainer: 9 Loser: 18
+€100 >0.25< 4% high-drop => €13 Remain: 1703 Transactions: 6 Gainer: 11 Loser: 18
+€100 >0.75< 8.5% high-drop-hard => €12 Remain: 1942 Transactions: 1 Gainer: 16 Loser: 5
+€100 >0.5< 5% near-low => €19 Remain: 0 Transactions: 8 Gainer: 31 Loser: -5
+
+
+Started new trading with RAYEUR based on 5 mins time interval:
+€100 >1< 6.5% on-increase => €13 Remain: 11 Transactions: 3 Gainer: 20 Loser: 0
+€100 >1< 6% on-increase => €16 Remain: 11 Transactions: 4 Gainer: 25 Loser: 0
+€100 >1< 5.5% on-increase => €16 Remain: 10 Transactions: 4 Gainer: 25 Loser: -2
+€100 >1< 7% on-increase => €17 Remain: 18 Transactions: 4 Gainer: 16 Loser: 19
+€100 >1< 5% on-increase => €16 Remain: 10 Transactions: 5 Gainer: 26 Loser: -3
+€100 >0.75< 6% on-increase => €16 Remain: 11 Transactions: 4 Gainer: 25 Loser: -2
+€100 >0.75< 5.5% on-increase => €15 Remain: 10 Transactions: 4 Gainer: 25 Loser: -4
+€100 >0.75< 3.5% on-increase-hard => €14 Remain: 10 Transactions: 8 Gainer: 25 Loser: -8
+€100 >0.5< 4.5% on-increase-hard => €16 Remain: 10 Transactions: 6 Gainer: 24 Loser: -1
+€100 >0.5< 3.5% on-increase-hard => €15 Remain: 10 Transactions: 8 Gainer: 23 Loser: 0
+€100 >0.25< 5% on-increase-hard => €15 Remain: 18 Transactions: 6 Gainer: 17 Loser: 12
+€100 >1< 7% high-drop => €17 Remain: 18 Transactions: 4 Gainer: 16 Loser: 19
+€100 >1< 5% high-drop => €16 Remain: 10 Transactions: 5 Gainer: 26 Loser: -3
+€100 >0.75< 5% high-drop-hard => €24 Remain: 18 Transactions: 6 Gainer: 18 Loser: 36
+
+
+Started new trading with BONKEUR based on 5 mins time interval:
+€100 >0.5< 6% on-increase => €11 Remain: 0 Transactions: 4 Gainer: 23 Loser: -13
+€100 >1< 6% on-increase-hard => €11 Remain: 0 Transactions: 5 Gainer: 25 Loser: -16
+€100 >0.25< 4.5% on-increase-hard => €10 Remain: 0 Transactions: 6 Gainer: 18 Loser: -4
+€100 >0.25< 3% high-drop-hard => €10 Remain: 0 Transactions: 7 Gainer: 9 Loser: 14
+€100 >1< 4% near-low => €11 Remain: 0 Transactions: 4 Gainer: 17 Loser: 0
+€100 >0.25< 6.5% near-low => €11 Remain: 0 Transactions: 4 Gainer: 17 Loser: -1
+€100 >0.25< 5.5% near-low => €14 Remain: 0 Transactions: 6 Gainer: 21 Loser: 0
+
+
+Started new trading with PENDLEEUR based on 5 mins time interval:
+€100 >1< 3.5% high-drop => €16 Remain: 5 Transactions: 10 Gainer: 24 Loser: 0
+€100 >0.25< 6.5% near-low => €15 Remain: 12 Transactions: 4 Gainer: 9 Loser: 28
+€100 >0.25< 6.5% near-low-hard => €18 Remain: 12 Transactions: 4 Gainer: 10 Loser: 34
+
+
+Started new trading with STEPEUR based on 5 mins time interval:
+€100 >1< 6.5% high-drop-hard => €11 Remain: 0 Transactions: 1 Gainer: 3 Loser: 27
+€100 >0.25< 7.5% near-low => €12 Remain: 300 Transactions: 2 Gainer: 14 Loser: 8
+€100 >0.25< 8% near-low => €12 Remain: 300 Transactions: 2 Gainer: 14 Loser: 8
+€100 >0.25< 8.5% near-low => €12 Remain: 300 Transactions: 2 Gainer: 9 Loser: 18
+€100 >0.25< 7% near-low => €13 Remain: 295 Transactions: 2 Gainer: 12 Loser: 16
+€100 >0.25< 7.5% near-low-hard => €13 Remain: 1022 Transactions: 1 Gainer: 16 Loser: 7
+€100 >0.25< 8% near-low-hard => €13 Remain: 1022 Transactions: 1 Gainer: 16 Loser: 8
+€100 >0.25< 8.5% near-low-hard => €13 Remain: 1022 Transactions: 1 Gainer: 12 Loser: 17
+€100 >0.25< 7% near-low-hard => €15 Remain: 1017 Transactions: 2 Gainer: 14 Loser: 16
+
+
+Started new trading with FLOKIEUR based on 5 mins time interval:
+€100 >0.5< 4% high-drop => €11 Remain: 0 Transactions: 6 Gainer: 20 Loser: -7
+€100 >1< 3.5% high-drop-hard => €10 Remain: 0 Transactions: 3 Gainer: 9 Loser: 12
+€100 >0.75< 3.5% high-drop-hard => €11 Remain: 0 Transactions: 4 Gainer: 9 Loser: 15
+€100 >0.75< 3% high-drop-hard => €10 Remain: 0 Transactions: 4 Gainer: 8 Loser: 16
+€100 >0.5< 3% high-drop-hard => €12 Remain: 0 Transactions: 5 Gainer: 9 Loser: 19
+€100 >0.25< 3.5% high-drop-hard => €15 Remain: 0 Transactions: 5 Gainer: 18 Loser: 9
+
+
+Started new trading with ARKMEUR based on 5 mins time interval:
+€100 >0.25< 3.5% high-drop => €10 Remain: 0 Transactions: 7 Gainer: 21 Loser: -10
+€100 >1< 7% high-drop-hard => €11 Remain: 22 Transactions: 1 Gainer: 17 Loser: 0
+€100 >1< 7.5% high-drop-hard => €12 Remain: 0 Transactions: 2 Gainer: 18 Loser: 0
+€100 >0.25< 7% high-drop-hard => €12 Remain: 23 Transactions: 1 Gainer: 11 Loser: 13
+€100 >0.25< 6.5% high-drop-hard => €12 Remain: 0 Transactions: 2 Gainer: 11 Loser: 14
+€100 >0.25< 6% high-drop-hard => €13 Remain: 0 Transactions: 2 Gainer: 13 Loser: 14
+€100 >0.25< 3.5% high-drop-hard => €12 Remain: 0 Transactions: 4 Gainer: 13 Loser: 10
+
+
+Started new trading with IMXEUR based on 5 mins time interval:
+€100 >1< 4.5% high-drop-hard => €10 Remain: 0 Transactions: 2 Gainer: 16 Loser: 0
+€100 >0.75< 9.5% near-low => €11 Remain: 51 Transactions: 1 Gainer: 19 Loser: -5
+€100 >0.75< 9.5% near-low-hard => €12 Remain: 51 Transactions: 1 Gainer: 21 Loser: -5
+
+
+Started new trading with KP3REUR based on 5 mins time interval:
+€100 >0.25< 9.5% high-drop => €10 Remain: 0 Transactions: 2 Gainer: 5 Loser: 22
+€100 >0.25< 9% high-drop => €15 Remain: 0 Transactions: 2 Gainer: 4 Loser: 38
+
+
+Started new trading with CSMEUR based on 5 mins time interval:
+€100 >0.75< 1.5% high-drop-hard => €18 Remain: 0 Transactions: 1 Gainer: 23 Loser: 8
+€100 >0.5< 1.5% high-drop-hard => €18 Remain: 0 Transactions: 1 Gainer: 23 Loser: 7
+
+
+Started new trading with BLUREUR based on 5 mins time interval:
+€100 >1< 9.5% on-increase => €11 Remain: 284 Transactions: 2 Gainer: 11 Loser: 12
+€100 >1< 7.5% on-increase => €13 Remain: 275 Transactions: 4 Gainer: 17 Loser: 5
+€100 >0.25< 4.5% on-increase => €13 Remain: 0 Transactions: 8 Gainer: 14 Loser: 11
+€100 >1< 9.5% on-increase-hard => €12 Remain: 273 Transactions: 3 Gainer: 13 Loser: 10
+€100 >1< 9% on-increase-hard => €15 Remain: 273 Transactions: 3 Gainer: 17 Loser: 12
+€100 >1< 7.5% on-increase-hard => €17 Remain: 269 Transactions: 4 Gainer: 28 Loser: -4
+€100 >0.5< 5.5% on-increase-hard => €18 Remain: 0 Transactions: 7 Gainer: 28 Loser: -1
+€100 >1< 10% near-low => €24 Remain: 286 Transactions: 4 Gainer: 20 Loser: 32
+€100 >1< 9% near-low => €24 Remain: 286 Transactions: 4 Gainer: 24 Loser: 24
+€100 >1< 9.5% near-low => €27 Remain: 286 Transactions: 4 Gainer: 24 Loser: 32
+
+
+Started new trading with ZETAEUR based on 5 mins time interval:
+€100 >1< 10% on-increase => €10 Remain: 113 Transactions: 2 Gainer: 15 Loser: 2
+€100 >1< 9.5% on-increase => €13 Remain: 112 Transactions: 2 Gainer: 14 Loser: 11
+€100 >1< 9% on-increase => €12 Remain: 110 Transactions: 3 Gainer: 16 Loser: 5
+€100 >1< 8% on-increase => €17 Remain: 105 Transactions: 4 Gainer: 17 Loser: 18
+€100 >0.75< 8% on-increase => €22 Remain: 0 Transactions: 4 Gainer: 23 Loser: 21
+€100 >0.75< 8% high-drop => €22 Remain: 0 Transactions: 4 Gainer: 23 Loser: 21
+
+
+Started new trading with STXEUR based on 5 mins time interval:
+€100 >0.25< 7.5% on-increase => €10 Remain: 19 Transactions: 1 Gainer: 3 Loser: 23
+€100 >0.25< 5% on-increase => €11 Remain: 18 Transactions: 5 Gainer: 11 Loser: 13
+€100 >0.75< 9% on-increase-hard => €12 Remain: 15 Transactions: 2 Gainer: 11 Loser: 13
+€100 >0.25< 8% on-increase-hard => €12 Remain: 17 Transactions: 1 Gainer: 9 Loser: 17
+€100 >0.25< 7% on-increase-hard => €15 Remain: 0 Transactions: 2 Gainer: 10 Loser: 25
+€100 >0.25< 7.5% on-increase-hard => €14 Remain: 0 Transactions: 2 Gainer: 9 Loser: 25
+€100 >0.25< 6.5% on-increase-hard => €14 Remain: 0 Transactions: 3 Gainer: 11 Loser: 20
+€100 >0.25< 6% on-increase-hard => €13 Remain: 0 Transactions: 3 Gainer: 11 Loser: 17
+€100 >0.75< 10% near-low => €13 Remain: 16 Transactions: 2 Gainer: 10 Loser: 19
+€100 >0.5< 10% near-low => €13 Remain: 0 Transactions: 2 Gainer: 10 Loser: 19
+€100 >0.25< 7% near-low => €12 Remain: 0 Transactions: 3 Gainer: 8 Loser: 21
+€100 >0.75< 10% near-low-hard => €12 Remain: 16 Transactions: 2 Gainer: 10 Loser: 18
+€100 >0.5< 10% near-low-hard => €13 Remain: 0 Transactions: 2 Gainer: 10 Loser: 20
+€100 >0.25< 7% near-low-hard => €15 Remain: 0 Transactions: 3 Gainer: 11 Loser: 25
+
+
+Started new trading with RUNEEUR based on 5 mins time interval:
+€100 >0.75< 5.5% on-increase-hard => €17 Remain: 6 Transactions: 7 Gainer: 18 Loser: 16
+
+
+Started new trading with CELREUR based on 5 mins time interval:
+
+
+Started new trading with ZKEUR based on 5 mins time interval:
+€100 >1< 9% on-increase => €18 Remain: 467 Transactions: 2 Gainer: 8 Loser: 39
+€100 >1< 9% high-drop => €19 Remain: 287 Transactions: 2 Gainer: 8 Loser: 41
+€100 >0.5< 8.5% near-low => €19 Remain: 190 Transactions: 3 Gainer: 5 Loser: 46
+€100 >0.25< 6% near-low => €18 Remain: 189 Transactions: 5 Gainer: 5 Loser: 44
+€100 >0.25< 5.5% near-low => €18 Remain: 184 Transactions: 6 Gainer: 7 Loser: 42
+€100 >0.25< 5% near-low => €21 Remain: 184 Transactions: 8 Gainer: 11 Loser: 41
+€100 >0.5< 8.5% near-low-hard => €21 Remain: 190 Transactions: 4 Gainer: 6 Loser: 52
+
+
+Started new trading with GTCEUR based on 5 mins time interval:
+€100 >1< 5.5% near-low => €11 Remain: 50 Transactions: 4 Gainer: 17 Loser: 0
+
+
+Started new trading with MOVREUR based on 5 mins time interval:
+
+
+Started new trading with UNFIEUR based on 5 mins time interval:
+€100 >1< 8% on-increase => €10 Remain: 19 Transactions: 3 Gainer: 23 Loser: -15
+€100 >1< 7.5% on-increase => €10 Remain: 19 Transactions: 3 Gainer: 23 Loser: -15
+€100 >1< 7% on-increase => €10 Remain: 19 Transactions: 3 Gainer: 23 Loser: -16
+€100 >1< 3.5% high-drop-hard => €17 Remain: 0 Transactions: 1 Gainer: 32 Loser: -14
+€100 >1< 5% high-drop-hard => €19 Remain: 0 Transactions: 1 Gainer: 32 Loser: -8
+€100 >0.75< 5% high-drop-hard => €18 Remain: 0 Transactions: 1 Gainer: 33 Loser: -11
+€100 >0.75< 3% high-drop-hard => €17 Remain: 0 Transactions: 1 Gainer: 31 Loser: -11
+€100 >0.75< 3.5% high-drop-hard => €21 Remain: 0 Transactions: 2 Gainer: 35 Loser: -7
+€100 >0.75< 2.5% high-drop-hard => €27 Remain: 0 Transactions: 3 Gainer: 41 Loser: 0
+
+
+
+Started new trading with PRCLEUR based on 5 mins time interval:
+€100 >1< 9.5% on-increase => €25 Remain: 65 Transactions: 5 Gainer: 34 Loser: 7
+€100 >1< 10% on-increase => €28 Remain: 66 Transactions: 5 Gainer: 35 Loser: 13
+€100 >1< 9% on-increase => €31 Remain: 65 Transactions: 6 Gainer: 36 Loser: 23
+€100 >1< 8.5% on-increase => €33 Remain: 222 Transactions: 7 Gainer: 35 Loser: 28
+€100 >0.75< 10% on-increase => €34 Remain: 66 Transactions: 5 Gainer: 27 Loser: 49
+€100 >0.75< 9% on-increase => €35 Remain: 66 Transactions: 6 Gainer: 28 Loser: 48
+€100 >0.75< 8.5% on-increase => €36 Remain: 65 Transactions: 7 Gainer: 38 Loser: 33
+€100 >0.75< 8% on-increase => €47 Remain: 65 Transactions: 9 Gainer: 50 Loser: 42
+€100 >0.75< 7.5% on-increase => €46 Remain: 99 Transactions: 10 Gainer: 46 Loser: 47
+€100 >0.5< 7.5% on-increase => €48 Remain: 0 Transactions: 11 Gainer: 50 Loser: 44
+€100 >0.5< 8.5% near-low => €49 Remain: 0 Transactions: 10 Gainer: 62 Loser: 24
+€100 >0.5< 8% near-low => €51 Remain: 93 Transactions: 11 Gainer: 59 Loser: 37
+€100 >0.25< 8.5% near-low => €51 Remain: 0 Transactions: 9 Gainer: 52 Loser: 49
+€100 >0.25< 8% near-low => €53 Remain: 140 Transactions: 9 Gainer: 59 Loser: 43
+€100 >0.25< 8.5% near-low-hard => €56 Remain: 96 Transactions: 9 Gainer: 55 Loser: 59
+€100 >0.25< 8% near-low-hard => €58 Remain: 235 Transactions: 9 Gainer: 61 Loser: 52
+
+
+Started new trading with BIGTIMEEUR based on 5 mins time interval:
+€100 >1< 9% on-increase => €10 Remain: 219 Transactions: 4 Gainer: -2 Loser: 36
+€100 >1< 9.5% on-increase => €27 Remain: 446 Transactions: 4 Gainer: 27 Loser: 28
+€100 >1< 10% on-increase => €42 Remain: 447 Transactions: 5 Gainer: 47 Loser: 31
+€100 >1< 10% high-drop => €42 Remain: 447 Transactions: 5 Gainer: 47 Loser: 31
+
+
+Started new trading with SUPEREUR based on 5 mins time interval:
+€100 >1< 9% on-increase => €10 Remain: 20 Transactions: 1 Gainer: 0 Loser: 31
+€100 >1< 10% on-increase => €16 Remain: 21 Transactions: 2 Gainer: 11 Loser: 26
+€100 >0.75< 8.5% on-increase => €15 Remain: 21 Transactions: 3 Gainer: 22 Loser: 3
+€100 >0.75< 8% on-increase => €24 Remain: 20 Transactions: 4 Gainer: 31 Loser: 10
+€100 >0.5< 8% on-increase => €27 Remain: 20 Transactions: 3 Gainer: 25 Loser: 31
+€100 >0.25< 6.5% on-increase => €30 Remain: 22 Transactions: 5 Gainer: 23 Loser: 44
+
+
+Started new trading with TNSREUR based on 5 mins time interval:
+€100 >1< 9% on-increase => €13 Remain: 152 Transactions: 2 Gainer: 18 Loser: 3
+€100 >1< 8% on-increase => €14 Remain: 144 Transactions: 4 Gainer: 24 Loser: -5
+€100 >1< 7.5% on-increase => €13 Remain: 143 Transactions: 5 Gainer: 21 Loser: -1
+€100 >1< 6.5% on-increase => €17 Remain: 142 Transactions: 6 Gainer: 25 Loser: 1
+€100 >0.75< 8.5% on-increase => €16 Remain: 70 Transactions: 3 Gainer: 16 Loser: 16
+€100 >0.75< 8% on-increase => €18 Remain: 64 Transactions: 4 Gainer: 23 Loser: 7
+€100 >0.75< 7.5% on-increase => €18 Remain: 150 Transactions: 5 Gainer: 21 Loser: 13
+€100 >1< 8% on-increase-hard => €18 Remain: 143 Transactions: 4 Gainer: 24 Loser: 5
+€100 >1< 7% on-increase-hard => €18 Remain: 141 Transactions: 6 Gainer: 27 Loser: 0
+€100 >1< 6.5% on-increase-hard => €21 Remain: 141 Transactions: 6 Gainer: 29 Loser: 5
+€100 >0.75< 8.5% on-increase-hard => €20 Remain: 70 Transactions: 3 Gainer: 22 Loser: 16
+€100 >0.75< 8% on-increase-hard => €26 Remain: 74 Transactions: 4 Gainer: 26 Loser: 28
+€100 >0.75< 10% near-low => €26 Remain: 158 Transactions: 4 Gainer: 28 Loser: 21
+€100 >0.75< 9.5% near-low => €30 Remain: 150 Transactions: 5 Gainer: 35 Loser: 20
+€100 >0.75< 9.5% near-low-hard => €32 Remain: 156 Transactions: 5 Gainer: 37 Loser: 22
+
+
+Started new trading with APTEUR based on 5 mins time interval:
+€100 >1< 10% on-increase => €10 Remain: 7 Transactions: 1 Gainer: 7 Loser: 17
+€100 >1< 7.5% on-increase => €11 Remain: 6 Transactions: 2 Gainer: 13 Loser: 7
+€100 >1< 8% on-increase => €16 Remain: 6 Transactions: 2 Gainer: 16 Loser: 15
+€100 >0.75< 9.5% on-increase-hard => €15 Remain: 3 Transactions: 1 Gainer: 11 Loser: 23
+€100 >0.75< 8.5% on-increase-hard => €15 Remain: 2 Transactions: 2 Gainer: 16 Loser: 14
+€100 >0.75< 9% on-increase-hard => €18 Remain: 2 Transactions: 2 Gainer: 17 Loser: 22
+
+
+Started new trading with ORCAEUR based on 5 mins time interval:
+€100 >1< 7% on-increase => €12 Remain: 12 Transactions: 3 Gainer: 22 Loser: -9
+€100 >1< 6.5% on-increase => €15 Remain: 12 Transactions: 3 Gainer: 27 Loser: -9
+€100 >1< 5.5% on-increase => €18 Remain: 12 Transactions: 4 Gainer: 31 Loser: -9
+€100 >1< 6% on-increase => €20 Remain: 12 Transactions: 4 Gainer: 35 Loser: -9
+€100 >0.25< 6% on-increase => €23 Remain: 21 Transactions: 3 Gainer: 10 Loser: 50
+€100 >0.25< 9% on-increase-hard => €24 Remain: 10 Transactions: 1 Gainer: 0 Loser: 73
+€100 >0.25< 8% on-increase-hard => €23 Remain: 10 Transactions: 1 Gainer: 0 Loser: 71
+€100 >0.25< 8.5% on-increase-hard => €31 Remain: 10 Transactions: 2 Gainer: 0 Loser: 95
+
+
+Started new trading with SAGAEUR based on 5 mins time interval:
+€100 >1< 9.5% on-increase => €12 Remain: 0 Transactions: 3 Gainer: 20 Loser: -2
+€100 >1< 9% on-increase => €16 Remain: 0 Transactions: 4 Gainer: 24 Loser: 0
+€100 >1< 8% on-increase => €20 Remain: 21 Transactions: 5 Gainer: 26 Loser: 9
+€100 >0.5< 4.5% high-drop => €20 Remain: 0 Transactions: 12 Gainer: 31 Loser: -1
+
+
+Started new trading with SDNEUR based on 5 mins time interval:
+€100 >0.25< 7% near-low => €12 Remain: 0 Transactions: 2 Gainer: 14 Loser: 7
+
+
+Started new trading with NTRNEUR based on 5 mins time interval:
+€100 >0.75< 8.5% on-increase => €12 Remain: 182 Transactions: 1 Gainer: 16 Loser: 3
+€100 >0.75< 8.5% high-drop => €12 Remain: 182 Transactions: 1 Gainer: 16 Loser: 3
+€100 >0.75< 10% near-low => €13 Remain: 182 Transactions: 1 Gainer: 16 Loser: 6
+€100 >0.25< 9.5% near-low-hard => €13 Remain: 0 Transactions: 1 Gainer: 0 Loser: 41
+
+
+Started new trading with ALTEUR based on 5 mins time interval:
+€100 >1< 6% on-increase-hard => €11 Remain: 0 Transactions: 5 Gainer: 26 Loser: -19
+€100 >1< 6.5% high-drop => €12 Remain: 0 Transactions: 4 Gainer: 18 Loser: -1
+€100 >0.75< 5.5% high-drop => €16 Remain: 0 Transactions: 6 Gainer: 25 Loser: 0
+€100 >0.5< 6.5% high-drop-hard => €16 Remain: 0 Transactions: 2 Gainer: 18 Loser: 13
+
+
+Started new trading with MOGEUR based on 5 mins time interval:
+€100 >1< 9.5% on-increase => €10 Remain: 0 Transactions: 2 Gainer: 18 Loser: -7
+€100 >1< 7.5% on-increase => €10 Remain: 12401942 Transactions: 5 Gainer: 12 Loser: 6
+€100 >1< 4.5% on-increase => €13 Remain: 0 Transactions: 6 Gainer: 20 Loser: 0
+€100 >1< 4% on-increase => €14 Remain: 0 Transactions: 7 Gainer: 21 Loser: 0
+€100 >0.75< 9.5% on-increase => €25 Remain: 14548641 Transactions: 4 Gainer: 29 Loser: 17
+€100 >0.75< 10% on-increase => €26 Remain: 14548641 Transactions: 4 Gainer: 30 Loser: 17
+€100 >1< 8% near-low => €25 Remain: 12300852 Transactions: 6 Gainer: 42 Loser: -10
+€100 >1< 7.5% near-low => €26 Remain: 0 Transactions: 6 Gainer: 40 Loser: 0
+€100 >1< 7.5% near-low-hard => €26 Remain: 0 Transactions: 6 Gainer: 40 Loser: 0
+
+
+Started new trading with FTMEUR based on 5 mins time interval:
+€100 >1< 9.5% on-increase => €10 Remain: 29 Transactions: 2 Gainer: 5 Loser: 20
+€100 >1< 9% on-increase => €12 Remain: 29 Transactions: 2 Gainer: 9 Loser: 18
+€100 >1< 7% on-increase => €16 Remain: 26 Transactions: 4 Gainer: 11 Loser: 25
+€100 >1< 7.5% on-increase => €19 Remain: 27 Transactions: 4 Gainer: 12 Loser: 34
+€100 >0.25< 5% on-increase => €23 Remain: 33 Transactions: 8 Gainer: 20 Loser: 31
+€100 >1< 7% on-increase-hard => €24 Remain: 26 Transactions: 5 Gainer: 18 Loser: 37
+€100 >1< 6.5% on-increase-hard => €26 Remain: 26 Transactions: 6 Gainer: 19 Loser: 42
+€100 >0.25< 6.5% near-low => €28 Remain: 33 Transactions: 6 Gainer: 16 Loser: 53
+€100 >0.25< 6% near-low => €30 Remain: 33 Transactions: 8 Gainer: 25 Loser: 41
+€100 >0.25< 6.5% near-low-hard => €30 Remain: 33 Transactions: 6 Gainer: 15 Loser: 59
+€100 >0.25< 6% near-low-hard => €32 Remain: 33 Transactions: 8 Gainer: 26 Loser: 46
+
+
+Started new trading with NOSEUR based on 5 mins time interval:
+€100 >1< 6% on-increase => €12 Remain: 0 Transactions: 4 Gainer: -4 Loser: 47
+€100 >0.75< 9.5% on-increase => €15 Remain: 8 Transactions: 2 Gainer: 24 Loser: -4
+€100 >0.75< 10% on-increase => €16 Remain: 8 Transactions: 2 Gainer: 26 Loser: -4
+€100 >0.75< 9% on-increase => €20 Remain: 8 Transactions: 3 Gainer: 33 Loser: -4
+€100 >0.5< 10% on-increase => €20 Remain: 20 Transactions: 2 Gainer: 24 Loser: 11
+€100 >0.25< 9.5% on-increase => €19 Remain: 9 Transactions: 2 Gainer: 18 Loser: 22
+€100 >0.25< 10% on-increase => €21 Remain: 9 Transactions: 2 Gainer: 19 Loser: 24
+€100 >0.25< 9% on-increase => €23 Remain: 9 Transactions: 2 Gainer: 24 Loser: 22
+
+
+Started new trading with XDGEUR based on 5 mins time interval:
+
+
+Started new trading with FETEUR based on 5 mins time interval:
+
+
+Started new trading with TIAEUR based on 5 mins time interval:
+€100 >0.75< 9.5% on-increase => €15 Remain: 12 Transactions: 2 Gainer: 16 Loser: 13
+€100 >0.5< 8% on-increase => €14 Remain: 6 Transactions: 3 Gainer: 11 Loser: 21
+€100 >0.25< 9.5% on-increase => €13 Remain: 0 Transactions: 1 Gainer: 5 Loser: 30
+€100 >0.25< 8.5% on-increase => €13 Remain: 6 Transactions: 2 Gainer: 10 Loser: 21
+€100 >0.25< 5% on-increase => €19 Remain: 0 Transactions: 8 Gainer: 9 Loser: 40
+€100 >0.5< 8% high-drop-hard => €22 Remain: 6 Transactions: 3 Gainer: 18 Loser: 30
+
+
+Started new trading with SAFEEUR based on 5 mins time interval:
+€100 >1< 9.5% on-increase => €19 Remain: 22 Transactions: 1 Gainer: 30 Loser: -2
+€100 >1< 10% on-increase => €24 Remain: 23 Transactions: 1 Gainer: 38 Loser: -2
+€100 >0.75< 9.5% on-increase-hard => €24 Remain: 23 Transactions: 1 Gainer: 37 Loser: -1
+€100 >0.75< 9% high-drop => €25 Remain: 23 Transactions: 1 Gainer: 28 Loser: 18
+€100 >1< 10% high-drop-hard => €26 Remain: 23 Transactions: 1 Gainer: 33 Loser: 13
+
+
+Started new trading with ZECEUR based on 5 mins time interval:
+€100 >1< 6% high-drop => €11 Remain: 0 Transactions: 3 Gainer: 24 Loser: -15
+€100 >1< 6% high-drop-hard => €12 Remain: 0 Transactions: 3 Gainer: 25 Loser: -14
+
+
+Started new trading with MEMEEUR based on 5 mins time interval:
+€100 >1< 8% on-increase => €18 Remain: 3018 Transactions: 3 Gainer: 22 Loser: 9
+€100 >1< 6.5% high-drop-hard => €18 Remain: 0 Transactions: 3 Gainer: 24 Loser: 7
+€100 >0.75< 4.5% high-drop-hard => €17 Remain: 0 Transactions: 4 Gainer: 26 Loser: 0
+€100 >0.25< 4.5% high-drop-hard => €17 Remain: 0 Transactions: 3 Gainer: 22 Loser: 8
+€100 >1< 10% near-low => €19 Remain: 3018 Transactions: 3 Gainer: 21 Loser: 16
+€100 >1< 9.5% near-low => €20 Remain: 3018 Transactions: 3 Gainer: 20 Loser: 22
+€100 >1< 8% near-low => €23 Remain: 0 Transactions: 5 Gainer: 29 Loser: 11
+
+
+Started new trading with ACHEUR based on 5 mins time interval:
+€100 >1< 9% on-increase => €10 Remain: 1325 Transactions: 1 Gainer: 18 Loser: -5
+€100 >1< 5.5% on-increase => €12 Remain: 0 Transactions: 5 Gainer: 24 Loser: -12
+€100 >0.75< 5.5% on-increase => €13 Remain: 0 Transactions: 5 Gainer: 20 Loser: -2
+€100 >0.25< 4.5% near-low => €15 Remain: 0 Transactions: 7 Gainer: 23 Loser: 0
+
+
+Started new trading with MLNEUR based on 5 mins time interval:
+
+
+Started new trading with LUNAEUR based on 5 mins time interval:
+
+
+
+
+
+=========================== Down ===========================
+
+
+
+
+
+Started new trading with XRPEUR based on 5 mins time interval:
+€100 >1< 1.5% near-low => €5.5 Remain: 0 Transactions: 5
+€100 >1< 1.5% near-low-hard => €5.5 Remain: 0 Transactions: 5
+
+
+Started new trading with BSXEUR based on 5 mins time interval:
+€100 >0.25< 4% on-increase => €11.5 Remain: 0 Transactions: 4.5
+€100 >0.25< 4.5% on-increase => €10 Remain: 0 Transactions: 4
+€100 >0.25< 5% on-increase => €12 Remain: 0 Transactions: 4
+€100 >0.25< 5.5% on-increase => €12 Remain: 0 Transactions: 3.5
+€100 >0.5< 5% on-increase => €15 Remain: 0 Transactions: 4.5
+€100 >0.5< 5.5% on-increase => €14.5 Remain: 0 Transactions: 4
+€100 >0.75< 5% on-increase => €13.5 Remain: 0 Transactions: 5
+€100 >0.75< 5.5% on-increase => €13.5 Remain: 0 Transactions: 4.5
+€100 >0.75< 6% on-increase => €12 Remain: 0 Transactions: 4
+€100 >1< 5.5% on-increase => €13.5 Remain: 0 Transactions: 4.5
+€100 >1< 6% on-increase => €14 Remain: 0 Transactions: 4
+€100 >0.75< 8.5% high-drop-hard => €13 Remain: 0 Transactions: 1.5
+€100 >0.5< 7.5% near-low => €13.5 Remain: 0 Transactions: 3.5
+€100 >0.5< 8% near-low => €12 Remain: 0 Transactions: 3
+€100 >0.75< 6% near-low => €11 Remain: 0 Transactions: 3.5
+€100 >0.75< 7.5% near-low => €15 Remain: 0 Transactions: 3.5
+€100 >0.75< 8% near-low => €14 Remain: 0 Transactions: 3
+€100 >1< 7.5% near-low => €20.5 Remain: 0 Transactions: 3.5
+€100 >1< 8% near-low => €21 Remain: 0 Transactions: 3.5
+€100 >1< 7% near-low-hard => €20 Remain: 0 Transactions: 3
+€100 >1< 7.5% near-low-hard => €24.5 Remain: 0 Transactions: 3.5
+€100 >1< 8% near-low-hard => €24.5 Remain: 0 Transactions: 3.5
+
+
+Started new trading with RENDEREUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €7 Remain: 0 Transactions: 4.5
+€100 >0.5< 5% on-increase => €7 Remain: 0 Transactions: 5
+€100 >0.5< 6% on-increase => €8.5 Remain: 0 Transactions: 3.5
+€100 >0.5< 6.5% on-increase => €8 Remain: 0 Transactions: 2.5
+€100 >0.75< 4.5% on-increase => €10 Remain: 10.5 Transactions: 6.5
+€100 >0.75< 6.5% on-increase => €8.5 Remain: 0 Transactions: 3
+€100 >0.75< 7% on-increase => €12.5 Remain: 0 Transactions: 3
+€100 >0.75< 3% on-increase-hard => €14 Remain: 0 Transactions: 13
+€100 >0.75< 7% high-drop => €13 Remain: 0 Transactions: 3
+€100 >1< 3% high-drop => €12.5 Remain: 0 Transactions: 10.5
+
+
+Started new trading with ZEUSEUR based on 5 mins time interval:
+€100 >0.5< 7.5% on-increase => €6 Remain: 0 Transactions: 3.5
+€100 >0.5< 8.5% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 9% on-increase => €5 Remain: 0 Transactions: 1.5
+€100 >0.5< 9.5% on-increase => €7.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 9% on-increase => €9 Remain: 0 Transactions: 3
+€100 >0.75< 9.5% on-increase => €18.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 9.5% high-drop => €18.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 2.5% near-low-hard => €24.5 Remain: 0 Transactions: 5
+
+
+Started new trading with ICPEUR based on 5 mins time interval:
+€100 >1< 4.5% on-increase => €7.5 Remain: 6.5 Transactions: 5.5
+€100 >1< 5% on-increase-hard => €8 Remain: 7 Transactions: 4.5
+€100 >0.75< 3.5% high-drop => €7.5 Remain: 6.5 Transactions: 7.5
+€100 >0.75< 4.5% high-drop => €7.5 Remain: 6.5 Transactions: 5
+€100 >0.25< 2% high-drop-hard => €12.5 Remain: 0 Transactions: 7.5
+€100 >1< 5% near-low-hard => €11 Remain: 6.5 Transactions: 6
+€100 >1< 5.5% near-low-hard => €10 Remain: 6.5 Transactions: 5.5
+
+
+Started new trading with ARBEUR based on 5 mins time interval:
+€100 >0.25< 3% on-increase => €5 Remain: 0 Transactions: 6.5
+€100 >0.25< 3.5% on-increase => €7.5 Remain: 0 Transactions: 5
+€100 >0.5< 5.5% on-increase => €6.5 Remain: 0 Transactions: 2
+€100 >0.5< 6% on-increase => €7.5 Remain: 0 Transactions: 2
+€100 >0.75< 5.5% on-increase => €7 Remain: 103.5 Transactions: 1.5
+€100 >0.75< 6% on-increase => €8.5 Remain: 0 Transactions: 2
+€100 >0.25< 3% high-drop => €8.5 Remain: 0 Transactions: 6
+€100 >0.25< 3.5% high-drop => €7.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 6% high-drop => €6.5 Remain: 0 Transactions: 2
+€100 >0.75< 5.5% high-drop => €6.5 Remain: 103.5 Transactions: 1.5
+€100 >0.75< 6% high-drop => €8 Remain: 0 Transactions: 2
+€100 >0.25< 3.5% high-drop-hard => €8 Remain: 0 Transactions: 3
+€100 >0.5< 5% high-drop-hard => €8 Remain: 0 Transactions: 2.5
+€100 >0.25< 4.5% near-low => €6.5 Remain: 0 Transactions: 5
+€100 >0.25< 5% near-low => €6 Remain: 0 Transactions: 3.5
+€100 >0.25< 5.5% near-low => €8.5 Remain: 0 Transactions: 3
+€100 >0.25< 6.5% near-low => €7.5 Remain: 0 Transactions: 2
+€100 >0.5< 6.5% near-low => €7.5 Remain: 0 Transactions: 3
+€100 >0.5< 7.5% near-low => €6.5 Remain: 0 Transactions: 2
+€100 >0.5< 8% near-low => €6.5 Remain: 0 Transactions: 2
+€100 >0.75< 6.5% near-low => €11.5 Remain: 103.5 Transactions: 3
+€100 >0.75< 6.5% near-low-hard => €12 Remain: 103.5 Transactions: 3
+
+
+Started new trading with GRTEUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase => €5 Remain: 0 Transactions: 3
+€100 >0.5< 6% on-increase => €5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6% on-increase => €5 Remain: 354.5 Transactions: 2.5
+€100 >0.75< 7% on-increase => €6.5 Remain: 0 Transactions: 2
+€100 >1< 7% on-increase => €5 Remain: 361.5 Transactions: 2
+€100 >0.5< 5.5% high-drop => €5 Remain: 0 Transactions: 3
+€100 >0.75< 7% high-drop => €6.5 Remain: 0 Transactions: 2
+€100 >0.25< 2% high-drop-hard => €6 Remain: 0 Transactions: 4
+€100 >0.25< 5% high-drop-hard => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 6.5% high-drop-hard => €6 Remain: 0 Transactions: 2
+€100 >1< 2% high-drop-hard => €6 Remain: 0 Transactions: 2.5
+€100 >1< 7% high-drop-hard => €5.5 Remain: 361.5 Transactions: 1.5
+
+
+Started new trading with RAREEUR based on 5 mins time interval:
+€100 >0.25< 6.5% on-increase => €5 Remain: 0 Transactions: 3
+€100 >0.25< 6% high-drop => €8 Remain: 0 Transactions: 4.5
+€100 >0.25< 6.5% high-drop => €11 Remain: 0 Transactions: 2.5
+€100 >1< 3.5% high-drop-hard => €11.5 Remain: 0 Transactions: 4
+
+
+Started new trading with STRKEUR based on 5 mins time interval:
+€100 >0.25< 3% on-increase => €11 Remain: 0 Transactions: 13
+€100 >0.25< 4% on-increase => €14.5 Remain: 0 Transactions: 9
+€100 >0.25< 4.5% on-increase => €14.5 Remain: 0 Transactions: 6.5
+€100 >0.75< 4% on-increase => €15 Remain: 0 Transactions: 10
+€100 >1< 5% on-increase => €13.5 Remain: 0 Transactions: 7.5
+€100 >1< 7.5% on-increase => €12 Remain: 0 Transactions: 3
+€100 >0.25< 5% on-increase-hard => €12.5 Remain: 0 Transactions: 5
+€100 >0.5< 7.5% on-increase-hard => €11.5 Remain: 0 Transactions: 3
+€100 >0.75< 4.5% on-increase-hard => €11.5 Remain: 0 Transactions: 8.5
+€100 >0.75< 5% on-increase-hard => €10.5 Remain: 0 Transactions: 8
+€100 >0.75< 5.5% on-increase-hard => €14.5 Remain: 0 Transactions: 6.5
+€100 >1< 8% on-increase-hard => €15 Remain: 149.5 Transactions: 2.5
+€100 >0.25< 4% high-drop => €18.5 Remain: 0 Transactions: 8.5
+€100 >0.25< 4.5% high-drop => €21 Remain: 0 Transactions: 6
+€100 >0.75< 7.5% high-drop-hard => €20.5 Remain: 0 Transactions: 3
+
+
+Started new trading with LUNA2EUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase => €6.5 Remain: 0 Transactions: 4.5
+€100 >1< 5% high-drop => €8 Remain: 0 Transactions: 5
+€100 >0.25< 3% high-drop-hard => €10.5 Remain: 0 Transactions: 3
+€100 >0.5< 3% high-drop-hard => €10.5 Remain: 0 Transactions: 3
+€100 >0.5< 3.5% high-drop-hard => €11.5 Remain: 0 Transactions: 3
+€100 >0.75< 5.5% high-drop-hard => €11.5 Remain: 0 Transactions: 2
+€100 >0.5< 6% near-low => €12.5 Remain: 0 Transactions: 5.5
+€100 >1< 3% near-low => €14 Remain: 151.5 Transactions: 6
+€100 >0.5< 6% near-low-hard => €13.5 Remain: 0 Transactions: 5.5
+€100 >1< 3% near-low-hard => €12.5 Remain: 151.5 Transactions: 5.5
+
+
+Started new trading with DRIFTEUR based on 5 mins time interval:
+€100 >1< 10% on-increase => €6.5 Remain: 0 Transactions: 1
+€100 >1< 10% high-drop => €6.5 Remain: 0 Transactions: 1
+
+
+Started new trading with POLEUR based on 5 mins time interval:
+€100 >0.25< 5.5% high-drop => €5 Remain: 0 Transactions: 1.5
+€100 >0.25< 5.5% high-drop-hard => €5 Remain: 0 Transactions: 1.5
+
+
+Started new trading with MNTEUR based on 5 mins time interval:
+€100 >0.25< 3.5% on-increase => €6 Remain: 0 Transactions: 3
+€100 >0.5< 3.5% on-increase => €6.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 9% near-low => €5.5 Remain: 0 Transactions: 1
+€100 >1< 9% near-low => €6 Remain: 0 Transactions: 1
+€100 >0.75< 9% near-low-hard => €5.5 Remain: 0 Transactions: 1
+€100 >1< 9% near-low-hard => €7 Remain: 0 Transactions: 1
+
+
+Started new trading with XRTEUR based on 5 mins time interval:
+€100 >0.5< 9% on-increase => €5 Remain: 0 Transactions: 2
+€100 >0.5< 9.5% on-increase => €5 Remain: 0 Transactions: 1.5
+€100 >0.5< 1.5% high-drop => €5.5 Remain: 20 Transactions: 2
+€100 >0.5< 2.5% high-drop => €12 Remain: 20.5 Transactions: 3
+€100 >0.75< 2.5% high-drop => €12 Remain: 20.5 Transactions: 3
+
+
+Started new trading with KINEUR based on 5 mins time interval:
+€100 >0.25< 9% near-low => €5 Remain: 0 Transactions: 0.5
+€100 >0.25< 9.5% near-low => €5 Remain: 0 Transactions: 0.5
+€100 >0.25< 10% near-low => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 9% near-low => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 9.5% near-low => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 10% near-low => €5 Remain: 0 Transactions: 0.5
+€100 >0.25< 9% near-low-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 9.5% near-low-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 10% near-low-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.5< 9% near-low-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.5< 9.5% near-low-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.5< 10% near-low-hard => €6.5 Remain: 0 Transactions: 0.5
+
+
+Started new trading with ZROEUR based on 5 mins time interval:
+€100 >0.25< 2% high-drop-hard => €8 Remain: 0 Transactions: 5.5
+€100 >0.5< 3.5% high-drop-hard => €9 Remain: 0 Transactions: 6
+€100 >1< 4% high-drop-hard => €8 Remain: 0 Transactions: 4.5
+€100 >1< 4.5% high-drop-hard => €8.5 Remain: 0 Transactions: 4
+€100 >0.5< 2% near-low-hard => €8.5 Remain: 0 Transactions: 8.5
+€100 >0.75< 2.5% near-low-hard => €9.5 Remain: 0 Transactions: 6
+
+
+Started new trading with DASHEUR based on 5 mins time interval:
+€100 >0.75< 2.5% on-increase => €5 Remain: 0 Transactions: 7.5
+€100 >0.75< 3.5% on-increase => €5 Remain: 0 Transactions: 4
+€100 >0.75< 4.5% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 5.5% on-increase => €7.5 Remain: 0 Transactions: 1.5
+€100 >1< 4.5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >1< 5% on-increase => €6.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% on-increase => €7.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% on-increase-hard => €7 Remain: 2 Transactions: 1
+€100 >0.75< 5.5% on-increase-hard => €7 Remain: 2 Transactions: 1
+€100 >1< 5% on-increase-hard => €6 Remain: 2 Transactions: 1.5
+€100 >1< 5.5% on-increase-hard => €7 Remain: 2 Transactions: 1.5
+€100 >0.75< 5.5% high-drop => €7 Remain: 0 Transactions: 1.5
+€100 >1< 4.5% high-drop => €7 Remain: 0 Transactions: 2.5
+€100 >1< 5% high-drop => €6.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% high-drop => €7.5 Remain: 0 Transactions: 1.5
+€100 >1< 4.5% high-drop-hard => €7.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6% near-low => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 6.5% near-low => €7.5 Remain: 0 Transactions: 1.5
+€100 >1< 6% near-low => €7.5 Remain: 0 Transactions: 2
+€100 >1< 6.5% near-low => €9 Remain: 0 Transactions: 2
+€100 >0.75< 6.5% near-low-hard => €7.5 Remain: 0 Transactions: 1.5
+€100 >1< 6% near-low-hard => €7.5 Remain: 0 Transactions: 2
+€100 >1< 6.5% near-low-hard => €9 Remain: 0 Transactions: 2
+
+
+Started new trading with BOBAEUR based on 5 mins time interval:
+€100 >0.75< 7% on-increase => €6.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 5% on-increase-hard => €6 Remain: 293 Transactions: 3.5
+€100 >0.75< 5.5% on-increase-hard => €6.5 Remain: 293 Transactions: 3.5
+€100 >0.75< 7% high-drop => €6.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 7% high-drop-hard => €6 Remain: 0 Transactions: 2.5
+€100 >1< 2.5% high-drop-hard => €8.5 Remain: 0 Transactions: 5.5
+€100 >1< 3% high-drop-hard => €7 Remain: 0 Transactions: 4
+€100 >1< 6% high-drop-hard => €9 Remain: 0 Transactions: 2.5
+
+
+Started new trading with TOKEEUR based on 5 mins time interval:
+
+
+Started new trading with CVXEUR based on 5 mins time interval:
+€100 >0.75< 5% on-increase => €6.5 Remain: 0 Transactions: 3.5
+€100 >1< 5% on-increase => €5.5 Remain: 0 Transactions: 3.5
+€100 >1< 5.5% on-increase => €7 Remain: 0 Transactions: 3.5
+€100 >1< 6% on-increase => €7.5 Remain: 0 Transactions: 2.5
+€100 >1< 6.5% on-increase => €8.5 Remain: 35.5 Transactions: 1.5
+€100 >1< 6.5% on-increase-hard => €7.5 Remain: 35 Transactions: 2.5
+€100 >1< 6.5% high-drop => €7.5 Remain: 35 Transactions: 1.5
+€100 >1< 4.5% high-drop-hard => €7 Remain: 0 Transactions: 1.5
+€100 >1< 5% high-drop-hard => €7.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 6.5% near-low => €6 Remain: 0 Transactions: 3.5
+€100 >0.75< 7% near-low => €5.5 Remain: 0 Transactions: 3
+€100 >1< 6.5% near-low => €7.5 Remain: 0 Transactions: 3
+€100 >1< 7.5% near-low => €6.5 Remain: 0 Transactions: 2.5
+€100 >1< 8% near-low => €9 Remain: 35.5 Transactions: 2.5
+€100 >1< 6.5% near-low-hard => €9 Remain: 0 Transactions: 3
+€100 >1< 8% near-low-hard => €9 Remain: 35.5 Transactions: 2.5
+
+
+Started new trading with RARIEUR based on 5 mins time interval:
+€100 >0.5< 2% high-drop => €6 Remain: 0 Transactions: 2.5
+€100 >0.5< 2.5% high-drop => €8.5 Remain: 0 Transactions: 3
+€100 >0.75< 2% high-drop => €8 Remain: 31.5 Transactions: 2.5
+€100 >0.75< 2.5% high-drop => €7.5 Remain: 0 Transactions: 2
+€100 >1< 2% high-drop => €8.5 Remain: 0 Transactions: 3
+€100 >0.5< 3.5% near-low => €8.5 Remain: 30.5 Transactions: 2.5
+€100 >0.5< 4% near-low => €7.5 Remain: 30.5 Transactions: 2
+€100 >0.5< 4.5% near-low => €6.5 Remain: 30.5 Transactions: 1.5
+€100 >0.75< 3.5% near-low => €14 Remain: 30.5 Transactions: 3.5
+€100 >0.75< 3.5% near-low-hard => €14 Remain: 30.5 Transactions: 3.5
+
+
+Started new trading with NYMEUR based on 5 mins time interval:
+
+
+Started new trading with JUNOEUR based on 5 mins time interval:
+€100 >0.25< 3.5% near-low => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 4.5% near-low => €5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5% near-low => €6 Remain: 0 Transactions: 2.5
+€100 >0.5< 5.5% near-low => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 6% near-low => €5 Remain: 0 Transactions: 2.5
+€100 >0.25< 3.5% near-low-hard => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 4.5% near-low-hard => €5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5% near-low-hard => €5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5.5% near-low-hard => €5.5 Remain: 0 Transactions: 2
+
+
+Started new trading with KINTEUR based on 5 mins time interval:
+€100 >0.5< 4.5% near-low-hard => €5.5 Remain: 0 Transactions: 1
+€100 >0.5< 5% near-low-hard => €5.5 Remain: 0 Transactions: 1
+€100 >0.5< 5.5% near-low-hard => €5.5 Remain: 0 Transactions: 1
+€100 >0.75< 4.5% near-low-hard => €5.5 Remain: 0 Transactions: 1
+€100 >0.75< 5% near-low-hard => €5 Remain: 191.5 Transactions: 1
+€100 >0.75< 5.5% near-low-hard => €5 Remain: 191.5 Transactions: 1
+
+
+Started new trading with PSTAKEEUR based on 5 mins time interval:
+€100 >1< 4.5% high-drop => €5.5 Remain: 1364 Transactions: 2
+
+
+Started new trading with EULEUR based on 5 mins time interval:
+€100 >0.25< 5% on-increase => €6 Remain: 0 Transactions: 1
+€100 >0.25< 5.5% on-increase => €6.5 Remain: 0 Transactions: 1
+€100 >0.25< 6% on-increase => €7 Remain: 0 Transactions: 1
+€100 >0.5< 5.5% on-increase => €12 Remain: 0 Transactions: 1.5
+€100 >0.5< 6% on-increase => €14 Remain: 0 Transactions: 1.5
+€100 >0.5< 6.5% on-increase => €14.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 7% on-increase => €15 Remain: 0 Transactions: 1.5
+€100 >0.5< 6.5% high-drop => €14.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 7% high-drop => €15 Remain: 0 Transactions: 1.5
+€100 >0.5< 6.5% high-drop-hard => €15 Remain: 0 Transactions: 1
+€100 >0.5< 7% high-drop-hard => €15 Remain: 0 Transactions: 1
+
+
+Started new trading with GALEUR based on 5 mins time interval:
+
+
+Started new trading with ADAEUR based on 5 mins time interval:
+€100 >0.75< 5.5% on-increase => €8 Remain: 0 Transactions: 2
+€100 >1< 7% on-increase => €7 Remain: 0 Transactions: 1.5
+€100 >0.5< 5.5% on-increase-hard => €7 Remain: 0 Transactions: 2
+€100 >0.75< 5.5% on-increase-hard => €12 Remain: 0 Transactions: 2.5
+€100 >0.75< 6% on-increase-hard => €11 Remain: 0 Transactions: 2.5
+€100 >0.75< 7% near-low => €12 Remain: 0 Transactions: 2.5
+€100 >1< 8% near-low => €11.5 Remain: 0 Transactions: 2
+€100 >0.75< 7% near-low-hard => €12 Remain: 0 Transactions: 2.5
+€100 >1< 8% near-low-hard => €11.5 Remain: 0 Transactions: 2
+
+
+Started new trading with PRIMEEUR based on 5 mins time interval:
+€100 >0.25< 5% on-increase => €14 Remain: 0 Transactions: 5.5
+€100 >0.5< 5% on-increase => €19 Remain: 0 Transactions: 8
+€100 >0.5< 5.5% on-increase => €20.5 Remain: 0 Transactions: 8
+€100 >0.75< 5.5% on-increase => €23 Remain: 0 Transactions: 8.5
+€100 >0.25< 5% high-drop => €22.5 Remain: 0 Transactions: 6
+€100 >0.5< 5% high-drop => €26 Remain: 0 Transactions: 8.5
+€100 >0.5< 5.5% high-drop => €27.5 Remain: 0 Transactions: 8.5
+€100 >0.75< 5.5% high-drop => €27 Remain: 0 Transactions: 9
+€100 >0.75< 7% near-low => €33.5 Remain: 0 Transactions: 7.5
+€100 >0.75< 7% near-low-hard => €34 Remain: 7 Transactions: 6.5
+
+
+Started new trading with NEAREUR based on 5 mins time interval:
+€100 >0.5< 7% on-increase => €8.5 Remain: 0 Transactions: 2
+€100 >0.75< 7% on-increase => €10 Remain: 0 Transactions: 2
+€100 >0.75< 7% high-drop => €9 Remain: 12.5 Transactions: 1.5
+€100 >1< 9% high-drop-hard => €8 Remain: 12.5 Transactions: 1
+€100 >1< 9.5% high-drop-hard => €7 Remain: 12.5 Transactions: 0.5
+€100 >1< 10% high-drop-hard => €7 Remain: 12.5 Transactions: 0.5
+€100 >1< 2.5% near-low => €7 Remain: 0 Transactions: 3.5
+€100 >0.5< 1.5% near-low-hard => €5.5 Remain: 0 Transactions: 5
+€100 >0.75< 2% near-low-hard => €5 Remain: 0 Transactions: 4
+€100 >0.75< 8.5% near-low-hard => €5 Remain: 12.5 Transactions: 2
+€100 >0.75< 9% near-low-hard => €8.5 Remain: 0 Transactions: 2
+
+
+Started new trading with CRVEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase => €12.5 Remain: 0 Transactions: 4
+€100 >1< 5.5% on-increase => €11 Remain: 0 Transactions: 3
+€100 >0.25< 3.5% on-increase-hard => €10 Remain: 0 Transactions: 5.5
+€100 >0.5< 4.5% on-increase-hard => €13.5 Remain: 0 Transactions: 4
+€100 >0.5< 5% on-increase-hard => €14 Remain: 0 Transactions: 3.5
+€100 >0.75< 5.5% on-increase-hard => €13.5 Remain: 229 Transactions: 2.5
+€100 >0.5< 4.5% high-drop => €12 Remain: 0 Transactions: 4
+€100 >0.5< 5% high-drop => €11 Remain: 0 Transactions: 3
+€100 >1< 5.5% high-drop => €11 Remain: 0 Transactions: 3
+€100 >0.25< 4% near-low => €11 Remain: 0 Transactions: 6
+€100 >0.5< 5.5% near-low => €13 Remain: 0 Transactions: 4
+€100 >0.5< 6% near-low => €13.5 Remain: 0 Transactions: 3.5
+€100 >0.5< 6.5% near-low => €12.5 Remain: 0 Transactions: 3
+€100 >0.75< 6% near-low => €11.5 Remain: 0 Transactions: 4
+€100 >0.75< 6.5% near-low => €10.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 7.5% near-low => €10 Remain: 0 Transactions: 2
+€100 >1< 7% near-low => €11 Remain: 0 Transactions: 2.5
+€100 >1< 8% near-low => €10 Remain: 232.5 Transactions: 1.5
+€100 >0.25< 4% near-low-hard => €12 Remain: 0 Transactions: 6
+€100 >0.5< 5.5% near-low-hard => €13.5 Remain: 0 Transactions: 4
+€100 >0.5< 6% near-low-hard => €13.5 Remain: 0 Transactions: 3.5
+€100 >0.5< 6.5% near-low-hard => €12.5 Remain: 0 Transactions: 3
+
+
+Started new trading with DOTEUR based on 5 mins time interval:
+€100 >0.75< 5.5% on-increase-hard => €5 Remain: 13.5 Transactions: 1.5
+
+
+Started new trading with FILEUR based on 5 mins time interval:
+€100 >0.25< 3.5% on-increase => €6.5 Remain: 0 Transactions: 3.5
+€100 >0.25< 4% on-increase => €5 Remain: 0 Transactions: 2
+€100 >0.5< 4% on-increase => €6 Remain: 0 Transactions: 3.5
+€100 >0.5< 4.5% on-increase => €9 Remain: 0 Transactions: 3
+€100 >0.5< 5% on-increase => €8.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5.5% on-increase => €7.5 Remain: 0 Transactions: 2
+€100 >0.5< 6% on-increase => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 4.5% on-increase => €6.5 Remain: 0 Transactions: 3
+€100 >0.75< 5% on-increase => €6 Remain: 0 Transactions: 2.5
+€100 >0.75< 5.5% on-increase => €8 Remain: 0 Transactions: 2
+€100 >0.75< 6% on-increase => €10 Remain: 0 Transactions: 2
+€100 >1< 6.5% on-increase => €8.5 Remain: 0 Transactions: 2
+€100 >1< 7% on-increase => €9.5 Remain: 0 Transactions: 2
+€100 >0.25< 4% on-increase-hard => €8.5 Remain: 0 Transactions: 3.5
+€100 >0.25< 4.5% on-increase-hard => €9 Remain: 0 Transactions: 2.5
+€100 >0.5< 4% on-increase-hard => €8.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 4.5% on-increase-hard => €12 Remain: 0 Transactions: 3
+€100 >1< 5% on-increase-hard => €11 Remain: 0 Transactions: 3
+€100 >0.25< 3% high-drop => €9.5 Remain: 0 Transactions: 6.5
+€100 >0.5< 4.5% high-drop => €8.5 Remain: 0 Transactions: 3
+€100 >0.5< 5% high-drop => €8.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5.5% high-drop => €7 Remain: 0 Transactions: 2
+€100 >0.5< 6% high-drop => €6 Remain: 0 Transactions: 1.5
+€100 >0.75< 4.5% high-drop => €6 Remain: 0 Transactions: 3
+€100 >0.75< 5% high-drop => €6 Remain: 0 Transactions: 2.5
+€100 >0.75< 5.5% high-drop => €7.5 Remain: 0 Transactions: 2
+€100 >0.75< 6% high-drop => €9.5 Remain: 0 Transactions: 2
+€100 >0.75< 7% high-drop => €8.5 Remain: 0 Transactions: 1.5
+€100 >1< 6.5% high-drop => €8.5 Remain: 0 Transactions: 2
+€100 >1< 7% high-drop => €9.5 Remain: 0 Transactions: 2
+€100 >0.75< 6% high-drop-hard => €8.5 Remain: 0 Transactions: 1.5
+€100 >1< 6% high-drop-hard => €9 Remain: 0 Transactions: 2
+€100 >0.5< 6.5% near-low => €8.5 Remain: 0 Transactions: 2
+€100 >0.5< 7.5% near-low => €7.5 Remain: 0 Transactions: 2
+€100 >0.75< 6.5% near-low => €12 Remain: 0 Transactions: 2.5
+€100 >0.75< 8% near-low => €11 Remain: 0 Transactions: 2
+€100 >0.75< 8.5% near-low => €10 Remain: 0 Transactions: 1.5
+€100 >0.75< 9% near-low => €10.5 Remain: 0 Transactions: 1.5
+€100 >1< 8.5% near-low => €11.5 Remain: 0 Transactions: 2
+€100 >1< 9% near-low => €11 Remain: 16 Transactions: 1.5
+€100 >0.75< 6.5% near-low-hard => €12 Remain: 0 Transactions: 2.5
+€100 >0.75< 8% near-low-hard => €10.5 Remain: 0 Transactions: 2
+€100 >0.75< 8.5% near-low-hard => €9.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 9% near-low-hard => €10 Remain: 0 Transactions: 1.5
+€100 >1< 8.5% near-low-hard => €12.5 Remain: 0 Transactions: 2
+€100 >1< 9% near-low-hard => €12 Remain: 16 Transactions: 1.5
+
+
+Started new trading with CVCEUR based on 5 mins time interval:
+€100 >0.25< 3% on-increase => €5.5 Remain: 399 Transactions: 8
+€100 >0.25< 3.5% on-increase => €8.5 Remain: 416 Transactions: 7.5
+€100 >0.25< 4% on-increase => €11.5 Remain: 416 Transactions: 6.5
+€100 >0.5< 4% on-increase => €15.5 Remain: 416 Transactions: 8.5
+€100 >0.75< 4% on-increase => €17.5 Remain: 416 Transactions: 9.5
+€100 >1< 4% on-increase => €16.5 Remain: 416 Transactions: 9
+€100 >1< 5% on-increase => €18.5 Remain: 407.5 Transactions: 7
+€100 >0.25< 5.5% on-increase-hard => €18 Remain: 412 Transactions: 3
+€100 >0.75< 6.5% on-increase-hard => €19 Remain: 0 Transactions: 4.5
+€100 >1< 7% on-increase-hard => €18.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 4.5% high-drop => €21 Remain: 407.5 Transactions: 6.5
+€100 >0.5< 5.5% near-low => €22 Remain: 407.5 Transactions: 5
+€100 >1< 6.5% near-low => €21.5 Remain: 410.5 Transactions: 4
+€100 >0.5< 5.5% near-low-hard => €22 Remain: 407.5 Transactions: 5
+€100 >0.75< 7.5% near-low-hard => €22 Remain: 413.5 Transactions: 3
+€100 >1< 6% near-low-hard => €21 Remain: 407.5 Transactions: 4.5
+€100 >1< 6.5% near-low-hard => €26.5 Remain: 410.5 Transactions: 4
+
+
+Started new trading with OCEANEUR based on 5 mins time interval:
+€100 >0.5< 6.5% on-increase-hard => €5 Remain: 100.5 Transactions: 2
+€100 >0.5< 2.5% high-drop-hard => €6.5 Remain: 0 Transactions: 2
+€100 >0.5< 5.5% high-drop-hard => €6.5 Remain: 0 Transactions: 1
+€100 >0.75< 5% high-drop-hard => €5.5 Remain: 0 Transactions: 1
+€100 >0.75< 5.5% high-drop-hard => €15 Remain: 0 Transactions: 2.5
+
+
+Started new trading with TRUEUR based on 5 mins time interval:
+€100 >0.5< 7% on-increase => €5 Remain: 0 Transactions: 3
+€100 >0.5< 9% on-increase => €7 Remain: 0 Transactions: 1.5
+€100 >0.75< 8.5% on-increase => €7 Remain: 0 Transactions: 1.5
+€100 >0.75< 9% on-increase => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 9.5% on-increase => €7.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 9.5% high-drop => €7.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 8.5% high-drop-hard => €6 Remain: 0 Transactions: 1
+€100 >0.75< 9% high-drop-hard => €5 Remain: 0 Transactions: 1
+€100 >0.75< 9.5% high-drop-hard => €7 Remain: 0 Transactions: 1.5
+€100 >1< 2.5% near-low-hard => €5.5 Remain: 0 Transactions: 2.5
+
+
+Started new trading with HONEYEUR based on 5 mins time interval:
+€100 >0.75< 7% on-increase => €9.5 Remain: 0 Transactions: 3.5
+€100 >1< 7.5% on-increase => €12 Remain: 0 Transactions: 3
+€100 >1< 8.5% on-increase => €13 Remain: 0 Transactions: 1.5
+€100 >1< 7.5% on-increase-hard => €13 Remain: 0 Transactions: 3
+€100 >1< 7.5% high-drop => €12 Remain: 0 Transactions: 3
+€100 >1< 8.5% high-drop => €13 Remain: 0 Transactions: 1.5
+€100 >1< 7.5% high-drop-hard => €11.5 Remain: 0 Transactions: 2.5
+€100 >1< 8.5% high-drop-hard => €13.5 Remain: 0 Transactions: 1.5
+
+
+Started new trading with AGLDEUR based on 5 mins time interval:
+€100 >0.25< 2.5% on-increase => €10.5 Remain: 0 Transactions: 10.5
+€100 >0.75< 5% on-increase => €11.5 Remain: 0 Transactions: 4.5
+€100 >0.25< 3.5% on-increase-hard => €10.5 Remain: 0 Transactions: 7.5
+€100 >0.75< 5% high-drop => €11.5 Remain: 0 Transactions: 4.5
+€100 >1< 8% high-drop => €11 Remain: 0 Transactions: 1.5
+€100 >0.5< 5% high-drop-hard => €9.5 Remain: 0 Transactions: 2
+€100 >0.75< 5% high-drop-hard => €12.5 Remain: 0 Transactions: 2.5
+€100 >0.25< 3.5% near-low-hard => €11 Remain: 0 Transactions: 9.5
+€100 >0.25< 4% near-low-hard => €9.5 Remain: 0 Transactions: 6.5
+€100 >0.25< 5% near-low-hard => €9.5 Remain: 0 Transactions: 5
+€100 >0.5< 1.5% near-low-hard => €9.5 Remain: 50.5 Transactions: 7.5
+€100 >0.5< 3.5% near-low-hard => €9 Remain: 0 Transactions: 9.5
+€100 >0.5< 4% near-low-hard => €10 Remain: 0 Transactions: 8.5
+€100 >0.5< 6.5% near-low-hard => €10 Remain: 0 Transactions: 3.5
+€100 >0.75< 7% near-low-hard => €9.5 Remain: 52.5 Transactions: 3
+€100 >0.75< 7.5% near-low-hard => €9 Remain: 0 Transactions: 3
+€100 >0.75< 10% near-low-hard => €8.5 Remain: 55 Transactions: 1.5
+€100 >1< 5% near-low-hard => €10.5 Remain: 0 Transactions: 5
+
+
+Started new trading with XMREUR based on 5 mins time interval:
+€100 >0.5< 4% on-increase => €6 Remain: 0 Transactions: 2
+€100 >0.75< 4% on-increase => €6.5 Remain: 0 Transactions: 3
+€100 >0.75< 4.5% on-increase => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 4% on-increase-hard => €7 Remain: 0 Transactions: 2.5
+€100 >0.75< 4% on-increase-hard => €5.5 Remain: 0 Transactions: 3
+€100 >0.75< 5% on-increase-hard => €5.5 Remain: 0 Transactions: 1
+€100 >0.75< 4% high-drop => €5 Remain: 0 Transactions: 2.5
+€100 >0.5< 2.5% high-drop-hard => €9 Remain: 0 Transactions: 5
+
+
+Started new trading with STGEUR based on 5 mins time interval:
+€100 >0.5< 4% on-increase => €6 Remain: 0 Transactions: 4
+€100 >0.75< 4% on-increase => €5 Remain: 0 Transactions: 4
+€100 >0.75< 4.5% on-increase => €7 Remain: 0 Transactions: 3
+€100 >0.25< 3% high-drop => €7.5 Remain: 0 Transactions: 5.5
+€100 >0.25< 3.5% high-drop => €7 Remain: 0 Transactions: 3.5
+€100 >0.75< 3.5% high-drop-hard => €6 Remain: 198 Transactions: 2.5
+€100 >1< 4% high-drop-hard => €6.5 Remain: 198 Transactions: 2
+€100 >0.25< 4.5% near-low => €5.5 Remain: 0 Transactions: 3.5
+€100 >0.25< 5% near-low => €7 Remain: 0 Transactions: 3.5
+€100 >0.25< 4.5% near-low-hard => €6 Remain: 0 Transactions: 3.5
+€100 >0.25< 5% near-low-hard => €9 Remain: 0 Transactions: 3.5
+
+
+Started new trading with EWTEUR based on 5 mins time interval:
+
+
+Started new trading with BICOEUR based on 5 mins time interval:
+€100 >0.75< 7.5% on-increase => €5.5 Remain: 303 Transactions: 2
+€100 >0.75< 8% on-increase => €7.5 Remain: 303 Transactions: 2
+€100 >0.75< 8% high-drop => €7 Remain: 303 Transactions: 2
+€100 >0.5< 10% near-low => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 9% near-low => €7.5 Remain: 308 Transactions: 2
+€100 >0.75< 9.5% near-low => €8 Remain: 308 Transactions: 2
+€100 >0.75< 10% near-low => €6.5 Remain: 308 Transactions: 1.5
+€100 >1< 10% near-low => €6.5 Remain: 308 Transactions: 2
+€100 >0.75< 9% near-low-hard => €7 Remain: 308 Transactions: 2
+€100 >0.75< 9.5% near-low-hard => €7.5 Remain: 308 Transactions: 2
+€100 >0.75< 10% near-low-hard => €6.5 Remain: 308 Transactions: 1.5
+€100 >1< 2% near-low-hard => €5.5 Remain: 0 Transactions: 3
+€100 >1< 10% near-low-hard => €7 Remain: 308 Transactions: 2
+
+
+Started new trading with LPTEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase => €6 Remain: 0 Transactions: 7.5
+€100 >1< 7% on-increase-hard => €6.5 Remain: 4.5 Transactions: 2.5
+€100 >0.5< 4.5% high-drop => €5.5 Remain: 0 Transactions: 7.5
+€100 >1< 3.5% high-drop => €6.5 Remain: 4.5 Transactions: 7.5
+€100 >0.25< 2% high-drop-hard => €6 Remain: 4.5 Transactions: 5.5
+€100 >0.25< 4.5% high-drop-hard => €13.5 Remain: 0 Transactions: 3.5
+
+
+Started new trading with FLREUR based on 5 mins time interval:
+€100 >0.25< 5.5% on-increase => €5 Remain: 0 Transactions: 1.5
+€100 >0.5< 7% on-increase => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 7% on-increase => €7 Remain: 0 Transactions: 1.5
+€100 >0.5< 7% on-increase-hard => €8.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 7.5% on-increase-hard => €9.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 7% on-increase-hard => €9.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 7.5% on-increase-hard => €10 Remain: 0 Transactions: 1.5
+€100 >1< 3.5% high-drop-hard => €9.5 Remain: 3924 Transactions: 4
+
+
+Started new trading with TRACEUR based on 5 mins time interval:
+€100 >1< 4% on-increase => €11 Remain: 98 Transactions: 8
+€100 >0.5< 3.5% high-drop => €10 Remain: 0 Transactions: 8.5
+€100 >0.75< 4% high-drop => €9 Remain: 98 Transactions: 7
+€100 >1< 3% high-drop => €7.5 Remain: 0 Transactions: 8.5
+€100 >1< 3.5% high-drop => €12 Remain: 97.5 Transactions: 8.5
+€100 >1< 4% high-drop => €13 Remain: 98 Transactions: 7.5
+
+
+Started new trading with BRICKEUR based on 5 mins time interval:
+
+
+Started new trading with LCXEUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €17 Remain: 0 Transactions: 6
+€100 >0.25< 5% high-drop => €21.5 Remain: 0 Transactions: 4.5
+€100 >0.75< 6% high-drop-hard => €26 Remain: 0 Transactions: 4.5
+
+
+Started new trading with GARIEUR based on 5 mins time interval:
+€100 >0.25< 6.5% near-low => €5 Remain: 0 Transactions: 1
+€100 >0.5< 6.5% near-low => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 7% near-low => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 7.5% near-low => €6 Remain: 0 Transactions: 1.5
+€100 >0.75< 7% near-low => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 7.5% near-low => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 8% near-low => €6.5 Remain: 0 Transactions: 1
+€100 >0.75< 8.5% near-low => €6.5 Remain: 0 Transactions: 1
+€100 >0.5< 1.5% near-low-hard => €7 Remain: 0 Transactions: 1.5
+€100 >0.75< 8% near-low-hard => €8 Remain: 0 Transactions: 1
+€100 >0.75< 8.5% near-low-hard => €8.5 Remain: 0 Transactions: 1
+
+
+Started new trading with TVKEUR based on 5 mins time interval:
+€100 >0.5< 2.5% high-drop-hard => €6 Remain: 0 Transactions: 1
+€100 >0.5< 4% high-drop-hard => €8 Remain: 0 Transactions: 1
+€100 >0.5< 4.5% high-drop-hard => €8 Remain: 0 Transactions: 1
+€100 >0.5< 1.5% near-low => €12 Remain: 0 Transactions: 4
+€100 >0.5< 1.5% near-low-hard => €21.5 Remain: 0 Transactions: 4
+
+
+Started new trading with AIREUR based on 5 mins time interval:
+€100 >0.75< 6% on-increase => €7.5 Remain: 0 Transactions: 2.5
+€100 >1< 6% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >1< 10% on-increase => €5.5 Remain: 0 Transactions: 0.5
+€100 >1< 10% high-drop => €5.5 Remain: 0 Transactions: 0.5
+€100 >1< 10% high-drop-hard => €5.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 7.5% near-low => €7.5 Remain: 0 Transactions: 2
+€100 >0.25< 8% near-low => €7.5 Remain: 0 Transactions: 2
+€100 >0.25< 8.5% near-low => €6.5 Remain: 0 Transactions: 1
+€100 >0.25< 9% near-low => €7 Remain: 0 Transactions: 1
+€100 >0.25< 9.5% near-low => €7 Remain: 0 Transactions: 1
+
+
+Started new trading with STRDEUR based on 5 mins time interval:
+
+
+Started new trading with CXTEUR based on 5 mins time interval:
+€100 >0.25< 2.5% on-increase => €10 Remain: 709.5 Transactions: 19
+€100 >0.25< 3% on-increase => €9 Remain: 715.5 Transactions: 13.5
+€100 >0.25< 3.5% on-increase => €17.5 Remain: 0 Transactions: 12.5
+€100 >0.25< 5% on-increase => €26.5 Remain: 0 Transactions: 9
+€100 >0.5< 6% on-increase => €26 Remain: 0 Transactions: 8
+€100 >0.25< 5% high-drop => €25.5 Remain: 0 Transactions: 9
+€100 >0.5< 3.5% high-drop => €24 Remain: 0 Transactions: 12
+€100 >0.5< 4% high-drop => €30 Remain: 0 Transactions: 12
+€100 >0.75< 4% high-drop => €30.5 Remain: 0 Transactions: 12.5
+€100 >0.25< 6.5% near-low => €31 Remain: 0 Transactions: 7.5
+€100 >0.5< 6.5% near-low => €35 Remain: 0 Transactions: 6
+€100 >0.5< 7% near-low => €43 Remain: 0 Transactions: 6
+€100 >0.5< 8% near-low => €47 Remain: 0 Transactions: 7
+
+
+Started new trading with TEEREUR based on 5 mins time interval:
+€100 >0.25< 6.5% on-increase => €30 Remain: 0 Transactions: 2.5
+€100 >0.25< 7% on-increase => €30 Remain: 0 Transactions: 2.5
+€100 >0.25< 7.5% on-increase => €36 Remain: 0 Transactions: 2.5
+€100 >0.5< 3% on-increase => €39.5 Remain: 0 Transactions: 5
+€100 >0.5< 8% on-increase => €40.5 Remain: 0 Transactions: 3
+€100 >0.5< 8.5% on-increase => €42 Remain: 0 Transactions: 3
+€100 >0.75< 8.5% on-increase => €45.5 Remain: 0 Transactions: 3.5
+€100 >0.25< 7.5% high-drop => €51.5 Remain: 0 Transactions: 3
+
+
+Started new trading with AAVEEUR based on 5 mins time interval:
+€100 >0.25< 5.5% on-increase => €5 Remain: 0 Transactions: 2
+€100 >0.25< 6% on-increase => €7 Remain: 0 Transactions: 1.5
+€100 >0.25< 6.5% on-increase => €7 Remain: 0 Transactions: 1.5
+€100 >0.25< 7% on-increase => €9.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 4.5% on-increase => €8 Remain: 0 Transactions: 5.5
+€100 >0.5< 6% on-increase => €7.5 Remain: 0 Transactions: 2
+€100 >0.5< 6.5% on-increase => €7 Remain: 0 Transactions: 1.5
+€100 >0.5< 7% on-increase => €9 Remain: 0 Transactions: 1.5
+€100 >0.75< 4.5% on-increase => €9.5 Remain: 0 Transactions: 6
+€100 >0.75< 5% on-increase => €10.5 Remain: 0 Transactions: 5
+€100 >0.75< 5.5% on-increase => €17.5 Remain: 0 Transactions: 4.5
+€100 >0.75< 6% on-increase-hard => €18.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 5.5% high-drop => €17.5 Remain: 0 Transactions: 4.5
+€100 >0.75< 5% high-drop-hard => €17.5 Remain: 0 Transactions: 5
+€100 >0.75< 6.5% high-drop-hard => €18 Remain: 0 Transactions: 3
+€100 >0.75< 6.5% near-low => €16.5 Remain: 0 Transactions: 5
+€100 >0.75< 7% near-low => €19.5 Remain: 0 Transactions: 5
+€100 >0.75< 7% near-low-hard => €18.5 Remain: 0 Transactions: 5
+
+
+Started new trading with BODENEUR based on 5 mins time interval:
+€100 >0.5< 7% on-increase => €11.5 Remain: 0 Transactions: 8.5
+€100 >0.5< 7.5% on-increase => €16.5 Remain: 0 Transactions: 8.5
+€100 >0.5< 9% on-increase => €18 Remain: 0 Transactions: 7.5
+€100 >0.25< 8.5% on-increase-hard => €17 Remain: 0 Transactions: 5.5
+€100 >0.25< 9% on-increase-hard => €18 Remain: 0 Transactions: 5.5
+€100 >0.5< 8.5% on-increase-hard => €24 Remain: 0 Transactions: 7
+€100 >0.5< 9% on-increase-hard => €24.5 Remain: 0 Transactions: 6.5
+
+
+Started new trading with JASMYEUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €8 Remain: 0 Transactions: 3.5
+€100 >0.25< 5% on-increase => €6.5 Remain: 0 Transactions: 3
+€100 >0.25< 5.5% on-increase => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5.5% on-increase => €6.5 Remain: 0 Transactions: 4
+€100 >0.5< 6% on-increase => €5.5 Remain: 0 Transactions: 3
+€100 >0.5< 6.5% on-increase => €12.5 Remain: 0 Transactions: 3
+€100 >0.5< 7% on-increase => €13.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6% on-increase => €13 Remain: 0 Transactions: 4
+€100 >0.75< 7% on-increase => €12 Remain: 0 Transactions: 3
+€100 >1< 7% on-increase => €11 Remain: 0 Transactions: 3
+€100 >0.5< 6.5% on-increase-hard => €11.5 Remain: 0 Transactions: 3
+€100 >0.5< 7% high-drop => €13 Remain: 0 Transactions: 2.5
+€100 >0.75< 6% high-drop => €12.5 Remain: 0 Transactions: 4
+€100 >0.75< 7% high-drop => €11.5 Remain: 0 Transactions: 3
+€100 >1< 7% high-drop => €11 Remain: 0 Transactions: 3
+€100 >1< 2.5% high-drop-hard => €10 Remain: 0 Transactions: 5
+€100 >0.25< 7% near-low => €9.5 Remain: 0 Transactions: 3
+€100 >0.5< 2.5% near-low => €12.5 Remain: 0 Transactions: 11.5
+€100 >0.5< 2.5% near-low-hard => €11.5 Remain: 0 Transactions: 11.5
+
+
+Started new trading with QNTEUR based on 5 mins time interval:
+€100 >0.5< 5% on-increase => €5.5 Remain: 0 Transactions: 2
+€100 >0.5< 5.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >0.5< 6% on-increase => €7.5 Remain: 0 Transactions: 2
+€100 >0.75< 5.5% on-increase => €9 Remain: 0 Transactions: 2
+€100 >0.75< 6% on-increase => €11 Remain: 0 Transactions: 2
+€100 >1< 6% on-increase-hard => €11 Remain: 0.5 Transactions: 1.5
+€100 >0.75< 6% high-drop => €11 Remain: 0 Transactions: 2
+€100 >0.75< 7.5% near-low => €11.5 Remain: 0.5 Transactions: 1.5
+€100 >1< 7% near-low => €10.5 Remain: 0.5 Transactions: 1.5
+€100 >1< 7.5% near-low => €11 Remain: 0.5 Transactions: 1.5
+€100 >0.75< 7% near-low-hard => €10 Remain: 0.5 Transactions: 1.5
+€100 >0.75< 7.5% near-low-hard => €10 Remain: 0.5 Transactions: 1.5
+€100 >1< 7% near-low-hard => €10.5 Remain: 0.5 Transactions: 1.5
+€100 >1< 7.5% near-low-hard => €11 Remain: 0.5 Transactions: 1.5
+
+
+Started new trading with FIDAEUR based on 5 mins time interval:
+€100 >0.75< 8% on-increase => €12.5 Remain: 225 Transactions: 3.5
+€100 >1< 5% on-increase-hard => €21.5 Remain: 209 Transactions: 7.5
+€100 >0.75< 1.5% high-drop => €24.5 Remain: 0 Transactions: 7
+
+
+Started new trading with POLSEUR based on 5 mins time interval:
+€100 >0.25< 5.5% on-increase-hard => €6 Remain: 184 Transactions: 3
+€100 >0.25< 6% on-increase-hard => €14 Remain: 0 Transactions: 3
+€100 >0.25< 6.5% on-increase-hard => €12.5 Remain: 0 Transactions: 3
+€100 >0.25< 7% on-increase-hard => €13.5 Remain: 0 Transactions: 3
+€100 >0.25< 7.5% on-increase-hard => €15.5 Remain: 0 Transactions: 3
+€100 >0.25< 8% on-increase-hard => €16.5 Remain: 0 Transactions: 2.5
+€100 >0.25< 8.5% on-increase-hard => €16.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 7.5% high-drop-hard => €17 Remain: 0 Transactions: 1.5
+
+
+Started new trading with KILTEUR based on 5 mins time interval:
+€100 >0.75< 1.5% high-drop => €14.5 Remain: 0 Transactions: 3.5
+€100 >1< 1.5% high-drop => €16 Remain: 0 Transactions: 3.5
+€100 >0.5< 2% high-drop-hard => €15.5 Remain: 0 Transactions: 1
+€100 >0.75< 1.5% high-drop-hard => €16 Remain: 0 Transactions: 1.5
+€100 >0.75< 2% high-drop-hard => €19 Remain: 0 Transactions: 1
+€100 >1< 2% high-drop-hard => €19 Remain: 0 Transactions: 1
+€100 >1< 7% near-low-hard => €17.5 Remain: 0 Transactions: 2
+
+
+Started new trading with BLZEUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €8 Remain: 0 Transactions: 5
+€100 >0.25< 5% on-increase => €8.5 Remain: 0 Transactions: 4
+€100 >0.5< 5.5% on-increase => €9 Remain: 0 Transactions: 4
+€100 >0.75< 6% on-increase => €9 Remain: 0 Transactions: 4
+€100 >0.25< 4% on-increase-hard => €9 Remain: 0 Transactions: 7
+€100 >0.25< 4.5% on-increase-hard => €14.5 Remain: 0 Transactions: 5
+€100 >0.75< 6% on-increase-hard => €14 Remain: 532 Transactions: 4
+€100 >0.5< 5% high-drop => €14.5 Remain: 0 Transactions: 5.5
+€100 >0.25< 5% high-drop-hard => €16 Remain: 0 Transactions: 4
+€100 >0.25< 6% near-low => €16 Remain: 0 Transactions: 5
+€100 >0.25< 6% near-low-hard => €15 Remain: 0 Transactions: 5
+€100 >1< 2.5% near-low-hard => €15.5 Remain: 514.5 Transactions: 4
+
+
+Started new trading with L3EUR based on 5 mins time interval:
+€100 >0.5< 8% on-increase => €5 Remain: 0 Transactions: 1.5
+€100 >0.5< 8.5% on-increase => €6 Remain: 0 Transactions: 1.5
+€100 >0.75< 9.5% on-increase-hard => €11.5 Remain: 0 Transactions: 1.5
+
+
+Started new trading with XLMEUR based on 5 mins time interval:
+€100 >0.5< 2.5% high-drop-hard => €5 Remain: 0 Transactions: 2.5
+
+
+Started new trading with ATOMEUR based on 5 mins time interval:
+€100 >1< 2% high-drop-hard => €5.5 Remain: 0 Transactions: 3
+
+
+Started new trading with ALGOEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase => €5 Remain: 0 Transactions: 3
+€100 >0.5< 5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >0.5< 5.5% on-increase => €5 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% on-increase => €9 Remain: 0 Transactions: 3
+€100 >1< 5% on-increase => €9 Remain: 0 Transactions: 3
+€100 >1< 5.5% on-increase => €11 Remain: 0 Transactions: 2.5
+€100 >1< 5.5% high-drop => €10.5 Remain: 0 Transactions: 2.5
+€100 >1< 7% near-low => €9.5 Remain: 476.5 Transactions: 1.5
+€100 >1< 7% near-low-hard => €9.5 Remain: 476.5 Transactions: 1.5
+
+
+Started new trading with POLISEUR based on 5 mins time interval:
+€100 >0.25< 3.5% on-increase => €7.5 Remain: 0 Transactions: 8.5
+€100 >0.25< 2% high-drop => €6 Remain: 0 Transactions: 10
+€100 >0.25< 3.5% high-drop => €6 Remain: 0 Transactions: 4.5
+€100 >0.5< 3.5% high-drop => €11 Remain: 0 Transactions: 5
+€100 >1< 1.5% high-drop => €11.5 Remain: 0 Transactions: 5.5
+€100 >0.25< 4% high-drop-hard => €10.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 3% high-drop-hard => €10 Remain: 0 Transactions: 4
+€100 >0.5< 4% high-drop-hard => €16.5 Remain: 0 Transactions: 5
+
+
+Started new trading with TLMEUR based on 5 mins time interval:
+€100 >0.75< 7.5% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 8% on-increase => €6.5 Remain: 0 Transactions: 1.5
+€100 >1< 7.5% on-increase => €7.5 Remain: 5797 Transactions: 1.5
+€100 >1< 8% on-increase => €8.5 Remain: 5797 Transactions: 1.5
+€100 >1< 8.5% on-increase => €10.5 Remain: 5797 Transactions: 1.5
+€100 >1< 8.5% high-drop => €9.5 Remain: 5711 Transactions: 1.5
+€100 >1< 8% high-drop-hard => €11 Remain: 5797 Transactions: 1
+
+
+Started new trading with LMWREUR based on 5 mins time interval:
+€100 >0.5< 3% on-increase => €5.5 Remain: 377.5 Transactions: 14.5
+€100 >0.5< 3% high-drop => €12 Remain: 397 Transactions: 11.5
+€100 >0.5< 4% near-low => €10.5 Remain: 405.5 Transactions: 10
+
+
+Started new trading with SGBEUR based on 5 mins time interval:
+€100 >0.5< 3.5% on-increase => €8 Remain: 0 Transactions: 7.5
+€100 >0.25< 2% high-drop => €6.5 Remain: 0 Transactions: 12.5
+€100 >0.5< 3.5% high-drop => €12 Remain: 0 Transactions: 6.5
+
+
+Started new trading with GLMREUR based on 5 mins time interval:
+€100 >0.75< 5.5% on-increase => €5 Remain: 0 Transactions: 2
+€100 >1< 4.5% on-increase => €5 Remain: 0 Transactions: 3
+€100 >1< 5% on-increase => €7.5 Remain: 0 Transactions: 3
+€100 >1< 5.5% on-increase => €9 Remain: 0 Transactions: 3
+
+
+Started new trading with CFGEUR based on 5 mins time interval:
+€100 >1< 8.5% on-increase => €6.5 Remain: 184.5 Transactions: 0.5
+€100 >1< 9% on-increase => €9 Remain: 0 Transactions: 1
+€100 >1< 9% high-drop => €9 Remain: 0 Transactions: 1
+
+
+Started new trading with IDEXEUR based on 5 mins time interval:
+€100 >0.75< 9.5% on-increase => €5 Remain: 0 Transactions: 0.5
+€100 >1< 9.5% on-increase => €5 Remain: 0 Transactions: 0.5
+€100 >0.75< 9.5% high-drop => €5 Remain: 0 Transactions: 0.5
+€100 >1< 9.5% high-drop => €5 Remain: 0 Transactions: 0.5
+
+
+Started new trading with REPV2EUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €5.5 Remain: 0 Transactions: 1
+€100 >0.25< 5% on-increase => €6 Remain: 0 Transactions: 1
+€100 >0.25< 5.5% on-increase => €6 Remain: 0 Transactions: 1
+€100 >0.25< 6% on-increase => €6 Remain: 0 Transactions: 1
+€100 >0.75< 9.5% on-increase => €5.5 Remain: 0 Transactions: 0.5
+€100 >0.75< 10% on-increase => €5.5 Remain: 0 Transactions: 0.5
+€100 >1< 9.5% on-increase => €5.5 Remain: 0 Transactions: 0.5
+€100 >1< 10% on-increase => €5.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 4.5% high-drop => €6 Remain: 0 Transactions: 1
+€100 >0.25< 6% high-drop => €6 Remain: 0 Transactions: 1
+€100 >0.5< 5% high-drop => €7 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% high-drop => €7.5 Remain: 0 Transactions: 1.5
+€100 >1< 5% high-drop => €9.5 Remain: 0 Transactions: 2.5
+€100 >0.25< 5.5% near-low => €11.5 Remain: 0 Transactions: 2
+
+
+Started new trading with KAREUR based on 5 mins time interval:
+€100 >0.75< 6.5% on-increase-hard => €5.5 Remain: 0 Transactions: 1
+€100 >1< 6.5% on-increase-hard => €6 Remain: 0 Transactions: 1
+
+
+Started new trading with OSMOEUR based on 5 mins time interval:
+
+
+Started new trading with INTREUR based on 5 mins time interval:
+€100 >1< 3% near-low => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 3% near-low-hard => €5 Remain: 0 Transactions: 1
+€100 >0.5< 3.5% near-low-hard => €5 Remain: 0 Transactions: 1
+
+
+Started new trading with RBCEUR based on 5 mins time interval:
+€100 >1< 5.5% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >1< 5.5% high-drop => €7 Remain: 0 Transactions: 1
+€100 >0.5< 4% high-drop-hard => €7 Remain: 0 Transactions: 1
+€100 >0.75< 5% high-drop-hard => €7.5 Remain: 0 Transactions: 1
+€100 >1< 5% high-drop-hard => €7.5 Remain: 0 Transactions: 1
+€100 >1< 6.5% near-low => €8.5 Remain: 0 Transactions: 2
+
+
+Started new trading with MULTIEUR based on 5 mins time interval:
+
+
+
+
+
+
+
+=========================== Other ===========================
+
+
+
+
+
+
+
+Started new trading with SUIEUR based on 5 mins time interval:
+€100 >0.25< 1.5% on-increase => €12 Remain: 26 Transactions: 29.5
+€100 >0.25< 2% on-increase => €18 Remain: 26 Transactions: 23
+€100 >0.25< 2.5% on-increase => €22.5 Remain: 0 Transactions: 19
+€100 >0.25< 3% on-increase => €26 Remain: 0 Transactions: 15.5
+€100 >0.25< 3.5% on-increase => €25 Remain: 0 Transactions: 12.5
+€100 >0.5< 3% on-increase => €25 Remain: 0 Transactions: 17.5
+€100 >0.5< 3.5% on-increase => €25 Remain: 0 Transactions: 14.5
+€100 >0.5< 4.5% on-increase => €27.5 Remain: 0 Transactions: 10.5
+€100 >0.75< 4% on-increase => €26 Remain: 0 Transactions: 11
+€100 >0.75< 4.5% on-increase => €28 Remain: 0 Transactions: 11
+€100 >0.75< 5% on-increase => €32.5 Remain: 0 Transactions: 9
+€100 >0.75< 5.5% on-increase => €31 Remain: 0 Transactions: 8
+€100 >0.75< 6% on-increase => €33.5 Remain: 0 Transactions: 7
+€100 >1< 3% on-increase => €36 Remain: 0 Transactions: 15.5
+€100 >1< 3.5% on-increase => €37 Remain: 29 Transactions: 12.5
+€100 >1< 4% on-increase => €36.5 Remain: 29 Transactions: 10.5
+€100 >1< 4.5% on-increase => €37.5 Remain: 0 Transactions: 11
+€100 >0.75< 5.5% on-increase-hard => €45 Remain: 0 Transactions: 9
+€100 >0.75< 6.5% near-low => €45.5 Remain: 0 Transactions: 8
+€100 >0.75< 6.5% near-low-hard => €45.5 Remain: 0 Transactions: 8
+
+
+Started new trading with WENEUR based on 5 mins time interval:
+€100 >0.75< 3.5% on-increase => €5 Remain: 0 Transactions: 9.5
+€100 >0.75< 4% on-increase => €16.5 Remain: 0 Transactions: 10
+€100 >0.75< 5% on-increase => €15 Remain: 0 Transactions: 7.5
+€100 >1< 5% on-increase => €18.5 Remain: 0 Transactions: 8
+€100 >0.75< 6.5% on-increase-hard => €17 Remain: 0 Transactions: 5
+€100 >1< 7% on-increase-hard => €15.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 4% high-drop => €19.5 Remain: 0 Transactions: 10
+€100 >0.75< 4% high-drop => €21.5 Remain: 0 Transactions: 10
+€100 >0.75< 5% high-drop => €20 Remain: 0 Transactions: 7.5
+€100 >0.5< 4% high-drop-hard => €24.5 Remain: 0 Transactions: 6
+€100 >0.5< 5.5% high-drop-hard => €23.5 Remain: 0 Transactions: 4
+€100 >0.75< 4% high-drop-hard => €26 Remain: 0 Transactions: 6.5
+€100 >0.75< 5.5% high-drop-hard => €30 Remain: 0 Transactions: 4.5
+
+
+Started new trading with TREMPEUR based on 5 mins time interval:
+€100 >0.25< 5.5% on-increase-hard => €39 Remain: 127.5 Transactions: 4
+€100 >0.25< 6% on-increase-hard => €40 Remain: 127.5 Transactions: 4
+€100 >1< 9% high-drop => €45.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 8.5% high-drop-hard => €44 Remain: 133.5 Transactions: 3
+€100 >0.5< 9% high-drop-hard => €45.5 Remain: 133.5 Transactions: 3
+€100 >0.75< 8% high-drop-hard => €51.5 Remain: 0 Transactions: 5
+€100 >0.75< 9% high-drop-hard => €55.5 Remain: 0 Transactions: 4
+€100 >1< 9% high-drop-hard => €54.5 Remain: 0 Transactions: 4
+
+
+Started new trading with UNIEUR based on 5 mins time interval:
+€100 >0.25< 2% on-increase => €7 Remain: 0 Transactions: 15.5
+€100 >0.5< 2% on-increase => €9.5 Remain: 0 Transactions: 16.5
+€100 >0.75< 2% on-increase => €9 Remain: 0 Transactions: 15
+€100 >0.75< 5.5% on-increase => €9.5 Remain: 7 Transactions: 2.5
+€100 >0.25< 2% on-increase-hard => €9.5 Remain: 0 Transactions: 16.5
+€100 >0.25< 2.5% on-increase-hard => €12 Remain: 0 Transactions: 12.5
+€100 >0.5< 4.5% on-increase-hard => €12 Remain: 0 Transactions: 6
+€100 >0.75< 5.5% on-increase-hard => €11 Remain: 0 Transactions: 4
+€100 >0.25< 2% high-drop => €15.5 Remain: 0 Transactions: 14.5
+€100 >0.5< 2% high-drop => €14.5 Remain: 0 Transactions: 15
+€100 >0.75< 2% high-drop => €20.5 Remain: 0 Transactions: 15
+€100 >0.75< 3.5% near-low => €19 Remain: 0 Transactions: 9
+€100 >1< 4% near-low => €22 Remain: 6.5 Transactions: 7.5
+€100 >1< 4% near-low-hard => €22 Remain: 6.5 Transactions: 7.5
+
+
+Started new trading with ETHWEUR based on 5 mins time interval:
+€100 >0.25< 3% on-increase => €5 Remain: 0 Transactions: 11.5
+€100 >0.25< 4% on-increase => €8.5 Remain: 0 Transactions: 7.5
+€100 >0.5< 4% on-increase => €8.5 Remain: 0 Transactions: 8.5
+€100 >0.5< 5% on-increase => €15.5 Remain: 0 Transactions: 7
+€100 >0.75< 4% on-increase => €15 Remain: 16 Transactions: 8
+€100 >0.75< 5% on-increase => €15.5 Remain: 16.5 Transactions: 6.5
+€100 >1< 4% on-increase => €16.5 Remain: 16 Transactions: 7
+€100 >0.75< 4% on-increase-hard => €17 Remain: 15.5 Transactions: 8.5
+€100 >0.75< 4.5% on-increase-hard => €21.5 Remain: 15.5 Transactions: 8
+€100 >1< 4.5% on-increase-hard => €22 Remain: 16 Transactions: 7.5
+€100 >0.25< 4% high-drop => €22 Remain: 0 Transactions: 9
+€100 >0.25< 5% near-low => €21 Remain: 0 Transactions: 7.5
+
+
+Started new trading with APEEUR based on 5 mins time interval:
+€100 >1< 3.5% on-increase-hard => €8 Remain: 47.5 Transactions: 11.5
+€100 >0.75< 1.5% high-drop => €9.5 Remain: 0 Transactions: 15.5
+€100 >0.75< 2% high-drop => €14 Remain: 0 Transactions: 12
+€100 >0.25< 3% high-drop-hard => €14.5 Remain: 0 Transactions: 7.5
+€100 >0.5< 3% high-drop-hard => €13.5 Remain: 50.5 Transactions: 4.5
+€100 >1< 5% high-drop-hard => €13.5 Remain: 0 Transactions: 3.5
+€100 >0.5< 3.5% near-low => €12.5 Remain: 50.5 Transactions: 9.5
+€100 >0.5< 4% near-low => €15 Remain: 50.5 Transactions: 9
+€100 >0.75< 5.5% near-low => €21.5 Remain: 0 Transactions: 7.5
+€100 >0.75< 5.5% near-low-hard => €22.5 Remain: 0 Transactions: 7.5
+
+
+Started new trading with C98EUR based on 5 mins time interval:
+€100 >0.5< 3.5% on-increase => €7.5 Remain: 0 Transactions: 4
+€100 >0.5< 4% on-increase => €8 Remain: 0 Transactions: 1.5
+€100 >0.5< 4.5% on-increase => €8 Remain: 0 Transactions: 1.5
+€100 >0.5< 5% on-increase => €9 Remain: 0 Transactions: 1.5
+€100 >0.5< 5.5% on-increase => €9 Remain: 0 Transactions: 1.5
+€100 >0.5< 6.5% on-increase => €8 Remain: 0 Transactions: 1
+€100 >0.75< 3.5% on-increase => €8 Remain: 0 Transactions: 4
+€100 >0.75< 4% on-increase => €17.5 Remain: 0 Transactions: 3.5
+€100 >1< 4.5% on-increase => €18.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 5% near-low => €18.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 5.5% near-low => €20 Remain: 0 Transactions: 3.5
+€100 >1< 5% near-low => €21 Remain: 0 Transactions: 4
+€100 >1< 5.5% near-low => €20 Remain: 0 Transactions: 3.5
+€100 >1< 5% near-low-hard => €20.5 Remain: 0 Transactions: 4
+€100 >1< 5.5% near-low-hard => €19.5 Remain: 0 Transactions: 3.5
+
+
+Started new trading with BTCEUR based on 5 mins time interval:
+€100 >0.5< 3.5% on-increase => €5 Remain: 0 Transactions: 2
+€100 >0.75< 3.5% on-increase => €5.5 Remain: 0 Transactions: 2
+€100 >1< 3% on-increase => €5.5 Remain: 0 Transactions: 3
+€100 >1< 3.5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >0.25< 3.5% near-low => €8 Remain: 0 Transactions: 3
+€100 >0.25< 3.5% near-low-hard => €7 Remain: 0 Transactions: 3
+
+
+
+Started new trading with LITEUR based on 5 mins time interval:
+€100 >1< 5% high-drop-hard => €5 Remain: 0 Transactions: 1
+
+
+Started new trading with ONDOEUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €6 Remain: 0 Transactions: 3.5
+€100 >0.5< 5.5% on-increase => €7.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 7% on-increase => €7 Remain: 0 Transactions: 2
+€100 >0.75< 7.5% on-increase => €8 Remain: 0 Transactions: 2
+€100 >1< 7.5% on-increase => €7 Remain: 78.5 Transactions: 2
+€100 >1< 8% on-increase => €7 Remain: 78.5 Transactions: 1.5
+€100 >1< 8.5% on-increase => €8.5 Remain: 78.5 Transactions: 1.5
+€100 >1< 9% on-increase => €9.5 Remain: 80.5 Transactions: 1
+€100 >0.75< 8% on-increase-hard => €8.5 Remain: 80 Transactions: 1.5
+€100 >1< 8.5% on-increase-hard => €7.5 Remain: 79.5 Transactions: 1.5
+€100 >0.5< 5.5% high-drop => €7.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 7% high-drop => €7 Remain: 0 Transactions: 2
+€100 >0.75< 7.5% high-drop => €8 Remain: 0 Transactions: 2
+€100 >1< 7.5% high-drop => €7 Remain: 78.5 Transactions: 2
+€100 >1< 8% high-drop => €7 Remain: 78.5 Transactions: 1.5
+€100 >1< 8.5% high-drop => €8.5 Remain: 78.5 Transactions: 1.5
+€100 >1< 9% high-drop => €9.5 Remain: 80.5 Transactions: 1
+€100 >0.25< 4% high-drop-hard => €9.5 Remain: 0 Transactions: 2
+€100 >0.25< 5% high-drop-hard => €8 Remain: 0 Transactions: 2
+€100 >0.5< 5% high-drop-hard => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 8.5% high-drop-hard => €5 Remain: 0 Transactions: 1
+€100 >1< 6.5% high-drop-hard => €5 Remain: 0 Transactions: 1.5
+€100 >1< 7% high-drop-hard => €8 Remain: 78.5 Transactions: 1.5
+€100 >0.75< 8.5% near-low => €8 Remain: 77 Transactions: 2
+€100 >0.75< 9% near-low => €8 Remain: 77 Transactions: 2
+€100 >0.75< 9.5% near-low => €9.5 Remain: 0 Transactions: 2
+€100 >1< 9.5% near-low => €9 Remain: 79 Transactions: 2
+€100 >1< 10% near-low => €11 Remain: 79 Transactions: 2
+€100 >1< 10% near-low-hard => €10 Remain: 79 Transactions: 2
+
+
+Started new trading with OMGEUR based on 5 mins time interval:
+€100 >0.25< 7% on-increase => €6.5 Remain: 0 Transactions: 3
+€100 >0.25< 7.5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >0.5< 7.5% on-increase => €8 Remain: 0 Transactions: 3
+€100 >0.5< 8% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >0.75< 6.5% on-increase => €13.5 Remain: 225 Transactions: 3.5
+€100 >0.75< 7.5% on-increase => €12 Remain: 227 Transactions: 2.5
+€100 >1< 7% on-increase => €14.5 Remain: 225 Transactions: 3.5
+€100 >1< 7.5% on-increase => €13 Remain: 225 Transactions: 2.5
+€100 >0.75< 7.5% on-increase-hard => €12.5 Remain: 227.5 Transactions: 2.5
+€100 >0.75< 8% on-increase-hard => €11.5 Remain: 226.5 Transactions: 2
+€100 >0.25< 3% high-drop => €11.5 Remain: 0 Transactions: 9
+€100 >0.5< 7.5% high-drop => €10 Remain: 0 Transactions: 3
+€100 >0.5< 8% high-drop => €9.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6.5% high-drop => €17 Remain: 225 Transactions: 3.5
+€100 >0.75< 7.5% high-drop => €15.5 Remain: 227 Transactions: 2.5
+€100 >1< 6.5% high-drop => €15.5 Remain: 225 Transactions: 3.5
+€100 >1< 7% high-drop => €17 Remain: 225 Transactions: 3.5
+€100 >1< 7.5% high-drop => €15.5 Remain: 225 Transactions: 2.5
+€100 >0.25< 9% near-low-hard => €15 Remain: 0 Transactions: 2.5
+€100 >0.75< 7.5% near-low-hard => €13.5 Remain: 227.5 Transactions: 4
+€100 >0.75< 8% near-low-hard => €18.5 Remain: 227.5 Transactions: 3.5
+
+
+Started new trading with SANDEUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >0.5< 6% on-increase => €7 Remain: 0 Transactions: 2
+€100 >0.75< 4.5% on-increase-hard => €8.5 Remain: 0 Transactions: 4.5
+€100 >1< 4% on-increase-hard => €7.5 Remain: 205.5 Transactions: 4.5
+€100 >1< 5% on-increase-hard => €9.5 Remain: 221 Transactions: 3.5
+€100 >0.5< 7% near-low => €9 Remain: 0 Transactions: 2
+€100 >0.5< 7.5% near-low => €9 Remain: 0 Transactions: 2
+€100 >0.75< 5.5% near-low => €9.5 Remain: 215.5 Transactions: 4
+€100 >1< 6% near-low => €9.5 Remain: 215.5 Transactions: 3.5
+€100 >0.5< 7% near-low-hard => €9.5 Remain: 0 Transactions: 2
+€100 >0.5< 7.5% near-low-hard => €9.5 Remain: 0 Transactions: 2
+€100 >1< 6% near-low-hard => €9 Remain: 215.5 Transactions: 3.5
+
+
+Started new trading with XTZEUR based on 5 mins time interval:
+€100 >0.5< 5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >0.75< 5% on-increase => €7 Remain: 0 Transactions: 2
+€100 >1< 6% on-increase => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 5% high-drop => €6 Remain: 0 Transactions: 2
+€100 >0.75< 5% high-drop => €6.5 Remain: 0 Transactions: 2
+€100 >1< 6% high-drop => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 5% high-drop-hard => €5 Remain: 0 Transactions: 1
+€100 >0.75< 5% high-drop-hard => €5 Remain: 0 Transactions: 1
+€100 >1< 6% high-drop-hard => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 7% near-low => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 7% near-low-hard => €5 Remain: 0 Transactions: 1.5
+
+
+Started new trading with BADGEREUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €8 Remain: 0 Transactions: 3
+€100 >0.25< 5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >0.5< 5.5% on-increase => €7.5 Remain: 0 Transactions: 2.5
+€100 >1< 5% on-increase-hard => €6.5 Remain: 0 Transactions: 4.5
+€100 >0.25< 4.5% high-drop => €13 Remain: 0 Transactions: 3
+
+
+Started new trading with SNXEUR based on 5 mins time interval:
+€100 >0.5< 5% on-increase => €7.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 5.5% on-increase => €6.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 7% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >1< 6% on-increase => €6.5 Remain: 0 Transactions: 3
+€100 >1< 6.5% on-increase => €5 Remain: 0 Transactions: 2.5
+€100 >1< 7% on-increase => €7.5 Remain: 38.5 Transactions: 1.5
+€100 >0.5< 6.5% on-increase-hard => €8 Remain: 0 Transactions: 2
+€100 >0.75< 6% on-increase-hard => €6.5 Remain: 38.5 Transactions: 2.5
+€100 >0.75< 6.5% on-increase-hard => €6 Remain: 0 Transactions: 2
+€100 >0.75< 7.5% on-increase-hard => €6 Remain: 38 Transactions: 1
+€100 >1< 2.5% on-increase-hard => €5.5 Remain: 0 Transactions: 10.5
+€100 >1< 6.5% on-increase-hard => €7.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5% high-drop => €7.5 Remain: 0 Transactions: 3.5
+€100 >0.5< 5.5% high-drop => €6 Remain: 0 Transactions: 3
+€100 >0.5< 6% high-drop => €5 Remain: 0 Transactions: 2.5
+€100 >0.5< 6.5% high-drop => €5 Remain: 0 Transactions: 2
+€100 >0.75< 5% high-drop => €5 Remain: 0 Transactions: 3.5
+€100 >0.75< 5.5% high-drop => €6.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 7% high-drop => €5.5 Remain: 0 Transactions: 1.5
+€100 >1< 6% high-drop => €6.5 Remain: 0 Transactions: 3
+€100 >1< 6.5% high-drop => €5 Remain: 0 Transactions: 2.5
+€100 >1< 7% high-drop => €7.5 Remain: 38.5 Transactions: 1.5
+€100 >0.5< 5.5% high-drop-hard => €8 Remain: 0 Transactions: 2
+€100 >0.5< 6% high-drop-hard => €7.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% high-drop-hard => €6.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 5.5% high-drop-hard => €14 Remain: 0 Transactions: 3.5
+€100 >1< 6.5% high-drop-hard => €14.5 Remain: 38.5 Transactions: 2
+
+
+
+Started new trading with ZRXEUR based on 5 mins time interval:
+€100 >0.75< 5% on-increase => €6.5 Remain: 163 Transactions: 4
+€100 >0.75< 5.5% on-increase => €7.5 Remain: 163 Transactions: 3
+€100 >0.75< 6% on-increase => €7.5 Remain: 163 Transactions: 2.5
+€100 >1< 5% on-increase => €7.5 Remain: 166.5 Transactions: 4
+€100 >1< 5.5% on-increase-hard => €7 Remain: 168 Transactions: 3.5
+€100 >0.75< 5% high-drop => €8 Remain: 0 Transactions: 4.5
+€100 >0.75< 5.5% high-drop => €9 Remain: 168.5 Transactions: 3
+€100 >0.75< 6% high-drop => €7.5 Remain: 163 Transactions: 2.5
+€100 >0.25< 3.5% high-drop-hard => €6.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 5.5% high-drop-hard => €6 Remain: 168.5 Transactions: 1.5
+€100 >0.75< 6% high-drop-hard => €10.5 Remain: 163 Transactions: 1.5
+€100 >1< 6% high-drop-hard => €10 Remain: 163 Transactions: 1.5
+
+
+Started new trading with OXTEUR based on 5 mins time interval:
+€100 >1< 9% on-increase => €5 Remain: 0 Transactions: 1
+€100 >0.75< 7.5% on-increase-hard => €5.5 Remain: 0 Transactions: 2
+€100 >1< 7% on-increase-hard => €5.5 Remain: 0 Transactions: 2
+€100 >1< 7.5% on-increase-hard => €6.5 Remain: 0 Transactions: 2
+€100 >1< 8% on-increase-hard => €10.5 Remain: 0 Transactions: 2
+€100 >0.75< 3% high-drop-hard => €11.5 Remain: 0 Transactions: 6
+
+
+Started new trading with ALCXEUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €5.5 Remain: 0 Transactions: 3.5
+€100 >0.5< 5% on-increase => €7 Remain: 0 Transactions: 3.5
+€100 >0.5< 5.5% on-increase => €7 Remain: 0 Transactions: 3
+€100 >0.75< 5% on-increase => €8 Remain: 0 Transactions: 3.5
+€100 >0.75< 5.5% on-increase => €7 Remain: 0 Transactions: 3
+€100 >1< 5.5% on-increase => €6.5 Remain: 0 Transactions: 3
+€100 >0.25< 4% high-drop => €9.5 Remain: 0 Transactions: 3
+€100 >0.25< 4.5% high-drop => €13 Remain: 0 Transactions: 3.5
+€100 >0.25< 5.5% near-low => €13 Remain: 0 Transactions: 3.5
+€100 >0.5< 5.5% near-low => €12 Remain: 0 Transactions: 3
+€100 >0.75< 5.5% near-low => €14 Remain: 0 Transactions: 3.5
+€100 >0.25< 5.5% near-low-hard => €14.5 Remain: 0 Transactions: 3.5
+
+
+Started new trading with OGNEUR based on 5 mins time interval:
+€100 >0.5< 7% on-increase => €5 Remain: 0 Transactions: 2
+€100 >0.75< 7% on-increase => €7 Remain: 0 Transactions: 2
+€100 >0.75< 10% on-increase => €6 Remain: 0 Transactions: 1
+€100 >1< 7% on-increase => €8 Remain: 680 Transactions: 2
+€100 >0.25< 3% high-drop => €7 Remain: 0 Transactions: 6
+€100 >0.75< 10% high-drop => €6 Remain: 0 Transactions: 1
+€100 >1< 10% high-drop => €5 Remain: 0 Transactions: 1
+€100 >0.5< 3% high-drop-hard => €6 Remain: 0 Transactions: 3.5
+
+
+Started new trading with SYNEUR based on 5 mins time interval:
+€100 >0.5< 6% on-increase => €6.5 Remain: 0 Transactions: 3
+€100 >0.75< 6% on-increase => €14.5 Remain: 89.5 Transactions: 2.5
+€100 >1< 6% on-increase => €13.5 Remain: 89.5 Transactions: 3
+€100 >1< 9.5% on-increase => €13 Remain: 0 Transactions: 1.5
+€100 >1< 10% on-increase => €12 Remain: 0 Transactions: 1.5
+€100 >1< 6.5% on-increase-hard => €16 Remain: 89.5 Transactions: 2
+€100 >1< 7% on-increase-hard => €16 Remain: 89.5 Transactions: 2
+
+
+Started new trading with BONDEUR based on 5 mins time interval:
+€100 >0.75< 9% high-drop-hard => €5 Remain: 0 Transactions: 1
+€100 >0.75< 9.5% high-drop-hard => €5.5 Remain: 0 Transactions: 1
+€100 >1< 8.5% high-drop-hard => €11 Remain: 0 Transactions: 2
+
+
+Started new trading with SPELLEUR based on 5 mins time interval:
+€100 >0.75< 7.5% on-increase => €5 Remain: 99401 Transactions: 1
+€100 >0.5< 4% high-drop-hard => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 9.5% high-drop-hard => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 10% high-drop-hard => €5 Remain: 0 Transactions: 0.5
+€100 >1< 3% high-drop-hard => €5 Remain: 0 Transactions: 1.5
+€100 >0.75< 2% near-low => €9 Remain: 0 Transactions: 7.5
+€100 >1< 2% near-low => €8 Remain: 0 Transactions: 5
+€100 >1< 2.5% near-low => €14.5 Remain: 0 Transactions: 6.5
+€100 >1< 2.5% near-low-hard => €15 Remain: 0 Transactions: 6.5
+
+
+Started new trading with WAXLEUR based on 5 mins time interval:
+€100 >0.25< 2% on-increase => €9.5 Remain: 0 Transactions: 6
+€100 >0.25< 2.5% on-increase => €14 Remain: 0 Transactions: 5
+€100 >0.25< 3% near-low => €14.5 Remain: 0 Transactions: 4.5
+€100 >0.25< 5% near-low-hard => €13 Remain: 0 Transactions: 1.5
+€100 >0.5< 7.5% near-low-hard => €12.5 Remain: 72.5 Transactions: 1
+€100 >0.75< 7.5% near-low-hard => €12 Remain: 72 Transactions: 1
+
+
+Started new trading with RADEUR based on 5 mins time interval:
+€100 >1< 4% high-drop-hard => €5 Remain: 44 Transactions: 0.5
+€100 >1< 5% near-low-hard => €11.5 Remain: 43.5 Transactions: 3
+
+
+Started new trading with ROOKEUR based on 5 mins time interval:
+
+
+Started new trading with SRMEUR based on 5 mins time interval:
+€100 >1< 3% near-low => €5.5 Remain: 0 Transactions: 2
+€100 >1< 4.5% near-low-hard => €6 Remain: 0 Transactions: 1
+€100 >1< 5% near-low-hard => €6 Remain: 0 Transactions: 1
+€100 >1< 5.5% near-low-hard => €6 Remain: 0 Transactions: 1
+€100 >1< 6% near-low-hard => €6 Remain: 0 Transactions: 1
+
+
+Started new trading with MCEUR based on 5 mins time interval:
+€100 >0.5< 3% on-increase => €12 Remain: 0 Transactions: 2
+€100 >0.5< 3.5% on-increase => €13.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 4% on-increase => €14 Remain: 0 Transactions: 1.5
+€100 >0.5< 4.5% on-increase => €14 Remain: 0 Transactions: 1.5
+€100 >0.5< 5% on-increase => €14.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 5.5% on-increase => €15 Remain: 0 Transactions: 1
+€100 >0.75< 4.5% on-increase => €13.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% on-increase => €14 Remain: 0 Transactions: 1.5
+€100 >0.75< 5.5% on-increase => €15 Remain: 0 Transactions: 1
+€100 >1< 5.5% on-increase => €15 Remain: 0 Transactions: 1
+€100 >1< 6% on-increase => €15 Remain: 0 Transactions: 1
+€100 >0.5< 5% high-drop => €14.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 5.5% high-drop => €15 Remain: 0 Transactions: 1
+€100 >0.75< 5% high-drop => €14 Remain: 0 Transactions: 1.5
+€100 >0.75< 5.5% high-drop => €15 Remain: 0 Transactions: 1
+€100 >1< 5.5% high-drop => €15 Remain: 0 Transactions: 1
+€100 >1< 6% high-drop => €15 Remain: 0 Transactions: 1
+€100 >0.5< 5% near-low => €15.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 5.5% near-low => €15.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 6% near-low => €16 Remain: 0 Transactions: 1.5
+€100 >0.5< 6.5% near-low => €16.5 Remain: 0 Transactions: 1
+€100 >0.5< 7% near-low => €17 Remain: 0 Transactions: 1
+€100 >0.75< 6% near-low => €15.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 6.5% near-low => €16.5 Remain: 0 Transactions: 1
+€100 >0.75< 7% near-low => €17 Remain: 0 Transactions: 1
+€100 >1< 7% near-low => €17 Remain: 0 Transactions: 1
+€100 >0.5< 6.5% near-low-hard => €15.5 Remain: 0 Transactions: 1
+€100 >0.5< 7% near-low-hard => €16 Remain: 0 Transactions: 1
+€100 >0.75< 6.5% near-low-hard => €15.5 Remain: 0 Transactions: 1
+€100 >0.75< 7% near-low-hard => €16 Remain: 0 Transactions: 1
+€100 >1< 7% near-low-hard => €16 Remain: 0 Transactions: 1
+
+
+Started new trading with ETHEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 5% on-increase => €5.5 Remain: 0 Transactions: 2.5
+€100 >1< 4.5% on-increase => €5 Remain: 0 Transactions: 2.5
+€100 >1< 5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >1< 5.5% on-increase => €7 Remain: 0 Transactions: 2
+€100 >0.25< 4% on-increase-hard => €7 Remain: 0 Transactions: 3
+€100 >0.5< 4.5% high-drop => €6 Remain: 0 Transactions: 2.5
+€100 >0.75< 5% high-drop => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.25< 5% near-low => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.25< 5% near-low-hard => €5.5 Remain: 0 Transactions: 2.5
+
+
+Started new trading with GALAEUR based on 5 mins time interval:
+€100 >0.75< 2.5% on-increase => €5.5 Remain: 0 Transactions: 13
+€100 >1< 2.5% on-increase => €7.5 Remain: 0 Transactions: 11.5
+€100 >1< 5% on-increase => €8 Remain: 0 Transactions: 4.5
+€100 >1< 2.5% on-increase-hard => €7.5 Remain: 2394 Transactions: 11
+€100 >1< 3% on-increase-hard => €9 Remain: 2648.5 Transactions: 10
+€100 >0.5< 7% near-low => €14.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 7% near-low-hard => €17 Remain: 0 Transactions: 4.5
+
+
+Started new trading with AEVOEUR based on 5 mins time interval:
+€100 >0.25< 4% on-increase => €8.5 Remain: 0 Transactions: 6.5
+€100 >0.75< 7% on-increase => €7.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 7.5% on-increase => €9 Remain: 0 Transactions: 2
+€100 >1< 7% on-increase => €10.5 Remain: 167 Transactions: 2.5
+€100 >0.25< 5.5% on-increase-hard => €9 Remain: 0 Transactions: 3
+€100 >0.5< 5% on-increase-hard => €10 Remain: 0 Transactions: 6.5
+€100 >0.5< 6.5% on-increase-hard => €9 Remain: 0 Transactions: 3
+€100 >0.5< 7% on-increase-hard => €8.5 Remain: 0 Transactions: 2.5
+€100 >1< 3% on-increase-hard => €11 Remain: 0 Transactions: 11.5
+€100 >0.5< 3% high-drop => €10 Remain: 0 Transactions: 11
+€100 >0.25< 4% high-drop-hard => €12.5 Remain: 0 Transactions: 4.5
+€100 >1< 4% high-drop-hard => €15.5 Remain: 0 Transactions: 4.5
+
+
+Started new trading with LTCEUR based on 5 mins time interval:
+
+
+Started new trading with GMXEUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase => €5 Remain: 0 Transactions: 2.5
+€100 >0.5< 6% on-increase => €8.5 Remain: 0 Transactions: 2.5
+€100 >1< 6% on-increase => €8 Remain: 0 Transactions: 2.5
+€100 >1< 6.5% on-increase => €10 Remain: 0 Transactions: 2.5
+€100 >0.5< 6% high-drop => €8.5 Remain: 0 Transactions: 2.5
+€100 >1< 6.5% high-drop => €10 Remain: 0 Transactions: 2.5
+
+
+Started new trading with BANDEUR based on 5 mins time interval:
+€100 >0.25< 3.5% on-increase => €7.5 Remain: 0 Transactions: 5
+€100 >0.5< 4% on-increase => €9 Remain: 0 Transactions: 5
+€100 >0.75< 4% on-increase => €10 Remain: 0 Transactions: 6
+€100 >1< 4% on-increase => €10.5 Remain: 0 Transactions: 6.5
+€100 >0.5< 4% on-increase-hard => €9 Remain: 0 Transactions: 7
+€100 >0.5< 5% on-increase-hard => €8.5 Remain: 0 Transactions: 3
+€100 >0.75< 4% on-increase-hard => €13.5 Remain: 48 Transactions: 6
+€100 >0.75< 4% high-drop => €14 Remain: 0 Transactions: 6
+
+
+Started new trading with FLOWEUR based on 5 mins time interval:
+
+
+Started new trading with STORJEUR based on 5 mins time interval:
+€100 >0.25< 3% on-increase-hard => €8.5 Remain: 0 Transactions: 13
+€100 >0.5< 3% on-increase-hard => €11 Remain: 0 Transactions: 13.5
+€100 >0.25< 2% high-drop => €18 Remain: 112.5 Transactions: 16.5
+
+
+Started new trading with YFIEUR based on 5 mins time interval:
+€100 >0.75< 4.5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >1< 4.5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >0.75< 4.5% high-drop => €6.5 Remain: 0 Transactions: 2.5
+
+
+Started new trading with FXSEUR based on 5 mins time interval:
+
+
+Started new trading with DENTEUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5% on-increase => €8.5 Remain: 0 Transactions: 3
+€100 >1< 10% on-increase => €8 Remain: 68312.5 Transactions: 0.5
+€100 >0.25< 4.5% on-increase-hard => €11 Remain: 0 Transactions: 3.5
+€100 >0.25< 5% near-low-hard => €10.5 Remain: 0 Transactions: 4
+
+
+Started new trading with BALEUR based on 5 mins time interval:
+€100 >0.75< 7% on-increase => €7.5 Remain: 0 Transactions: 1.5
+€100 >0.25< 5% on-increase-hard => €7.5 Remain: 0 Transactions: 2
+€100 >0.25< 6% on-increase-hard => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 7.5% on-increase-hard => €11.5 Remain: 29.5 Transactions: 1.5
+€100 >0.75< 8.5% near-low => €13 Remain: 0 Transactions: 2
+€100 >0.75< 9% near-low => €14 Remain: 0 Transactions: 2
+€100 >1< 9% near-low => €13.5 Remain: 0 Transactions: 2
+€100 >0.75< 8.5% near-low-hard => €13.5 Remain: 0 Transactions: 2
+€100 >0.75< 9% near-low-hard => €13 Remain: 0 Transactions: 2
+€100 >1< 9% near-low-hard => €13.5 Remain: 0 Transactions: 2
+
+
+Started new trading with CHREUR based on 5 mins time interval:
+€100 >0.5< 7% on-increase => €6.5 Remain: 0 Transactions: 2
+€100 >0.5< 7.5% on-increase => €5 Remain: 0 Transactions: 1.5
+€100 >0.5< 8% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 7.5% on-increase => €8 Remain: 332 Transactions: 1.5
+€100 >0.75< 8.5% on-increase => €8 Remain: 332.5 Transactions: 1
+€100 >0.25< 4% high-drop => €8.5 Remain: 0 Transactions: 4.5
+€100 >0.75< 7.5% high-drop => €8 Remain: 332 Transactions: 1.5
+€100 >0.75< 8.5% high-drop => €7.5 Remain: 332.5 Transactions: 1
+€100 >1< 9% high-drop => €6.5 Remain: 337 Transactions: 1
+€100 >1< 9.5% high-drop => €6.5 Remain: 337 Transactions: 1
+€100 >1< 8.5% high-drop-hard => €5.5 Remain: 337 Transactions: 1
+€100 >1< 9% high-drop-hard => €6.5 Remain: 337 Transactions: 1
+€100 >0.5< 9% near-low => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 9.5% near-low => €6 Remain: 0 Transactions: 1.5
+€100 >0.75< 9% near-low => €10 Remain: 332 Transactions: 2
+€100 >0.75< 9% near-low-hard => €11 Remain: 332 Transactions: 2
+€100 >0.75< 9.5% near-low-hard => €10 Remain: 332 Transactions: 1.5
+€100 >0.75< 10% near-low-hard => €9.5 Remain: 332 Transactions: 1.5
+
+
+Started new trading with AUCTIONEUR based on 5 mins time interval:
+€100 >0.75< 7.5% on-increase => €5.5 Remain: 4 Transactions: 1.5
+€100 >0.75< 7.5% high-drop => €5.5 Remain: 4 Transactions: 1.5
+€100 >0.75< 9.5% near-low => €6.5 Remain: 4 Transactions: 1.5
+
+
+Started new trading with XBTEUR based on 5 mins time interval:
+€100 >1< 3.5% on-increase => €5 Remain: 0 Transactions: 2.5
+€100 >0.25< 3.5% near-low => €9 Remain: 0 Transactions: 3.5
+€100 >0.25< 3.5% near-low-hard => €8.5 Remain: 0 Transactions: 3.5
+
+
+Started new trading with AUDIOEUR based on 5 mins time interval:
+
+
+Started new trading with GNOEUR based on 5 mins time interval:
+€100 >0.25< 2% on-increase-hard => €12.5 Remain: 0 Transactions: 2
+
+
+Started new trading with MNGOEUR based on 5 mins time interval:
+€100 >0.25< 3.5% high-drop => €8.5 Remain: 0 Transactions: 1
+€100 >0.5< 7.5% high-drop => €8 Remain: 0 Transactions: 0.5
+€100 >0.25< 5% high-drop-hard => €9 Remain: 0 Transactions: 0.5
+€100 >0.25< 5.5% high-drop-hard => €10 Remain: 0 Transactions: 0.5
+€100 >0.5< 8.5% high-drop-hard => €9 Remain: 0 Transactions: 0.5
+€100 >0.5< 10% high-drop-hard => €8.5 Remain: 3112.5 Transactions: 0.5
+
+
+Started new trading with PYUSDEUR based on 5 mins time interval:
+
+
+Started new trading with TBTCEUR based on 5 mins time interval:
+
+
+Started new trading with FISEUR based on 5 mins time interval:
+€100 >0.25< 3.5% high-drop-hard => €6.5 Remain: 0 Transactions: 1
+€100 >0.25< 4% high-drop-hard => €6.5 Remain: 0 Transactions: 1
+
+
+Started new trading with TRXEUR based on 5 mins time interval:
+
+
+Started new trading with ENAEUR based on 5 mins time interval:
+€100 >0.25< 7% on-increase-hard => €7 Remain: 0 Transactions: 3
+€100 >0.25< 6% high-drop => €5.5 Remain: 0 Transactions: 5
+€100 >0.25< 5% high-drop-hard => €6.5 Remain: 0 Transactions: 2.5
+€100 >0.25< 5.5% high-drop-hard => €11 Remain: 0 Transactions: 4
+€100 >0.25< 7% high-drop-hard => €11.5 Remain: 0 Transactions: 2.5
+€100 >0.25< 6% near-low-hard => €15 Remain: 0 Transactions: 8
+
+
+Started new trading with LINKEUR based on 5 mins time interval:
+€100 >0.75< 6.5% on-increase => €6 Remain: 4.5 Transactions: 0.5
+€100 >0.75< 6.5% high-drop => €6 Remain: 4.5 Transactions: 0.5
+€100 >0.25< 5.5% near-low-hard => €5 Remain: 0 Transactions: 2.5
+€100 >1< 1.5% near-low-hard => €6 Remain: 0 Transactions: 4.5
+
+
+Started new trading with OPEUR based on 5 mins time interval:
+€100 >0.75< 5% on-increase => €11 Remain: 0 Transactions: 3.5
+€100 >0.75< 6.5% on-increase => €9.5 Remain: 0 Transactions: 2.5
+€100 >1< 5% on-increase => €12.5 Remain: 0 Transactions: 4
+€100 >1< 6.5% on-increase => €12 Remain: 33.5 Transactions: 2.5
+€100 >1< 7% on-increase => €11 Remain: 0 Transactions: 2.5
+€100 >1< 7.5% on-increase => €12.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6.5% on-increase-hard => €12.5 Remain: 34.5 Transactions: 2
+€100 >0.75< 7% on-increase-hard => €16.5 Remain: 34.5 Transactions: 2
+€100 >1< 7% on-increase-hard => €15 Remain: 34.5 Transactions: 2
+€100 >1< 7.5% on-increase-hard => €15 Remain: 34.5 Transactions: 2
+€100 >1< 7% high-drop-hard => €13.5 Remain: 0 Transactions: 2
+€100 >0.75< 8% near-low => €14 Remain: 0 Transactions: 2.5
+€100 >0.75< 8.5% near-low => €14.5 Remain: 34 Transactions: 2
+€100 >1< 8% near-low => €13 Remain: 34 Transactions: 2
+€100 >1< 8.5% near-low => €15 Remain: 34 Transactions: 2
+€100 >1< 9% near-low => €17 Remain: 0 Transactions: 2.5
+€100 >1< 9.5% near-low => €17 Remain: 0 Transactions: 2.5
+€100 >1< 9% near-low-hard => €16.5 Remain: 0 Transactions: 2.5
+€100 >1< 9.5% near-low-hard => €17 Remain: 0 Transactions: 2.5
+
+
+Started new trading with API3EUR based on 5 mins time interval:
+€100 >0.5< 4% high-drop => €9.5 Remain: 31.5 Transactions: 7.5
+€100 >1< 5% high-drop-hard => €9 Remain: 0 Transactions: 4
+€100 >0.75< 2% near-low => €9 Remain: 0 Transactions: 4.5
+€100 >1< 2.5% near-low => €9.5 Remain: 0 Transactions: 3.5
+€100 >1< 3.5% near-low => €12.5 Remain: 0 Transactions: 7.5
+€100 >1< 3.5% near-low-hard => €12 Remain: 0 Transactions: 7.5
+
+
+Started new trading with EGLDEUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >0.5< 6% on-increase => €6 Remain: 0 Transactions: 2
+€100 >0.75< 6% on-increase => €7.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 6% high-drop => €6 Remain: 0 Transactions: 2
+€100 >0.25< 5.5% near-low => €5.5 Remain: 0 Transactions: 2
+€100 >0.25< 5.5% near-low-hard => €5 Remain: 0 Transactions: 2
+
+
+Started new trading with BATEUR based on 5 mins time interval:
+€100 >0.75< 4% on-increase => €5 Remain: 0 Transactions: 4
+€100 >0.75< 4.5% on-increase => €7.5 Remain: 0 Transactions: 3
+€100 >0.75< 4.5% high-drop => €7.5 Remain: 0 Transactions: 3
+
+
+Started new trading with KEYEUR based on 5 mins time interval:
+€100 >0.5< 9.5% on-increase => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 9.5% high-drop-hard => €10 Remain: 0 Transactions: 1
+
+
+Started new trading with ALPHAEUR based on 5 mins time interval:
+€100 >0.5< 8.5% on-increase-hard => €6.5 Remain: 757.5 Transactions: 2
+€100 >0.5< 9% on-increase-hard => €6.5 Remain: 757.5 Transactions: 2
+€100 >0.75< 7% high-drop => €5 Remain: 759.5 Transactions: 2
+€100 >0.75< 7.5% high-drop => €9 Remain: 764.5 Transactions: 1.5
+€100 >0.75< 2% near-low-hard => €7.5 Remain: 0 Transactions: 4.5
+€100 >1< 2.5% near-low-hard => €6.5 Remain: 0 Transactions: 3
+€100 >1< 3% near-low-hard => €7 Remain: 0 Transactions: 3
+
+
+Started new trading with CTSIEUR based on 5 mins time interval:
+€100 >1< 5.5% on-increase => €5 Remain: 0 Transactions: 3.5
+€100 >1< 4.5% on-increase-hard => €8 Remain: 0 Transactions: 6.5
+€100 >1< 5.5% on-increase-hard => €7.5 Remain: 0 Transactions: 4
+€100 >0.25< 4% high-drop => €11.5 Remain: 0 Transactions: 4.5
+
+
+Started new trading with 1INCHEUR based on 5 mins time interval:
+€100 >0.25< 6.5% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 7.5% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >1< 6% on-increase => €6 Remain: 216.5 Transactions: 2.5
+€100 >1< 6.5% on-increase => €5.5 Remain: 216.5 Transactions: 2
+€100 >1< 7.5% on-increase => €6.5 Remain: 216.5 Transactions: 1.5
+€100 >1< 8% on-increase => €7 Remain: 216.5 Transactions: 1.5
+€100 >1< 8.5% on-increase => €8.5 Remain: 219 Transactions: 1.5
+€100 >1< 9% on-increase => €9 Remain: 219 Transactions: 1.5
+€100 >1< 6.5% on-increase-hard => €8 Remain: 216.5 Transactions: 2.5
+€100 >1< 8.5% on-increase-hard => €7.5 Remain: 215.5 Transactions: 1.5
+€100 >1< 9% on-increase-hard => €7.5 Remain: 215.5 Transactions: 1.5
+€100 >0.5< 3% high-drop => €8 Remain: 0 Transactions: 8.5
+€100 >1< 7.5% high-drop => €6.5 Remain: 216.5 Transactions: 1.5
+€100 >1< 8% high-drop => €7 Remain: 216.5 Transactions: 1.5
+€100 >1< 8.5% high-drop => €8.5 Remain: 219 Transactions: 1.5
+€100 >1< 9% high-drop => €9 Remain: 219 Transactions: 1.5
+€100 >0.5< 5.5% near-low => €8 Remain: 0 Transactions: 5
+€100 >0.5< 8.5% near-low => €8.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 10% near-low => €7.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 3.5% near-low => €7 Remain: 0 Transactions: 8.5
+€100 >0.75< 4% near-low => €9.5 Remain: 204 Transactions: 7
+€100 >0.75< 8% near-low => €13 Remain: 0 Transactions: 3
+€100 >1< 8% near-low => €13 Remain: 219 Transactions: 2.5
+€100 >0.75< 8% near-low-hard => €11.5 Remain: 0 Transactions: 3
+€100 >1< 8% near-low-hard => €12 Remain: 219 Transactions: 2.5
+
+
+Started new trading with SCRTEUR based on 5 mins time interval:
+€100 >0.25< 3.5% on-increase => €7 Remain: 0 Transactions: 4
+€100 >0.25< 3.5% high-drop => €5.5 Remain: 0 Transactions: 4
+€100 >0.25< 4.5% near-low => €6 Remain: 0 Transactions: 3.5
+€100 >0.25< 5% near-low => €6.5 Remain: 0 Transactions: 3
+€100 >0.25< 5.5% near-low => €5 Remain: 0 Transactions: 2.5
+€100 >0.5< 8% near-low => €5 Remain: 0 Transactions: 2
+€100 >0.5< 8.5% near-low => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 9.5% near-low => €5 Remain: 0 Transactions: 1
+€100 >0.75< 10% near-low => €5 Remain: 0 Transactions: 1
+€100 >1< 9.5% near-low => €5 Remain: 0 Transactions: 1
+€100 >1< 10% near-low => €5 Remain: 0 Transactions: 1
+€100 >0.25< 5% near-low-hard => €5 Remain: 0 Transactions: 3
+€100 >1< 9.5% near-low-hard => €5 Remain: 0 Transactions: 1
+€100 >1< 10% near-low-hard => €5 Remain: 0 Transactions: 1
+
+
+Started new trading with NMREUR based on 5 mins time interval:
+€100 >0.25< 3% on-increase => €6.5 Remain: 0 Transactions: 6
+€100 >0.75< 7% on-increase => €7 Remain: 3.5 Transactions: 1
+€100 >0.5< 5.5% on-increase-hard => €5.5 Remain: 3.5 Transactions: 2
+€100 >0.5< 6% on-increase-hard => €9.5 Remain: 3.5 Transactions: 1.5
+€100 >0.25< 4% near-low => €11.5 Remain: 0 Transactions: 5
+€100 >0.25< 4% near-low-hard => €16 Remain: 0 Transactions: 5
+
+
+Started new trading with PERPEUR based on 5 mins time interval:
+€100 >1< 2.5% near-low => €5.5 Remain: 0 Transactions: 3
+€100 >1< 2.5% near-low-hard => €5.5 Remain: 0 Transactions: 3
+
+
+Started new trading with REPEUR based on 5 mins time interval:
+€100 >1< 2.5% on-increase => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 2.5% high-drop => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 2.5% high-drop-hard => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 2.5% high-drop-hard => €5.5 Remain: 0 Transactions: 1.5
+
+
+Started new trading with GHSTEUR based on 5 mins time interval:
+
+
+Started new trading with ALICEEUR based on 5 mins time interval:
+€100 >0.25< 3.5% high-drop => €8 Remain: 0 Transactions: 2.5
+€100 >0.5< 2.5% high-drop-hard => €9 Remain: 0 Transactions: 7
+€100 >1< 2% near-low => €13 Remain: 0 Transactions: 6
+€100 >1< 2.5% near-low => €13.5 Remain: 0 Transactions: 5.5
+€100 >1< 2% near-low-hard => €12 Remain: 0 Transactions: 5.5
+€100 >1< 2.5% near-low-hard => €14.5 Remain: 0 Transactions: 5.5
+
+
+Started new trading with GSTEUR based on 5 mins time interval:
+
+
+Started new trading with NODLEUR based on 5 mins time interval:
+€100 >0.5< 3.5% high-drop => €8.5 Remain: 23271 Transactions: 2
+€100 >0.75< 3.5% high-drop => €7 Remain: 23271 Transactions: 2.5
+€100 >0.25< 3.5% high-drop-hard => €6 Remain: 0 Transactions: 0.5
+€100 >0.5< 3.5% high-drop-hard => €10 Remain: 0 Transactions: 1.5
+€100 >1< 5% near-low => €13.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% near-low => €13 Remain: 0 Transactions: 2.5
+€100 >1< 6% near-low => €18.5 Remain: 0 Transactions: 3.5
+
+
+Started new trading with KEEPEUR based on 5 mins time interval:
+
+
+Started new trading with BNCEUR based on 5 mins time interval:
+
+
+Started new trading with SHIBEUR based on 5 mins time interval:
+€100 >0.25< 3.5% on-increase => €9 Remain: 2873629.5 Transactions: 6
+€100 >0.25< 4% on-increase => €8.5 Remain: 2895348.5 Transactions: 5
+€100 >0.5< 3% on-increase => €9.5 Remain: 2852233.5 Transactions: 10.5
+€100 >0.5< 4% on-increase => €14 Remain: 2895348.5 Transactions: 6.5
+€100 >0.5< 4.5% on-increase-hard => €16 Remain: 2905484 Transactions: 5.5
+€100 >1< 4% on-increase-hard => €16 Remain: 0 Transactions: 8
+€100 >0.75< 5.5% high-drop-hard => €14.5 Remain: 0 Transactions: 2.5
+
+
+Started new trading with ENJEUR based on 5 mins time interval:
+€100 >0.25< 4.5% high-drop => €7.5 Remain: 0 Transactions: 2
+€100 >0.5< 2% high-drop => €6 Remain: 0 Transactions: 8.5
+€100 >0.5< 4.5% high-drop => €7.5 Remain: 0 Transactions: 2
+€100 >0.75< 5.5% high-drop-hard => €6 Remain: 366 Transactions: 1
+€100 >1< 5.5% high-drop-hard => €5 Remain: 366 Transactions: 1
+€100 >0.75< 9.5% near-low => €5.5 Remain: 383 Transactions: 1
+€100 >1< 2% near-low => €6.5 Remain: 0 Transactions: 4
+€100 >1< 2.5% near-low => €11.5 Remain: 0 Transactions: 5.5
+€100 >1< 2.5% near-low-hard => €11.5 Remain: 0 Transactions: 5.5
+
+
+Started new trading with RLCEUR based on 5 mins time interval:
+€100 >0.25< 4.5% on-increase => €7 Remain: 0 Transactions: 3.5
+€100 >0.25< 5% on-increase => €6 Remain: 0 Transactions: 3
+€100 >0.25< 5.5% on-increase => €9 Remain: 0 Transactions: 2.5
+€100 >0.5< 6.5% on-increase => €10.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 7% on-increase-hard => €13 Remain: 0 Transactions: 2.5
+€100 >0.25< 7% near-low => €12.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 8% near-low => €15 Remain: 0 Transactions: 2.5
+€100 >1< 3.5% near-low => €15.5 Remain: 34 Transactions: 6.5
+€100 >0.5< 8% near-low-hard => €14.5 Remain: 0 Transactions: 2.5
+€100 >1< 3% near-low-hard => €13.5 Remain: 0 Transactions: 6
+€100 >1< 3.5% near-low-hard => €16.5 Remain: 34 Transactions: 6.5
+
+
+Started new trading with MINAEUR based on 5 mins time interval:
+€100 >0.5< 5% on-increase => €7 Remain: 0 Transactions: 5
+€100 >0.75< 5% on-increase => €6 Remain: 0 Transactions: 5
+€100 >1< 5.5% on-increase-hard => €16 Remain: 106 Transactions: 4.5
+
+
+Started new trading with ARPAEUR based on 5 mins time interval:
+€100 >0.5< 2% high-drop => €10 Remain: 1164 Transactions: 13
+€100 >1< 7% high-drop-hard => €9 Remain: 1187.5 Transactions: 1.5
+€100 >0.5< 3.5% near-low => €10 Remain: 0 Transactions: 9.5
+€100 >0.5< 4% near-low => €9.5 Remain: 1176.5 Transactions: 7
+
+
+Started new trading with EOSEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase => €6 Remain: 0 Transactions: 2.5
+€100 >0.5< 5% on-increase => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 4.5% on-increase => €6.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 5% on-increase => €5.5 Remain: 0 Transactions: 2
+€100 >1< 5% on-increase => €5 Remain: 0 Transactions: 2
+€100 >1< 5.5% on-increase => €5.5 Remain: 122.5 Transactions: 1.5
+€100 >0.25< 3% on-increase-hard => €5.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 4.5% on-increase-hard => €6 Remain: 0 Transactions: 2.5
+€100 >0.75< 4.5% on-increase-hard => €5 Remain: 122.5 Transactions: 2
+€100 >1< 4.5% on-increase-hard => €5 Remain: 122.5 Transactions: 2
+€100 >0.25< 3% high-drop => €7 Remain: 0 Transactions: 3.5
+€100 >0.5< 4.5% high-drop => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 5% high-drop => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 4.5% high-drop => €6.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 5% high-drop => €5.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% high-drop => €5.5 Remain: 122.5 Transactions: 1.5
+€100 >0.25< 3% high-drop-hard => €6.5 Remain: 0 Transactions: 2.5
+€100 >0.25< 3.5% high-drop-hard => €6.5 Remain: 0 Transactions: 2
+€100 >0.25< 3.5% near-low => €6 Remain: 0 Transactions: 5
+€100 >0.75< 6% near-low => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 6.5% near-low => €7 Remain: 0 Transactions: 2
+€100 >1< 7% near-low => €6 Remain: 124 Transactions: 1.5
+€100 >0.25< 3.5% near-low-hard => €5 Remain: 0 Transactions: 5
+€100 >0.75< 6.5% near-low-hard => €5.5 Remain: 0 Transactions: 2
+€100 >1< 7% near-low-hard => €5.5 Remain: 124 Transactions: 1.5
+
+
+Started new trading with DYDXEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase => €9 Remain: 0 Transactions: 7.5
+€100 >1< 4.5% on-increase => €8.5 Remain: 0 Transactions: 7
+€100 >1< 3% on-increase-hard => €10.5 Remain: 49.5 Transactions: 11
+€100 >1< 5% on-increase-hard => €14 Remain: 50.5 Transactions: 5.5
+€100 >1< 3% near-low => €17.5 Remain: 0 Transactions: 6.5
+€100 >1< 4% near-low => €17 Remain: 0 Transactions: 5
+€100 >1< 4.5% near-low => €16.5 Remain: 51 Transactions: 4.5
+€100 >1< 3% near-low-hard => €18 Remain: 0 Transactions: 6.5
+
+
+Started new trading with KSMEUR based on 5 mins time interval:
+€100 >0.75< 5.5% on-increase => €5.5 Remain: 3 Transactions: 1.5
+€100 >0.75< 6% on-increase => €8 Remain: 0 Transactions: 2
+€100 >0.75< 6% high-drop => €7.5 Remain: 0 Transactions: 2
+€100 >0.75< 5.5% high-drop-hard => €6.5 Remain: 3 Transactions: 1.5
+€100 >0.75< 6% high-drop-hard => €6 Remain: 0 Transactions: 1
+€100 >0.75< 7.5% near-low => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 8% near-low => €5 Remain: 0 Transactions: 1.5
+€100 >0.75< 8.5% near-low => €6 Remain: 0 Transactions: 1.5
+€100 >0.75< 9% near-low => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 9.5% near-low => €6.5 Remain: 3 Transactions: 1
+€100 >0.75< 10% near-low => €6.5 Remain: 3 Transactions: 1
+€100 >0.75< 10% near-low-hard => €5.5 Remain: 3 Transactions: 1
+
+
+Started new trading with AXSEUR based on 5 mins time interval:
+€100 >0.25< 4% on-increase => €5.5 Remain: 0 Transactions: 3
+€100 >1< 5% on-increase => €6 Remain: 0 Transactions: 3.5
+€100 >0.25< 4.5% on-increase-hard => €8.5 Remain: 0 Transactions: 3
+
+
+Started new trading with ICXEUR based on 5 mins time interval:
+€100 >0.75< 5.5% on-increase => €7.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% on-increase => €7 Remain: 420.5 Transactions: 1.5
+€100 >0.5< 4% on-increase-hard => €9.5 Remain: 0 Transactions: 4.5
+€100 >0.75< 4% on-increase-hard => €9.5 Remain: 420.5 Transactions: 5.5
+€100 >1< 5% on-increase-hard => €9 Remain: 397 Transactions: 3
+
+
+Started new trading with COTIEUR based on 5 mins time interval:
+€100 >0.25< 6.5% on-increase => €8 Remain: 0 Transactions: 2.5
+€100 >0.5< 6.5% on-increase => €8.5 Remain: 0 Transactions: 3.5
+€100 >0.5< 7% on-increase => €9.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6.5% on-increase => €12.5 Remain: 580 Transactions: 3.5
+€100 >0.25< 6.5% high-drop => €12 Remain: 0 Transactions: 2
+€100 >0.5< 6.5% high-drop => €11 Remain: 0 Transactions: 3.5
+€100 >0.75< 6.5% high-drop => €15.5 Remain: 580 Transactions: 3.5
+
+
+Started new trading with GMTEUR based on 5 mins time interval:
+€100 >1< 7.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >1< 8% on-increase => €6 Remain: 0 Transactions: 2
+€100 >1< 8.5% on-increase => €7 Remain: 433 Transactions: 1.5
+€100 >1< 9% on-increase => €7 Remain: 433 Transactions: 1.5
+€100 >0.75< 8.5% on-increase-hard => €5.5 Remain: 429 Transactions: 1.5
+€100 >1< 8% on-increase-hard => €5 Remain: 429 Transactions: 1.5
+€100 >1< 9% on-increase-hard => €6.5 Remain: 425.5 Transactions: 1.5
+€100 >1< 9.5% on-increase-hard => €6.5 Remain: 425.5 Transactions: 1.5
+€100 >0.5< 2% high-drop => €7.5 Remain: 0 Transactions: 7
+€100 >1< 2% high-drop => €13 Remain: 0 Transactions: 5
+€100 >1< 8.5% high-drop => €11.5 Remain: 433 Transactions: 1.5
+€100 >0.75< 2.5% near-low => €16.5 Remain: 0 Transactions: 7
+€100 >0.75< 2.5% near-low-hard => €18 Remain: 0 Transactions: 7
+
+
+Started new trading with AKTEUR based on 5 mins time interval:
+€100 >0.5< 6.5% on-increase => €6.5 Remain: 0 Transactions: 1.5
+€100 >1< 8% on-increase => €5.5 Remain: 24 Transactions: 1
+€100 >0.25< 3.5% high-drop => €6.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 6.5% high-drop => €6.5 Remain: 0 Transactions: 1.5
+€100 >1< 4.5% high-drop => €6 Remain: 23.5 Transactions: 4
+€100 >0.25< 3.5% high-drop-hard => €5 Remain: 0 Transactions: 2
+€100 >0.25< 4% high-drop-hard => €6.5 Remain: 0 Transactions: 1.5
+
+
+Started new trading with MXCEUR based on 5 mins time interval:
+€100 >0.5< 9.5% on-increase => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 10% on-increase => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 9.5% high-drop => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 10% high-drop => €5 Remain: 0 Transactions: 0.5
+€100 >0.25< 6.5% high-drop-hard => €5 Remain: 9521.5 Transactions: 0.5
+€100 >0.5< 9.5% high-drop-hard => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 10% high-drop-hard => €5 Remain: 0 Transactions: 0.5
+
+
+Started new trading with POWREUR based on 5 mins time interval:
+€100 >1< 5% on-increase => €7 Remain: 261 Transactions: 2.5
+€100 >1< 5.5% on-increase => €7.5 Remain: 263.5 Transactions: 2.5
+€100 >1< 5.5% high-drop => €7.5 Remain: 263.5 Transactions: 2.5
+€100 >0.25< 3.5% near-low => €6.5 Remain: 0 Transactions: 5.5
+€100 >1< 9% near-low => €6.5 Remain: 0 Transactions: 1
+€100 >1< 9.5% near-low => €6.5 Remain: 0 Transactions: 1
+
+
+Started new trading with HNTEUR based on 5 mins time interval:
+€100 >0.75< 7.5% on-increase => €5 Remain: 0 Transactions: 2
+€100 >1< 8% on-increase => €9 Remain: 0 Transactions: 1.5
+€100 >1< 8% high-drop => €9 Remain: 0 Transactions: 1.5
+€100 >0.75< 2% near-low-hard => €9 Remain: 7.5 Transactions: 5.5
+€100 >1< 8.5% near-low-hard => €13 Remain: 0 Transactions: 3.5
+
+
+Started new trading with SBREUR based on 5 mins time interval:
+€100 >0.75< 10% on-increase => €5.5 Remain: 0 Transactions: 0.5
+€100 >1< 10% on-increase => €6.5 Remain: 0 Transactions: 1
+€100 >0.75< 10% high-drop => €5.5 Remain: 0 Transactions: 0.5
+€100 >1< 10% high-drop => €6.5 Remain: 0 Transactions: 1
+
+
+Started new trading with BTTEUR based on 5 mins time interval:
+
+
+Started new trading with HDXEUR based on 5 mins time interval:
+
+
+Started new trading with ADXEUR based on 5 mins time interval:
+€100 >0.5< 4% high-drop-hard => €6.5 Remain: 0 Transactions: 1
+€100 >0.75< 4% high-drop-hard => €6.5 Remain: 0 Transactions: 1
+€100 >0.25< 5.5% near-low-hard => €5.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 6% near-low-hard => €8.5 Remain: 0 Transactions: 1
+€100 >0.25< 6.5% near-low-hard => €9 Remain: 0 Transactions: 1
+€100 >0.5< 6% near-low-hard => €8.5 Remain: 0 Transactions: 1
+€100 >0.5< 6.5% near-low-hard => €9 Remain: 0 Transactions: 1
+€100 >0.75< 6% near-low-hard => €8.5 Remain: 0 Transactions: 1
+€100 >0.75< 6.5% near-low-hard => €9 Remain: 0 Transactions: 1
+€100 >0.75< 7% near-low-hard => €9.5 Remain: 0 Transactions: 1
+
+
+Started new trading with XCNEUR based on 5 mins time interval:
+
+
+Started new trading with FARMEUR based on 5 mins time interval:
+€100 >1< 4% on-increase => €6 Remain: 0 Transactions: 2.5
+€100 >1< 4.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >1< 5% on-increase => €6.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% on-increase => €8 Remain: 0 Transactions: 2
+€100 >1< 5% high-drop => €7.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% high-drop => €8 Remain: 0 Transactions: 2
+€100 >1< 5.5% high-drop-hard => €6.5 Remain: 0 Transactions: 1.5
+€100 >1< 5% near-low => €6 Remain: 0 Transactions: 2.5
+€100 >1< 5.5% near-low => €6 Remain: 0 Transactions: 2
+€100 >1< 6% near-low => €6.5 Remain: 1 Transactions: 1.5
+€100 >1< 6.5% near-low => €7 Remain: 1 Transactions: 1.5
+€100 >1< 7% near-low => €7.5 Remain: 1 Transactions: 1.5
+€100 >0.25< 4% near-low-hard => €6 Remain: 0 Transactions: 2
+€100 >0.25< 4.5% near-low-hard => €9 Remain: 0 Transactions: 2
+€100 >0.25< 5% near-low-hard => €10 Remain: 0 Transactions: 1.5
+€100 >0.5< 5% near-low-hard => €8.5 Remain: 0 Transactions: 2
+€100 >0.5< 6% near-low-hard => €7 Remain: 0 Transactions: 1.5
+€100 >0.5< 6.5% near-low-hard => €8 Remain: 0 Transactions: 1.5
+€100 >0.75< 4% near-low-hard => €9 Remain: 0 Transactions: 3.5
+€100 >0.75< 4.5% near-low-hard => €11.5 Remain: 0 Transactions: 3.5
+€100 >0.75< 5% near-low-hard => €11 Remain: 0 Transactions: 3
+€100 >1< 5% near-low-hard => €11 Remain: 0 Transactions: 2.5
+€100 >1< 7% near-low-hard => €10 Remain: 1 Transactions: 1.5
+
+
+Started new trading with WBTCEUR based on 5 mins time interval:
+€100 >0.25< 3% near-low => €5.5 Remain: 0 Transactions: 3
+€100 >0.25< 2.5% near-low-hard => €5.5 Remain: 0 Transactions: 4
+€100 >0.25< 3% near-low-hard => €5 Remain: 0 Transactions: 3
+
+
+Started new trading with WOOEUR based on 5 mins time interval:
+€100 >0.75< 6.5% on-increase => €8 Remain: 0 Transactions: 3.5
+€100 >0.75< 7% on-increase => €11 Remain: 0 Transactions: 3.5
+€100 >0.25< 3.5% on-increase-hard => €13 Remain: 267.5 Transactions: 9
+€100 >0.75< 6.5% high-drop-hard => €13.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 2% near-low => €12 Remain: 0 Transactions: 6
+€100 >0.75< 5.5% near-low => €16 Remain: 0 Transactions: 6
+€100 >1< 3% near-low => €15 Remain: 0 Transactions: 5.5
+€100 >0.5< 4.5% near-low-hard => €15 Remain: 0 Transactions: 7.5
+€100 >0.75< 5.5% near-low-hard => €15.5 Remain: 0 Transactions: 6
+
+
+Started new trading with ETCEUR based on 5 mins time interval:
+€100 >0.5< 4% on-increase => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 4.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >1< 3% on-increase => €6 Remain: 0 Transactions: 5
+€100 >1< 5% on-increase => €5 Remain: 0 Transactions: 1.5
+€100 >1< 5.5% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.5< 3% on-increase-hard => €5 Remain: 0 Transactions: 4.5
+€100 >0.5< 3.5% on-increase-hard => €5 Remain: 0 Transactions: 3.5
+€100 >0.75< 3.5% on-increase-hard => €8 Remain: 0 Transactions: 4.5
+€100 >0.25< 4% near-low => €8 Remain: 0 Transactions: 3
+€100 >0.5< 3.5% near-low => €6.5 Remain: 0 Transactions: 5
+€100 >0.5< 4% near-low => €6 Remain: 0 Transactions: 3.5
+€100 >0.5< 4.5% near-low => €6 Remain: 0 Transactions: 3
+€100 >0.5< 5% near-low => €8.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 3.5% near-low => €8 Remain: 0 Transactions: 6.5
+€100 >0.75< 4% near-low => €10 Remain: 0 Transactions: 4.5
+€100 >0.75< 4% near-low-hard => €9.5 Remain: 0 Transactions: 4.5
+
+
+Started new trading with UMAEUR based on 5 mins time interval:
+€100 >0.25< 5.5% on-increase => €7 Remain: 0 Transactions: 3
+€100 >0.25< 6.5% on-increase => €6.5 Remain: 0 Transactions: 1
+€100 >0.5< 4.5% on-increase => €5.5 Remain: 0 Transactions: 6.5
+€100 >0.5< 5.5% on-increase => €6.5 Remain: 0 Transactions: 5
+€100 >0.5< 6% on-increase => €6 Remain: 0 Transactions: 3.5
+€100 >0.5< 9.5% on-increase => €5 Remain: 0 Transactions: 0.5
+€100 >0.5< 10% on-increase => €5 Remain: 0 Transactions: 0.5
+€100 >0.75< 4.5% on-increase => €9 Remain: 20 Transactions: 7.5
+€100 >0.75< 5% on-increase => €8 Remain: 20 Transactions: 6.5
+€100 >0.75< 6% on-increase => €11.5 Remain: 20.5 Transactions: 4
+€100 >1< 5% on-increase => €11 Remain: 20 Transactions: 6.5
+€100 >1< 5% on-increase-hard => €10 Remain: 20 Transactions: 5.5
+€100 >0.75< 6% high-drop => €11.5 Remain: 20.5 Transactions: 4
+€100 >1< 4% high-drop-hard => €10.5 Remain: 0 Transactions: 4
+€100 >0.5< 6% near-low => €12.5 Remain: 0 Transactions: 6
+
+
+Started new trading with COMPEUR based on 5 mins time interval:
+€100 >1< 5% on-increase => €5.5 Remain: 0 Transactions: 2.5
+€100 >1< 5% on-increase-hard => €6.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 4% high-drop-hard => €8 Remain: 0 Transactions: 2
+€100 >0.75< 4% high-drop-hard => €8 Remain: 0 Transactions: 2
+€100 >1< 4% high-drop-hard => €7.5 Remain: 0 Transactions: 2
+€100 >0.25< 3.5% near-low => €9.5 Remain: 0 Transactions: 8
+€100 >0.25< 3.5% near-low-hard => €10.5 Remain: 0 Transactions: 8
+
+
+Started new trading with REQEUR based on 5 mins time interval:
+€100 >0.5< 3.5% on-increase => €5 Remain: 0 Transactions: 5
+€100 >0.5< 4.5% on-increase => €7.5 Remain: 0 Transactions: 3
+€100 >0.75< 4.5% on-increase => €8 Remain: 0 Transactions: 3
+€100 >0.5< 3.5% on-increase-hard => €8 Remain: 0 Transactions: 5
+€100 >0.5< 4% on-increase-hard => €8.5 Remain: 0 Transactions: 5
+€100 >0.75< 4% on-increase-hard => €8.5 Remain: 589.5 Transactions: 4.5
+€100 >1< 5% on-increase-hard => €8 Remain: 588.5 Transactions: 2
+€100 >0.25< 4% high-drop => €7 Remain: 0 Transactions: 3
+€100 >0.5< 4.5% high-drop => €7.5 Remain: 0 Transactions: 3
+€100 >0.75< 4.5% high-drop => €8 Remain: 0 Transactions: 3
+€100 >0.5< 4% near-low => €7 Remain: 0 Transactions: 5.5
+€100 >0.5< 4.5% near-low => €8 Remain: 0 Transactions: 5
+€100 >0.5< 4.5% near-low-hard => €8.5 Remain: 0 Transactions: 5
+
+
+Started new trading with QTUMEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase-hard => €6 Remain: 0 Transactions: 2.5
+€100 >0.5< 6% high-drop => €5.5 Remain: 0 Transactions: 1
+€100 >1< 5% high-drop => €5 Remain: 23.5 Transactions: 2
+€100 >0.5< 6% high-drop-hard => €5.5 Remain: 0 Transactions: 1
+€100 >1< 6% high-drop-hard => €8.5 Remain: 24 Transactions: 1
+€100 >0.75< 6.5% near-low => €8 Remain: 0 Transactions: 2.5
+€100 >1< 2% near-low => €8.5 Remain: 0 Transactions: 5.5
+€100 >0.75< 6.5% near-low-hard => €8 Remain: 0 Transactions: 2.5
+€100 >1< 2% near-low-hard => €9 Remain: 0 Transactions: 5.5
+
+
+Started new trading with SUSHIEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase => €5.5 Remain: 0 Transactions: 4.5
+€100 >0.5< 6% on-increase => €5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6.5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >1< 8% on-increase => €5.5 Remain: 79.5 Transactions: 1
+€100 >0.25< 3.5% on-increase-hard => €5.5 Remain: 0 Transactions: 7.5
+€100 >0.5< 6% on-increase-hard => €11 Remain: 0 Transactions: 3
+€100 >0.5< 7% near-low => €11.5 Remain: 0 Transactions: 3
+€100 >0.75< 7.5% near-low => €10 Remain: 0 Transactions: 3.5
+€100 >0.75< 8.5% near-low => €11 Remain: 0 Transactions: 2.5
+€100 >0.5< 7% near-low-hard => €9.5 Remain: 0 Transactions: 3
+€100 >0.5< 8.5% near-low-hard => €8 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% near-low-hard => €7 Remain: 75.5 Transactions: 5.5
+€100 >0.75< 7% near-low-hard => €10 Remain: 0 Transactions: 4
+€100 >0.75< 7.5% near-low-hard => €9 Remain: 0 Transactions: 3.5
+€100 >0.75< 8.5% near-low-hard => €10.5 Remain: 0 Transactions: 2.5
+
+
+Started new trading with RENEUR based on 5 mins time interval:
+€100 >1< 5.5% high-drop-hard => €6 Remain: 0 Transactions: 2
+€100 >1< 6% high-drop-hard => €6 Remain: 0 Transactions: 2
+
+
+Started new trading with BNTEUR based on 5 mins time interval:
+€100 >0.5< 5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >0.5< 5.5% on-increase => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 5% on-increase => €7.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 5.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >1< 5% on-increase => €5 Remain: 0 Transactions: 2.5
+€100 >1< 5.5% on-increase => €6.5 Remain: 0 Transactions: 2
+€100 >0.5< 5% high-drop => €7 Remain: 0 Transactions: 2.5
+€100 >0.5< 5.5% high-drop => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 5% high-drop => €7.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 5.5% high-drop => €6 Remain: 0 Transactions: 2
+€100 >1< 5.5% high-drop => €6.5 Remain: 0 Transactions: 2
+€100 >0.25< 3.5% high-drop-hard => €6 Remain: 0 Transactions: 2
+€100 >0.5< 5% high-drop-hard => €7 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% high-drop-hard => €7 Remain: 0 Transactions: 1.5
+€100 >0.25< 4.5% near-low => €5.5 Remain: 0 Transactions: 3
+€100 >0.5< 6% near-low => €8.5 Remain: 0 Transactions: 2.5
+€100 >0.5< 6% near-low-hard => €8 Remain: 0 Transactions: 2.5
+
+
+Started new trading with ATLASEUR based on 5 mins time interval:
+€100 >0.25< 3.5% high-drop-hard => €14.5 Remain: 0 Transactions: 3.5
+
+
+Started new trading with ANKREUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-increase => €6 Remain: 0 Transactions: 3.5
+€100 >0.75< 4.5% on-increase => €8 Remain: 0 Transactions: 5
+€100 >1< 4.5% on-increase => €7.5 Remain: 2026.5 Transactions: 4.5
+€100 >0.75< 7% on-increase-hard => €6.5 Remain: 2192.5 Transactions: 1
+€100 >1< 4.5% on-increase-hard => €9 Remain: 2007 Transactions: 4.5
+€100 >0.75< 8.5% near-low => €8 Remain: 2232 Transactions: 1
+€100 >0.75< 8.5% near-low-hard => €8 Remain: 2232 Transactions: 1
+
+
+Started new trading with CLOUDEUR based on 5 mins time interval:
+€100 >0.25< 6% high-drop => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 4% high-drop => €6 Remain: 154 Transactions: 5
+€100 >0.25< 6% high-drop-hard => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 5% high-drop-hard => €5.5 Remain: 0 Transactions: 3
+€100 >0.75< 5.5% high-drop-hard => €13 Remain: 0 Transactions: 3.5
+
+
+Started new trading with PDAEUR based on 5 mins time interval:
+€100 >0.25< 3% high-drop-hard => €8 Remain: 0 Transactions: 2.5
+€100 >0.25< 3.5% high-drop-hard => €7 Remain: 0 Transactions: 2.5
+€100 >0.5< 3% high-drop-hard => €6.5 Remain: 0 Transactions: 4
+€100 >0.75< 3% high-drop-hard => €5.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 8.5% high-drop-hard => €5 Remain: 0 Transactions: 1
+€100 >0.75< 9% high-drop-hard => €5 Remain: 0 Transactions: 1
+€100 >0.5< 7% near-low => €6 Remain: 0 Transactions: 4
+€100 >0.5< 7% near-low-hard => €5 Remain: 0 Transactions: 4
+
+
+Started new trading with REZEUR based on 5 mins time interval:
+€100 >0.5< 5% on-increase => €5 Remain: 1538.5 Transactions: 5
+€100 >0.75< 7% on-increase => €6.5 Remain: 1552 Transactions: 2.5
+€100 >0.75< 7.5% on-increase => €6.5 Remain: 1559.5 Transactions: 2
+€100 >0.75< 8% on-increase => €8.5 Remain: 1602 Transactions: 2
+€100 >0.75< 9% on-increase => €7.5 Remain: 1626.5 Transactions: 1.5
+€100 >1< 8% on-increase => €10.5 Remain: 1552 Transactions: 2.5
+€100 >0.25< 5% high-drop => €9.5 Remain: 0 Transactions: 4
+€100 >0.5< 5.5% high-drop => €12 Remain: 1538.5 Transactions: 4
+€100 >0.5< 5.5% high-drop-hard => €13 Remain: 1538.5 Transactions: 1
+€100 >0.5< 6% high-drop-hard => €13 Remain: 1538.5 Transactions: 1
+€100 >0.75< 6% high-drop-hard => €14 Remain: 1538.5 Transactions: 1
+€100 >0.75< 6.5% high-drop-hard => €14 Remain: 1538.5 Transactions: 1
+€100 >1< 4% high-drop-hard => €15.5 Remain: 0 Transactions: 1.5
+€100 >1< 8.5% high-drop-hard => €16 Remain: 1552 Transactions: 1
+
+
+Started new trading with ANTEUR based on 5 mins time interval:
+
+
+
+Started new trading with MPLEUR based on 5 mins time interval:
+€100 >0.25< 4% on-increase => €5.5 Remain: 0 Transactions: 1.5
+€100 >1< 4% on-increase => €8 Remain: 0 Transactions: 4
+€100 >0.75< 3% high-drop => €8.5 Remain: 0 Transactions: 5.5
+€100 >1< 3% high-drop => €7.5 Remain: 0 Transactions: 5.5
+€100 >1< 4% high-drop => €7 Remain: 0 Transactions: 4
+€100 >0.75< 5% near-low => €6.5 Remain: 0 Transactions: 3.5
+€100 >1< 5% near-low => €10 Remain: 0 Transactions: 3.5
+
+
+Started new trading with PONDEUR based on 5 mins time interval:
+€100 >0.75< 5% near-low-hard => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 5.5% near-low-hard => €5.5 Remain: 0 Transactions: 1.5
+€100 >1< 5% near-low-hard => €5 Remain: 0 Transactions: 1.5
+€100 >1< 5.5% near-low-hard => €5.5 Remain: 0 Transactions: 1.5
+
+
+Started new trading with FORTHEUR based on 5 mins time interval:
+
+
+Started new trading with HFTEUR based on 5 mins time interval:
+€100 >0.75< 6.5% on-increase => €7 Remain: 399 Transactions: 1.5
+€100 >1< 6% on-increase => €9.5 Remain: 0 Transactions: 3.5
+€100 >1< 6.5% on-increase => €11.5 Remain: 399 Transactions: 2.5
+€100 >1< 5.5% on-increase-hard => €12.5 Remain: 371 Transactions: 4.5
+
+
+Started new trading with BCHEUR based on 5 mins time interval:
+€100 >0.25< 3.5% on-increase => €9.5 Remain: 0 Transactions: 3
+€100 >0.5< 4.5% on-increase => €10 Remain: 0 Transactions: 3
+€100 >0.75< 4.5% on-increase => €10 Remain: 0 Transactions: 3
+€100 >1< 5% on-increase => €10 Remain: 0 Transactions: 3
+€100 >0.5< 4.5% high-drop => €10 Remain: 0 Transactions: 3
+€100 >0.75< 4.5% high-drop => €10 Remain: 0 Transactions: 3
+€100 >1< 5% high-drop => €10 Remain: 0 Transactions: 3
+€100 >0.25< 4.5% near-low => €10.5 Remain: 0 Transactions: 3
+€100 >0.25< 4.5% near-low-hard => €10.5 Remain: 0 Transactions: 3
+
+
+Started new trading with MSOLEUR based on 5 mins time interval:
+€100 >1< 2.5% high-drop => €5.5 Remain: 0 Transactions: 1.5
+
+
+Started new trading with MANAEUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase => €5 Remain: 0 Transactions: 2.5
+€100 >0.75< 5.5% on-increase => €5 Remain: 0 Transactions: 3
+€100 >0.75< 7% on-increase => €5.5 Remain: 0 Transactions: 1
+€100 >1< 4.5% on-increase => €6.5 Remain: 177.5 Transactions: 3.5
+€100 >1< 5% on-increase => €6 Remain: 178.5 Transactions: 3
+€100 >1< 5.5% on-increase => €6 Remain: 183.5 Transactions: 2.5
+€100 >1< 8.5% on-increase => €5 Remain: 189.5 Transactions: 0.5
+€100 >0.5< 6.5% on-increase-hard => €6.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 4.5% on-increase-hard => €5 Remain: 0 Transactions: 4
+€100 >0.75< 7% on-increase-hard => €6 Remain: 188.5 Transactions: 0.5
+€100 >1< 4.5% on-increase-hard => €7.5 Remain: 177.5 Transactions: 3.5
+€100 >1< 5% on-increase-hard => €7.5 Remain: 177.5 Transactions: 3
+€100 >1< 4.5% high-drop => €6.5 Remain: 177.5 Transactions: 3.5
+€100 >1< 5% high-drop => €6 Remain: 178.5 Transactions: 3
+€100 >1< 5.5% high-drop => €6 Remain: 183.5 Transactions: 2.5
+€100 >1< 8.5% high-drop => €5 Remain: 189.5 Transactions: 0.5
+€100 >0.75< 6% high-drop-hard => €7.5 Remain: 0 Transactions: 2
+€100 >0.5< 7% near-low => €7.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6.5% near-low => €6.5 Remain: 0 Transactions: 3
+€100 >0.75< 8.5% near-low => €6 Remain: 0 Transactions: 1
+€100 >1< 5.5% near-low => €9.5 Remain: 178 Transactions: 3.5
+€100 >1< 5.5% near-low-hard => €8.5 Remain: 178 Transactions: 3.5
+€100 >1< 6.5% near-low-hard => €7 Remain: 181 Transactions: 2.5
+
+
+Started new trading with LDOEUR based on 5 mins time interval:
+€100 >0.75< 7% on-increase => €5.5 Remain: 0 Transactions: 2
+€100 >0.75< 7.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >1< 7.5% on-increase => €6 Remain: 0 Transactions: 2
+€100 >1< 8% on-increase => €6.5 Remain: 54 Transactions: 1.5
+€100 >0.75< 6.5% on-increase-hard => €5 Remain: 54 Transactions: 1.5
+€100 >1< 6.5% on-increase-hard => €8.5 Remain: 54 Transactions: 2.5
+€100 >0.5< 6% high-drop => €7.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 7.5% high-drop => €6 Remain: 0 Transactions: 2
+€100 >1< 7.5% high-drop => €6 Remain: 0 Transactions: 2
+€100 >1< 8% high-drop => €6.5 Remain: 54 Transactions: 1.5
+€100 >0.5< 3% high-drop-hard => €6.5 Remain: 0 Transactions: 5.5
+€100 >0.5< 6.5% high-drop-hard => €6 Remain: 0 Transactions: 1
+€100 >0.5< 7% high-drop-hard => €7 Remain: 0 Transactions: 1
+€100 >0.75< 7% high-drop-hard => €9 Remain: 0 Transactions: 1.5
+€100 >0.75< 9.5% near-low => €8.5 Remain: 0 Transactions: 2
+€100 >0.75< 9.5% near-low-hard => €9 Remain: 0 Transactions: 2
+
+
+Started new trading with KNCEUR based on 5 mins time interval:
+€100 >0.25< 4% on-increase => €8.5 Remain: 0 Transactions: 3
+€100 >0.5< 4% on-increase => €8.5 Remain: 0 Transactions: 5
+€100 >0.5< 4.5% on-increase => €9.5 Remain: 0 Transactions: 4
+€100 >0.5< 5% on-increase => €11 Remain: 0 Transactions: 3
+€100 >1< 5% on-increase => €13.5 Remain: 0 Transactions: 4
+€100 >1< 5% high-drop => €13 Remain: 0 Transactions: 4
+
+
+Started new trading with KAVAEUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase => €10.5 Remain: 0 Transactions: 4
+€100 >0.75< 6% high-drop-hard => €10.5 Remain: 0 Transactions: 3
+€100 >1< 6% high-drop-hard => €9 Remain: 167.5 Transactions: 2.5
+
+
+Started new trading with ENSEUR based on 5 mins time interval:
+€100 >0.5< 5.5% on-increase => €7 Remain: 0 Transactions: 2.5
+€100 >0.5< 6.5% on-increase => €7 Remain: 0 Transactions: 2
+€100 >0.75< 6% on-increase => €10.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6.5% on-increase => €11 Remain: 0 Transactions: 2.5
+€100 >0.75< 7% on-increase => €12.5 Remain: 0 Transactions: 2.5
+€100 >1< 7% on-increase => €12 Remain: 0 Transactions: 2.5
+€100 >0.75< 6% high-drop => €10.5 Remain: 0 Transactions: 2.5
+€100 >0.75< 6.5% high-drop => €11 Remain: 0 Transactions: 2.5
+€100 >0.75< 7% high-drop => €12.5 Remain: 0 Transactions: 2.5
+€100 >1< 7% high-drop => €12 Remain: 0 Transactions: 2.5
+
+
+Started new trading with LSKEUR based on 5 mins time interval:
+€100 >1< 6% on-increase => €6 Remain: 0 Transactions: 2
+€100 >0.25< 3% high-drop => €6 Remain: 0 Transactions: 4
+€100 >1< 6% high-drop => €6 Remain: 0 Transactions: 2
+€100 >0.5< 2.5% high-drop-hard => €5 Remain: 0 Transactions: 4
+€100 >0.75< 2.5% high-drop-hard => €7 Remain: 0 Transactions: 3.5
+€100 >1< 2.5% high-drop-hard => €6 Remain: 68 Transactions: 2.5
+€100 >1< 3% high-drop-hard => €6.5 Remain: 66 Transactions: 3
+€100 >1< 5.5% high-drop-hard => €6 Remain: 0 Transactions: 1.5
+€100 >1< 6% high-drop-hard => €6.5 Remain: 71.5 Transactions: 1
+€100 >1< 7% near-low-hard => €6.5 Remain: 72 Transactions: 1.5
+
+
+Started new trading with NANOEUR based on 5 mins time interval:
+€100 >0.25< 3.5% on-increase => €8 Remain: 0 Transactions: 3.5
+€100 >1< 5.5% on-increase => €7.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% on-increase-hard => €6 Remain: 67 Transactions: 1.5
+€100 >0.25< 3.5% high-drop => €7 Remain: 0 Transactions: 3.5
+€100 >1< 5.5% high-drop => €7 Remain: 0 Transactions: 2
+€100 >0.25< 3.5% high-drop-hard => €6 Remain: 0 Transactions: 3
+€100 >0.75< 7% high-drop-hard => €6.5 Remain: 0 Transactions: 1
+€100 >0.75< 7.5% high-drop-hard => €6 Remain: 0 Transactions: 1
+€100 >1< 5% high-drop-hard => €5.5 Remain: 0 Transactions: 2
+€100 >1< 5.5% high-drop-hard => €5.5 Remain: 0 Transactions: 1.5
+€100 >1< 6% high-drop-hard => €6.5 Remain: 0 Transactions: 1.5
+€100 >1< 6.5% high-drop-hard => €6 Remain: 0 Transactions: 1
+€100 >1< 7% high-drop-hard => €6.5 Remain: 0 Transactions: 1
+€100 >1< 7.5% high-drop-hard => €6 Remain: 0 Transactions: 1
+€100 >0.75< 8.5% near-low => €5.5 Remain: 0 Transactions: 1
+€100 >0.75< 9% near-low => €5.5 Remain: 0 Transactions: 1
+€100 >1< 6.5% near-low => €6.5 Remain: 0 Transactions: 2
+€100 >1< 7% near-low => €6.5 Remain: 67.5 Transactions: 1.5
+€100 >1< 7.5% near-low => €5.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 8% near-low-hard => €5.5 Remain: 0 Transactions: 1
+€100 >0.75< 8.5% near-low-hard => €7 Remain: 0 Transactions: 1
+€100 >0.75< 9% near-low-hard => €9 Remain: 0 Transactions: 1
+
+
+Started new trading with ASTREUR based on 5 mins time interval:
+€100 >0.5< 4% high-drop-hard => €11.5 Remain: 0 Transactions: 4
+
+
+Started new trading with LRCEUR based on 5 mins time interval:
+€100 >0.75< 6% on-increase => €10 Remain: 0 Transactions: 2.5
+€100 >1< 6% on-increase => €9 Remain: 454 Transactions: 2
+€100 >0.75< 6% high-drop => €9 Remain: 0 Transactions: 2.5
+€100 >1< 6% high-drop => €8 Remain: 454 Transactions: 2
+€100 >1< 6% high-drop-hard => €9.5 Remain: 454 Transactions: 1
+
+
+Started new trading with SCEUR based on 5 mins time interval:
+€100 >0.25< 5.5% on-increase => €5 Remain: 0 Transactions: 1.5
+€100 >0.75< 6% on-increase => €5 Remain: 0 Transactions: 2
+€100 >0.75< 3% on-increase-hard => €8.5 Remain: 11581 Transactions: 8.5
+€100 >0.25< 6.5% near-low-hard => €8 Remain: 0 Transactions: 1.5
+€100 >0.25< 7% near-low-hard => €11 Remain: 0 Transactions: 1.5
+
+
+Started new trading with PAXGEUR based on 5 mins time interval:
+
+
+Started new trading with CHZEUR based on 5 mins time interval:
+€100 >0.25< 3% on-increase => €8.5 Remain: 0 Transactions: 11
+€100 >0.25< 3.5% on-increase => €10.5 Remain: 0 Transactions: 7
+€100 >0.75< 7.5% on-increase => €10.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 8% on-increase => €11 Remain: 0 Transactions: 1.5
+€100 >0.75< 8.5% on-increase => €11.5 Remain: 0 Transactions: 1.5
+€100 >0.75< 9% on-increase => €12 Remain: 0 Transactions: 1.5
+€100 >1< 8% on-increase => €11.5 Remain: 876.5 Transactions: 2
+€100 >1< 8.5% on-increase => €13.5 Remain: 884.5 Transactions: 1.5
+€100 >0.25< 3% on-increase-hard => €13 Remain: 0 Transactions: 12
+€100 >0.5< 4% on-increase-hard => €12 Remain: 0 Transactions: 8.5
+€100 >0.75< 4% on-increase-hard => €12.5 Remain: 0 Transactions: 8.5
+€100 >1< 4% on-increase-hard => €13 Remain: 0 Transactions: 8
+€100 >0.25< 3.5% high-drop => €14 Remain: 0 Transactions: 6
+€100 >1< 8.5% high-drop => €13.5 Remain: 884.5 Transactions: 1.5
+€100 >0.75< 8.5% high-drop-hard => €13 Remain: 0 Transactions: 1.5
+€100 >1< 8.5% high-drop-hard => €13 Remain: 0 Transactions: 1.5
+€100 >0.25< 4.5% near-low => €16.5 Remain: 0 Transactions: 6
+€100 >0.25< 4.5% near-low-hard => €18 Remain: 0 Transactions: 6
+
+
+Started new trading with KUJIEUR based on 5 mins time interval:
+€100 >1< 10% on-increase => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 2% on-increase-hard => €20.5 Remain: 126.5 Transactions: 6
+
+
+Started new trading with MIREUR based on 5 mins time interval:
+€100 >0.25< 5% on-increase => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 5.5% on-increase => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.5< 5.5% on-increase => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.75< 5.5% on-increase => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 5% high-drop => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 5.5% high-drop => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.5< 5.5% high-drop => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.75< 5.5% high-drop => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 4.5% high-drop-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 5% high-drop-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 5.5% high-drop-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.5< 5.5% high-drop-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.75< 5.5% high-drop-hard => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 4.5% near-low => €6.5 Remain: 0 Transactions: 0.5
+€100 >0.25< 5% near-low => €6.5 Remain: 0 Transactions: 0.5
+€100 >1< 4.5% near-low => €6.5 Remain: 0 Transactions: 0.5
+€100 >1< 5% near-low => €10 Remain: 0 Transactions: 1
+€100 >0.25< 6.5% near-low-hard => €10 Remain: 0 Transactions: 1
+€100 >0.5< 6.5% near-low-hard => €10 Remain: 0 Transactions: 1
+€100 >0.75< 6.5% near-low-hard => €14 Remain: 0 Transactions: 1.5
+€100 >1< 5.5% near-low-hard => €17.5 Remain: 0 Transactions: 2
+€100 >1< 6% near-low-hard => €17.5 Remain: 0 Transactions: 2
+€100 >1< 6.5% near-low-hard => €17.5 Remain: 0 Transactions: 2
+
+
+Started new trading with ACAEUR based on 5 mins time interval:
+
+
+Started new trading with BITEUR based on 5 mins time interval:
+€100 >0.5< 1.5% near-low => €9 Remain: 0 Transactions: 3
+€100 >0.75< 1.5% near-low => €10 Remain: 0 Transactions: 3.5
+€100 >0.75< 5% near-low => €15 Remain: 83.5 Transactions: 0.5
+€100 >1< 5% near-low => €16 Remain: 83.5 Transactions: 0.5
+€100 >0.75< 5% near-low-hard => €15 Remain: 83.5 Transactions: 0.5
+€100 >1< 5% near-low-hard => €16 Remain: 83.5 Transactions: 0.5
+
+
+Started new trading with RPLEUR based on 5 mins time interval:
+€100 >1< 6.5% on-increase => €5.5 Remain: 0 Transactions: 1
+€100 >1< 6.5% high-drop => €5.5 Remain: 0 Transactions: 1
+€100 >0.5< 4.5% high-drop-hard => €5 Remain: 0 Transactions: 1.5
+€100 >1< 3.5% high-drop-hard => €6 Remain: 0 Transactions: 1.5
+€100 >0.5< 5% near-low => €7 Remain: 0 Transactions: 5
+€100 >0.75< 7.5% near-low => €8 Remain: 0 Transactions: 2
+€100 >0.75< 8% near-low => €9 Remain: 0 Transactions: 2
+€100 >1< 8.5% near-low => €9 Remain: 0 Transactions: 1
+€100 >1< 9% near-low => €9.5 Remain: 0 Transactions: 1
+€100 >0.5< 5% near-low-hard => €11.5 Remain: 0 Transactions: 5
+
+

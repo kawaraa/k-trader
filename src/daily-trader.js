@@ -43,7 +43,6 @@ module.exports = class DailyTrader {
     this.timeInterval = +timeInterval;
     this.period = +timeInterval; // this.period is deleted in only test trading
     this.listener = null;
-    this.#tradingAmount = 0; // cryptoTradingAmount
     this.hard = this.mode.includes("hard");
     this.lowRSI = this.hard ? 30 : 45;
     this.sellOnRSI = this.hard ? 65 : 60;
@@ -59,7 +58,6 @@ module.exports = class DailyTrader {
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
       const prices = await this.ex.prices(this.#pair, this.#strategyRange); // For the last xxx days
-      this.#tradingAmount = +(this.#capital / bidPrice).toFixed(8);
 
       const askPrices = prices.map((p) => p.askPrice);
       const bidPrices = prices.map((p) => p.bidPrice);
@@ -112,7 +110,7 @@ module.exports = class DailyTrader {
       if (enoughPricesData && shouldBuy) {
         this.dispatch("log", `Suggest buying: TradePrice Price is ${tradePrice}`);
 
-        if (!orders[0] && balance.eur >= this.#capital) {
+        if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital) {
           const cost = this.#capital - calculateFee(this.#capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
