@@ -31,7 +31,7 @@ export default function CryptoChart() {
     labels.push(`${toShortDate(new Date(since + interval * i))}`);
   });
 
-  const changePair = (p) => router.push(`/chart?pair=${p}`);
+  const changePair = (p) => router.push(`/chart?pair=${p}&loser=0`);
 
   const fetchPrices = async (pair) => {
     setLoading(true);
@@ -45,7 +45,7 @@ export default function CryptoChart() {
   };
 
   useEffect(() => {
-    fetchPrices(pair);
+    fetchPrices(`${pair}?loser=${searchParams.get("loser")}`);
   }, [pair]);
 
   useEffect(() => {

@@ -252,7 +252,10 @@
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 1.31,
     "note": "Moving up down - G3",
-    "strategies": ["€100 >0.75< 2.5% near-low-hard => €24.5 Remain: 0 Transactions: 5"]
+    "strategies": [
+      "€100 €100 >0.75< 2.5% near-low-hard => €22 Remain: 0 Transactions: 4 Gainer: 24 Loser: 19",
+      "€100 €100 >0.75< 6% on-increase-hard => €17 Remain: 74 Transactions: 3 Gainer: 0 Loser: 52"
+    ]
   },
   "BSXEUR": {
     "becameAvailable": "2022-03-01",
@@ -680,7 +683,7 @@
   "RLCEUR": {
     "becameAvailable": "2017-04-01",
     "askBidSpreadPercentage": 0.19,
-    "note": "",
+    "note": "loser -",
     "strategies": []
   },
   "GTCEUR": {
