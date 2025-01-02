@@ -14,8 +14,8 @@ const pairs = Object.keys(currencies);
 
 (async () => {
   for (const pair of pairs) {
-    const shouldTest = currencies[pair].strategies[0] || /stable|no price/gim.test(currencies[pair].note);
-    if (alreadyInProgress(pair) || !shouldTest) continue;
+    const shouldNotTest = currencies[pair].strategies[0] || /stable|no price/gim.test(currencies[pair].note);
+    if (alreadyInProgress(pair) || shouldNotTest) continue;
     await runTradingTest(pair, capital, minStrategyRange, minPercentPriceChange, modes, interval);
 
     // if (global.gc) global.gc(); // Forces garbage collection
@@ -26,11 +26,11 @@ function alreadyInProgress(pair) {
   const getFilePath = (name) => `${process.cwd()}/database/logs/${name}.log`;
   return (
     readFileSync(getFilePath("all")).includes(pair) ||
-    readFileSync(getFilePath("loser-1")).includes(pair) ||
-    readFileSync(getFilePath("loser-2")).includes(pair) ||
-    readFileSync(getFilePath("loser-3")).includes(pair) ||
     readFileSync(getFilePath("result-1")).includes(pair) ||
     readFileSync(getFilePath("result-2")).includes(pair) ||
-    readFileSync(getFilePath("result-3")).includes(pair)
+    readFileSync(getFilePath("result-3")).includes(pair) ||
+    readFileSync(getFilePath("result-4")).includes(pair) ||
+    readFileSync(getFilePath("result-5")).includes(pair) ||
+    readFileSync(getFilePath("result-6")).includes(pair)
   );
 }

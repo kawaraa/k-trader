@@ -2,6 +2,7 @@
 
 
 Started new trading with SOLEUR based on 5 mins time interval:
+€100 >0.5< 3.5% high-drop-hard => €9 Remain: 0 Transactions: 5 Gainer: 4 Loser: 20
 €100 >1< 5.5% on-increase-hard => €10 Remain: 0 Transactions: 3 Gainer: 10 Loser: 10
 €100 >1< 5% on-increase-hard => €11 Remain: 0 Transactions: 4 Gainer: 12 Loser: 10
 €100 >0.75< 5% on-increase-hard => €12 Remain: 0 Transactions: 4 Gainer: 16 Loser: 4
@@ -45,6 +46,7 @@ Started new trading with WIFEUR based on 5 mins time interval:
 
 
 Started new trading with SEIEUR based on 5 mins time interval:
+€100 >0.25< 6% on-increase-hard => €19 Remain: 71 Transactions: 4 Gainer: 3 Loser: 53
 €100 >1< 10% on-increase => €10 Remain: 172 Transactions: 1 Gainer: 5 Loser: 20
 €100 >1< 8.5% on-increase => €12 Remain: 162 Transactions: 2 Gainer: 5 Loser: 25
 €100 >1< 8% on-increase => €11 Remain: 162 Transactions: 3 Gainer: 8 Loser: 19
@@ -70,6 +72,7 @@ Started new trading with OXYEUR based on 5 mins time interval:
 
 
 Started new trading with YGGEUR based on 5 mins time interval:
+€100 >0.25< 4.5% near-low-hard => €13 Remain: 0 Transactions: 10 Gainer: 20 Loser: -1
 €100 >1< 9.5% on-increase => €14 Remain: 142 Transactions: 1 Gainer: 12 Loser: 17
 €100 >0.5< 7.5% on-increase => €18 Remain: 65 Transactions: 4 Gainer: 17 Loser: 21
 €100 >0.5< 7.5% high-drop => €17 Remain: 64 Transactions: 4 Gainer: 16 Loser: 21
@@ -97,6 +100,7 @@ Started new trading with ZEUSEUR based on 5 mins time interval:
 
 
 Started new trading with JTOEUR based on 5 mins time interval:
+€100 >0.25< 8.5% near-low => €12 Remain: 0 Transactions: 2 Gainer: -2 Loser: 42
 €100 >1< 7% on-increase => €12 Remain: 10 Transactions: 4 Gainer: 14 Loser: 9
 €100 >1< 6.5% on-increase => €12 Remain: 10 Transactions: 5 Gainer: 15 Loser: 8
 €100 >1< 6% on-increase => €12 Remain: 25 Transactions: 5 Gainer: 14 Loser: 9
@@ -146,6 +150,8 @@ Started new trading with MVEUR based on 5 mins time interval:
 
 
 Started new trading with PYTHEUR based on 5 mins time interval:
+€100 >0.25< 7.5% on-increase-hard => €15 Remain: 92 Transactions: 2 Gainer: 0 Loser: 47
+€100 >0.75< 4.5% on-increase-hard => €12 Remain: 0 Transactions: 8 Gainer: 19 Loser: -2
 €100 >1< 8.5% on-increase => €12 Remain: 80 Transactions: 3 Gainer: 8 Loser: 21
 €100 >0.75< 9% on-increase => €16 Remain: 90 Transactions: 2 Gainer: 4 Loser: 39
 €100 >0.75< 8% on-increase => €15 Remain: 80 Transactions: 3 Gainer: 8 Loser: 30
@@ -171,6 +177,7 @@ Started new trading with WEUR based on 5 mins time interval:
 
 
 Started new trading with TAOEUR based on 5 mins time interval:
+€100 >0.5< 8% on-increase-hard => €12 Remain: 0 Transactions: 2 Gainer: -5 Loser: 50
 €100 >1< 9% on-increase => €12 Remain: 0 Transactions: 1 Gainer: -2 Loser: 44
 €100 >0.75< 8.5% on-increase => €11 Remain: 0 Transactions: 2 Gainer: -3 Loser: 43
 €100 >0.25< 8.5% on-increase => €15 Remain: 0 Transactions: 1 Gainer: 4 Loser: 36
@@ -189,6 +196,8 @@ Started new trading with JUPEUR based on 5 mins time interval:
 
 Started new trading with CPOOLEUR based on 5 mins time interval:
 €100 >1< 9% on-increase => €15 Remain: 74 Transactions: 2 Gainer: 9 Loser: 27
+€100 >1< 9.5% near-low-hard => €19 Remain: 0 Transactions: 2 Gainer: 19 Loser: 19
+€100 >1< 7% on-increase-hard => €20 Remain: 72 Transactions: 3 Gainer: -5 Loser: 73
 €100 >1< 9.5% on-increase => €23 Remain: 0 Transactions: 3 Gainer: 12 Loser: 44
 €100 >1< 10% on-increase => €27 Remain: 0 Transactions: 3 Gainer: 13 Loser: 56
 
@@ -212,6 +221,8 @@ Started new trading with INJEUR based on 5 mins time interval:
 
 
 Started new trading with DYMEUR based on 5 mins time interval:
+€100 >1< 10% near-low => €24 Remain: 45 Transactions: 4 Gainer: 25 Loser: 22
+€100 >0.5< 8.5% on-increase-hard => €17 Remain: 23 Transactions: 4 Gainer: 6 Loser: 40
 €100 >1< 10% on-increase => €11 Remain: 46 Transactions: 3 Gainer: 16 Loser: 3
 €100 >1< 9.5% on-increase => €17 Remain: 46 Transactions: 3 Gainer: 25 Loser: 1
 €100 >1< 9% on-increase => €20 Remain: 46 Transactions: 4 Gainer: 23 Loser: 16
@@ -255,6 +266,7 @@ Started new trading with TURBOEUR based on 5 mins time interval:
 
 
 Started new trading with USTEUR based on 5 mins time interval:
+€100 >0.25< 7% on-increase => €8 Remain: 1871 Transactions: 1 Gainer: -4 Loser: 35
 €100 >0.5< 5.5% high-drop => €12 Remain: 1715 Transactions: 5 Gainer: 17 Loser: 3
 €100 >0.5< 3.5% high-drop => €12 Remain: 0 Transactions: 11 Gainer: 19 Loser: -1
 €100 >0.25< 5% high-drop => €12 Remain: 1715 Transactions: 4 Gainer: 9 Loser: 18
@@ -264,6 +276,8 @@ Started new trading with USTEUR based on 5 mins time interval:
 
 
 Started new trading with RAYEUR based on 5 mins time interval:
+€100 >0.5< 6.5% near-low-hard => €18 Remain: 10 Transactions: 4 Gainer: 28 Loser: -1
+€100 >0.5< 4.5% high-drop-hard => €23 Remain: 8 Transactions: 6 Gainer: 15 Loser: 38
 €100 >1< 6.5% on-increase => €13 Remain: 11 Transactions: 3 Gainer: 20 Loser: 0
 €100 >1< 6% on-increase => €16 Remain: 11 Transactions: 4 Gainer: 25 Loser: 0
 €100 >1< 5.5% on-increase => €16 Remain: 10 Transactions: 4 Gainer: 25 Loser: -2
@@ -344,6 +358,8 @@ Started new trading with CSMEUR based on 5 mins time interval:
 
 
 Started new trading with BLUREUR based on 5 mins time interval:
+€100 >0.25< 5.5% near-low => €18 Remain: 0 Transactions: 8 Gainer: 29 Loser: -3
+€100 >0.25< 7.5% on-increase-hard => €12 Remain: 125 Transactions: 2 Gainer: 4 Loser: 27
 €100 >1< 9.5% on-increase => €11 Remain: 284 Transactions: 2 Gainer: 11 Loser: 12
 €100 >1< 7.5% on-increase => €13 Remain: 275 Transactions: 4 Gainer: 17 Loser: 5
 €100 >0.25< 4.5% on-increase => €13 Remain: 0 Transactions: 8 Gainer: 14 Loser: 11
@@ -357,6 +373,7 @@ Started new trading with BLUREUR based on 5 mins time interval:
 
 
 Started new trading with ZETAEUR based on 5 mins time interval:
+€100 >0.25< 7.5% on-increase-hard => €12 Remain: 0 Transactions: 2 Gainer: 0 Loser: 39
 €100 >1< 10% on-increase => €10 Remain: 113 Transactions: 2 Gainer: 15 Loser: 2
 €100 >1< 9.5% on-increase => €13 Remain: 112 Transactions: 2 Gainer: 14 Loser: 11
 €100 >1< 9% on-increase => €12 Remain: 110 Transactions: 3 Gainer: 16 Loser: 5
@@ -390,6 +407,7 @@ Started new trading with CELREUR based on 5 mins time interval:
 
 
 Started new trading with ZKEUR based on 5 mins time interval:
+€100 >0.75< 6% near-low => €15 Remain: 189 Transactions: 7 Gainer: 18 Loser: 8
 €100 >1< 9% on-increase => €18 Remain: 467 Transactions: 2 Gainer: 8 Loser: 39
 €100 >1< 9% high-drop => €19 Remain: 287 Transactions: 2 Gainer: 8 Loser: 41
 €100 >0.5< 8.5% near-low => €19 Remain: 190 Transactions: 3 Gainer: 5 Loser: 46
@@ -407,6 +425,7 @@ Started new trading with MOVREUR based on 5 mins time interval:
 
 
 Started new trading with UNFIEUR based on 5 mins time interval:
+€100 >0.25< 9% on-increase => €4 Remain: 0 Transactions: 1 Gainer: -6 Loser: 28
 €100 >1< 8% on-increase => €10 Remain: 19 Transactions: 3 Gainer: 23 Loser: -15
 €100 >1< 7.5% on-increase => €10 Remain: 19 Transactions: 3 Gainer: 23 Loser: -15
 €100 >1< 7% on-increase => €10 Remain: 19 Transactions: 3 Gainer: 23 Loser: -16
@@ -511,6 +530,8 @@ Started new trading with NTRNEUR based on 5 mins time interval:
 
 
 Started new trading with ALTEUR based on 5 mins time interval:
+€100 >0.5< 5% near-low => €12 Remain: 0 Transactions: 6 Gainer: 29 Loser: -22
+€100 >0.25< 10% on-increase-hard => €5 Remain: 306 Transactions: 0 Gainer: -5 Loser: 27
 €100 >1< 6% on-increase-hard => €11 Remain: 0 Transactions: 5 Gainer: 26 Loser: -19
 €100 >1< 6.5% high-drop => €12 Remain: 0 Transactions: 4 Gainer: 18 Loser: -1
 €100 >0.75< 5.5% high-drop => €16 Remain: 0 Transactions: 6 Gainer: 25 Loser: 0
@@ -544,6 +565,8 @@ Started new trading with FTMEUR based on 5 mins time interval:
 
 
 Started new trading with NOSEUR based on 5 mins time interval:
+€100 >0.5< 10% on-increase-hard => €22 Remain: 8 Transactions: 2 Gainer: 34 Loser: -2
+€100 >0.75< 5.5% high-drop-hard => €17 Remain: 12 Transactions: 4 Gainer: 0 Loser: 54
 €100 >1< 6% on-increase => €12 Remain: 0 Transactions: 4 Gainer: -4 Loser: 47
 €100 >0.75< 9.5% on-increase => €15 Remain: 8 Transactions: 2 Gainer: 24 Loser: -4
 €100 >0.75< 10% on-increase => €16 Remain: 8 Transactions: 2 Gainer: 26 Loser: -4
@@ -565,8 +588,10 @@ Started new trading with TIAEUR based on 5 mins time interval:
 €100 >0.5< 8% on-increase => €14 Remain: 6 Transactions: 3 Gainer: 11 Loser: 21
 €100 >0.25< 9.5% on-increase => €13 Remain: 0 Transactions: 1 Gainer: 5 Loser: 30
 €100 >0.25< 8.5% on-increase => €13 Remain: 6 Transactions: 2 Gainer: 10 Loser: 21
+€100 >1< 9% on-increase-hard => €14 Remain: 6 Transactions: 2 Gainer: -2 Loser: 48
 €100 >0.25< 5% on-increase => €19 Remain: 0 Transactions: 8 Gainer: 9 Loser: 40
 €100 >0.5< 8% high-drop-hard => €22 Remain: 6 Transactions: 3 Gainer: 18 Loser: 30
+
 
 
 Started new trading with SAFEEUR based on 5 mins time interval:
@@ -589,6 +614,7 @@ Started new trading with MEMEEUR based on 5 mins time interval:
 €100 >0.25< 4.5% high-drop-hard => €17 Remain: 0 Transactions: 3 Gainer: 22 Loser: 8
 €100 >1< 10% near-low => €19 Remain: 3018 Transactions: 3 Gainer: 21 Loser: 16
 €100 >1< 9.5% near-low => €20 Remain: 3018 Transactions: 3 Gainer: 20 Loser: 22
+€100 >0.5< 9.5% near-low-hard => €21 Remain: 64 Transactions: 4 Gainer: 15 Loser: 33
 €100 >1< 8% near-low => €23 Remain: 0 Transactions: 5 Gainer: 29 Loser: 11
 
 
@@ -619,6 +645,9 @@ Started new trading with XRPEUR based on 5 mins time interval:
 €100 >1< 1.5% near-low-hard => €5.5 Remain: 0 Transactions: 5
 
 
+Started new trading with BSXEUR based on 5 mins time interval:
+€100 >1< 8% near-low-hard => €13 Remain: 0 Transactions: 2 Gainer: 24 Loser: -10
+€100 >0.75< 10% on-increase => €19 Remain: 0 Transactions: 2 Gainer: 6 Loser: 47
 Started new trading with BSXEUR based on 5 mins time interval:
 €100 >0.25< 4% on-increase => €11.5 Remain: 0 Transactions: 4.5
 €100 >0.25< 4.5% on-increase => €10 Remain: 0 Transactions: 4
