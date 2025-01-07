@@ -167,13 +167,14 @@ function isOlderThen(timestamp, days) {
 }
 function getSupportedModes() {
   return [
-    "on-increase",
-    "on-increase-soft",
-    "on-increase-percent",
-    "on-increase-rsi",
-    "high-drop",
-    "high-drop-soft",
-    "high-drop-percent",
+    "on-decrease",
+    "on-decrease-soft",
+    "on-decrease-percent",
+    "on-decrease-rsi",
+    "on-drop",
+    "on-drop-soft",
+    "on-drop-percent",
+    "on-drop-rsi",
   ];
 }
 

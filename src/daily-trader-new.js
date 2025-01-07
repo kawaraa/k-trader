@@ -5,7 +5,7 @@
 - DailyTrader performs trading based on the provided strategy and settings. It analyzes the prices of the last xxx days on every xxx mins interval. every strategy has its settings.
 
 - There are a currently 5 strategies:
-1. on-drop: It buys if the current price drops -xxx% and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
+1. high-drop: It buys if the current price drops -xxx% and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
 3. near-low: It buys if the current price drops -xxx% and near the lowest price in the last xxx days and the RSI is less than 30, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
 5. on-increase: It buys if the RSI is less than 30 and increasing, and sell when the RSI is higher than 70 and the current price is xxx% higher than the bought order price.
 
@@ -17,6 +17,20 @@
 3. If it's good time to buy, place buy orders with 2 mins expire and store their IDs in the state.
 4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
 */
+// "on-decrease",
+// "on-decrease-soft",
+// "on-decrease-percent",
+// "on-decrease-percent-soft",
+// "on-decrease-flex",
+// "on-decrease-flex-soft",
+// "on-drop",
+// "on-drop-soft",
+// "on-drop-percent",
+// "on-drop-percent-soft",
+// "on-drop-flex",
+// "on-drop-flex-soft",
+// "on-both",
+// "on-both-soft",
 
 const {
   calculateRSI,
@@ -44,7 +58,9 @@ module.exports = class DailyTrader {
     this.listener = null;
     this.soft = this.mode.includes("soft");
     this.buyOnRSI = this.soft ? 45 : 30;
-    this.buySellOnThreshold = this.#percentageThreshold / 4;
+    this.sellOnRSI = this.soft ? 60 : 70;
+    this.onDropThreshold = this.#percentageThreshold * (this.soft ? 1 : 1.3);
+    this.buySellOnThreshold = this.#percentageThreshold / (this.soft ? 5 : 4);
     this.stopLossTimeLimit = Math.max(this.#strategyRange * 3, 1.5);
 
     this.previouslyDropped = false;
@@ -72,34 +88,44 @@ module.exports = class DailyTrader {
 
       const highDropChange = calcPercentageDifference(highestBidPr, askPrice);
       const increased = calcPercentageDifference(lowestAsk, askPrice);
-      const dropped = highDropChange < -(this.#percentageThreshold * 1.2);
+      const dropped = highDropChange < -this.onDropThreshold;
       const goingUp = increased >= this.buySellOnThreshold;
       const goingDown = !dropped && highDropChange <= -this.buySellOnThreshold;
       const rsiGoingUp = askPriceRSI <= this.buyOnRSI && this.previousBidRSI < bidPriceRSI;
+      const rsiDown = this.previousBidRSI > this.sellOnRSI && this.previousBidRSI >= bidPriceRSI;
       let shouldBuy = false;
+      let shouldSell = false;
 
       if (!this.previouslyDropped && dropped) this.previouslyDropped = true;
 
       this.dispatch("log", `Ask Price: => Cur:${askPrice} - RSI:${askPriceRSI} Change:${askPrChange}%`);
       this.dispatch("log", `Bid Price: => Cur:${bidPrice} - RSI:${bidPriceRSI} Change:${bidPrChange}%`);
 
-      const shouldSell =
-        this.mode.includes("rsi") && this.previousBidRSI > 70 && this.previousBidRSI >= bidPriceRSI;
-
-      // 1. On price drop mode "on-drop"
-      if (this.mode.includes("on-drop")) {
-        shouldBuy = dropped && rsiGoingUp; // soft and hard
-        if (this.mode.includes("percent")) shouldBuy = dropped && goingUp;
-
-        // 2. On price decrease mode "on-decrease"
-      } else if (this.mode.includes("on-decrease")) {
-        shouldBuy = this.previouslyDropped && rsiGoingUp; // soft and hard
-        if (this.mode.includes("percent")) shouldBuy = this.previouslyDropped && goingUp;
+      // 1. on-drop, on-drop-soft, on-drop-percent, on-drop-percent-soft, on-drop-flex, on-drop-flex-soft
+      if (this.mode.includes("on-drop")) shouldBuy = dropped;
+      // 2. on-decrease, on-decrease-soft, on-decrease-percent, on-decrease-percent-soft, on-decrease-flex, on-decrease-flex-soft
+      else if (this.mode.includes("on-decrease")) shouldBuy = this.previouslyDropped;
+      // 3. on-both, on-both-soft
+      else if (this.mode.includes("on-both")) {
+        shouldBuy = (dropped || this.previouslyDropped) && (rsiGoingUp || goingUp);
+        shouldSell = rsiDown || goingDown;
       }
 
-      if (!/soft|percent/gim.test(this.mode) && highDropChange <= -(this.#percentageThreshold * 1.5)) {
-        shouldBuy = false;
+      // 4. flex
+      if (this.mode.includes("flex")) {
+        shouldBuy = shouldBuy && (rsiGoingUp || goingUp);
+        shouldSell = rsiDown || goingDown;
+      } else if (this.mode.includes("percent")) {
+        shouldBuy = shouldBuy & goingUp;
+        shouldSell = goingDown;
+      } else if (!this.mode.includes("on-both")) {
+        shouldBuy = shouldBuy & rsiGoingUp;
+        shouldSell = rsiDown;
       }
+
+      // if (!/soft|percent/gim.test(this.mode) && highDropChange <= -(this.#percentageThreshold * 1.5)) {
+      //   shouldBuy = false;
+      // }
 
       // Buy
       if (enoughPricesData && shouldBuy) {
@@ -114,7 +140,7 @@ module.exports = class DailyTrader {
         }
 
         // Sell
-      } else if (enoughPricesData && balance.crypto > 0 && (goingDown || shouldSell)) {
+      } else if (enoughPricesData && balance.crypto > 0 && shouldSell) {
         let orderType = "";
         const sellableOrders = orders.filter((o) => {
           if (this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice)) return true;

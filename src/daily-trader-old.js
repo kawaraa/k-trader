@@ -32,7 +32,6 @@ module.exports = class DailyTrader {
   #capital;
   #strategyRange;
   #percentageThreshold;
-  #tradingAmount;
   constructor(exProvider, pair, { capital, strategyRange, priceChange, mode, timeInterval }) {
     this.ex = exProvider;
     this.#pair = pair;
@@ -91,8 +90,8 @@ module.exports = class DailyTrader {
       // 3. Safety check, pause buying if the price is dropping too much or fast
       if (highDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
 
-      // 4. On price increase mode "on-increase"
-      if (this.mode.includes("on-increase")) {
+      // 4. On price increase mode "on-decrease"
+      if (this.mode.includes("on-decrease")) {
         if (!this.hard) shouldBuy = this.previouslyDropped && rsiGoingUp;
         else {
           if ((shouldBuy = this.previouslyDropped && goingUp)) this.previouslyDropped = false;
@@ -118,7 +117,7 @@ module.exports = class DailyTrader {
           return this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice);
         });
 
-        if (this.mode.includes("on-increase")) {
+        if (this.mode.includes("on-decrease")) {
           if ((this.hard && !goingDown) || (!this.hard && !rsiGoingDown)) sellableOrders = [];
         } else if (!rsiGoingDown) {
           sellableOrders = [];

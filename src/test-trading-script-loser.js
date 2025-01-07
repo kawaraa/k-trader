@@ -12,8 +12,8 @@ const capital = +process.argv[6] || 100; // Amount in EUR which is the total mon
 const interval = +process.argv[7] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 
 let minStrategyRange = 0.25;
-let minPercentagePriceChange = 1.5;
 let maxStrategyRange = 1;
+let minPercentagePriceChange = 1.5;
 let maxPriceChange = 10;
 if (range) minStrategyRange = maxStrategyRange = range;
 if (priceChange) minPercentagePriceChange = maxPriceChange = priceChange;
