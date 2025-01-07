@@ -24,7 +24,7 @@
     "becameAvailable": "2013-01-01",
     "askBidSpreadPercentage": 0.05,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "ADAEUR": {
     "becameAvailable": "2017-09-29",
@@ -36,13 +36,13 @@
     "becameAvailable": "2017-10-01",
     "askBidSpreadPercentage": 0.05,
     "note": "",
-    "strategies": ["none"]
+    "strategies": []
   },
   "AVAXEUR": {
     "becameAvailable": "2020-10-01",
     "askBidSpreadPercentage": 0.05,
     "note": "loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "SHIBEUR": {
     "becameAvailable": "2020-08-01",
@@ -60,7 +60,7 @@
     "becameAvailable": "2019-01-01",
     "askBidSpreadPercentage": 0.14,
     "note": "",
-    "strategies": ["none"]
+    "strategies": []
   },
   "SUIEUR": {
     "becameAvailable": "2023-05-05",
@@ -71,333 +71,402 @@
   "PRCLEUR": {
     "becameAvailable": "2024-04-15",
     "askBidSpreadPercentage": 0.21,
-    "note": "loser - G1",
+    "note": "loser - gain",
     "strategies": [
       "€100 >0.5< 7% on-decrease-soft => €52 Remain: 91 Transactions: 13 Gainer: 75 Loser: 6",
+      "€100 >0.5< 7.5% on-drop-soft => €52 Remain: 87 Transactions: 11 Gainer: 77 Loser: 3",
+      "€100 >0.75< 8.5% on-drop-rsi => €44 Remain: 0 Transactions: 6 Gainer: 44 Loser: 45",
       "€100 >0.75< 9% on-drop => €40 Remain: 0 Transactions: 6 Gainer: 40 Loser: 40",
       "€100 >1< 9.5% on-drop => €38 Remain: 0 Transactions: 4 Gainer: 22 Loser: 69"
+    ]
+  },
+  "KMNOEUR": {
+    "becameAvailable": "2024-04-30",
+    "askBidSpreadPercentage": 0.23,
+    "note": "loser - gain",
+    "strategies": [
+      "€100 >0.75< 7.5% on-decrease-soft => €53 Remain: 189 Transactions: 7 Gainer: 60 Loser: 39",
+      "€100 >1< 7.5% on-decrease-percent => €51 Remain: 557 Transactions: 6 Gainer: 61 Loser: 30",
+      "€100 >0.75< 6.5% on-decrease-soft => €48 Remain: 189 Transactions: 7 Gainer: 52 Loser: 42"
     ]
   },
   "BIGTIMEEUR": {
     "becameAvailable": "2023-10-12",
     "askBidSpreadPercentage": 1.39,
-    "note": "loser - G1 - gain loss",
+    "note": "loser - gain",
     "strategies": [
       "€100 >1< 10% on-decrease => €48 Remain: 439 Transactions: 4 Gainer: 67 Loser: 10",
       "€100 >1< 8.5% on-decrease-rsi => €35 Remain: 232 Transactions: 6 Gainer: 40 Loser: 27",
       "€100 >1< 3.5% on-decrease-rsi => €10 Remain: 0 Transactions: 4 Gainer: 0 Loser: 34"
     ]
   },
-  "KMNOEUR": {
-    "becameAvailable": "2024-04-30",
-    "askBidSpreadPercentage": 0.23,
-    "note": "loser - G1 - gain",
+  "UNFIEUR": {
+    "becameAvailable": "2020-11-01",
+    "askBidSpreadPercentage": 0.25,
+    "note": "loser - gain",
     "strategies": [
-      "€100 >1< 7.5% on-decrease-percent => €51 Remain: 557 Transactions: 6 Gainer: 61 Loser: 30",
-      "€100 >0.75< 6.5% on-decrease-soft => €48 Remain: 189 Transactions: 7 Gainer: 52 Loser: 42",
-      "€100 >0.75< 7.5% on-decrease-soft => €53 Remain: 189 Transactions: 7 Gainer: 60 Loser: 39"
+      "€100 >0.75< 2.5% on-drop-rsi => €27 Remain: 0 Transactions: 3 Gainer: 41 Loser: 0",
+      "€100 >0.75< 3.5% on-drop-rsi => €23 Remain: 0 Transactions: 2 Gainer: 35 Loser: 0"
     ]
   },
-  "TURBOEUR": {
-    "becameAvailable": "2023-05-05",
-    "askBidSpreadPercentage": 0.36,
-    "note": "loser - G1 - gain",
+  "MOGEUR": {
+    "becameAvailable": "2023-07-22",
+    "askBidSpreadPercentage": 1.25,
+    "note": "loser - gain",
     "strategies": [
-      "€100 >1.25< 8% on-decrease-soft => €42 Remain: 3835 Transactions: 5 Gainer: 69 Loser: -10"
-    ]
-  },
-  "ORCAEUR": {
-    "becameAvailable": "2021-10-01",
-    "askBidSpreadPercentage": 0.19,
-    "note": "loser - G1 - loss",
-    "strategies": [
-      "€100 >0.25< 7% on-drop-percent => €32 Remain: 10 Transactions: 2 Gainer: -2 Loser: 102",
-      "€100 >1< 9% on-drop => €31 Remain: 9 Transactions: 2 Gainer: 8 Loser: 78"
-    ]
-  },
-  "TNSREUR": {
-    "becameAvailable": "2024-04-10",
-    "askBidSpreadPercentage": 0.14,
-    "note": "loser - G1 - gain loss",
-    "strategies": ["€100 >1< 8% on-decrease-soft => €30 Remain: 80 Transactions: 5 Gainer: 33 Loser: 26"]
-  },
-  "FTMEUR": {
-    "becameAvailable": "2018-10-01",
-    "askBidSpreadPercentage": 0.12,
-    "note": "In migration process to SONIC - loser - G1 - loss",
-    "strategies": [
-      "€100 >0.25< 5.5% on-decrease-soft => €30 Remain: 33 Transactions: 7 Gainer: 16 Loser: 59",
-      "€100 >0.25< 6.5% on-decrease => €29 Remain: 35 Transactions: 4 Gainer: 20 Loser: 47",
-      "€100 >0.5< 7% on-decrease => €27 Remain: 0 Transactions: 5 Gainer: 33 Loser: 15"
-    ]
-  },
-  "TAOEUR": {
-    "becameAvailable": "2023-03-01",
-    "askBidSpreadPercentage": 0.18,
-    "note": "loser - G1 - gain loss",
-    "strategies": [
-      "€100 >1< 5.5% on-decrease => €24 Remain: 0 Transactions: 6 Gainer: 37 Loser: -1",
-      "€100 >0.25< 6.5% on-decrease-soft => €31 Remain: 0 Transactions: 6 Gainer: 20 Loser: 54"
+      "€100 >1< 5.5% on-decrease => €28 Remain: 13816063 Transactions: 6 Gainer: 40 Loser: 4",
+      "€100 >1< 5.5% on-drop-soft => €28 Remain: 0 Transactions: 4 Gainer: 43 Loser: -1",
+      "€100 >0.5< 5.5% on-drop-rsi => €26 Remain: 0 Transactions: 8 Gainer: 23 Loser: 33"
     ]
   },
   "SUPEREUR": {
     "becameAvailable": "2021-02-20",
     "askBidSpreadPercentage": 0.17,
-    "note": "loser - G1 - loss",
+    "note": "loser - gain",
     "strategies": [
       "€100 >1< 4.5% on-decrease => €30 Remain: 17 Transactions: 6 Gainer: 39 Loser: 14",
       "€100 >1< 10% on-decrease => €17 Remain: 0 Transactions: 3 Gainer: 10 Loser: 31",
       "€100 >1< 8.5% on-decrease => €10 Remain: 0 Transactions: 2 Gainer: -3 Loser: 38"
     ]
   },
+  "SAGAEUR": {
+    "becameAvailable": "2024-04-01",
+    "askBidSpreadPercentage": 1.18,
+    "note": "loser - gain",
+    "strategies": ["€100 >0.25< 4.5% on-decrease-soft => €26 Remain: 17 Transactions: 11 Gainer: 39 Loser: 0"]
+  },
+  "SAFEEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.2,
+    "note": "loser - gain",
+    "strategies": [
+      "€100 >0.75< 9% on-drop-soft => €26 Remain: 30 Transactions: 2 Gainer: 39 Loser: -1",
+      "€100 >0.75< 6.5% on-drop-soft => €25 Remain: 0 Transactions: 3 Gainer: 38 Loser: -1"
+    ]
+  },
+  "TURBOEUR": {
+    "becameAvailable": "2023-05-05",
+    "askBidSpreadPercentage": 0.36,
+    "note": "loser - gain",
+    "strategies": [
+      "€100 >0.25< 4.5% on-decrease-soft => €36 Remain: 7716 Transactions: 17 Gainer: 33 Loser: 44",
+      "€100 >1< 8% on-decrease-soft => €33 Remain: 3835 Transactions: 4 Gainer: 51 Loser: -4"
+    ]
+  },
+  "WIFEUR": {
+    "becameAvailable": "2023-12-20",
+    "askBidSpreadPercentage": 0.05,
+    "note": "loser - gain",
+    "strategies": ["€100 >1< 9% on-decrease => €24 Remain: 15 Transactions: 2 Gainer: 38 Loser: -5"]
+  },
+  "MASKEUR": {
+    "becameAvailable": "2021-06-01",
+    "askBidSpreadPercentage": 0.16,
+    "note": "loser - gain",
+    "strategies": [
+      "€100 >0.25< 4.5% on-decrease-percent => €21 Remain: 12 Transactions: 3 Gainer: 35 Loser: -6"
+    ]
+  },
+  "TNSREUR": {
+    "becameAvailable": "2024-04-10",
+    "askBidSpreadPercentage": 0.14,
+    "note": "loser - gain",
+    "strategies": ["€100 >1< 8% on-decrease-soft => €30 Remain: 80 Transactions: 5 Gainer: 33 Loser: 26"]
+  },
+  "ALTEUR": {
+    "becameAvailable": "2022-03-01",
+    "askBidSpreadPercentage": 1.1,
+    "note": "loser - gain",
+    "strategies": ["€100 >0.75< 10% on-decrease => €20 Remain: 383 Transactions: 2 Gainer: 30 Loser: 0"]
+  },
+
+  "ORCAEUR": {
+    "becameAvailable": "2021-10-01",
+    "askBidSpreadPercentage": 0.19,
+    "note": "loser - loss",
+    "strategies": [
+      "€100 >0.25< 7% on-drop-percent => €32 Remain: 10 Transactions: 2 Gainer: -2 Loser: 102",
+      "€100 >1< 9% on-drop => €31 Remain: 9 Transactions: 2 Gainer: 8 Loser: 78"
+    ]
+  },
+  "STEPEUR": {
+    "becameAvailable": "2021-04-01",
+    "askBidSpreadPercentage": 3.49,
+    "note": "loser - loss",
+    "strategies": [
+      "€100 >1< 1.5% on-decrease-rsi => €23 Remain: 0 Transactions: 5 Gainer: -1 Loser: 74",
+      "€100 >1< 2.5% on-decrease-rsi => €18 Remain: 0 Transactions: 4 Gainer: 0 Loser: 58"
+    ]
+  },
+  "BSXEUR": {
+    "becameAvailable": "2022-03-01",
+    "askBidSpreadPercentage": 1.48,
+    "note": "loser - loss",
+    "strategies": ["€100 >0.25< 10% on-drop-soft => €26 Remain: 0 Transactions: 3 Gainer: 4 Loser: 71"]
+  },
   "ZEXEUR": {
     "becameAvailable": "2024-07-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "loser - G1 - loss",
+    "note": "loser - loss",
     "strategies": [
       "€100 >0.25< 2.5% on-drop => €34 Remain: 743 Transactions: 10 Gainer: 29 Loser: 45",
       "€100 >0.5< 3.5% on-drop => €32 Remain: 466 Transactions: 8 Gainer: 18 Loser: 60",
       "€100 >1< 5% on-drop => €30 Remain: 403 Transactions: 7 Gainer: 41 Loser: 8"
     ]
   },
-
-  "CXTEUR": {
-    "name": "Covalent X Token",
-    "askBidSpreadPercentage": 0.36,
-    "note": "Moving down - G1",
-    "strategies": ["€100 >0.75< 8.5% on-decrease-rsi => €41 Remain: 0 Transactions: 6"]
-  },
-  "TEEREUR": {
-    "becameAvailable": "2021-10-01",
-    "askBidSpreadPercentage": 0.24,
-    "note": "Moving up down - G1",
-    "strategies": ["€100 >0.25< 6.5% on-decrease-rsi => €41 Remain: 0 Transactions: 3"]
-  },
-  "PRIMEEUR": {
-    "becameAvailable": "2023-03-01",
-    "askBidSpreadPercentage": 0.21,
-    "note": "Moving down - G1",
-    "strategies": ["€100 >0.75< 7% near-low => €33.5 Remain: 0 Transactions: 7.5"]
-  },
-  "CVCEUR": {
-    "becameAvailable": "20xx-xx-01",
-    "askBidSpreadPercentage": 0.78,
-    "note": "Moving down - G1",
+  "RUNEEUR": {
+    "becameAvailable": "2020-07-01",
+    "askBidSpreadPercentage": 0.17,
+    "note": "loser - loss",
     "strategies": [
-      "€100 >0.75< 6.5% on-decrease-soft => €28 Remain: 0 Transactions: 5",
-      "€100 >1< 5% on-drop-soft => €31.5 Remain: 407.5 Transactions: 6.5"
+      "€100 >0.5< 6% on-decrease => €18 Remain: 6 Transactions: 4 Gainer: -1 Loser: 60",
+      "€100 >0.5< 6% on-decrease-rsi => €19 Remain: 6 Transactions: 4 Gainer: -1 Loser: 61"
     ]
   },
-  "XRTEUR": {
-    "becameAvailable": "20xx-xx-01",
-    "askBidSpreadPercentage": 0.29,
-    "note": "Moving down - G1",
-    "strategies": ["€100 >0.5< 1.5% on-drop => €31.5 Remain: 0 Transactions: 2"]
-  },
-
   "CPOOLEUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 2.94,
-    "note": "loser - G2 - loss",
-    "strategies": ["€100 >1< 10% on-drop-soft => €26 Remain: 76 Transactions: 3 Gainer: 9 Loser: 59"]
+    "note": "loser - loss",
+    "strategies": [
+      "€100 >1< 10% on-drop-soft => €26 Remain: 76 Transactions: 3 Gainer: 9 Loser: 59",
+      "€100 >1< 5% on-drop => €21 Remain: 0 Transactions: 3 Gainer: 7 Loser: 50"
+    ]
+  },
+  "FTMEUR": {
+    "becameAvailable": "2018-10-01",
+    "askBidSpreadPercentage": 0.12,
+    "note": "In migration process to SONIC - loser - loss",
+    "strategies": [
+      "€100 >0.25< 5.5% on-decrease-soft => €30 Remain: 33 Transactions: 7 Gainer: 16 Loser: 59",
+      "€100 >0.25< 6.5% on-decrease => €29 Remain: 35 Transactions: 4 Gainer: 20 Loser: 47",
+      "€100 >0.5< 7% on-decrease => €27 Remain: 0 Transactions: 5 Gainer: 33 Loser: 15"
+    ]
+  },
+  "NOSEUR": {
+    "becameAvailable": "2022-01-01",
+    "askBidSpreadPercentage": 0.57,
+    "note": "loser - loss",
+    "strategies": [
+      "€100 >1< 10% on-drop-soft => €27 Remain: 18 Transactions: 3 Gainer: 28 Loser: 25",
+      "€100 >1< 10% on-decrease-rsi => €25 Remain: 18 Transactions: 3 Gainer: 20 Loser: 34",
+      "€100 >0.75< 6% on-drop-rsi => €18 Remain: 12 Transactions: 5 Gainer: 0 Loser: 58",
+      "€100 >1< 7.5% on-decrease-rsi => €16 Remain: 0 Transactions: 4 Gainer: -1 Loser: 51"
+    ]
+  },
+  "TAOEUR": {
+    "becameAvailable": "2023-03-01",
+    "askBidSpreadPercentage": 0.18,
+    "note": "loser - loss",
+    "strategies": [
+      "€100 >0.25< 6.5% on-decrease-soft => €31 Remain: 0 Transactions: 6 Gainer: 20 Loser: 54",
+      "€100 >1< 5.5% on-decrease => €24 Remain: 0 Transactions: 6 Gainer: 37 Loser: -1"
+    ]
+  },
+  "ZKEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.15,
+    "note": "loser - loss",
+    "strategies": ["€100 >1< 9% on-decrease-soft => €23 Remain: 470 Transactions: 2 Gainer: 8 Loser: 54"]
+  },
+  "ZEUSEUR": {
+    "becameAvailable": "2024-04-01",
+    "askBidSpreadPercentage": 1.31,
+    "note": "Moving up down - loss",
+    "strategies": ["€100 >1< 6% on-decrease-percent => €14 Remain: 74 Transactions: 3 Gainer: 0 Loser: 45"]
+  },
+  "PYTHEUR": {
+    "becameAvailable": "2023-11-01",
+    "askBidSpreadPercentage": 0.11,
+    "note": "loser - loss",
+    "strategies": ["€100 >1< 9% on-decrease-percent => €20 Remain: 186 Transactions: 2 Gainer: 6 Loser: 49"]
   },
   "BLUREUR": {
     "becameAvailable": "2022-02-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "loser - G2 - gain loss",
+    "note": "loser - loss",
     "strategies": [
       "€100 >1< 9.5% on-decrease => €24 Remain: 275 Transactions: 3 Gainer: 17 Loser: 40",
       "€100 >1< 8.5% on-decrease => €24 Remain: 285 Transactions: 4 Gainer: 23 Loser: 26"
     ]
   },
-  "UNFIEUR": {
-    "becameAvailable": "2020-11-01",
-    "askBidSpreadPercentage": 0.25,
-    "note": "loser - G2 - gain",
-    "strategies": []
-  },
-  "MOGEUR": {
-    "becameAvailable": "2023-07-22",
-    "askBidSpreadPercentage": 1.25,
-    "note": "loser - G2 - gain",
-    "strategies": [
-      "€100 >1< 5.5% on-decrease => €28 Remain: 13816063 Transactions: 6 Gainer: 40 Loser: 4",
-      "€100 >1< 5.5% on-drop-soft => €28 Remain: 0 Transactions: 4 Gainer: 43 Loser: -1"
-    ]
-  },
   "DYMEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.21,
-    "note": "loser - G2 - loss",
+    "note": "loser - loss",
     "strategies": [
       "€100 >0.75< 8.5% on-decrease-soft => €25 Remain: 0 Transactions: 5 Gainer: 13 Loser: 48",
       "€100 >1< 8% on-decrease-soft => €24 Remain: 19 Transactions: 6 Gainer: 22 Loser: 28"
     ]
   },
-  "SAFEEUR": {
-    "becameAvailable": "20xx-xx-01",
-    "askBidSpreadPercentage": 0.2,
-    "note": "loser - G2 - gain",
-    "strategies": [
-      "€100 >0.75< 9% on-drop-soft => €26 Remain: 30 Transactions: 2 Gainer: 39 Loser: -1",
-      "€100 >0.75< 6.5% on-drop-soft => €25 Remain: 0 Transactions: 3 Gainer: 38 Loser: -1"
-    ]
-  },
-
-  "MASKEUR": {
-    "becameAvailable": "2021-06-01",
-    "askBidSpreadPercentage": 0.16,
-    "note": "loser ",
-    "strategies": [
-      "€100 >0.25< 4.5% on-decrease-percent => €21 Remain: 12 Transactions: 3 Gainer: 35 Loser: -6"
-    ]
-  },
-  "LCXEUR": {
-    "becameAvailable": "20xx-xx-01",
-    "askBidSpreadPercentage": 0.27,
-    "note": "Moving down - G3",
-    "strategies": ["€100 >0.75< 7.5% on-drop => €22.5 Remain: 150 Transactions: 2.5"]
-  },
-  "FIDAEUR": {
-    "becameAvailable": "2020-12-01",
-    "askBidSpreadPercentage": 0.29,
-    "note": "Moving down - G3",
-    "strategies": []
-  },
-  "BODENEUR": {
-    "becameAvailable": "2022-05-01",
-    "askBidSpreadPercentage": 2.32,
-    "note": "Moving down - G3",
-    "strategies": ["€100 >1< 8.5% on-drop-percent => €26 Remain: 0 Transactions: 7.5"]
-  },
-  "ZEUSEUR": {
-    "becameAvailable": "2024-04-01",
-    "askBidSpreadPercentage": 1.31,
-    "note": "Moving up down - G3 - loss",
-    "strategies": []
-  },
-  "BSXEUR": {
-    "becameAvailable": "2022-03-01",
-    "askBidSpreadPercentage": 1.48,
-    "note": "loser - G3 - loss",
-    "strategies": ["€100 >0.25< 10% on-drop-soft => €26 Remain: 0 Transactions: 3 Gainer: 4 Loser: 71"]
-  },
-  "MEMEEUR": {
-    "becameAvailable": "2023-11-01",
-    "askBidSpreadPercentage": 0.28,
-    "note": "loser - G3 - gain loss",
-    "strategies": []
-  },
-  "NOSEUR": {
-    "becameAvailable": "2022-01-01",
-    "askBidSpreadPercentage": 0.57,
-    "note": "loser - G3 - gain loss",
-    "strategies": [
-      "€100 >1< 10% on-drop-soft => €27 Remain: 18 Transactions: 3 Gainer: 28 Loser: 25",
-      "€100 >1< 10% on-decrease-rsi => €25 Remain: 18 Transactions: 3 Gainer: 20 Loser: 34",
-      "€100 >1< 7.5% on-decrease-rsi => €16 Remain: 0 Transactions: 4 Gainer: -1 Loser: 51"
-    ]
-  },
   "RAYEUR": {
     "becameAvailable": "2021-02-20",
     "askBidSpreadPercentage": 0.39,
-    "note": "loser - G3 - gain",
-    "strategies": ["€100 >1< 6% on-decrease => €21 Remain: 10 Transactions: 4 Gainer: 32 Loser: 0"]
-  },
-  "SEIEUR": {
-    "becameAvailable": "2021-01-01",
-    "askBidSpreadPercentage": 0.05,
-    "note": "loser - G3 - loss",
-    "strategies": []
-  },
-  "TIAEUR": {
-    "becameAvailable": "2023-11-01",
-    "askBidSpreadPercentage": 0.14,
-    "note": "loser - G3 - loss",
+    "note": "loser - loss",
     "strategies": [
-      "€100 >0.5< 9% on-drop => €23 Remain: 0 Transactions: 2 Gainer: 19 Loser: 31",
-      "€100 >0.5< 8.5% on-drop => €22 Remain: 6 Transactions: 3 Gainer: 18 Loser: 31"
-    ]
-  },
-  "YGGEUR": {
-    "becameAvailable": "2021-07-01",
-    "askBidSpreadPercentage": 0.2,
-    "note": "loser - G3 - loss",
-    "strategies": [
-      "€100 >0.5< 9.5% near-low-hard => €21 Remain: 64 Transactions: 4 Gainer: 15 Loser: 33",
-      "€100 >0.25< 4.5% near-low-hard => €13 Remain: 0 Transactions: 10 Gainer: 20 Loser: -1"
+      "€100 >1< 6% on-decrease => €21 Remain: 10 Transactions: 4 Gainer: 32 Loser: 0",
+      "€100 >0.5< 4.5% on-drop-rsi => €20 Remain: 8 Transactions: 6 Gainer: 10 Loser: 40"
     ]
   },
   "ZETAEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser - G3 - loss",
+    "note": "loser - loss",
     "strategies": [
       "€100 >1< 8% on-drop-percent => €19 Remain: 115 Transactions: 3 Gainer: 17 Loser: 23",
       "€100 >0.75< 9.5% on-decrease-soft => €18 Remain: 0 Transactions: 3 Gainer: 11 Loser: 34"
     ]
   },
-  "STRKEUR": {
-    "becameAvailable": "2021-09-01",
+  "STXEUR": {
+    "becameAvailable": "2019-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down - G3",
-    "strategies": []
+    "note": "loser - loss",
+    "strategies": [
+      "€100 >0.75< 9% on-decrease-percent => €13 Remain: 15 Transactions: 2 Gainer: 11 Loser: 19",
+      "€100 >0.25< 6.5% on-drop-percent => €14 Remain: 18 Transactions: 2 Gainer: 4 Loser: 34"
+    ]
   },
-  "TVKEUR": {
-    "becameAvailable": "2019-09-01",
-    "askBidSpreadPercentage": 2.35,
-    "note": "Moving down - G3",
-    "strategies": ["€100 >0.5< 1.5% near-low-hard => €21.5 Remain: 0 Transactions: 4"]
-  },
-  "ZKEUR": {
-    "becameAvailable": "20xx-xx-01",
+  "PENDLEEUR": {
+    "becameAvailable": "2021-04-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "loser - G3 - loss",
-    "strategies": ["€100 >1< 9% on-decrease-soft => €23 Remain: 470 Transactions: 2 Gainer: 8 Loser: 54"]
+    "note": "loser - loss",
+    "strategies": [
+      "€100 >0.25< 7% on-decrease => €10 Remain: 0 Transactions: 2 Gainer: 0 Loser: 33",
+      "€100 >0.25< 6% on-decrease => €17 Remain: 0 Transactions: 4 Gainer: 13 Loser: 25"
+    ]
   },
-  "WIFEUR": {
-    "becameAvailable": "2023-12-20",
-    "askBidSpreadPercentage": 0.05,
-    "note": "loser - G3 - gain",
-    "strategies": ["€100 >1< 9% on-decrease => €24 Remain: 15 Transactions: 2 Gainer: 38 Loser: -5"]
-  },
-  "SAGAEUR": {
-    "becameAvailable": "2024-04-01",
-    "askBidSpreadPercentage": 1.18,
-    "note": "loser - G3 - gain",
-    "strategies": ["€100 >0.25< 4.5% on-decrease-soft => €26 Remain: 17 Transactions: 11 Gainer: 39 Loser: 0"]
-  },
-  "USTEUR": {
-    "becameAvailable": "2022-08-01",
-    "askBidSpreadPercentage": 0.29,
-    "note": "loser - G3 - gain loss",
-    "strategies": []
-  },
-  "PYTHEUR": {
+  "TIAEUR": {
     "becameAvailable": "2023-11-01",
-    "askBidSpreadPercentage": 0.11,
-    "note": "loser - G3 - loss",
-    "strategies": ["€100 >1< 9% on-decrease-percent => €20 Remain: 186 Transactions: 2 Gainer: 6 Loser: 49"]
+    "askBidSpreadPercentage": 0.14,
+    "note": "loser - loss",
+    "strategies": [
+      "€100 >0.5< 9% on-drop => €23 Remain: 0 Transactions: 2 Gainer: 19 Loser: 31",
+      "€100 >0.5< 8.5% on-drop => €22 Remain: 6 Transactions: 3 Gainer: 18 Loser: 31",
+      "€100 >0.5< 9% on-drop-rsi => €19 Remain: 0 Transactions: 2 Gainer: 12 Loser: 35"
+    ]
   },
-  "ETHFIEUR": {
-    "becameAvailable": "2022-03-01",
-    "askBidSpreadPercentage": 0.39,
-    "note": "loser - G3",
-    "strategies": []
+
+  "CXTEUR": {
+    "name": "Covalent X Token",
+    "askBidSpreadPercentage": 0.36,
+    "note": "Moving down -",
+    "strategies": ["€100 >0.75< 8.5% on-decrease-rsi => €41 Remain: 0 Transactions: 6"]
+  },
+  "TEEREUR": {
+    "becameAvailable": "2021-10-01",
+    "askBidSpreadPercentage": 0.24,
+    "note": "Moving up down -",
+    "strategies": ["€100 >0.25< 6.5% on-decrease-rsi => €41 Remain: 0 Transactions: 3"]
+  },
+  "PRIMEEUR": {
+    "becameAvailable": "2023-03-01",
+    "askBidSpreadPercentage": 0.21,
+    "note": "Moving down -",
+    "strategies": ["€100 >0.75< 7% near-low => €33.5 Remain: 0 Transactions: 7.5"]
+  },
+  "CVCEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.78,
+    "note": "Moving down -",
+    "strategies": [
+      "€100 >1< 5% on-drop-soft => €31.5 Remain: 407.5 Transactions: 6.5",
+      "€100 >0.75< 6.5% on-decrease-soft => €28 Remain: 0 Transactions: 5"
+    ]
+  },
+  "XRTEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.29,
+    "note": "Moving down -",
+    "strategies": ["€100 >0.5< 1.5% on-drop => €31.5 Remain: 0 Transactions: 2"]
+  },
+  "BODENEUR": {
+    "becameAvailable": "2022-05-01",
+    "askBidSpreadPercentage": 2.32,
+    "note": "Moving down -",
+    "strategies": [
+      "€100 >1< 8.5% on-drop-percent => €26 Remain: 0 Transactions: 7.5",
+      "€100 >1< 8.5% on-decrease-percent => €26.5 Remain: 8440.5 Transactions: 7.5"
+    ]
   },
   "AAVEEUR": {
     "becameAvailable": "2020-12-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down - G3",
+    "note": "Moving up down",
     "strategies": ["€100 >0.75< 6% on-decrease => €23 Remain: 0 Transactions: 5"]
+  },
+  "POLSEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 4.25,
+    "note": "Moving down",
+    "strategies": ["€100 >0.75< 8% on-drop => €23.5 Remain: 0 Transactions: 1"]
+  },
+  "LCXEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.27,
+    "note": "Moving down -",
+    "strategies": [
+      "€100 >0.75< 6% on-drop => €22 Remain: 516 Transactions: 3.5",
+      "€100 >0.75< 6% on-drop-rsi => €20 Remain: 0 Transactions: 4.5"
+    ]
+  },
+  "STRKEUR": {
+    "becameAvailable": "2021-09-01",
+    "askBidSpreadPercentage": 0.05,
+    "note": "Moving up down",
+    "strategies": [
+      "€100 >0.75< 7.5% on-drop => €22.5 Remain: 150 Transactions: 2.5",
+      "€100 >0.75< 6% on-decrease-rsi => €19.5 Remain: 0 Transactions: 7",
+      "€100 >0.75< 7.5% on-drop-rsi => €19 Remain: 0 Transactions: 3"
+    ]
   },
   "KILTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 1.76,
-    "note": "Moving down - G3",
+    "note": "Moving down",
     "strategies": ["€100 >1< 2.5% on-drop => €21.5 Remain: 0 Transactions: 2"]
   },
+  "TVKEUR": {
+    "becameAvailable": "2019-09-01",
+    "askBidSpreadPercentage": 2.35,
+    "note": "Moving down",
+    "strategies": ["€100 >0.5< 1.5% near-low-hard => €21.5 Remain: 0 Transactions: 4"]
+  },
 
+  "FIDAEUR": {
+    "becameAvailable": "2020-12-01",
+    "askBidSpreadPercentage": 0.29,
+    "note": "Moving down -",
+    "strategies": []
+  },
+  "MEMEEUR": {
+    "becameAvailable": "2023-11-01",
+    "askBidSpreadPercentage": 0.28,
+    "note": "loser",
+    "strategies": []
+  },
+  "SEIEUR": {
+    "becameAvailable": "2021-01-01",
+    "askBidSpreadPercentage": 0.05,
+    "note": "loser - loss",
+    "strategies": []
+  },
+  "YGGEUR": {
+    "becameAvailable": "2021-07-01",
+    "askBidSpreadPercentage": 0.2,
+    "note": "loser - loss",
+    "strategies": []
+  },
+  "USTEUR": {
+    "becameAvailable": "2022-08-01",
+    "askBidSpreadPercentage": 0.29,
+    "note": "loser -",
+    "strategies": []
+  },
+  "ETHFIEUR": {
+    "becameAvailable": "2022-03-01",
+    "askBidSpreadPercentage": 0.39,
+    "note": "loser",
+    "strategies": []
+  },
   "APTEUR": {
     "becameAvailable": "2022-10-01",
     "askBidSpreadPercentage": 0.05,
@@ -410,26 +479,11 @@
     "note": "loser",
     "strategies": []
   },
-  "PENDLEEUR": {
-    "becameAvailable": "2021-04-01",
-    "askBidSpreadPercentage": 0.15,
-    "note": "loser - loss",
-    "strategies": [
-      "€100 >0.25< 7% on-decrease => €10 Remain: 0 Transactions: 2 Gainer: 0 Loser: 33",
-      "€100 >0.25< 6% on-decrease => €17 Remain: 0 Transactions: 4 Gainer: 13 Loser: 25"
-    ]
-  },
   "OXYEUR": {
     "becameAvailable": "2021-03-20",
     "askBidSpreadPercentage": 1.31,
     "note": "loser",
     "strategies": []
-  },
-  "STEPEUR": {
-    "becameAvailable": "2021-04-01",
-    "askBidSpreadPercentage": 3.49,
-    "note": "loser - loss",
-    "strategies": ["€100 >0.25< 1.5% on-decrease-rsi => €21 Remain: 0 Transactions: 5 Gainer: -1 Loser: 66"]
   },
   "JTOEUR": {
     "becameAvailable": "2024-01-01",
@@ -459,13 +513,13 @@
     "becameAvailable": "2023-06-01",
     "askBidSpreadPercentage": 0.34,
     "note": "loser",
-    "strategies": ["none"]
+    "strategies": []
   },
   "MVEUR": {
     "becameAvailable": "2022-02-01",
     "askBidSpreadPercentage": 3.21,
     "note": "loser ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "ARKMEUR": {
     "becameAvailable": "2023-07-01",
@@ -491,29 +545,23 @@
     "note": "Moving down",
     "strategies": []
   },
-  "ALTEUR": {
-    "becameAvailable": "2022-03-01",
-    "askBidSpreadPercentage": 1.1,
-    "note": "loser - gain",
-    "strategies": ["€100 >0.75< 10% on-decrease => €20 Remain: 383 Transactions: 2 Gainer: 30 Loser: 0"]
-  },
   "ICPEUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 0.05,
     "note": "Moving down ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "DOTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
     "note": "Moving up down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "QNTEUR": {
     "becameAvailable": "2018-08-01",
     "askBidSpreadPercentage": 0.12,
     "note": "Moving down - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "ARBEUR": {
     "becameAvailable": "2023-04-23",
@@ -531,7 +579,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.14,
     "note": "loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "GRTEUR": {
     "becameAvailable": "2020-12-01",
@@ -551,12 +599,6 @@
     "note": "loser",
     "strategies": []
   },
-  "POLSEUR": {
-    "becameAvailable": "20xx-xx-01",
-    "askBidSpreadPercentage": 4.25,
-    "note": "Moving down",
-    "strategies": ["€100 >0.75< 8% on-drop => €23.5 Remain: 0 Transactions: 1"]
-  },
   "RAREEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 0.21,
@@ -569,7 +611,6 @@
     "note": "Moving up down",
     "strategies": []
   },
-
   "TRUEUR": {
     "becameAvailable": "2018-07-01",
     "askBidSpreadPercentage": 1.04,
@@ -617,20 +658,20 @@
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.05,
     "note": "loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "CSMEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 4.82,
     "note": "loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "XDGEUR": {
     "name": "DOGE",
     "becameAvailable": "2013-12-06",
     "askBidSpreadPercentage": 0.05,
     "note": "loser",
-    "strategies": ["none"]
+    "strategies": []
   },
   "PEPEEUR": {
     "becameAvailable": "2023-04-01",
@@ -642,34 +683,19 @@
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.05,
     "note": "",
-    "strategies": ["none"]
+    "strategies": []
   },
   "FETEUR": {
     "becameAvailable": "2021-05-01",
     "askBidSpreadPercentage": 0.05,
     "note": "loser - ",
-    "strategies": ["none"]
-  },
-  "STXEUR": {
-    "becameAvailable": "2019-10-01",
-    "askBidSpreadPercentage": 0.05,
-    "note": "loser - loss",
-    "strategies": ["€100 >0.25< 6.5% on-drop-percent => €14 Remain: 18 Transactions: 2 Gainer: 4 Loser: 34"]
+    "strategies": []
   },
   "INJEUR": {
     "becameAvailable": "2021-04-01",
     "askBidSpreadPercentage": 0.11,
     "note": "loser - ",
-    "strategies": ["none"]
-  },
-  "RUNEEUR": {
-    "becameAvailable": "2020-07-01",
-    "askBidSpreadPercentage": 0.17,
-    "note": "loser - ",
-    "strategies": [
-      "€100 >0.5< 6% on-decrease => €18 Remain: 6 Transactions: 4 Gainer: -1 Loser: 60",
-      "€100 >0.5< 6% on-decrease-rsi => €19 Remain: 6 Transactions: 4 Gainer: -1 Loser: 61"
-    ]
+    "strategies": []
   },
   "GALAEUR": {
     "becameAvailable": "2020-09-01",
@@ -693,13 +719,13 @@
     "becameAvailable": "2016-10-01",
     "askBidSpreadPercentage": 0.15,
     "note": "loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "HFTEUR": {
     "becameAvailable": "2022-09-01",
     "askBidSpreadPercentage": 0.17,
     "note": "",
-    "strategies": ["none"]
+    "strategies": []
   },
   "RLCEUR": {
     "becameAvailable": "2017-04-01",
@@ -711,25 +737,25 @@
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 1.4,
     "note": "loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "PORTALEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.18,
     "note": "loser ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "ACHEUR": {
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.12,
     "note": "loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "MOVREUR": {
     "becameAvailable": "2021-08-01",
     "askBidSpreadPercentage": 0.19,
     "note": "loser",
-    "strategies": ["none"]
+    "strategies": []
   },
   "SAMOEUR": {
     "becameAvailable": "2021-05-01",
@@ -741,7 +767,7 @@
     "becameAvailable": "2017-02-01",
     "askBidSpreadPercentage": 0.51,
     "note": "In migration process (Melon is rebranded as Enzyme. Read more about this) - loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "AEVOEUR": {
     "becameAvailable": "2024-03-01",
@@ -789,7 +815,7 @@
     "becameAvailable": "2014-07-01",
     "askBidSpreadPercentage": 0.05,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "LTCEUR": {
     "becameAvailable": "20xx-xx-01",
@@ -826,37 +852,37 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 6.26,
     "note": "In migration process from MATICEUR (MATIC Polygon) - Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "XMREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.14,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "ATOMEUR": {
     "becameAvailable": "2019-03-14",
     "askBidSpreadPercentage": 0.05,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "MNTEUR": {
     "becameAvailable": "2022-10-01",
     "askBidSpreadPercentage": 0.14,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "ALGOEUR": {
     "becameAvailable": "2019-06-19",
     "askBidSpreadPercentage": 0.11,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "STGEUR": {
     "becameAvailable": "2020-09-01",
     "note": "Moving down",
     "askBidSpreadPercentage": 0.86,
-    "strategies": ["none"]
+    "strategies": []
   },
   "POPCATEUR": {
     "becameAvailable": "2024-01-01",
@@ -880,13 +906,13 @@
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 2.46,
     "note": "In migration process from MCEUR (MC Merit Circle token ) - loser - ",
-    "strategies": ["none"]
+    "strategies": []
   },
   "LUNAEUR": {
     "becameAvailable": "2019-08-01",
     "askBidSpreadPercentage": 0.63,
     "note": "loser",
-    "strategies": ["none"]
+    "strategies": []
   },
   "TREMPEUR": {
     "becameAvailable": "2024-03-01",
@@ -898,25 +924,25 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.43,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "EWTEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.81,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "KINEUR": {
     "becameAvailable": "2022-08-01",
     "askBidSpreadPercentage": 0.86,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "TLMEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "API3EUR": {
     "becameAvailable": "2021-11-01",
@@ -928,7 +954,7 @@
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 0.17,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "GMXEUR": {
     "becameAvailable": "2021-12-01",
@@ -1019,7 +1045,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "BADGEREUR": { "becameAvailable": "2020-12-03", "askBidSpreadPercentage": 0.11, "strategies": [] },
   "STORJEUR": { "becameAvailable": "2017-07-01", "askBidSpreadPercentage": 0.12, "strategies": [] },
@@ -1036,13 +1062,13 @@
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.05,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "DASHEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "ETHWEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.28, "strategies": [] },
   "FXSEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.14, "strategies": [] },
@@ -1059,7 +1085,7 @@
     "becameAvailable": "2021-09-01",
     "askBidSpreadPercentage": 0.36,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "OXTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.27, "strategies": [] },
   "NANOEUR": { "becameAvailable": "2015-03-01", "askBidSpreadPercentage": 0.29, "strategies": [] },
@@ -1067,7 +1093,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.12,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "BALEUR": { "becameAvailable": "2020-06-23", "askBidSpreadPercentage": 0.35, "strategies": [] },
   "SCRTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.68, "strategies": [] },
@@ -1075,7 +1101,7 @@
     "becameAvailable": "2021-07-01",
     "askBidSpreadPercentage": 0.74,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
 
   "GMTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.53, "strategies": [] },
@@ -1083,7 +1109,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.6,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "ATLASEUR": {
     "becameAvailable": "2021-03-01",
@@ -1094,7 +1120,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "CHREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.61, "strategies": [] },
   "AKTEUR": { "becameAvailable": "2022-08-01", "askBidSpreadPercentage": 0.69, "strategies": [] },
@@ -1133,7 +1159,7 @@
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.85,
     "note": "Moving down",
-    "strategies": ["none"]
+    "strategies": []
   },
   "CVXEUR": {
     "becameAvailable": "20xx-xx-01",

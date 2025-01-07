@@ -17,14 +17,17 @@ Started new trading with PRCLEUR based on 5 mins time interval:
 €100 >1< 9% on-drop => €39 Remain: 65 Transactions: 5 Gainer: 37 Loser: 43
 €100 >0.75< 9% on-drop => €40 Remain: 0 Transactions: 6 Gainer: 40 Loser: 40
 €100 >0.75< 7.5% on-decrease-soft => €42 Remain: 236 Transactions: 10 Gainer: 61 Loser: 4
+€100 >0.75< 8.5% on-drop-rsi => €44 Remain: 0 Transactions: 6 Gainer: 44 Loser: 45
 €100 >0.75< 7% on-decrease-soft => €47 Remain: 157 Transactions: 11 Gainer: 70 Loser: 0
 €100 >0.5< 8% on-decrease-soft => €46 Remain: 86 Transactions: 11 Gainer: 62 Loser: 15
 €100 >0.5< 7% on-decrease-soft => €52 Remain: 91 Transactions: 13 Gainer: 75 Loser: 6
 €100 >0.5< 7.5% on-drop-soft => €52 Remain: 87 Transactions: 11 Gainer: 77 Loser: 3
 
 
+
 Started new trading with BIGTIMEEUR based on 5 mins time interval:
 €100 >1< 3.5% on-decrease-rsi => €10 Remain: 0 Transactions: 4 Gainer: 0 Loser: 34
+€100 >1< 10% on-drop-rsi => €34 Remain: 460 Transactions: 3 Gainer: 49 Loser: 6
 €100 >1< 8.5% on-decrease-rsi => €35 Remain: 232 Transactions: 6 Gainer: 40 Loser: 27
 €100 >1< 10% on-decrease => €48 Remain: 439 Transactions: 4 Gainer: 67 Loser: 10
 
@@ -72,14 +75,15 @@ Started new trading with ALTEUR based on 5 mins time interval:
 
 
 Started new trading with KMNOEUR based on 5 mins time interval:
+€100 >0.75< 7.5% on-decrease-soft => €53 Remain: 189 Transactions: 7 Gainer: 60 Loser: 39
 €€100 >1< 7.5% on-decrease-percent => €51 Remain: 557 Transactions: 6 Gainer: 61 Loser: 30
 €100 >0.75< 6.5% on-decrease-soft => €48 Remain: 189 Transactions: 7 Gainer: 52 Loser: 42
-€100 >0.75< 7.5% on-decrease-soft => €53 Remain: 189 Transactions: 7 Gainer: 60 Loser: 39
 
 
 Started new trading with TURBOEUR based on 5 mins time interval:
 €100 >1< 8% on-decrease-percent => €19 Remain: 0 Transactions: 4 Gainer: 32 Loser: -7
 €100 >0.25< 8% on-drop => €20 Remain: 0 Transactions: 3 Gainer: 18 Loser: 26
+€100 >0.25< 8% on-drop-rsi => €21 Remain: 0 Transactions: 3 Gainer: 19 Loser: 26
 €100 >0.75< 6% on-decrease-percent => €23 Remain: 3772 Transactions: 7 Gainer: 35 Loser: -1
 €100 >1< 8% on-decrease-soft => €33 Remain: 3835 Transactions: 4 Gainer: 51 Loser: -4
 €100 >0.25< 4.5% on-decrease-soft => €36 Remain: 7716 Transactions: 17 Gainer: 33 Loser: 44
@@ -87,8 +91,8 @@ Started new trading with TURBOEUR based on 5 mins time interval:
 
 Started new trading with ORCAEUR based on 5 mins time interval:
 €100 >0.5< 9% on-decrease => €14 Remain: 9 Transactions: 2 Gainer: 0 Loser: 43
-€100 >0.25< 9% on-decrease => €25 Remain: 10 Transactions: 1 Gainer: 0 Loser: 77
-€100 >0.25< 9% on-decrease-soft => €29 Remain: 10 Transactions: 1 Gainer: 0 Loser: 87
+€100 >1< 8.5% on-drop-rsi => €15 Remain: 9 Transactions: 3 Gainer: 8 Loser: 29
+€100 >0.75< 5.5% on-drop-rsi => €15 Remain: 12 Transactions: 4 Gainer: 24 Loser: -2
 €100 >1< 9% on-drop => €31 Remain: 9 Transactions: 2 Gainer: 8 Loser: 78
 €100 >0.25< 7% on-drop-percent => €32 Remain: 10 Transactions: 2 Gainer: -2 Loser: 102
 
@@ -127,8 +131,8 @@ Started new trading with DYMEUR based on 5 mins time interval:
 €100 >0.75< 8.5% on-decrease-soft => €25 Remain: 0 Transactions: 5 Gainer: 13 Loser: 48
 
 
-
 Started new trading with RAYEUR based on 5 mins time interval:
+€100 >0.5< 4.5% on-drop-rsi => €20 Remain: 8 Transactions: 6 Gainer: 10 Loser: 40
 €100 >1< 6% on-decrease => €21 Remain: 10 Transactions: 4 Gainer: 32 Loser: 0
 
 
@@ -176,6 +180,7 @@ Started new trading with MOGEUR based on 5 mins time interval:
 €100 >1< 4% on-decrease => €23 Remain: 0 Transactions: 3 Gainer: 38 Loser: -7
 €100 >1< 6% on-decrease => €23 Remain: 0 Transactions: 4 Gainer: 35 Loser: -1
 €100 >1< 5% on-decrease => €26 Remain: 15794481 Transactions: 5 Gainer: 35 Loser: 10
+€100 >0.5< 5.5% on-drop-rsi => €26 Remain: 0 Transactions: 8 Gainer: 23 Loser: 33
 €100 >1< 5.5% on-decrease => €28 Remain: 13816063 Transactions: 6 Gainer: 40 Loser: 4
 €100 >1< 5.5% on-drop-soft => €28 Remain: 0 Transactions: 4 Gainer: 43 Loser: -1
 
@@ -183,6 +188,8 @@ Started new trading with MOGEUR based on 5 mins time interval:
 Started new trading with SAFEEUR based on 5 mins time interval:
 €100 >1< 9.5% on-decrease-soft => €20 Remain: 0 Transactions: 1 Gainer: 33 Loser: -4
 €100 >1< 10% on-decrease-soft => €21 Remain: 30 Transactions: 1 Gainer: 33 Loser: -4
+€100 >1< 9.5% on-drop-rsi => €22 Remain: 23 Transactions: 1 Gainer: 27 Loser: 13
+€100 >1< 10% on-drop-rsi => €23 Remain: 23 Transactions: 1 Gainer: 28 Loser: 14
 €100 >0.75< 9.5% on-decrease-soft => €25 Remain: 30 Transactions: 1 Gainer: 39 Loser: -1
 €100 >0.75< 10% on-decrease-soft => €25 Remain: 30 Transactions: 1 Gainer: 39 Loser: -1
 €100 >1< 10% on-drop => €25 Remain: 23 Transactions: 1 Gainer: 32 Loser: 12
@@ -195,8 +202,8 @@ Started new trading with SAFEEUR based on 5 mins time interval:
 Started new trading with MEMEEUR based on 5 mins time interval:
 €100 >1< 7% on-decrease-soft => €16 Remain: 5819 Transactions: 5 Gainer: 19 Loser: 10
 €100 >1< 7% on-drop-soft => €16 Remain: 3018 Transactions: 5 Gainer: 19 Loser: 12
-old-€100 >1.25< 8% on-decrease-soft => €27 Remain: 3018 Transactions: 4 Gainer: 34 Loser: 15
-old-€100 >1.5< 8% on-drop-soft => €27 Remain: 3018 Transactions: 4 Gainer: 39 Loser: 4
+    old-€100 >1.25< 8% on-decrease-soft => €27 Remain: 3018 Transactions: 4 Gainer: 34 Loser: 15
+    old-€100 >1.5< 8% on-drop-soft => €27 Remain: 3018 Transactions: 4 Gainer: 39 Loser: 4
 
 
 Started new trading with SEIEUR based on 5 mins time interval:
@@ -204,8 +211,8 @@ Started new trading with SEIEUR based on 5 mins time interval:
 €100 >1< 9% on-decrease => €14 Remain: 165 Transactions: 3 Gainer: 15 Loser: 14
 €100 >1< 7.5% on-decrease => €16 Remain: 94 Transactions: 3 Gainer: 29 Loser: -9
 €100 >1< 7% on-decrease => €20 Remain: 97 Transactions: 4 Gainer: 38 Loser: -17
-old-€100 >1.5< 10% on-decrease-soft => €23 Remain: 162 Transactions: 2 Gainer: 22 Loser: 26
-old-€100 >1.5< 10% on-decrease-percent => €30 Remain: 162 Transactions: 3 Gainer: 21 Loser: 48
+    old-€100 >1.5< 10% on-decrease-soft => €23 Remain: 162 Transactions: 2 Gainer: 22 Loser: 26
+    old-€100 >1.5< 10% on-decrease-percent => €30 Remain: 162 Transactions: 3 Gainer: 21 Loser: 48
 
 
 Started new trading with ZETAEUR based on 5 mins time interval:
@@ -240,15 +247,14 @@ Started new trading with CPOOLEUR based on 5 mins time interval:
 €100 >1< 5% on-drop => €21 Remain: 0 Transactions: 3 Gainer: 7 Loser: 50
 €100 >1< 9.5% on-drop-soft => €20 Remain: 76 Transactions: 3 Gainer: 9 Loser: 43
 €100 >1< 10% on-drop-soft => €26 Remain: 76 Transactions: 3 Gainer: 9 Loser: 59
-old-€100 >1< 7% on-decrease-hard => €20 Remain: 72 Transactions: 3 Gainer: -5 Loser: 73
 
 
 Started new trading with BLUREUR based on 5 mins time interval:
 €100 >1< 10% on-decrease => €14 Remain: 275 Transactions: 2 Gainer: 8 Loser: 27
 €100 >1< 9.5% on-decrease => €24 Remain: 275 Transactions: 3 Gainer: 17 Loser: 40
 €100 >1< 8.5% on-decrease => €24 Remain: 285 Transactions: 4 Gainer: 23 Loser: 26
-old-€100 >1.25< 8.5% on-decrease => €30 Remain: 290 Transactions: 4 Gainer: 25 Loser: 40
-old-€100 >1< 9.5% near-low => €27 Remain: 286 Transactions: 4 Gainer: 24 Loser: 32
+    old-€100 >1.25< 8.5% on-decrease => €30 Remain: 290 Transactions: 4 Gainer: 25 Loser: 40
+    old-€100 >1< 9.5% near-low => €27 Remain: 286 Transactions: 4 Gainer: 24 Loser: 32
 
 
 Started new trading with BSXEUR based on 5 mins time interval:
@@ -264,17 +270,18 @@ Started new trading with BSXEUR based on 5 mins time interval:
 
 Started new trading with NOSEUR based on 5 mins time interval:
 €100 >1< 10% on-decrease => €11 Remain: 9 Transactions: 2 Gainer: 0 Loser: 35
+€100 >1< 10% on-decrease-percent => €14 Remain: 8 Transactions: 2 Gainer: 23 Loser: -3
 €100 >1< 10% on-decrease-soft => €15 Remain: 18 Transactions: 4 Gainer: 18 Loser: 8
 €100 >1< 6% on-decrease-soft => €15 Remain: 0 Transactions: 5 Gainer: -1 Loser: 49
-€100 >1< 10% on-decrease-percent => €14 Remain: 8 Transactions: 2 Gainer: 23 Loser: -3
 €100 >1< 7.5% on-decrease-rsi => €16 Remain: 0 Transactions: 4 Gainer: -1 Loser: 51
+€100 >0.75< 6% on-drop-rsi => €18 Remain: 12 Transactions: 5 Gainer: 0 Loser: 58
 €100 >1< 10% on-decrease-rsi => €25 Remain: 18 Transactions: 3 Gainer: 20 Loser: 34
 €100 >1< 10% on-drop-soft => €27 Remain: 18 Transactions: 3 Gainer: 28 Loser: 25
 
 
 Started new trading with UNFIEUR based on 5 mins time interval:
-€100 >0.25< 1.5% on-decrease-rsi => €20 Remain: 0 Transactions: 3 Gainer: 35 Loser: -8
-€100 >0.25< 3% on-decrease-rsi => €21 Remain: 0 Transactions: 5 Gainer: 40 Loser: -17
+€100 >0.75< 3.5% on-drop-rsi => €23 Remain: 0 Transactions: 2 Gainer: 35 Loser: 0
+€100 >0.75< 2.5% on-drop-rsi => €27 Remain: 0 Transactions: 3 Gainer: 41 Loser: 0
 
 
 Started new trading with TIAEUR based on 5 mins time interval:
@@ -284,10 +291,10 @@ Started new trading with TIAEUR based on 5 mins time interval:
 €100 >0.75< 9.5% on-decrease-soft => €18 Remain: 6 Transactions: 3 Gainer: 17 Loser: 22
 €100 >0.75< 8.5% on-decrease-rsi => €18 Remain: 13 Transactions: 3 Gainer: 23 Loser: 9
 €100 >0.75< 8.5% on-drop => €18 Remain: 6 Transactions: 2 Gainer: 24 Loser: 6
+€100 >0.5< 9% on-drop-rsi => €19 Remain: 0 Transactions: 2 Gainer: 12 Loser: 35
 €100 >0.5< 9% on-drop => €23 Remain: 0 Transactions: 2 Gainer: 19 Loser: 31
 €100 >0.5< 8.5% on-drop => €22 Remain: 6 Transactions: 3 Gainer: 18 Loser: 31
-old-€100 >0.25< 5% on-decrease => €19 Remain: 0 Transactions: 8 Gainer: 9 Loser: 40
-old-€100 >1< 9% on-decrease-hard => €14 Remain: 6 Transactions: 2 Gainer: -2 Loser: 48
+
 
 Started new trading with ZKEUR based on 5 mins time interval:
 €100 >1< 9% on-decrease => €10 Remain: 445 Transactions: 2 Gainer: 8 Loser: 16
@@ -403,7 +410,7 @@ Started new trading with FLOKIEUR based on 5 mins time interval:
 €100 >0.75< 3.5% on-drop => €13 Remain: 0 Transactions: 4 Gainer: 11 Loser: 18
 €100 >0.25< 3.5% on-drop => €13 Remain: 0 Transactions: 5 Gainer: 9 Loser: 20
 €100 >0.5< 4% on-drop-percent => €12 Remain: 0 Transactions: 7 Gainer: 19 Loser: -2
-
+€100 >0.25< 3.5% on-drop-rsi => €13 Remain: 0 Transactions: 5 Gainer: 9 Loser: 22
 
 Started new trading with MLNEUR based on 5 mins time interval:
 
@@ -421,6 +428,7 @@ Started new trading with OXYEUR based on 5 mins time interval:
 
 Started new trading with JTOEUR based on 5 mins time interval:
 €100 >0.75< 9.5% on-decrease => €10 Remain: 12 Transactions: 2 Gainer: 6 Loser: 19
+€100 >1< 7.5% on-drop-rsi => €12 Remain: 0 Transactions: 2 Gainer: 14 Loser: 7
 €100 >1< 7% on-decrease-soft => €14 Remain: 11 Transactions: 6 Gainer: 21 Loser: 1
 €100 >1< 6.5% on-decrease-soft => €14 Remain: 11 Transactions: 6 Gainer: 19 Loser: 5
 
@@ -460,6 +468,7 @@ Started new trading with PEPEEUR based on 5 mins time interval:
 
 Started new trading with ZECEUR based on 5 mins time interval:
 €100 >1< 6.5% on-drop => €11 Remain: 0 Transactions: 1 Gainer: 18 Loser: -2
+€100 >1< 6% on-drop-rsi => €12 Remain: 0 Transactions: 3 Gainer: 20 Loser: -3
 
 
 Started new trading with GTCEUR based on 5 mins time interval:
@@ -535,6 +544,8 @@ Started new trading with XRPEUR based on 5 mins time interval:
 Started new trading with LCXEUR based on 5 mins time interval:
 €100 >0.75< 6% on-decrease => €11.5 Remain: 516 Transactions: 4.5
 €100 >0.75< 5.5% on-drop => €12.5 Remain: 516 Transactions: 4
+€100 >0.25< 5% on-drop-rsi => €13 Remain: 0 Transactions: 3.5
+€100 >0.75< 6% on-drop-rsi => €20 Remain: 0 Transactions: 4.5
 €100 >0.75< 6% on-drop => €22 Remain: 516 Transactions: 3.5
 
 
@@ -544,10 +555,11 @@ Started new trading with STRKEUR based on 5 mins time interval:
 €100 >0.5< 7% on-decrease => €9 Remain: 0 Transactions: 3.5
 €100 >0.5< 7.5% on-decrease => €12.5 Remain: 0 Transactions: 3.5
 €100 >0.75< 6% on-decrease => €18 Remain: 0 Transactions: 7
-€100 >0.75< 6% on-decrease-rsi => €19.5 Remain: 0 Transactions: 7
-€100 >0.75< 6.5% on-decrease => €19 Remain: 149 Transactions: 4.5
 €100 >1< 8% on-decrease => €18 Remain: 150 Transactions: 3.5
 €100 >0.75< 7% on-drop => €17.5 Remain: 149 Transactions: 2.5
+€100 >0.75< 6.5% on-decrease => €19 Remain: 149 Transactions: 4.5
+€100 >0.75< 6% on-decrease-rsi => €19.5 Remain: 0 Transactions: 7
+€100 >0.75< 7.5% on-drop-rsi => €19 Remain: 0 Transactions: 3
 €100 >0.75< 7.5% on-drop => €22.5 Remain: 150 Transactions: 2.5
 
 
@@ -788,6 +800,7 @@ Started new trading with HONEYEUR based on 5 mins time interval:
 €100 >0.75< 7.5% on-decrease-rsi => €10 Remain: 0 Transactions: 3.5
 €100 >1< 9% on-decrease-rsi => €12 Remain: 0 Transactions: 1.5
 
+
 Started new trading with L3EUR based on 5 mins time interval:
 €100 >0.25< 4.5% on-decrease => €7.5 Remain: 1012 Transactions: 3
 €100 >0.75< 2% on-decrease => €7 Remain: 1012 Transactions: 2.5
@@ -797,6 +810,7 @@ Started new trading with L3EUR based on 5 mins time interval:
 €100 >1< 4.5% on-decrease => €12 Remain: 1012 Transactions: 2.5
 €100 >1< 3% on-decrease-rsi => €13 Remain: 1012 Transactions: 2.5
 €100 >1< 4.5% on-decrease-rsi => €13 Remain: 1012 Transactions: 2.5
+
 
 Started new trading with DRIFTEUR based on 5 mins time interval:
 
@@ -848,7 +862,6 @@ Started new trading with STGEUR based on 5 mins time interval:
 €100 >1< 4% on-drop => €7 Remain: 198 Transactions: 2
 
 
-
 Started new trading with POLISEUR based on 5 mins time interval:
 €100 >0.75< 4% on-decrease => €5.5 Remain: 418 Transactions: 7
 €100 >0.75< 4.5% on-decrease => €15 Remain: 418 Transactions: 7
@@ -880,6 +893,7 @@ Started new trading with ZROEUR based on 5 mins time interval:
 €100 >1< 4.5% on-drop => €15.5 Remain: 0 Transactions: 4
 €100 >1< 4% on-decrease-rsi => €17.5 Remain: 15.5 Transactions: 6.5
 €100 >1< 4.5% on-decrease-rsi => €17 Remain: 15.5 Transactions: 6.5
+
 
 Started new trading with LMWREUR based on 5 mins time interval:
 €100 >0.5< 1.5% on-decrease => €5.5 Remain: 0 Transactions: 9.5
@@ -986,6 +1000,7 @@ Started new trading with CVXEUR based on 5 mins time interval:
 €100 >0.75< 5.5% on-decrease => €11.5 Remain: 34.5 Transactions: 2.5
 €100 >0.75< 5.5% on-decrease-rsi => €13.5 Remain: 34.5 Transactions: 3
 
+
 Started new trading with IDEXEUR based on 5 mins time interval:
 
 
@@ -1049,6 +1064,7 @@ Started new trading with RBCEUR based on 5 mins time interval:
 €100 >0.75< 5.5% on-decrease-rsi => €12 Remain: 4414.5 Transactions: 1
 €100 >1< 5% on-decrease-rsi => €14.5 Remain: 4414.5 Transactions: 2
 €100 >1< 5.5% on-decrease-rsi => €15.5 Remain: 4414.5 Transactions: 1.5
+
 
 Started new trading with JUNOEUR based on 5 mins time interval:
 
