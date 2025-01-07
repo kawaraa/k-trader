@@ -43,10 +43,11 @@ module.exports = class DailyTrader {
     this.timeInterval = +timeInterval;
     this.period = +timeInterval; // this.period is deleted in only test trading
     this.listener = null;
-    this.soft = this.mode.includes("soft");
-    this.buyOnRSI = this.soft ? 45 : 30;
-    this.buySellOnThreshold = this.#percentageThreshold / 4;
-    this.stopLossTimeLimit = Math.max(this.#strategyRange * 3, 1.5);
+    this.hard = this.mode.includes("hard");
+    this.lowRSI = this.hard ? 30 : 45;
+    this.sellOnRSI = this.hard ? 65 : 60;
+    this.buySellOnThreshold = this.#percentageThreshold / 5;
+    this.stopLossTimeLimit = Math.max(this.#strategyRange * 4, 2.5);
 
     this.previouslyDropped = false;
     this.previousBidRSI = null;
@@ -74,32 +75,28 @@ module.exports = class DailyTrader {
       const highDropChange = calcPercentageDifference(highestBidPr, askPrice);
       const increased = calcPercentageDifference(lowestAsk, askPrice);
       const dropped = highDropChange < -(this.#percentageThreshold * 1.2);
-      const goingUp = increased >= this.buySellOnThreshold;
-      const goingDown = !dropped && highDropChange <= -this.buySellOnThreshold;
-      const rsiGoingUp = askPriceRSI <= this.buyOnRSI && this.previousBidRSI < bidPriceRSI;
-      let shouldBuy = false;
-
       if (!this.previouslyDropped && dropped) this.previouslyDropped = true;
+      const goingUp = increased >= this.buySellOnThreshold;
+      const goingDown = highDropChange <= -this.buySellOnThreshold;
+      const rsiGoingUp = this.previousBidRSI < bidPriceRSI;
+      const rsiGoingDown = this.previousBidRSI >= this.sellOnRSI && this.previousBidRSI > askPriceRSI;
 
       this.dispatch("log", `Ask Price: => Cur:${askPrice} - RSI:${askPriceRSI} Change:${askPrChange}%`);
       this.dispatch("log", `Bid Price: => Cur:${bidPrice} - RSI:${bidPriceRSI} Change:${bidPrChange}%`);
 
-      const shouldSell =
-        this.mode.includes("rsi") && this.previousBidRSI > 75 && this.previousBidRSI >= bidPriceRSI;
-
       // 1. On price drop mode "high-drop"
-      if (this.mode.includes("high-drop")) {
-        shouldBuy = dropped && rsiGoingUp; // soft and hard
-        if (this.mode.includes("percent")) shouldBuy = dropped && goingUp;
+      let shouldBuy = dropped && this.previousBidRSI <= this.lowRSI && rsiGoingUp;
+      //  (askPriceRSI <= this.buyOnRSI && bidPriceRSI <= this.buyOnRSI && rsiGoingUp)
 
-        // 2. On price increase mode "on-increase"
-      } else if (this.mode.includes("on-increase")) {
-        shouldBuy = this.previouslyDropped && rsiGoingUp; // soft and hard
-        if (this.mode.includes("percent")) shouldBuy = this.previouslyDropped && goingUp;
-      }
+      // 3. Safety check, pause buying if the price is dropping too much or fast
+      if (highDropChange <= -(this.#percentageThreshold * 1.5)) shouldBuy = false;
 
-      if (!/soft|percent/gim.test(this.mode) && highDropChange <= -(this.#percentageThreshold * 1.5)) {
-        shouldBuy = false;
+      // 4. On price increase mode "on-increase"
+      if (this.mode.includes("on-increase")) {
+        if (!this.hard) shouldBuy = this.previouslyDropped && rsiGoingUp;
+        else {
+          if ((shouldBuy = this.previouslyDropped && goingUp)) this.previouslyDropped = false;
+        }
       }
 
       // Buy
@@ -115,17 +112,23 @@ module.exports = class DailyTrader {
         }
 
         // Sell
-      } else if (enoughPricesData && balance.crypto > 0 && (goingDown || shouldSell)) {
+      } else if (enoughPricesData && balance.crypto > 0) {
         let orderType = "";
-        const sellableOrders = orders.filter((o) => {
-          if (this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice)) return true;
-          // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
-          else if (isOlderThen(o.createdAt, this.stopLossTimeLimit)) {
-            orderType = " backlog";
-            return true;
-          }
-          return false;
+        let sellableOrders = orders.filter((o) => {
+          return this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice);
         });
+
+        if (this.mode.includes("on-increase")) {
+          if ((this.hard && !goingDown) || (!this.hard && !rsiGoingDown)) sellableOrders = [];
+        } else if (!rsiGoingDown) {
+          sellableOrders = [];
+        }
+
+        // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
+        if (!sellableOrders[0] && orders[0] && ((this.hard && goingDown) || (!this.hard && rsiGoingDown))) {
+          sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, this.stopLossTimeLimit));
+          orderType = " backlog";
+        }
 
         this.dispatch("log", `There are (${sellableOrders.length})${orderType} orders to sell`);
         for (const order of sellableOrders) {
@@ -133,7 +136,6 @@ module.exports = class DailyTrader {
         }
       }
 
-      if (shouldBuy) this.previouslyDropped = false;
       this.previousBidRSI = bidPriceRSI;
       this.dispatch("log", "");
     } catch (error) {

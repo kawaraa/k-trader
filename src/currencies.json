@@ -171,7 +171,7 @@
   "CXTEUR": {
     "name": "Covalent X Token",
     "askBidSpreadPercentage": 0.36,
-    "note": "In migration process from CQTEUR (CQT Covalent) - Moving down - G1",
+    "note": "Moving down - G1",
     "strategies": [
       "€100 >0.5< 8% near-low => €47 Remain: 0 Transactions: 7",
       "€100 >0.5< 7% near-low => €43 Remain: 0 Transactions: 6"
