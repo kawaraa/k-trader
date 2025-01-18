@@ -37,7 +37,7 @@ module.exports = class DailyTrader {
     this.#pair = pair;
     this.#capital = capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
     this.#strategyRange = Math.max(+strategyRange || 0, 0.25); // Range in days "0.25 = 6 hours"
-    this.#percentageThreshold = priceChange; // Percentage Change is the price Percentage Threshold
+    this.#percentageThreshold = Math.max(+priceChange || 0, 1.5); // Percentage Change is the price Percentage Threshold
     this.mode = mode;
     this.timeInterval = +timeInterval;
     this.period = +timeInterval; // this.period is deleted in only test trading
@@ -46,6 +46,7 @@ module.exports = class DailyTrader {
     this.buyOnRSI = this.soft ? 45 : 30;
     this.buySellOnThreshold = this.#percentageThreshold / 4;
     this.stopLossTimeLimit = Math.max(this.#strategyRange * 3, 1.5);
+    // this.stopLossTimeLimit = Math.max(this.#strategyRange * 2, 1.5);
 
     this.previouslyDropped = false;
     this.previousBidRSI = null;
@@ -105,8 +106,9 @@ module.exports = class DailyTrader {
       if (enoughPricesData && shouldBuy) {
         this.dispatch("log", `Suggest buying: TradePrice Price is ${tradePrice}`);
 
-        if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital) {
-          const cost = this.#capital - calculateFee(this.#capital, 0.4);
+        if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital / 2) {
+          const capital = balance.eur < this.#capital ? balance.eur : this.#capital;
+          const cost = capital - calculateFee(capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
           this.dispatch("buy", orderId);
@@ -117,10 +119,12 @@ module.exports = class DailyTrader {
       } else if (enoughPricesData && balance.crypto > 0 && (goingDown || shouldSell)) {
         let orderType = "";
         const sellableOrders = orders.filter((o) => {
-          if (this.#percentageThreshold <= calcPercentageDifference(o.price, bidPrice)) return true;
-          // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
-          else if (isOlderThen(o.createdAt, this.stopLossTimeLimit)) {
-            orderType = " backlog";
+          const priceChange = calcPercentageDifference(o.price, bidPrice);
+          const stopLoss = isOlderThen(o.createdAt, this.stopLossTimeLimit);
+
+          if (this.#percentageThreshold <= priceChange || stopLoss) {
+            // Backlog: If older then StopLessLimit, Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
+            if (stopLoss) orderType = " backlog";
             return true;
           }
           return false;
