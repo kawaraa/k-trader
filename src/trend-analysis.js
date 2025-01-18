@@ -115,6 +115,23 @@ function findHighLowPriceChanges(prices, currentPrice) {
   return priceChanges;
 }
 
+function detectPriceShape(prices) {
+  const result = { shape: "", value: null };
+  if (prices.length < 3) return null; // Not enough points for a shape
+
+  const minPrice = (result.value = Math.min(...prices));
+  const minIndex = prices.indexOf(minPrice);
+  result.shape = "V"; // Check for "V" shape
+  if (minIndex > 0 && minIndex < prices.length - 1) return result;
+
+  const maxPrice = (result.value = Math.max(...prices));
+  const maxIndex = prices.indexOf(maxPrice);
+  result.shape = "A"; // Check for "A" shape
+  if (maxIndex > 0 && maxIndex < prices.length - 1) return result;
+
+  return result; // No clear "V" or "A" shape
+}
+
 function calcAveragePrice(prices) {
   if (prices.length === 0) throw new Error("Price list cannot be empty.");
   const total = prices.reduce((sum, price) => sum + price, 0);
@@ -183,6 +200,7 @@ module.exports = {
   simpleMovingAverage,
   calculateRSI,
   findHighLowPriceChanges,
+  detectPriceShape,
   calcAveragePrice,
   calcPercentageDifference,
   countPriceChanges,

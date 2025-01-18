@@ -64,7 +64,7 @@ module.exports = class DailyTrader {
         }
 
         // Sell
-      } else if (enoughPricesData && balance.crypto > 0 && (goingDown || goingDownSoft)) {
+      } else if (enoughPricesData && balance.crypto > 0 /* && (goingDown || goingDownSoft) */) {
         // const sellableOrders = orders;
         const sellableOrders = orders.filter(
           (o) => goingDown || (goingDownSoft && 0 <= calcPercentageDifference(o.price, bidPrice))
