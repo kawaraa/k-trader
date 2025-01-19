@@ -5,11 +5,12 @@ export default function ChartCanvas({ type = "line", labels, datasets, options }
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
   const [maxLevel, setMaxLevel] = useState(0);
-  const [zoomLevel, setZoomLevel] = useState(0);
+  const [leftZoomLevel, setLeftZoomLevel] = useState(0);
+  const [rightZoomLevel, setRightZoomLevel] = useState(0);
 
   const data = {
-    labels: labels.slice(-zoomLevel),
-    datasets: datasets.map((ds) => ({ ...ds, data: ds.data.slice(-zoomLevel) })),
+    labels: labels.slice(leftZoomLevel, rightZoomLevel),
+    datasets: datasets.map((ds) => ({ ...ds, data: ds.data.slice(leftZoomLevel, rightZoomLevel) })),
   };
 
   useEffect(() => {
@@ -19,12 +20,12 @@ export default function ChartCanvas({ type = "line", labels, datasets, options }
       chartInstanceRef.current.update();
     }
 
-    if (maxLevel <= 0) {
-      const max = data.datasets[0]?.data?.length || 0;
-      setMaxLevel(max);
-      setZoomLevel(max);
+    if (maxLevel <= 1) {
+      const max = datasets[0]?.data?.length || 0;
+      setMaxLevel(max + 1);
+      setRightZoomLevel(max + 1);
     }
-  }, [data, options]);
+  }, [data, options, datasets]);
 
   useEffect(() => {
     const ctx = chartRef.current?.getContext("2d");
@@ -39,20 +40,37 @@ export default function ChartCanvas({ type = "line", labels, datasets, options }
     <div className="relative h-[inherit]">
       <canvas ref={chartRef}></canvas>
 
-      <label className="absolute top-8 right-4 w-1/2 flex items-center">
-        <strong>+</strong>
-        <input
-          id="zoom"
-          type="range"
-          min="144"
-          max={maxLevel}
-          step="144"
-          value={zoomLevel}
-          onChange={(e) => setZoomLevel(Number(e.target.value))}
-          className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
-        />
-        <strong>-</strong>
-      </label>
+      <div className="absolute top-8 right-4 left-4 flex items-center">
+        <label className="flex flex-auto items-center">
+          <strong>+</strong>
+          <input
+            id="zoom"
+            type="range"
+            min="0"
+            max={maxLevel - 144}
+            step="144"
+            value={leftZoomLevel}
+            onChange={(e) => setLeftZoomLevel(Number(e.target.value))}
+            className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
+          />
+          <strong>-</strong>
+        </label>
+        <div className="w-4"></div>
+        <label className="flex flex-auto items-center">
+          <strong>+</strong>
+          <input
+            id="zoom"
+            type="range"
+            min="144"
+            max={maxLevel}
+            step="144"
+            value={rightZoomLevel}
+            onChange={(e) => setRightZoomLevel(Number(e.target.value) + 1)}
+            className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
+          />
+          <strong>-</strong>
+        </label>
+      </div>
     </div>
   );
 }

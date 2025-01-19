@@ -1,6 +1,6 @@
 const { calcPercentageDifference, detectPriceShape, calculateFee } = require("./trend-analysis.js");
 
-// Smart trader
+// Smart trader: V-A algorithm
 module.exports = class DailyTrader {
   #pair;
   #capital;
@@ -33,12 +33,12 @@ module.exports = class DailyTrader {
       const enoughPricesData = prices.length >= (this.#strategyRange * 60) / this.timeInterval;
 
       const { shape, value } = detectPriceShape(bidPrices);
-      const priceChange = calcPercentageDifference(value, bidPrice);
+      const priceChange = calcPercentageDifference(value, askPrice);
       const multiplier = this.#percentageThreshold < 5 ? 5 : 6;
       const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
       const highLiquidity = askBidSpreadPercentage < this.#percentageThreshold / multiplier;
       const shouldBuy = shape == "V" && highLiquidity && priceChange >= this.#percentageThreshold;
-      const shouldSell = shape == "A" && highLiquidity && priceChange <= -this.#percentageThreshold;
+      const shouldSell = highLiquidity && priceChange <= -this.#percentageThreshold;
 
       this.dispatch(
         "log",
@@ -59,7 +59,21 @@ module.exports = class DailyTrader {
         // Sell
       } else if (enoughPricesData && balance.crypto > 0 && shouldSell) {
         // const sellableOrders = orders;
-        const sellableOrders = orders.filter((o) => 0 <= calcPercentageDifference(o.price, bidPrice));
+        // const sellableOrders = orders.filter((o) => 0 <= calcPercentageDifference(o.price, bidPrice));
+        const sellableOrders = orders.filter((o) => {
+          const priceChange = calcPercentageDifference(o.price, bidPrice);
+          const minRange = this.#strategyRange * 4;
+
+          const case1 = priceChange >= this.#percentageThreshold * 3;
+          const case2 =
+            isOlderThen(o.createdAt, Math.max(minRange, 12) / 24) &&
+            priceChange >= this.#percentageThreshold * 2;
+          const case3 =
+            isOlderThen(o.createdAt, Math.max(minRange, 18) / 24) && priceChange >= this.#percentageThreshold;
+          const case4 = isOlderThen(o.createdAt, Math.max(minRange, 24) / 24) && priceChange <= 0;
+
+          return case1 || case2 || case3 || case4;
+        });
 
         this.dispatch("log", `There are (${sellableOrders.length}) orders to sell`);
         for (const order of sellableOrders) {
