@@ -71,6 +71,10 @@ module.exports = class DailyTrader {
       const lowestAsk = askPrices.sort()[0];
       const enoughPricesData = prices.length >= (this.#strategyRange * 24 * 60) / this.timeInterval;
 
+      const multiplier = this.#percentageThreshold < 5 ? 5 : 6;
+      const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
+      const highLiquidity = askBidSpreadPercentage < this.#percentageThreshold / multiplier;
+
       const highDropChange = calcPercentageDifference(highestBidPr, askPrice);
       const increased = calcPercentageDifference(lowestAsk, askPrice);
       const dropped = highDropChange < -(this.#percentageThreshold * 1.2);
@@ -103,7 +107,7 @@ module.exports = class DailyTrader {
       }
 
       // Buy
-      if (enoughPricesData && shouldBuy) {
+      if (enoughPricesData && highLiquidity && shouldBuy) {
         this.dispatch("log", `Suggest buying: TradePrice Price is ${tradePrice}`);
 
         if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital / 2) {
@@ -116,22 +120,19 @@ module.exports = class DailyTrader {
         }
 
         // Sell
-      } else if (enoughPricesData && balance.crypto > 0 && (goingDown || shouldSell)) {
+      } else if (enoughPricesData && balance.crypto > 0 && orders[0] && (goingDown || shouldSell)) {
         let orderType = "";
-        const sellableOrders = orders.filter((o) => {
-          const priceChange = calcPercentageDifference(o.price, bidPrice);
-          const stopLoss = isOlderThen(o.createdAt, this.stopLossTimeLimit);
+        let order = orders[0];
 
-          if (this.#percentageThreshold <= priceChange || stopLoss) {
-            // Backlog: If older then StopLessLimit, Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
-            if (stopLoss) orderType = " backlog";
-            return true;
-          }
-          return false;
-        });
+        const priceChange = calcPercentageDifference(order.price, bidPrice);
+        const stopLoss = isOlderThen(order.createdAt, this.stopLossTimeLimit);
 
-        this.dispatch("log", `There are (${sellableOrders.length})${orderType} orders to sell`);
-        for (const order of sellableOrders) {
+        if (stopLoss) orderType = "backlog";
+
+        if (!(this.#percentageThreshold <= priceChange || stopLoss)) order = null;
+        else this.dispatch("log", `${orderType} order will be executed`);
+
+        if (order) {
           await this.#sell(order, balance.crypto, bidPrice);
         }
       }

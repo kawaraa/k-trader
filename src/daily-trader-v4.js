@@ -137,16 +137,16 @@ module.exports = class DailyTrader {
 
         const profitable = (dropping || shouldSell) && priceChange >= this.#percentageThreshold;
         const earlySelling = period1 && dropping && priceChange >= halfThreshold;
-        const stopLoss1 = this.previousLoss <= -this.#percentageThreshold && priceChange > 0.4;
+        const stopLoss = this.previousLoss <= -this.#percentageThreshold && priceChange > 0.4;
         const nearLowStopLoss = stopLossPeriod || nearLow > this.#percentageThreshold;
 
         if (earlySelling) orderType = "earlySelling";
-        else if (stopLoss1) orderType = "stopLoss2";
+        else if (stopLoss) orderType = "stopLoss";
         else if (stopLossPeriod) orderType = "stopLossPeriod";
         else if (nearLowStopLoss) orderType = "nearLowStopLoss";
         // Backlog order: If older then StopLossLimit, Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
 
-        if (!profitable && !earlySelling && !(stopLoss1 || stopLossPeriod || nearLowStopLoss)) order = null;
+        if (!profitable && !earlySelling && !(stopLoss || stopLossPeriod || nearLowStopLoss)) order = null;
         else this.dispatch("log", `${orderType} order will be executed`);
 
         if (order) {

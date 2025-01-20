@@ -12,6 +12,9 @@ function parseNumbers(data) {
   for (const key in data) data[key] = +data[key];
   return data;
 }
+function extractNumbers(str) {
+  return parseNumbers(str.match(/\d+(\.\d+)?/gim));
+}
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -72,6 +75,7 @@ module.exports = {
   dateToString,
   toShortDate,
   parseNumbers,
+  extractNumbers,
   isValidPair,
   isNumber,
 };

@@ -2,12 +2,13 @@
 const { readFileSync } = require("fs");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
+const { extractNumbers } = require("./utilities.js");
 const strategyModes = require("./trend-analysis.js").getSupportedModes();
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const modes = [process.argv[3] || "all"];
-const range = +process.argv[4]; // In days, min value 0.25 day which equivalent to 6 hours
-const priceChange = +process.argv[5]; // Price Percentage Threshold, min value 1.25
+const range = extractNumbers(process.argv[4]); // In days, min value 0.25 day which equivalent to 6 hours
+const priceChange = extractNumbers(process.argv[5]); // Price Percentage Threshold, min value 1.25
 const capital = +process.argv[6] || 100; // Amount in EUR which is the total money that can be used for trading
 const interval = +process.argv[7] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 
@@ -51,7 +52,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
             if (totalProfit >= 10 && maxBalance < result.balance + 3) {
               maxBalance = result.balance;
               console.log(
-                `€${capital} >${range}< ${priceChange}% ${mode} =>`,
+                `${mode} ${range} ${priceChange}% =>`,
                 `€${totalProfit} Remain: ${remain} Transactions: ${transactions} Gainer: ${profit1} Loser: ${profit2}`
               );
             }
