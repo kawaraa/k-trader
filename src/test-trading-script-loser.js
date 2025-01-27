@@ -9,8 +9,8 @@ const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const modes = [process.argv[3] || "all"];
 const range = extractNumbers(process.argv[4]); // In days, min value 0.25 day which equivalent to 6 hours
 const priceChange = extractNumbers(process.argv[5]); // Price Percentage Threshold, min value 1.25
-const capital = +process.argv[6] || 100; // Amount in EUR which is the total money that can be used for trading
-const interval = +process.argv[7] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
+const interval = +process.argv[6] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
+const capital = 100; // Amount in EUR which is the total money that can be used for trading
 
 let minStrategyRange = 0.25;
 let maxStrategyRange = 1;

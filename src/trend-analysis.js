@@ -185,13 +185,21 @@ function isOlderThen(timestamp, days) {
 function getSupportedModes() {
   return [
     "on-decrease",
+    "on-decrease-safety",
     "on-decrease-soft",
+    "on-decrease-soft-safety",
     "on-decrease-percent",
+    "on-decrease-percent-safety",
     "on-decrease-rsi",
+    "on-decrease-rsi-safety",
     "on-drop",
+    "on-drop-safety",
     "on-drop-soft",
+    "on-drop-soft-safety",
     "on-drop-percent",
+    "on-drop-percent-safety",
     "on-drop-rsi",
+    "on-drop-rsi-safety",
   ];
 }
 

@@ -99,7 +99,7 @@ module.exports = class DailyTrader {
         shouldBuy = this.previouslyDropped && rsiGoingUp; // soft and hard
         if (this.mode.includes("percent")) shouldBuy = this.previouslyDropped && goingUp;
 
-        // 2. On price decrease mode "on-decrease"
+        // 3. near lowest price mode "near-low"
       } else if (this.mode.includes("near-low")) {
         shouldBuy = highDropChange <= -this.#percentageThreshold && nearLow <= this.#percentageThreshold / 8;
       }
@@ -133,12 +133,14 @@ module.exports = class DailyTrader {
         if (priceChange > this.previousProfit) this.previousProfit = priceChange;
         else if (priceChange < this.previousLoss) this.previousLoss = priceChange;
 
-        const dropping = priceChange - this.previousProfit <= -this.buySellOnThreshold;
+        const dropping =
+          this.previousProfit > 0 && priceChange - this.previousProfit <= -this.buySellOnThreshold;
 
         const profitable = (dropping || shouldSell) && priceChange >= this.#percentageThreshold;
         const earlySelling = period1 && dropping && priceChange >= halfThreshold;
         const stopLoss = this.previousLoss <= -this.#percentageThreshold && priceChange > 0.4;
-        const nearLowStopLoss = stopLossPeriod || nearLow > this.#percentageThreshold;
+        const nearLowStopLoss =
+          this.mode.includes("near-low") && (stopLossPeriod || nearLow > this.#percentageThreshold);
 
         if (earlySelling) orderType = "earlySelling";
         else if (stopLoss) orderType = "stopLoss";

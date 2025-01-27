@@ -13,7 +13,7 @@ function parseNumbers(data) {
   return data;
 }
 function extractNumbers(str) {
-  return parseNumbers(str.match(/\d+(\.\d+)?/gim));
+  return !str ? 0 : parseNumbers(str.match(/\d+(\.\d+)?/gim));
 }
 
 function delay(ms) {

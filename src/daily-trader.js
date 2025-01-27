@@ -45,11 +45,11 @@ module.exports = class DailyTrader {
     this.soft = this.mode.includes("soft");
     this.buyOnRSI = this.soft ? 45 : 30;
     this.buySellOnThreshold = this.#percentageThreshold / 4;
-    this.stopLossTimeLimit = Math.max(this.#strategyRange * 3, 1.5);
-    // this.stopLossTimeLimit = Math.max(this.#strategyRange * 2, 1.5);
 
     this.previouslyDropped = false;
     this.previousBidRSI = null;
+    this.previousProfit = 0;
+    this.previousLoss = 0;
   }
 
   async start() {
@@ -79,7 +79,6 @@ module.exports = class DailyTrader {
       const increased = calcPercentageDifference(lowestAsk, askPrice);
       const dropped = highDropChange < -(this.#percentageThreshold * 1.2);
       const goingUp = increased >= this.buySellOnThreshold;
-      const goingDown = !dropped && highDropChange <= -this.buySellOnThreshold;
       const rsiGoingUp = askPriceRSI <= this.buyOnRSI && this.previousBidRSI < bidPriceRSI;
       let shouldBuy = false;
 
@@ -100,9 +99,14 @@ module.exports = class DailyTrader {
       } else if (this.mode.includes("on-decrease")) {
         shouldBuy = this.previouslyDropped && rsiGoingUp; // soft and hard
         if (this.mode.includes("percent")) shouldBuy = this.previouslyDropped && goingUp;
+
+        // 3. near lowest price mode "near-low"
+      } else if (this.mode.includes("near-low")) {
+        shouldBuy =
+          highDropChange <= -this.#percentageThreshold && increased <= this.#percentageThreshold / 8;
       }
 
-      if (!/soft|percent/gim.test(this.mode) && highDropChange <= -(this.#percentageThreshold * 1.5)) {
+      if (!/safety|soft|percent/gim.test(this.mode) && highDropChange <= -(this.#percentageThreshold * 1.5)) {
         shouldBuy = false;
       }
 
@@ -120,20 +124,45 @@ module.exports = class DailyTrader {
         }
 
         // Sell
-      } else if (enoughPricesData && balance.crypto > 0 && orders[0] && (goingDown || shouldSell)) {
+      } else if (enoughPricesData && balance.crypto > 0 && orders[0]) {
         let orderType = "";
         let order = orders[0];
 
+        const halfThreshold = this.#percentageThreshold / 2;
         const priceChange = calcPercentageDifference(order.price, bidPrice);
-        const stopLoss = isOlderThen(order.createdAt, this.stopLossTimeLimit);
+        const firstPeriod = isOlderThen(order.createdAt, Math.max(this.#strategyRange, 0.25));
+        const stopLoss = isOlderThen(order.createdAt, Math.max(this.#strategyRange * 3, 1.5));
 
-        if (stopLoss) orderType = "backlog";
+        if (priceChange > this.previousProfit) this.previousProfit = priceChange;
+        else if (priceChange < this.previousLoss) this.previousLoss = priceChange;
 
-        if (!(this.#percentageThreshold <= priceChange || stopLoss)) order = null;
+        const dropping =
+          this.previousProfit > 0 && priceChange - this.previousProfit <= -this.buySellOnThreshold;
+        const goingDown = !dropped && highDropChange <= -this.buySellOnThreshold;
+
+        const profitable = (goingDown || shouldSell) && priceChange >= this.#percentageThreshold;
+        const profitable1 = (dropping || shouldSell) && priceChange >= this.#percentageThreshold;
+        const earlySelling = firstPeriod && dropping && priceChange >= halfThreshold;
+        const noLoss = this.previousLoss <= -this.#percentageThreshold && priceChange > 0.4;
+        const nearLowStopLoss =
+          this.mode.includes("near-low") && (stopLoss || increased > this.#percentageThreshold);
+
+        const case1 = !this.mode.includes("safety") && profitable;
+        const flexCase2 = this.mode.includes("safety") && (profitable1 || earlySelling || noLoss);
+
+        if (earlySelling) orderType = "earlySelling";
+        else if (noLoss) orderType = "noLoss";
+        else if (stopLoss) orderType = "stopLoss";
+        else if (nearLowStopLoss) orderType = "nearLowStopLoss";
+        // Backlog order: If older then StopLossLimit, Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
+
+        if (!case1 && !flexCase2 && !nearLowStopLoss && !stopLoss) order = null;
         else this.dispatch("log", `${orderType} order will be executed`);
 
         if (order) {
           await this.#sell(order, balance.crypto, bidPrice);
+          this.previousProfit = 0;
+          this.previousLoss = 0;
         }
       }
 
