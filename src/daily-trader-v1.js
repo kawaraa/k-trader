@@ -125,7 +125,7 @@ module.exports = class DailyTrader {
 
         // Backlog: Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
         if (!sellableOrders[0] && orders[0] && ((this.hard && goingDown) || (!this.hard && rsiGoingDown))) {
-          sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, this.stopLossTimeLimit));
+          sellableOrders = orders.filter((o) => isOlderThen(o.createdAt, this.stopLossTimeLimit * 24));
           orderType = " backlog";
         }
 

@@ -23,8 +23,8 @@ module.exports = class TestExchangeProvider {
   async pricesData(pair, period) {
     return this.allPrices.map((p) => p.tradePrice);
   }
-  async prices(pair, lastDays) {
-    const offset = this.currentPriceIndex - (lastDays * 24 * 60) / this.interval;
+  async prices(pair, lastHours) {
+    const offset = this.currentPriceIndex - (lastHours * 60) / this.interval;
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
   async createOrder(tradingType, b, c, volume) {

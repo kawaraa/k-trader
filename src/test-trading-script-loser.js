@@ -12,8 +12,8 @@ const priceChange = extractNumbers(process.argv[5]); // Price Percentage Thresho
 const interval = +process.argv[6] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 const capital = 100; // Amount in EUR which is the total money that can be used for trading
 
-let minStrategyRange = 0.25;
-let maxStrategyRange = 1;
+let minStrategyRange = 0.5;
+let maxStrategyRange = 12;
 let minPercentagePriceChange = 1.5;
 let maxPriceChange = 10;
 if (range) minStrategyRange = maxStrategyRange = range;
@@ -32,7 +32,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
 
     for (const mode of modes) {
       let workers = [];
-      for (let range = minStrategyRange; range <= maxStrategyRange; range += 0.25) {
+      for (let range = minStrategyRange; range <= maxStrategyRange; range += range >= 1 ? 1 : 0.5) {
         for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
           const worker = async () => {
             const result = await testStrategy(pair, prices, capital, range, priceChange, mode, interval);
@@ -74,7 +74,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
 
 async function testStrategy(pair, prices, capital, range, priceChange, mode, interval) {
   let transactions = 0;
-  const pricesOffset = (range * 24 * 60) / interval;
+  const pricesOffset = (range * 60) / interval;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, pricesOffset, interval);
   const info = { capital, strategyRange: range, priceChange, mode, timeInterval: interval };
   const trader = new DailyTrader(ex, pair, info);

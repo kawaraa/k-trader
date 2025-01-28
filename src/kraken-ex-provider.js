@@ -70,10 +70,10 @@ module.exports = class KrakenExchangeProvider {
     const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${since}`);
     return data[Object.keys(data)[0]].map((p) => p[4]);
   }
-  async prices(pair, lastDays) {
+  async prices(pair, lastHours) {
     // const prices = await this.pricesData(pair, lastDays);
     // return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
-    return this.state.getLocalPrices(pair, (lastDays * 24 * 60) / 5);
+    return this.state.getLocalPrices(pair, (lastHours * 60) / 5);
   }
   async createOrder(type, ordertype, pair, volume) {
     volume += "";

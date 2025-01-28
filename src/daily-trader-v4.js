@@ -127,8 +127,8 @@ module.exports = class DailyTrader {
         let order = orders[0];
         const halfThreshold = this.#percentageThreshold / 2;
         const priceChange = calcPercentageDifference(order.price, bidPrice);
-        const period1 = isOlderThen(order.createdAt, Math.max(this.#strategyRange, 0.25));
-        const stopLossPeriod = isOlderThen(order.createdAt, Math.max(this.#strategyRange * 3, 1.5));
+        const period1 = isOlderThen(order.createdAt, Math.max(this.#strategyRange, 0.25) * 24);
+        const stopLossPeriod = isOlderThen(order.createdAt, Math.max(this.#strategyRange * 3, 1.5) * 24);
 
         if (priceChange > this.previousProfit) this.previousProfit = priceChange;
         else if (priceChange < this.previousLoss) this.previousLoss = priceChange;

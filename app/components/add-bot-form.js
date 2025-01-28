@@ -28,8 +28,8 @@ export default function AddBotFrom({ bot, onSubmit }) {
       <input
         name="strategyRange"
         type="number"
-        step="0.05"
-        placeholder="Strategy range in days"
+        step="0.5"
+        placeholder="Strategy range in hours"
         defaultValue={bot?.info?.strategyRange}
         required
         className={inputCls}
@@ -37,7 +37,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
       <input
         name="priceChange"
         type="number"
-        step="0.1"
+        step="0.5"
         placeholder="Price percentage change"
         defaultValue={bot?.info?.priceChange}
         required

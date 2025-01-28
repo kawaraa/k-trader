@@ -73,11 +73,8 @@
     "askBidSpreadPercentage": 0.21,
     "note": "loser - gain",
     "strategies": [
-      ">on-decrease-soft >0.5< 7% => €52 Remain: 91 Transactions: 13 Gainer: 75 Loser: 6",
-      "on-drop-soft >0.5< 7.5% => €52 Remain: 87 Transactions: 11 Gainer: 77 Loser: 3",
-      "on-drop-rsi >0.75< 8.5% => €44 Remain: 0 Transactions: 6 Gainer: 44 Loser: 45",
-      "on-drop >0.75< 9% => €40 Remain: 0 Transactions: 6 Gainer: 40 Loser: 40",
-      "on-drop >1< 9.5% => €38 Remain: 0 Transactions: 4 Gainer: 22 Loser: 69"
+      "on-decrease-percent 12 8% => €46 Remain: 88 Transactions: 12 Gainer: 60 Loser: 17",
+      "on-decrease-percent 12 8% => €-3.5 Remain: 174 Transactions: 2.5"
     ]
   },
   "KMNOEUR": {

@@ -66,11 +66,10 @@ module.exports = class DailyTrader {
 
           const case1 = priceChange >= this.#percentageThreshold * 3;
           const case2 =
-            isOlderThen(o.createdAt, Math.max(minRange, 12) / 24) &&
-            priceChange >= this.#percentageThreshold * 2;
+            isOlderThen(o.createdAt, Math.max(minRange, 12)) && priceChange >= this.#percentageThreshold * 2;
           const case3 =
-            isOlderThen(o.createdAt, Math.max(minRange, 18) / 24) && priceChange >= this.#percentageThreshold;
-          const case4 = isOlderThen(o.createdAt, Math.max(minRange, 24) / 24) && priceChange <= 0;
+            isOlderThen(o.createdAt, Math.max(minRange, 18)) && priceChange >= this.#percentageThreshold;
+          const case4 = isOlderThen(o.createdAt, Math.max(minRange, 24)) && priceChange <= 0;
 
           return case1 || case2 || case3 || case4;
         });

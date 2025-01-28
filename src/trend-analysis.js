@@ -179,23 +179,19 @@ function adjustPrice(price, percentage) {
   const multiplier = percentage / 100;
   return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
 }
-function isOlderThen(timestamp, days) {
-  return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 / 24 > days;
+function isOlderThen(timestamp, hours) {
+  return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
 }
 function getSupportedModes() {
   return [
     "on-decrease",
     "on-decrease-safety",
-    "on-decrease-soft",
-    "on-decrease-soft-safety",
     "on-decrease-percent",
     "on-decrease-percent-safety",
     "on-decrease-rsi",
     "on-decrease-rsi-safety",
     "on-drop",
     "on-drop-safety",
-    "on-drop-soft",
-    "on-drop-soft-safety",
     "on-drop-percent",
     "on-drop-percent-safety",
     "on-drop-rsi",
