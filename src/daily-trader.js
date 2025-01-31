@@ -86,9 +86,6 @@ module.exports = class DailyTrader {
       this.dispatch("log", `Ask Price: => Cur:${askPrice} - RSI:${askPriceRSI} Change:${askPrChange}%`);
       this.dispatch("log", `Bid Price: => Cur:${bidPrice} - RSI:${bidPriceRSI} Change:${bidPrChange}%`);
 
-      const shouldSell =
-        this.mode.includes("rsi") && this.previousBidRSI > 70 && this.previousBidRSI >= bidPriceRSI;
-
       // 1. On price drop mode "on-drop"
       if (this.mode.includes("on-drop")) {
         shouldBuy = dropped && rsiGoingUp;
@@ -117,6 +114,8 @@ module.exports = class DailyTrader {
       } else if (enoughPricesData && balance.crypto > 0 && orders[0]) {
         let orderType = "";
         let order = orders[0];
+        const shouldSell =
+          this.mode.includes("rsi") && this.previousBidRSI > 70 && this.previousBidRSI > bidPriceRSI;
 
         const halfThreshold = this.#percentageThreshold / 2;
         const priceChange = calcPercentageDifference(order.price, bidPrice);
