@@ -114,13 +114,9 @@ module.exports = class DailyTrader {
       } else if (enoughPricesData && balance.crypto > 0 && orders[0]) {
         let orderType = "";
         let order = orders[0];
-        const shouldSell =
-          this.mode.includes("rsi") && this.previousBidRSI > 70 && this.previousBidRSI > bidPriceRSI;
 
         const halfThreshold = this.#percentageThreshold / 2;
         const priceChange = calcPercentageDifference(order.price, bidPrice);
-        const firstPeriod = isOlderThen(order.createdAt, this.#strategyRange);
-        const stopLoss = isOlderThen(order.createdAt, this.#strategyRange * 2);
 
         if (priceChange > this.previousProfit) this.previousProfit = priceChange;
         else if (priceChange < this.previousLoss) this.previousLoss = priceChange;
@@ -128,21 +124,20 @@ module.exports = class DailyTrader {
         const dropping =
           this.previousProfit > 0 && priceChange - this.previousProfit <= -this.buySellOnThreshold;
         const goingDown = !dropped && highDropChange <= -this.buySellOnThreshold;
+        const rsiGoingDown =
+          this.mode.includes("rsi") && this.previousBidRSI > 70 && this.previousBidRSI > bidPriceRSI;
 
-        const profitable = (goingDown || shouldSell) && priceChange >= this.#percentageThreshold;
-        const profitable1 = (dropping || shouldSell) && priceChange >= this.#percentageThreshold;
-        const earlySelling = firstPeriod && dropping && priceChange >= halfThreshold;
+        const shouldSell =
+          (dropping || goingDown || rsiGoingDown) &&
+          (priceChange > halfThreshold || priceChange >= this.#percentageThreshold);
         const noLoss = this.previousLoss <= -this.#percentageThreshold && priceChange > 0.4;
+        const stopLoss = isOlderThen(order.createdAt, this.#strategyRange * 2);
 
-        const case1 = !this.mode.includes("safety") && profitable;
-        const flexCase2 = this.mode.includes("safety") && (profitable1 || earlySelling || noLoss);
-
-        if (earlySelling) orderType = "earlySelling";
-        else if (noLoss) orderType = "noLoss";
+        if (noLoss) orderType = "noLoss";
         else if (stopLoss) orderType = "stopLoss";
         // Backlog order: If older then StopLossLimit, Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
 
-        if (!case1 && !flexCase2 && !stopLoss) order = null;
+        if (!shouldSell && !noLoss && !stopLoss) order = null;
         else this.dispatch("log", `${orderType} order will be executed`);
 
         if (order) {

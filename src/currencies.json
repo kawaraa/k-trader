@@ -18,7 +18,7 @@
     "becameAvailable": "2020-04-01",
     "askBidSpreadPercentage": 0.05,
     "note": "loser",
-    "strategies": ["on-decrease-percent 1 5% => €12 Remain: 0 Transactions: 4 Gainer: 11 Loser: 14"]
+    "strategies": []
   },
   "XRPEUR": {
     "becameAvailable": "2013-01-01",
@@ -379,28 +379,21 @@
     "askBidSpreadPercentage": 0.21,
     "note": "loser - gain",
     "strategies": [
-      "on-decrease-percent 12 8% => €46 Remain: 88 Transactions: 12 Gainer: 60 Loser: 17",
-      "on-decrease-percent 12 8% => €-3.5 Remain: 174 Transactions: 2.5",
-
-      "on-drop-percent 12 8% => €34 Remain: 0 Transactions: 7 Gainer: 34 Loser: 35",
-      "on-drop-percent 12 8% => €-7.5 Remain: 165 Transactions: 2"
+      "on-decrease-percent 11 8% => €33 Remain: 0 Transactions: 15 Gainer: 31 Loser: 37",
+      "on-decrease-percent 11 8% => €-4.5 Remain: 174 Transactions: 3.5"
     ]
   },
   "KMNOEUR": {
     "becameAvailable": "2024-04-30",
     "askBidSpreadPercentage": 0.23,
     "note": "loser - gain",
-    "strategies": [
-      ">on-decrease-soft >0.75< 7.5% => €53 Remain: 189 Transactions: 7 Gainer: 60 Loser: 39",
-      "on-decrease-percent €>1< 7.5% => €51 Remain: 557 Transactions: 6 Gainer: 61 Loser: 30",
-      "on-decrease-soft >0.75< 6.5% => €48 Remain: 189 Transactions: 7 Gainer: 52 Loser: 42"
-    ]
+    "strategies": []
   },
   "BIGTIMEEUR": {
     "becameAvailable": "2023-10-12",
     "askBidSpreadPercentage": 1.39,
     "note": "loser - gain",
-    "strategies": [">on-decrease 1 10% => €48 Remain: 439 Transactions: 4 Gainer: 67 Loser: 10"]
+    "strategies": []
   },
 
   "UNFIEUR": {
