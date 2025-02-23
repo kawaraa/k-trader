@@ -127,11 +127,11 @@ module.exports = class DailyTrader {
         const goingDown = !rsi && !dropped && highDropChange <= -this.buySellOnThreshold;
         const rsiGoingDown = rsi && this.previousBidRSI > 70 && this.previousBidRSI > bidPriceRSI;
 
-        const shouldSell =
-          (dropping || goingDown || rsiGoingDown) &&
-          (priceChange > halfThreshold || priceChange >= this.#percentageThreshold);
-        const noLoss = this.previousLoss <= -this.#percentageThreshold && priceChange > 0.4;
         const stopLoss = isOlderThen(order.createdAt, this.#strategyRange * 2);
+
+        const shouldSell =
+          (dropping || goingDown || rsiGoingDown) && (priceChange > halfThreshold || stopLoss);
+        const noLoss = this.previousLoss <= -this.#percentageThreshold && priceChange > 0.4;
 
         if (noLoss) orderType = "noLoss";
         else if (stopLoss) orderType = "stopLoss";

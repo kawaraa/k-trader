@@ -40,10 +40,12 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
         }
       }
 
+      console.log(`Will process (${workers.length}) tests on "${mode}" mode.`);
+
       (await Promise.all(workers)).forEach((r) => {
         const remain = parseInt(r.crypto) / 2;
         const transactions = parseInt(r.transactions) / 2;
-        if (r.balance - r.capital >= 10 && maxBalance < r.balance + 3) {
+        if (r.balance + 3 > maxBalance) {
           maxBalance = r.balance;
           console.log(
             `${r.mode} ${r.range} ${r.priceChange}% =>`,
@@ -86,6 +88,7 @@ async function testStrategy(pair, prices, capital, range, priceChange, mode, int
 }
 
 function getPrices(pair, skip = 1, path = "") {
+  // bots/v-2/
   return JSON.parse(readFileSync(`${process.cwd()}/database/prices/${path + pair}.json`)).filter(
     (p, index) => {
       return index % skip === 0;

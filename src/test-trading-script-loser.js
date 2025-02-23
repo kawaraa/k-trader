@@ -49,7 +49,7 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
             const transactions = parseInt(result.transactions / 3);
             const totalProfit = parseInt((result.balance - capital) / 3);
 
-            if (totalProfit >= 10 && maxBalance < result.balance + 3) {
+            if (result.balance + 3 > maxBalance) {
               maxBalance = result.balance;
               console.log(
                 `${mode} ${range} ${priceChange}% =>`,
@@ -62,8 +62,8 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
         }
       }
 
+      console.log(`Will process (${workers.length}) tests on "${mode}" mode.`);
       await Promise.all(workers);
-      // console.log(`Processed (${workers.length}) tests on "${mode}" mode.`);
     }
   } catch (error) {
     console.log("Error with ", pair, "=>", error);
