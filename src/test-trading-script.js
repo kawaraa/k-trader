@@ -45,11 +45,12 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
       (await Promise.all(workers)).forEach((r) => {
         const remain = parseInt(r.crypto) / 2;
         const transactions = parseInt(r.transactions) / 2;
-        if (r.balance + 3 > maxBalance) {
-          maxBalance = r.balance;
+        const profit = r.balance - r.capital;
+        if (profit >= 5) {
+          // maxBalance = r.balance;   && r.balance + 3 > maxBalance
           console.log(
             `${r.mode} ${r.range} ${r.priceChange}% =>`,
-            `€${parseInt(r.balance - r.capital) / 2} Remain: ${remain} Transactions: ${transactions}`
+            `€${parseInt(profit) / 2} Remain: ${remain} Transactions: ${transactions}`
           );
         }
       });

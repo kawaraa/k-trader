@@ -9,7 +9,8 @@ const minStrategyRange = +process.argv[3] || 0.5; // In days, min value 0.25 day
 const minPercentPriceChange = +process.argv[4] || 1.5; // Price Percentage Threshold, min value 1.25
 const interval = +process.argv[5] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 const capital = 100; // Amount in EUR which is the total money that can be used for trading
-let pairs = Object.keys(currencies).filter((p) => /down/gim.test(currencies[p].note));
+let pairs = Object.keys(currencies);
+// .filter((p) => /down/gim.test(currencies[p].note));
 // /loser.*g1/gim
 
 const getFilePath = (name) => `${process.cwd()}/database/logs/${name}.log`;

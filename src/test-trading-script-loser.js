@@ -49,8 +49,8 @@ async function runTradingTest(pair, capital, minStrategyRange, minPriceChange, m
             const transactions = parseInt(result.transactions / 3);
             const totalProfit = parseInt((result.balance - capital) / 3);
 
-            if (result.balance + 3 > maxBalance) {
-              maxBalance = result.balance;
+            if (totalProfit >= 5 && profit1 >= 0 && profit2 >= 0) {
+              // maxBalance = result.balance;  && result.balance + 3 > maxBalance
               console.log(
                 `${mode} ${range} ${priceChange}% =>`,
                 `€${totalProfit} Remain: ${remain} Transactions: ${transactions} Gainer: ${profit1} Loser: ${profit2}`
