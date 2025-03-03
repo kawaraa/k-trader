@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { borderCls } from "./tailwind-classes";
+const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function BotItem({ botInfo, onAction }) {
   const [open, setOpen] = useState(false);
@@ -16,7 +17,7 @@ export default function BotItem({ botInfo, onAction }) {
         <span className="flex-1 w-1/5">{botInfo.pair.replace("EUR", "")}</span>
         <span className="flex-1 w-1/5 text-orange">€{botInfo.capital}</span>
         <button onClick={() => onAction("rest", botInfo.pair)} className="flex-1 w-1/5 text-green">
-          €{parseInt(botInfo.earnings)}
+          €{parseInt(sum(botInfo.trades))}
         </button>
         <span className="flex-2 w-2/5 flex justify-between items-center">
           <span className="flex-auto text-red">{botInfo.orders.length}</span>
@@ -69,7 +70,7 @@ export default function BotItem({ botInfo, onAction }) {
             </span>
           </p>
           <p className="">
-            <strong>Sold / Transactions</strong>: <span>{botInfo.sold}</span>
+            <strong>Sold / Transactions</strong>: <span>{botInfo.trades.length}</span>
           </p>
           <div className="">
             <Link

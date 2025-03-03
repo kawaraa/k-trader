@@ -7,6 +7,7 @@ module.exports = class TestExchangeProvider {
     this.allPrices = prices;
     this.currentPriceIndex = 0;
     this.orders = [];
+    this.trades = [];
     this.interval = timeInterval;
   }
 
@@ -60,8 +61,12 @@ module.exports = class TestExchangeProvider {
   }
 
   // This is custom function only for running test.
-  removeOrder(orderId) {
-    this.orders = this.orders.filter((o) => o.id !== orderId);
+  removeOrder(info) {
+    this.orders = this.orders.filter((o) => o.id !== info.id);
+    this.trades.push(info.profit);
+  }
+  getState(pair, property) {
+    return this[property];
   }
 };
 

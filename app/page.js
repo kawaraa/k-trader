@@ -10,6 +10,7 @@ import Loader from "./components/loader";
 import RefreshButton from "./components/refresh-button";
 const badgeCls =
   "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
+const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function Home() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function Home() {
 
   const sortedBots = orderbyTime
     ? botsPairs.toSorted((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
-    : botsPairs.toSorted((p1, p2) => bots[p2].earnings - bots[p1].earnings);
+    : botsPairs.toSorted((p1, p2) => sum(bots[p2].trades) - sum(bots[p1].trades));
 
   const add = async (e) => {
     e.preventDefault();
@@ -106,12 +107,10 @@ export default function Home() {
       await request(`/api/bots/reset?pair=${pair}`, { method: "PUT" });
       const copy = { ...bots };
       if (copy[pair]) {
-        copy[pair].sold = 0;
-        copy[pair].earnings = 0;
+        copy[pair].trades = [];
       } else {
         for (const p in copy) {
-          copy[p].sold = 0;
-          copy[p].earnings = 0;
+          copy[p].trades = [];
         }
       }
       setBots(copy);
@@ -193,7 +192,7 @@ export default function Home() {
           <span className="flex-1 w-1/5 font-medium">Capital</span>
           <p className="relative flex-1 w-1/5">
             <button onClick={() => restState()} className={`${badgeCls} bg-emerald-400`}>
-              {parseInt(Object.keys(bots).reduce((acc, p) => acc + bots[p].earnings, 0))}
+              {parseInt(Object.keys(bots).reduce((acc, p) => acc + sum(bots[p].trades), 0))}
             </button>
             <span className="block font-medium">Earings</span>
           </p>

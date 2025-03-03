@@ -146,8 +146,7 @@ module.exports = class DailyTrader {
     const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.4);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60 / 24).toFixed(1);
-    this.dispatch("sell", id);
-    this.dispatch("earnings", profit);
+    this.dispatch("sell", { id, profit });
     this.dispatch("log", `Sold crypto with profit: ${profit} - Age: ${orderAge} - ID: "${id}"`);
   }
 
@@ -161,7 +160,7 @@ module.exports = class DailyTrader {
       const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
       const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
 
-      this.dispatch("earnings", profit);
+      this.dispatch("sell", { profit });
       this.dispatch("log", `Sold all crypto asset with profit: ${profit}`);
     }
   }

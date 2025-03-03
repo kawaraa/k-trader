@@ -1,5 +1,5 @@
 const { createHash, createHmac } = require("node:crypto");
-const { parseNumbers, delay, request } = require("./utilities.js");
+const { parseNumbers, request } = require("./utilities.js");
 
 module.exports = class KrakenExchangeProvider {
   #apiUrl;
@@ -95,5 +95,8 @@ module.exports = class KrakenExchangeProvider {
   async getOpenClosedOrders(state) {
     if (state == "open") return (await this.#privateApi("OpenOrders")).open;
     else (await this.#privateApi("ClosedOrders")).closed;
+  }
+  getState(pair, property) {
+    return this.state.get(pair, property);
   }
 };

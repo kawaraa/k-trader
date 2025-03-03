@@ -1,6 +1,7 @@
 const { statSync, existsSync, readFileSync } = require("node:fs");
 const { Bot, BotsManager } = require("../bots-manager");
 const { parseError, isValidPair, isNumber } = require("../utilities");
+const { getSupportedModes } = require("../trend-analysis");
 
 module.exports = (router, fireStoreProvider, authRequired, production) => {
   // Get bots
@@ -36,9 +37,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
       const token = request.cookies?.idToken;
       data = new BotInfo(data);
       data.balance = 0;
-      data.earnings = 0;
-      data.bought = 0;
-      data.sold = 0;
+      data.trades = [];
       data.orders = [];
 
       isValidPair(pair, true);
@@ -150,8 +149,8 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
 class BotInfo {
   constructor(info) {
     this.capital = this.setNumber(info.capital, 0, "capital", true);
-    this.strategyRange = this.setNumber(info.strategyRange, 0.25, "strategyRange", true);
-    this.priceChange = this.setNumber(info.priceChange, 1.1, "priceChange", true);
+    this.strategyRange = this.setNumber(info.strategyRange, 0.5, "strategyRange", true);
+    this.priceChange = this.setNumber(info.priceChange, 1.5, "priceChange", true);
     this.mode = info.mode;
     this.timeInterval = this.setNumber(info.timeInterval, 3, "timeInterval", true);
   }
@@ -159,4 +158,8 @@ class BotInfo {
     if (isNumber(value, minValue)) return value;
     if (throwError) throw new Error(`"${value}" is invalid ${name}.`);
   }
+  // setMode(value) {
+  //   const mode = getSupportedModes().includes(value);
+  //   if(!mode) throw new Error(`"${value}" is invalid ${name}.`);
+  // }
 }

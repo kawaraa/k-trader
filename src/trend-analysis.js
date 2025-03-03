@@ -1,5 +1,3 @@
-const { readFileSync } = require("fs");
-
 // Linear Regression Analysis method is used to analyze a series of price data for a cryptocurrency or other asset to determine the trend direction. is generally more suited for long-term trading.
 function linearRegression(prices) {
   const n = prices.length;
@@ -167,14 +165,7 @@ function isOlderThen(timestamp, hours) {
 }
 
 function getSupportedModes() {
-  return [
-    "on-decrease",
-    // "on-decrease-percent",
-    // "on-decrease-rsi",
-    "on-drop",
-    // "on-drop-percent",
-    // "on-drop-rsi",
-  ];
+  return ["on-decrease", "on-drop"];
 }
 
 // Methods for testing only:
@@ -182,20 +173,6 @@ function adjustPrice(price, percentage) {
   // This increases the tradePrice 0.10% by multiply it by 1.001, And decreases the tradePrice 0.10%, by multiply it by 0.999
   const multiplier = percentage / 100;
   return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
-}
-
-function getPrices(pair, skip = 1, path = "") {
-  return JSON.parse(readFileSync(`${process.cwd()}/database/prices/${path + pair}.json`)).filter(
-    (p, index) => {
-      return index % skip === 0;
-    }
-  );
-
-  // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
-  // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
-  // let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);
-  // const askBidSpread = currencies[pair].askBidSpreadPercentage; //the prices difference percent between ask and bid prices
-  // if (!prices[0]?.tradePrice) prices = prices.map((p) => adjustPrice(p, askBidSpread));
 }
 
 function countPriceChanges(prices, percentageThreshold, offset = 864) {
@@ -230,5 +207,4 @@ module.exports = {
   adjustPrice,
   isOlderThen,
   getSupportedModes,
-  getPrices,
 };

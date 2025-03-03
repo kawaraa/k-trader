@@ -15,6 +15,9 @@ function parseNumbers(data) {
 function extractNumbers(str) {
   return !str ? 0 : parseNumbers(str.match(/\d+(\.\d+)?/gim));
 }
+function strIncludes(str = "", text) {
+  return text.split(",").every((w) => str.toLowerCase().includes(w.toLowerCase()));
+}
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -78,4 +81,5 @@ module.exports = {
   extractNumbers,
   isValidPair,
   isNumber,
+  strIncludes,
 };
