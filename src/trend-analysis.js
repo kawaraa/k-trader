@@ -1,3 +1,5 @@
+const { readFileSync } = require("fs");
+
 // Linear Regression Analysis method is used to analyze a series of price data for a cryptocurrency or other asset to determine the trend direction. is generally more suited for long-term trading.
 function linearRegression(prices) {
   const n = prices.length;
@@ -143,6 +145,59 @@ function calcPercentageDifference(oldPrice, newPrice) {
   return +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2);
 }
 
+// This calculates the earnings from an investment given the current price, previous price, and invested amount.
+function calcInvestmentProfit(previousPrice, currentPrice, investedAmount) {
+  const earningsIncludedProfit = (investedAmount / previousPrice) * currentPrice;
+  return +(earningsIncludedProfit - investedAmount).toFixed(8); // Return the Profit;
+}
+
+// This calculates the profit from a transaction given the current price, order price, and volume of cryptoCur.
+function calcTransactionProfit(previousPrice, currentPrice, assetVolume, feePercentage) {
+  const cost = previousPrice * assetVolume + calculateFee(previousPrice * assetVolume, feePercentage);
+  const revenue = currentPrice * assetVolume - calculateFee(currentPrice * assetVolume, feePercentage);
+  return revenue - cost; // profit
+}
+
+function calculateFee(amount, feePercentage) {
+  return !feePercentage ? 0 : (amount * feePercentage) / 100;
+}
+
+function isOlderThen(timestamp, hours) {
+  return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
+}
+
+function getSupportedModes() {
+  return [
+    "on-decrease",
+    // "on-decrease-percent",
+    // "on-decrease-rsi",
+    "on-drop",
+    // "on-drop-percent",
+    // "on-drop-rsi",
+  ];
+}
+
+// Methods for testing only:
+function adjustPrice(price, percentage) {
+  // This increases the tradePrice 0.10% by multiply it by 1.001, And decreases the tradePrice 0.10%, by multiply it by 0.999
+  const multiplier = percentage / 100;
+  return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
+}
+
+function getPrices(pair, skip = 1, path = "") {
+  return JSON.parse(readFileSync(`${process.cwd()}/database/prices/${path + pair}.json`)).filter(
+    (p, index) => {
+      return index % skip === 0;
+    }
+  );
+
+  // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
+  // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
+  // let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);
+  // const askBidSpread = currencies[pair].askBidSpreadPercentage; //the prices difference percent between ask and bid prices
+  // if (!prices[0]?.tradePrice) prices = prices.map((p) => adjustPrice(p, askBidSpread));
+}
+
 function countPriceChanges(prices, percentageThreshold, offset = 864) {
   const changes = [];
   // Find the lowest price in the last 3 days (864) based on 5 mins interval
@@ -160,39 +215,6 @@ function countPriceChanges(prices, percentageThreshold, offset = 864) {
   return { changes, avgPeriod: +((prices.length * 5) / changes.length / 60 / 24).toFixed(2) };
 }
 
-// This calculates the earnings from an investment given the current price, previous price, and invested amount.
-function calcInvestmentProfit(previousPrice, currentPrice, investedAmount) {
-  const earningsIncludedProfit = (investedAmount / previousPrice) * currentPrice;
-  return +(earningsIncludedProfit - investedAmount).toFixed(8); // Return the Profit;
-}
-// This calculates the profit from a transaction given the current price, order price, and volume of cryptoCur.
-function calcTransactionProfit(previousPrice, currentPrice, assetVolume, feePercentage) {
-  const cost = previousPrice * assetVolume + calculateFee(previousPrice * assetVolume, feePercentage);
-  const revenue = currentPrice * assetVolume - calculateFee(currentPrice * assetVolume, feePercentage);
-  return revenue - cost; // profit
-}
-function calculateFee(amount, feePercentage) {
-  return !feePercentage ? 0 : (amount * feePercentage) / 100;
-}
-// This increases the tradePrice 0.10% by multiply it by 1.001, And decreases the tradePrice 0.10%, by multiply it by 0.999
-function adjustPrice(price, percentage) {
-  const multiplier = percentage / 100;
-  return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
-}
-function isOlderThen(timestamp, hours) {
-  return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
-}
-function getSupportedModes() {
-  return [
-    "on-decrease",
-    "on-decrease-percent",
-    "on-decrease-rsi",
-    "on-drop",
-    "on-drop-percent",
-    "on-drop-rsi",
-  ];
-}
-
 module.exports = {
   linearRegression,
   simpleMovingAverage,
@@ -208,4 +230,5 @@ module.exports = {
   adjustPrice,
   isOlderThen,
   getSupportedModes,
+  getPrices,
 };

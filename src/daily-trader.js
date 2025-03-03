@@ -18,7 +18,12 @@
 4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
 */
 
-const { calculateRSI, calcPercentageDifference, calculateFee, isOlderThen } = require("./trend-analysis.js");
+const {
+  calcPercentageDifference,
+  calculateFee,
+  isOlderThen,
+  calcAveragePrice,
+} = require("./trend-analysis.js");
 
 // Smart trader
 module.exports = class DailyTrader {
@@ -36,11 +41,10 @@ module.exports = class DailyTrader {
     this.timeInterval = +timeInterval;
     this.period = +timeInterval; // this.period is deleted in only test trading
     this.listener = null;
-    this.buyOnRSI = 30;
     this.buySellOnThreshold = this.#percentageThreshold / 4;
+    this.liquidity = { history: [], average: 0 };
 
     this.previouslyDropped = false;
-    this.previousBidRSI = null;
     this.previousProfit = 0;
   }
 
@@ -51,41 +55,32 @@ module.exports = class DailyTrader {
       const prices = await this.ex.prices(this.#pair, this.#strategyRange); // For the last xxx days
       const orders = await this.ex.getOrders(this.#pair);
 
-      const period = Math.max(prices.length / 5, 6);
       const enoughPricesData = prices.length >= (this.#strategyRange * 60) / this.timeInterval;
       const bidPrices = prices.map((p) => p.bidPrice);
-      const askPriceRSI = calculateRSI(
-        prices.map((p) => p.askPrice),
-        period
-      );
-      const bidPriceRSI = calculateRSI(bidPrices, period);
       const highestBidPr = bidPrices.sort().at(-1);
+
       const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
-      const normalLiquidity = askBidSpreadPercentage <= this.#percentageThreshold / 10;
+      if (!enoughPricesData) this.liquidity.history.push(askBidSpreadPercentage);
+      else if (!this.liquidity.average) this.liquidity.average = calcAveragePrice(this.liquidity.history);
+      const shouldTrade = enoughPricesData && askBidSpreadPercentage <= this.liquidity.average;
+
       const highDropChange = calcPercentageDifference(highestBidPr, askPrice);
       const dropped = highDropChange < -this.#percentageThreshold;
       const goingUp = this.#findPriceMovement(prices, this.buySellOnThreshold) == "increasing";
-      const rsiGoingUp = askPriceRSI <= this.buyOnRSI && this.previousBidRSI < bidPriceRSI;
       let shouldBuy = false;
 
       if (!this.previouslyDropped && dropped) this.previouslyDropped = true;
 
       // 1. On price drop mode "on-drop"
-      if (this.mode.includes("on-drop")) {
-        shouldBuy = dropped && rsiGoingUp;
-        if (this.mode.includes("percent")) shouldBuy = dropped && goingUp;
+      if (this.mode.includes("on-drop")) shouldBuy = dropped && goingUp;
+      // 2. On price decrease mode "on-decrease"
+      else if (this.mode.includes("on-decrease")) shouldBuy = this.previouslyDropped && goingUp;
 
-        // 2. On price decrease mode "on-decrease"
-      } else if (this.mode.includes("on-decrease")) {
-        shouldBuy = this.previouslyDropped && rsiGoingUp;
-        if (this.mode.includes("percent")) shouldBuy = this.previouslyDropped && goingUp;
-      }
-
-      const log = `Suggest buying: ${enoughPricesData && normalLiquidity && shouldBuy}`;
+      const log = `Suggest buying: ${shouldTrade && shouldBuy}`;
       this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} - Ask: ${askPrice} - Bid: ${bidPrice}`);
 
       // Buy
-      if (enoughPricesData && normalLiquidity && shouldBuy) {
+      if (shouldTrade && shouldBuy) {
         if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital / 2) {
           const capital = balance.eur < this.#capital ? balance.eur : this.#capital;
           const cost = capital - calculateFee(capital, 0.4);
@@ -96,7 +91,7 @@ module.exports = class DailyTrader {
         }
 
         // Sell
-      } else if (enoughPricesData && balance.crypto > 0 && orders[0] && normalLiquidity) {
+      } else if (shouldTrade && balance.crypto > 0 && orders[0]) {
         let orderType = "profitable";
         let order = orders[0];
 
@@ -107,18 +102,28 @@ module.exports = class DailyTrader {
 
         const dropping =
           this.previousProfit > 0 && priceChange - this.previousProfit <= -this.buySellOnThreshold;
-        const rsiGoingDown =
-          this.mode.includes("rsi") && this.previousBidRSI > 70 && this.previousBidRSI > bidPriceRSI;
-        const stopLossPeriod = isOlderThen(order.createdAt, this.#strategyRange * 3);
+        // const noLossPeriod = isOlderThen(order.createdAt, this.#strategyRange * 2) && priceChange > 0;
+        // const stopLossPeriod1 = isOlderThen(order.createdAt, this.#strategyRange * 3);
+        // const stopLossPeriod2 = isOlderThen(order.createdAt, this.#strategyRange * 3.5);
 
-        const shouldSell =
-          (dropping || !goingUp || rsiGoingDown) && (priceChange > halfThreshold || stopLossPeriod);
+        const stopLossPeriod = isOlderThen(order.createdAt, this.#strategyRange * 3);
+        const shouldSell = (dropping || !goingUp) && (priceChange > halfThreshold || stopLossPeriod);
+
+        // const shouldSell =
+        //   ((dropping || !goingUp) && (priceChange > halfThreshold || noLossPeriod || stopLossPeriod1)) ||
+        //   stopLossPeriod2;
         const stopLossLimit =
           (this.previousProfit >= this.buySellOnThreshold && priceChange <= 0) ||
           priceChange <= -this.#percentageThreshold;
 
+        // if (stopLossLimit) orderType = "stopLossLimit";
+        // else if (noLossPeriod) orderType = "noLossPeriod"; // earlySelling
+        // else if (stopLossPeriod1) orderType = "stopLossPeriod1";
+        // else if (stopLossPeriod2) orderType = "stopLossPeriod2";
+
         if (stopLossLimit) orderType = "stopLossLimit";
         else if (stopLossPeriod) orderType = "stopLossPeriod";
+
         // Backlog order: If older then stopLossPeriod or when the price drop percentageThreshold, Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
 
         if (!shouldSell && !stopLossLimit && !stopLossPeriod) order = null;
@@ -131,7 +136,6 @@ module.exports = class DailyTrader {
       }
 
       if (shouldBuy) this.previouslyDropped = false;
-      this.previousBidRSI = bidPriceRSI;
       this.dispatch("log", "");
     } catch (error) {
       this.dispatch("log", `Error running bot: ${error}`);

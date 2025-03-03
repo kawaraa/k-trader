@@ -2,10 +2,10 @@ const { randomUUID } = require("node:crypto");
 const { calculateFee } = require("./trend-analysis");
 
 module.exports = class TestExchangeProvider {
-  constructor(balance, prices, priceIndex, timeInterval) {
+  constructor(balance, prices, timeInterval) {
     this.currentBalance = balance;
     this.allPrices = prices;
-    this.currentPriceIndex = priceIndex;
+    this.currentPriceIndex = 0;
     this.orders = [];
     this.interval = timeInterval;
   }
