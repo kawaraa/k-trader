@@ -46,19 +46,14 @@ module.exports = class DailyTrader {
     this.previouslyDropped = false;
     this.previousProfit = 0;
     this.previousLoss = 0;
-    this.timeBetweenOrders = 0;
   }
 
   async start() {
     try {
       const profitThreshold = this.#percentageThreshold / 2;
-      let stopLossThreshold = this.#percentageThreshold;
       let range = this.#strategyRange;
       const totalEarnings = await this.ex.getState(this.#pair, "trades").reduce((acc, n) => acc + n, 0);
-      if ((totalEarnings / this.#capital) * 100 < -profitThreshold) {
-        range = this.#strategyRange / 3;
-        stopLossThreshold = profitThreshold;
-      }
+      if ((totalEarnings / this.#capital) * 100 < -profitThreshold) range = this.#strategyRange / 2;
 
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
@@ -66,7 +61,6 @@ module.exports = class DailyTrader {
       const orders = await this.ex.getOrders(this.#pair);
 
       const enoughPricesData = prices.length >= (range * 60) / this.timeInterval;
-      if (orders[0]) this.timeBetweenOrders += this.timeInterval;
       const bidPrices = prices.map((p) => p.bidPrice);
       const highestBidPr = bidPrices.sort().at(-1);
 
@@ -78,9 +72,7 @@ module.exports = class DailyTrader {
       }
 
       const shouldTrade = enoughPricesData && askBidSpreadPercentage <= this.averageAskBidSpread;
-
-      const highDropChange = calcPercentageDifference(highestBidPr, askPrice);
-      const dropped = highDropChange < -this.#percentageThreshold;
+      const dropped = calcPercentageDifference(highestBidPr, askPrice) < -this.#percentageThreshold;
       const goingUp = this.#findPriceMovement(prices, this.buySellOnThreshold) == "increasing";
       let shouldBuy = false;
 
@@ -96,9 +88,7 @@ module.exports = class DailyTrader {
 
       // Buy
       if (shouldTrade && shouldBuy) {
-        const periodHasPassed = this.timeBetweenOrders == 0 || this.timeBetweenOrders >= 30;
-
-        if (periodHasPassed && !orders[0] && this.#capital > 0 && balance.eur >= this.#capital / 2) {
+        if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital / 2) {
           const capital = balance.eur < this.#capital ? balance.eur : this.#capital;
           const cost = capital - calculateFee(capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
@@ -109,7 +99,7 @@ module.exports = class DailyTrader {
         }
 
         // Sell
-      } else if (balance.crypto > 0 && orders[0]) {
+      } else if (shouldTrade && balance.crypto > 0 && orders[0]) {
         let orderType = "profitable";
         let order = orders[0];
 
@@ -119,28 +109,38 @@ module.exports = class DailyTrader {
         if (priceChange < this.previousLoss) this.previousLoss = priceChange;
 
         const dropping =
-          this.previousProfit >= profitThreshold &&
-          priceChange - this.previousProfit <= -this.buySellOnThreshold;
+          (priceChange >= profitThreshold && !goingUp) ||
+          (this.previousProfit > profitThreshold &&
+            this.previousProfit - priceChange > this.buySellOnThreshold);
 
-        const stopLossLimit =
-          (this.previousLoss < -(this.#percentageThreshold / 1.2) && priceChange >= -1) ||
-          priceChange <= -stopLossThreshold;
-        const stopLossPeriod = isOlderThen(order.createdAt, this.#strategyRange * 3);
-        const shouldSell = (!goingUp && (priceChange > profitThreshold || stopLossPeriod)) || dropping;
+        const goingUpAgain =
+          this.previousLoss <= -(this.#percentageThreshold / 1.2) &&
+          priceChange >= -this.buySellOnThreshold &&
+          !goingUp;
 
-        if (stopLossLimit) orderType = "stopLossLimit";
+        const stopLossLimit = this.previousProfit - priceChange > this.#percentageThreshold;
+
+        const stopLossPeriod =
+          (isOlderThen(order.createdAt, range) &&
+            this.previousProfit < this.buySellOnThreshold &&
+            priceChange <= 0 &&
+            !goingUp) ||
+          isOlderThen(order.createdAt, this.#strategyRange * 3);
+
+        const shouldSell = dropping || stopLossLimit || stopLossPeriod || goingUpAgain;
+
+        if (goingUpAgain) orderType = "goingUpAgain";
+        else if (stopLossLimit) orderType = "stopLossLimit";
         else if (stopLossPeriod) orderType = "stopLossPeriod";
         // Backlog order: If older then stopLossPeriod or when the price drop percentageThreshold, Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
 
-        if (!shouldSell && !stopLossLimit) order = null;
+        if (!shouldSell) order = null;
         else this.dispatch("log", `${orderType} order will be executed`);
 
         if (order) {
           await this.#sell(order, balance.crypto, bidPrice);
           this.previousProfit = 0;
           this.previousLoss = 0;
-          this.previouslyDropped = false;
-          this.timeBetweenOrders = 0;
         }
       }
 
@@ -157,9 +157,9 @@ module.exports = class DailyTrader {
     const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
     const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.4);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
-    const orderAge = ((Date.now() - createdAt) / 60000 / 60 / 24).toFixed(1);
+    const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
     this.dispatch("sell", { id, profit });
-    this.dispatch("log", `Sold crypto with profit: ${profit} - Age: ${orderAge} - ID: "${id}"`);
+    this.dispatch("log", `Sold crypto with profit: ${profit} - Age: ${orderAge}hrs - ID: "${id}"`);
   }
 
   async sellAll() {

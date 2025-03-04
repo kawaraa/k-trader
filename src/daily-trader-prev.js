@@ -62,8 +62,7 @@ module.exports = class DailyTrader {
       const highestBidPr = bidPrices.sort().at(-1);
       const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
       const normalLiquidity = askBidSpreadPercentage <= this.#percentageThreshold / 10;
-      const highDropChange = calcPercentageDifference(highestBidPr, askPrice);
-      const dropped = highDropChange < -this.#percentageThreshold;
+      const dropped = calcPercentageDifference(highestBidPr, askPrice) < -this.#percentageThreshold;
       const goingUp = this.#findPriceMovement(prices, this.buySellOnThreshold) == "increasing";
       const rsiGoingUp = askPriceRSI <= this.buyOnRSI && this.previousBidRSI < bidPriceRSI;
       let shouldBuy = false;
@@ -113,9 +112,7 @@ module.exports = class DailyTrader {
 
         const shouldSell =
           (dropping || !goingUp || rsiGoingDown) && (priceChange > halfThreshold || stopLossPeriod);
-        const stopLossLimit =
-          (this.previousProfit >= this.buySellOnThreshold && priceChange <= 0) ||
-          priceChange <= -this.#percentageThreshold;
+        const stopLossLimit = this.previousProfit - priceChange > this.#percentageThreshold;
 
         if (stopLossLimit) orderType = "stopLossLimit";
         else if (stopLossPeriod) orderType = "stopLossPeriod";

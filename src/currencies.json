@@ -815,12 +815,8 @@
   "USTEUR": {
     "becameAvailable": "2022-08-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "loser - not supported anymore",
-    "strategies": [
-      "on-drop 5 2% => €12 Remain: 0 Transactions: 5 Gainer: 19 Loser: 0",
-      "on-decrease 11 6.5% => €8 Remain: 1893 Transactions: 6 Gainer: 0 Loser: 26",
-      "on-decrease 5 4% => €6 Remain: 0 Transactions: 10 Gainer: 5 Loser: 9"
-    ]
+    "note": "not supported anymore",
+    "strategies": []
   },
   "ETHFIEUR": {
     "becameAvailable": "2022-03-01",
