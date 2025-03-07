@@ -39,12 +39,13 @@ module.exports = class DailyTrader {
     this.period = +timeInterval; // this.period is deleted in only test trading
     this.listener = null;
     this.buySellOnThreshold = this.percentage / 4;
-    this.profitThreshold = this.percentage / 2;
+    this.profitThreshold = this.percentage / 1.2;
     this.lossThreshold = this.percentage;
 
     this.previouslyDropped = false;
     this.previousProfit = 0;
     this.previousLoss = 0;
+    this.averageAskBidSpread;
   }
 
   async start() {
@@ -53,7 +54,7 @@ module.exports = class DailyTrader {
       this.range = this.#strategyRange;
       const earnings =
         ((await this.ex.getState(this.#pair, "trades")).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
-      if (earnings < -0) {
+      if (earnings < 0) {
         if (!(earnings < -this.buySellOnThreshold)) this.range = this.#strategyRange / 2;
         else {
           this.range = 0.5;
@@ -64,7 +65,7 @@ module.exports = class DailyTrader {
       }
 
       this.buySellOnThreshold = this.percentage / 4;
-      this.profitThreshold = this.percentage / 2;
+      this.profitThreshold = this.percentage / 1.2;
       this.lossThreshold = this.percentage;
 
       // Get data from Kraken
@@ -101,6 +102,7 @@ module.exports = class DailyTrader {
       if (this.mode.includes("on-drop")) shouldBuy = dropped && increasing;
       // 2. On price decrease mode "on-decrease"
       else if (this.mode.includes("on-decrease")) shouldBuy = this.previouslyDropped && increasing;
+      // else if (this.mode.includes("on-increase")) shouldBuy = increasing;
 
       const log = `Should buy: ${shouldTrade && shouldBuy}`;
       this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} - Ask: ${askPrice} - Bid: ${bidPrice}`);

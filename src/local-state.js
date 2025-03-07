@@ -1,7 +1,7 @@
 const { readFileSync, writeFileSync } = require("node:fs");
 // In prod limit Storing prices to 30 days (8640) and in local to 60 days (17280)
 // dataLimit * 5 is the number of mins in 60 days.
-const dataLimit = process.env.NODE_ENV === "production" ? 8640 : 17280;
+const dataLimit = process.env.NODE_ENV === "production" ? 17280 : 17280;
 
 module.exports = class LocalState {
   #databaseFolder;
