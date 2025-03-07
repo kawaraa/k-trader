@@ -52,7 +52,7 @@ module.exports = class DailyTrader {
       // Safety check
       this.range = this.#strategyRange;
       const earnings =
-        ((await this.ex.getState(this.#pair, "trades").reduce((acc, n) => acc + n, 0)) / this.#capital) * 100;
+        ((await this.ex.getState(this.#pair, "trades")).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
       if (earnings < -0) {
         if (!(earnings < -this.buySellOnThreshold)) this.range = this.#strategyRange / 2;
         else {

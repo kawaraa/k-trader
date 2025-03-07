@@ -99,7 +99,9 @@ class BotsManager {
     else if (event == "sell") {
       this.#bots[pair].trades.push(info.profit);
       this.#bots[pair].orders = !info.id ? [] : this.#bots[pair].orders.filter((id) => id != info.id);
-    } else if (event == "balance") this.#bots[pair].balance = info;
+    } else if (event == "balance") {
+      this.#bots[pair].balance = info;
+    }
 
     this.state.update(this.get());
   }
