@@ -16,9 +16,11 @@ export default function BotItem({ botInfo, onAction }) {
       <div className="flex">
         <span className="flex-1 w-1/5">{botInfo.pair.replace("EUR", "")}</span>
         <span className="flex-1 w-1/5 text-orange">€{botInfo.capital}</span>
-        <button onClick={() => onAction("rest", botInfo.pair)} className="flex-1 w-1/5 text-green">
-          €{parseInt(sum(botInfo.trades))}
-        </button>
+        <div className="flex-1 w-1/5">
+          <button onClick={() => onAction("rest", botInfo.pair)} className="text-green">
+            €{parseInt(sum(botInfo.trades))}
+          </button>
+        </div>
         <span className="flex-2 w-2/5 flex justify-between items-center">
           <span className="flex-auto text-red">{botInfo.orders.length}</span>
           <button
@@ -51,17 +53,17 @@ export default function BotItem({ botInfo, onAction }) {
       <div className={`flex flex-col overflow-hidden px-2 transition-all duration-300 ease-in-out ${cls}`}>
         <div className="flex flex-col mb-5">
           <p className="mb-1">
-            <strong>Strategy Range</strong>: <span>{botInfo.strategyRange} Days</span>
+            <strong>Strategy Mode</strong>: <span>{botInfo.mode}</span>
+          </p>
+          <p className="mb-1">
+            <strong>Strategy Range</strong>: <span>{botInfo.strategyRange} Hours</span>
           </p>
           <p className="">
             <strong>Price Change</strong>: <span>{botInfo.priceChange}%</span>
           </p>
-          <p className="mb-1">
-            <strong>Mode</strong>: <span>{botInfo.mode}</span>
-          </p>
           <hr />
           <p className="mt-1">
-            <strong>Created</strong>: <span>{age} ago</span>
+            <strong>Created</strong>: <span>{age} days ago</span>
           </p>
           <p className="mt-1">
             <strong>Balance</strong>:{" "}
@@ -70,7 +72,7 @@ export default function BotItem({ botInfo, onAction }) {
             </span>
           </p>
           <p className="">
-            <strong>Sold / Transactions</strong>: <span>{botInfo.trades.length}</span>
+            <strong>Trades</strong>: <span>{botInfo.trades.length}</span>
           </p>
           <div className="">
             <Link

@@ -104,7 +104,7 @@ module.exports = class DailyTrader {
       else if (this.mode.includes("on-decrease")) shouldBuy = this.previouslyDropped && increasing;
       // else if (this.mode.includes("on-increase")) shouldBuy = increasing;
 
-      const log = `Should buy: ${shouldTrade && shouldBuy}`;
+      const log = `Should buy: ${shouldBuy} - Should trade: ${shouldTrade}`;
       this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} - Ask: ${askPrice} - Bid: ${bidPrice}`);
       if (orders[0]) {
         this.dispatch(

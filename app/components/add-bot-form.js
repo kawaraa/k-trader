@@ -25,6 +25,14 @@ export default function AddBotFrom({ bot, onSubmit }) {
         required
         className={inputCls}
       />
+      <select name="mode" defaultValue={mode} required className={inputCls}>
+        <option value="">Trading mode</option>
+        {strategyModes.map((mode, i) => (
+          <option value={mode} key={i}>
+            {mode}
+          </option>
+        ))}
+      </select>
       <input
         name="strategyRange"
         type="number"
@@ -43,16 +51,6 @@ export default function AddBotFrom({ bot, onSubmit }) {
         required
         className={inputCls}
       />
-
-      <select name="mode" defaultValue={mode} required className={inputCls}>
-        <option value="">Trading mode</option>
-        {strategyModes.map((mode, i) => (
-          <option value={mode} key={i}>
-            {mode}
-          </option>
-        ))}
-      </select>
-
       <input
         name="timeInterval"
         type="number"

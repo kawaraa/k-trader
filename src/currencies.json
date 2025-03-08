@@ -2,14 +2,12 @@
   "BTCEUR": {
     "becameAvailable": "2009-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "r",
-    "strategies": []
+    "note": "r"
   },
   "ETHEUR": {
     "becameAvailable": "2015-07-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "r",
-    "strategies": []
+    "note": "r"
   },
   "USDTEUR": { "becameAvailable": "2015-01-01", "askBidSpreadPercentage": 0.05, "note": "stable" },
   "USDCEUR": { "becameAvailable": "2018-10-01", "askBidSpreadPercentage": 0.05, "note": "stable" },
@@ -17,1239 +15,1171 @@
   "SOLEUR": {
     "becameAvailable": "2020-04-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "XRPEUR": {
     "becameAvailable": "2013-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
   "XDGEUR": {
     "name": "DOGE",
     "becameAvailable": "2013-12-06",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "ADAEUR": {
     "becameAvailable": "2017-09-29",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
   "TRXEUR": {
     "becameAvailable": "2017-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "",
-    "strategies": []
+    "note": "skip"
   },
   "AVAXEUR": {
     "becameAvailable": "2020-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "WBTCEUR": {
     "becameAvailable": "2019-01-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "XLMEUR": {
     "becameAvailable": "2014-07-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
   "TONEUR": {
     "becameAvailable": "2021-08-01",
     "askBidSpreadPercentage": 0.0,
-    "note": "no prices data",
-    "strategies": []
+    "note": "no prices data"
   },
   "LINKEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "",
-    "strategies": []
+    "note": "skip"
   },
   "SUIEUR": {
     "becameAvailable": "2023-05-05",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up",
-    "strategies": []
+    "note": "Moving up"
   },
   "SHIBEUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up",
-    "strategies": []
+    "note": "Moving up"
   },
   "LTCEUR": {
     "becameAvailable": "2013-09-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "",
-    "strategies": []
+    "note": "skip"
   },
   "DOTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
   "BCHEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "UNIEUR": {
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "USDSEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.0,
-    "note": "In migration process from DAIEUR (DAI) - no prices data",
-    "strategies": []
+    "note": "In migration process from DAIEUR (DAI) - no prices data"
   },
   "PEPEEUR": {
     "becameAvailable": "2023-04-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "NEAREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "AAVEEUR": {
     "becameAvailable": "2020-12-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
   "ONDOEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.13,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "APTEUR": {
     "becameAvailable": "2022-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser",
-    "strategies": []
+    "note": "p12-loser"
   },
   "ICPEUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving down ",
-    "strategies": []
+    "note": "Moving down "
   },
   "XMREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
   "ETCEUR": {
     "becameAvailable": "2016-07-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "MNTEUR": {
     "becameAvailable": "2022-10-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "TAOEUR": {
     "becameAvailable": "2023-03-01",
     "askBidSpreadPercentage": 0.18,
-    "note": "loser ",
-    "strategies": []
+    "note": "p8 - loser "
   },
   "POLSEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 4.25,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
   "KASEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0,
-    "note": "no prices data",
-    "strategies": []
+    "note": "no prices data"
   },
   "ALGOEUR": {
     "becameAvailable": "2019-06-19",
     "askBidSpreadPercentage": 0.11,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
   "RENDEREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "In migration process: Render (RNDR) will be migrated and rebranded to Render (RENDER) - Moving down",
-    "strategies": []
+    "note": "In migration process: Render (RNDR) will be migrated and rebranded to Render (RENDER) - Moving down"
   },
   "FILEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
   "ARBEUR": {
     "becameAvailable": "2023-04-23",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
   "FETEUR": {
     "becameAvailable": "2021-05-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "ATOMEUR": {
     "becameAvailable": "2019-03-14",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "ENAEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 0.33,
-    "note": "moving up",
-    "strategies": []
+    "note": "moving up"
   },
   "TIAEUR": {
     "becameAvailable": "2023-11-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "loser ",
-    "strategies": []
+    "note": "p14-loser "
   },
   "RAYEUR": {
     "becameAvailable": "2021-02-20",
     "askBidSpreadPercentage": 0.39,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "LDOEUR": {
     "becameAvailable": "20xx-xx-01",
-    "askBidSpreadPercentage": 0.1,
-    "strategies": []
+    "askBidSpreadPercentage": 0.1
   },
   "STXEUR": {
     "becameAvailable": "2019-10-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser ",
-    "strategies": []
+    "note": "p10 - loser "
   },
   "INJEUR": {
     "becameAvailable": "2021-04-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "IMXEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "BONKEUR": {
     "becameAvailable": "2023-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "OPEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "JUPEUR": {
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "GRTEUR": {
     "becameAvailable": "2020-12-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
   "QNTEUR": {
     "becameAvailable": "2018-08-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "Moving down - ",
-    "strategies": []
+    "note": "Moving down - "
   },
   "JASMYEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "SEIEUR": {
     "becameAvailable": "2021-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "FLREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "GALAEUR": {
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.35,
-    "note": "In migration process to a new contract address from the old contract address - ",
-    "strategies": []
+    "note": "In migration process to a new contract address from the old contract address - skip"
   },
   "SANDEUR": {
     "becameAvailable": "20xx-xx-01",
-    "askBidSpreadPercentage": 0.05,
-    "strategies": []
+    "askBidSpreadPercentage": 0.05
   },
   "MSOLEUR": {
     "becameAvailable": "2022-04-01",
     "askBidSpreadPercentage": 3.32,
-    "note": "",
-    "strategies": []
+    "note": "skip"
   },
   "FLOKIEUR": {
     "becameAvailable": "2021-07-01",
     "askBidSpreadPercentage": 0.14,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "WIFEUR": {
     "becameAvailable": "2023-12-20",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "EOSEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "strategies": []
+    "note": ""
   },
-  "ENSEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.15, "strategies": [] },
+  "ENSEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.15, "note": "" },
   "XTZEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.13,
-    "strategies": []
+    "note": ""
   },
   "PYTHEUR": {
     "becameAvailable": "2023-11-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
 
-  "NANOEUR": { "becameAvailable": "2015-03-01", "askBidSpreadPercentage": 0.29, "strategies": [] },
-  "REPEUR": { "becameAvailable": "2015-08-01", "askBidSpreadPercentage": 2.38, "strategies": [] },
+  "NANOEUR": { "becameAvailable": "2015-03-01", "askBidSpreadPercentage": 0.29, "note": "" },
+  "REPEUR": {
+    "becameAvailable": "2015-08-01",
+    "askBidSpreadPercentage": 2.38,
+    "note": "skip"
+  },
   "ZECEUR": {
     "becameAvailable": "2016-10-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "loser - ",
-    "strategies": []
+    "note": "p11-loser-"
   },
   "RLCEUR": {
     "becameAvailable": "2017-04-01",
     "askBidSpreadPercentage": 0.19,
-    "note": "loser -",
-    "strategies": []
+    "note": "loser -"
   },
   "MLNEUR": {
     "becameAvailable": "2017-02-01",
     "askBidSpreadPercentage": 0.51,
-    "note": "In migration process (Melon is rebranded as Enzyme. Read more about this) - loser - ",
-    "strategies": []
+    "note": "In migration process (Melon is rebranded as Enzyme. Read more about this) - loser - "
   },
   "BATEUR": {
     "becameAvailable": "2017-06-01",
     "askBidSpreadPercentage": 0.14,
-    "strategies": []
+    "note": ""
   },
-  "REQEUR": { "becameAvailable": "2017-08-01", "askBidSpreadPercentage": 0.12, "strategies": [] },
+  "REQEUR": { "becameAvailable": "2017-08-01", "askBidSpreadPercentage": 0.12, "note": "" },
   "STORJEUR": {
     "becameAvailable": "2017-07-01",
-    "askBidSpreadPercentage": 0.12,
-    "strategies": []
+    "askBidSpreadPercentage": 0.12
   },
-  "ZRXEUR": { "becameAvailable": "2017-08-01", "askBidSpreadPercentage": 0.24, "strategies": [] },
-  "WAXLEUR": { "becameAvailable": "2017-12-01", "askBidSpreadPercentage": 1.54, "strategies": [] },
+  "ZRXEUR": {
+    "becameAvailable": "2017-08-01",
+    "askBidSpreadPercentage": 0.24,
+    "note": "skip"
+  },
+  "WAXLEUR": { "becameAvailable": "2017-12-01", "askBidSpreadPercentage": 1.54, "note": "" },
   "FTMEUR": {
     "becameAvailable": "2018-10-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "In migration process to SONIC - loser ",
-    "strategies": []
+    "note": "p6 - In migration process to SONIC - loser "
   },
   "TRUEUR": {
     "becameAvailable": "2018-07-01",
     "askBidSpreadPercentage": 1.04,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "TVKEUR": {
     "becameAvailable": "2019-09-01",
     "askBidSpreadPercentage": 2.35,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
   "LUNAEUR": {
     "becameAvailable": "2019-08-01",
     "askBidSpreadPercentage": 0.63,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "UNFIEUR": {
     "becameAvailable": "2020-11-01",
     "askBidSpreadPercentage": 0.25,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "RUNEEUR": {
     "becameAvailable": "2020-07-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "FIDAEUR": {
     "becameAvailable": "2020-12-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "Moving down -",
-    "strategies": []
+    "note": "Moving down -"
   },
   "CRVEUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 0.25,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "ACHEUR": {
     "becameAvailable": "2020-09-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "WOOEUR": {
     "becameAvailable": "2020-10-01",
     "askBidSpreadPercentage": 0.13,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "STGEUR": {
     "becameAvailable": "2020-09-01",
     "note": "Moving down",
-    "askBidSpreadPercentage": 0.86,
-    "strategies": []
+    "askBidSpreadPercentage": 0.86
   },
   "ZROEUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "ZRO trading restricted for NL - Moving down",
-    "strategies": []
+    "note": "ZRO trading restricted for NL - Moving down"
   },
   "BANDEUR": {
     "becameAvailable": "2020-11-01",
     "askBidSpreadPercentage": 0.15,
-    "strategies": []
+    "note": ""
   },
-  "BADGEREUR": { "becameAvailable": "2020-12-03", "askBidSpreadPercentage": 0.11, "strategies": [] },
-  "AXSEUR": { "becameAvailable": "2020-11-04", "askBidSpreadPercentage": 0.11, "strategies": [] },
-  "PERPEUR": { "becameAvailable": "2020-08-01", "askBidSpreadPercentage": 0.54, "strategies": [] },
-  "PHAEUR": { "becameAvailable": "2020-08-01", "askBidSpreadPercentage": 0.46, "strategies": [] },
-  "BALEUR": { "becameAvailable": "2020-06-23", "askBidSpreadPercentage": 0.35, "strategies": [] },
+  "BADGEREUR": { "becameAvailable": "2020-12-03", "askBidSpreadPercentage": 0.11, "note": "" },
+  "AXSEUR": { "becameAvailable": "2020-11-04", "askBidSpreadPercentage": 0.11, "note": "" },
+  "PERPEUR": {
+    "becameAvailable": "2020-08-01",
+    "askBidSpreadPercentage": 0.54,
+    "note": "skip"
+  },
+  "PHAEUR": {
+    "becameAvailable": "2020-08-01",
+    "askBidSpreadPercentage": 0.46,
+    "note": "skip"
+  },
+  "BALEUR": { "becameAvailable": "2020-06-23", "askBidSpreadPercentage": 0.35, "note": "" },
   "REPV2EUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 1.89,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "SBREUR": { "becameAvailable": "2020-03-01", "askBidSpreadPercentage": 0.72, "note": "", "strategies": [] },
+  "SBREUR": { "becameAvailable": "2020-03-01", "askBidSpreadPercentage": 0.72, "note": "" },
   "KINTEUR": {
     "becameAvailable": "2020-10-01",
     "askBidSpreadPercentage": 2.99,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
-  "MNGOEUR": { "becameAvailable": "2020-07-01", "askBidSpreadPercentage": 1.81, "strategies": [] },
+  "MNGOEUR": { "becameAvailable": "2020-07-01", "askBidSpreadPercentage": 1.81, "note": "" },
   "NOVAEUR": {
     "name": "Nova finance",
     "becameAvailable": "2020-01-01",
     "askBidSpreadPercentage": 0.0,
-    "note": "In migration process from MOONEUR (MOON CryptoCurrency Moons) - no prices data",
-    "strategies": []
+    "note": "In migration process from MOONEUR (MOON CryptoCurrency Moons) - no prices data"
   },
   "MULTIEUR": {
     "becameAvailable": "2020-11-01",
     "askBidSpreadPercentage": 1.28,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
-  "SRMEUR": { "becameAvailable": "2020-07-01", "askBidSpreadPercentage": 1.9, "strategies": [] },
+  "SRMEUR": { "becameAvailable": "2020-07-01", "askBidSpreadPercentage": 1.9, "note": "" },
   "GALEUR": {
     "becameAvailable": "2020-08-01",
     "askBidSpreadPercentage": 4.34,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
   "SUPEREUR": {
     "becameAvailable": "2021-02-20",
     "askBidSpreadPercentage": 0.17,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "MASKEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 0.16,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "ORCAEUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 0.19,
-    "note": "loser ",
-    "strategies": []
+    "note": "p4 - loser "
   },
   "CPOOLEUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 2.94,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "STEPEUR": {
     "becameAvailable": "2021-04-01",
     "askBidSpreadPercentage": 3.49,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "PENDLEEUR": {
     "becameAvailable": "2021-04-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "TEEREUR": {
     "becameAvailable": "2021-10-01",
     "askBidSpreadPercentage": 0.24,
-    "note": "Moving up down -",
-    "strategies": []
+    "note": "Moving up down -"
   },
   "CXTEUR": {
     "becameAvailable": "2021-09-01",
     "name": "Covalent X Token",
     "askBidSpreadPercentage": 0.36,
-    "note": "Covalent (CQT) migrated to (CXT) Moving down -",
-    "strategies": []
+    "note": "Covalent (CQT) migrated to (CXT) Moving down - skip"
   },
   "STRKEUR": {
     "becameAvailable": "2021-09-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
   "YGGEUR": {
     "becameAvailable": "2021-07-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "OXYEUR": {
     "becameAvailable": "2021-03-20",
     "askBidSpreadPercentage": 1.31,
-    "note": "loser",
-    "strategies": []
+    "note": "p2 - loser"
   },
   "KP3REUR": {
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "RAREEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 0.21,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "BLZEUR": {
     "becameAvailable": "2021-03-01",
     "askBidSpreadPercentage": 0.1,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "ENJEUR": { "becameAvailable": "2021-06-01", "askBidSpreadPercentage": 0.85, "strategies": [] },
+  "ENJEUR": {
+    "becameAvailable": "2021-06-01",
+    "askBidSpreadPercentage": 0.85,
+    "note": "skip"
+  },
   "CSMEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 4.82,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "CELREUR": {
     "becameAvailable": "2021-03-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "GTCEUR": {
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 1.4,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "MOVREUR": {
     "becameAvailable": "2021-08-01",
     "askBidSpreadPercentage": 0.19,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "SAMOEUR": {
     "becameAvailable": "2021-05-01",
     "askBidSpreadPercentage": 2.82,
-    "note": "loser - ",
-    "strategies": []
+    "note": "loser - "
   },
   "AGLDEUR": {
     "becameAvailable": "2021-09-01",
     "askBidSpreadPercentage": 0.39,
-    "note": "moving up down",
-    "strategies": []
+    "note": "moving up down"
   },
   "LITEUR": {
     "becameAvailable": "2021-02-05",
     "askBidSpreadPercentage": 3.18,
-    "note": "",
-    "strategies": []
+    "note": "skip"
   },
   "MINAEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 0.18,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "API3EUR": {
     "becameAvailable": "2021-11-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "",
-    "strategies": []
+    "note": "skip"
   },
   "BICOEUR": {
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "GMXEUR": {
     "becameAvailable": "2021-12-01",
     "askBidSpreadPercentage": 0.22,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "COMPEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 0.05,
-    "strategies": []
+    "note": "skip"
   },
   "ALPHAEUR": {
     "becameAvailable": "2021-08-01",
-    "askBidSpreadPercentage": 0.4,
-    "strategies": []
+    "askBidSpreadPercentage": 0.4
   },
-  "LSKEUR": { "becameAvailable": "2021-07-01", "askBidSpreadPercentage": 0.17, "strategies": [] },
-  "1INCHEUR": { "becameAvailable": "2021-08-01", "askBidSpreadPercentage": 0.28, "strategies": [] },
+  "LSKEUR": {
+    "becameAvailable": "2021-07-01",
+    "askBidSpreadPercentage": 0.17,
+    "note": "skip"
+  },
+  "1INCHEUR": { "becameAvailable": "2021-08-01", "askBidSpreadPercentage": 0.28, "note": "" },
   "SGBEUR": {
     "becameAvailable": "2021-09-01",
     "askBidSpreadPercentage": 0.36,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
   "GLMREUR": {
     "becameAvailable": "2021-07-01",
     "askBidSpreadPercentage": 0.74,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "ATLASEUR": {
     "becameAvailable": "2021-03-01",
     "askBidSpreadPercentage": 0.35,
-    "note": "Users swapping ATLAS tokens on non-Solana chains may encounter high slippage due to the low liquidity",
-    "strategies": []
+    "note": "Users swapping ATLAS tokens on non-Solana chains may encounter high slippage due to the low liquidity"
   },
-  "HNTEUR": { "becameAvailable": "2021-08-01", "askBidSpreadPercentage": 1.37, "strategies": [] },
+  "HNTEUR": { "becameAvailable": "2021-08-01", "askBidSpreadPercentage": 1.37, "note": "" },
   "IDEXEUR": {
     "becameAvailable": "2021-03-01",
     "askBidSpreadPercentage": 0.7,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
-  "AUDIOEUR": { "becameAvailable": "2021-09-01", "askBidSpreadPercentage": 2.9, "strategies": [] },
-  "ANTEUR": { "becameAvailable": "2021-02-01", "askBidSpreadPercentage": 1.27, "strategies": [] },
-  "C98EUR": { "becameAvailable": "2021-07-01", "askBidSpreadPercentage": 1.43, "strategies": [] },
-  "SPELLEUR": { "becameAvailable": "2021-05-01", "askBidSpreadPercentage": 0.26, "strategies": [] },
+  "AUDIOEUR": {
+    "becameAvailable": "2021-09-01",
+    "askBidSpreadPercentage": 2.9,
+    "note": "skip"
+  },
+  "ANTEUR": {
+    "becameAvailable": "2021-02-01",
+    "askBidSpreadPercentage": 1.27,
+    "note": "skip"
+  },
+  "C98EUR": { "becameAvailable": "2021-07-01", "askBidSpreadPercentage": 1.43, "note": "" },
+  "SPELLEUR": { "becameAvailable": "2021-05-01", "askBidSpreadPercentage": 0.26, "note": "" },
   "KAREUR": {
     "becameAvailable": "2021-02-01",
     "askBidSpreadPercentage": 1.9,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
-  "GNOEUR": { "becameAvailable": "2017-04-01", "askBidSpreadPercentage": 2.48, "strategies": [] },
-  "BTTEUR": { "becameAvailable": "2021-01-01", "askBidSpreadPercentage": 0.71, "strategies": [] },
-  "MPLEUR": { "becameAvailable": "2021-10-01", "askBidSpreadPercentage": 2.07, "strategies": [] },
+  "GNOEUR": {
+    "becameAvailable": "2017-04-01",
+    "askBidSpreadPercentage": 2.48,
+    "note": "skip"
+  },
+  "BTTEUR": {
+    "becameAvailable": "2021-01-01",
+    "askBidSpreadPercentage": 0.71,
+    "note": "skip"
+  },
+  "MPLEUR": { "becameAvailable": "2021-10-01", "askBidSpreadPercentage": 2.07, "note": "" },
   "OSMOEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 2.14,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
-  "ALICEEUR": { "becameAvailable": "2021-07-01", "askBidSpreadPercentage": 2.06, "strategies": [] },
+  "ALICEEUR": { "becameAvailable": "2021-07-01", "askBidSpreadPercentage": 2.06, "note": "" },
   "PSTAKEEUR": {
     "becameAvailable": "2021-07-01",
     "askBidSpreadPercentage": 2.95,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
-  "KEEPEUR": { "becameAvailable": "2021-05-01", "askBidSpreadPercentage": 3.88, "strategies": [] },
+  "KEEPEUR": {
+    "becameAvailable": "2021-05-01",
+    "askBidSpreadPercentage": 3.88,
+    "note": "skip"
+  },
   "BSXEUR": {
     "becameAvailable": "2022-03-01",
     "askBidSpreadPercentage": 1.48,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "NOSEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.57,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "ALTEUR": {
     "becameAvailable": "2022-03-01",
     "askBidSpreadPercentage": 1.1,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "DYMEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.21,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "BLUREUR": {
     "becameAvailable": "2022-02-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "loser ",
-    "strategies": []
+    "note": "p13-loser "
   },
   "BODENEUR": {
     "becameAvailable": "2022-05-01",
     "askBidSpreadPercentage": 2.32,
-    "note": "Moving down -",
-    "strategies": []
+    "note": "Moving down -"
   },
   "USTEUR": {
     "becameAvailable": "2022-08-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "not supported anymore",
-    "strategies": []
+    "note": "not supported anymore"
   },
   "ETHFIEUR": {
     "becameAvailable": "2022-03-01",
     "askBidSpreadPercentage": 0.39,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "MVEUR": {
     "becameAvailable": "2022-02-01",
     "askBidSpreadPercentage": 3.21,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "LUNA2EUR": {
     "becameAvailable": "2022-05-01",
     "askBidSpreadPercentage": 0.22,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "HFTEUR": {
     "becameAvailable": "2022-09-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "BEAMEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 2.46,
-    "note": "In migration process from MCEUR (MC Merit Circle token ) - loser - ",
-    "strategies": []
+    "note": "In migration process from MCEUR (MC Merit Circle token ) - loser - "
   },
   "EWTEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.81,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "KINEUR": {
     "becameAvailable": "2022-08-01",
     "askBidSpreadPercentage": 0.86,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
-  "KEYEUR": { "becameAvailable": "2022-06-01", "askBidSpreadPercentage": 0.21, "strategies": [] },
+  "KEYEUR": { "becameAvailable": "2022-06-01", "askBidSpreadPercentage": 0.21, "note": "" },
   "LPTEUR": {
     "becameAvailable": "2022-01-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down - skip"
   },
-  "CTSIEUR": { "becameAvailable": "2022-11-01", "askBidSpreadPercentage": 0.22, "strategies": [] },
-  "DENTEUR": { "becameAvailable": "2022-04-01", "askBidSpreadPercentage": 0.21, "strategies": [] },
-  "AKTEUR": { "becameAvailable": "2022-08-01", "askBidSpreadPercentage": 0.69, "strategies": [] },
-  "BONDEUR": { "becameAvailable": "2022-08-01", "askBidSpreadPercentage": 0.47, "strategies": [] },
+  "CTSIEUR": { "becameAvailable": "2022-11-01", "askBidSpreadPercentage": 0.22, "note": "" },
+  "DENTEUR": { "becameAvailable": "2022-04-01", "askBidSpreadPercentage": 0.21, "note": "" },
+  "AKTEUR": { "becameAvailable": "2022-08-01", "askBidSpreadPercentage": 0.69, "note": "" },
+  "BONDEUR": { "becameAvailable": "2022-08-01", "askBidSpreadPercentage": 0.47, "note": "" },
   "BRICKEUR": {
     "becameAvailable": "2022-09-01",
     "askBidSpreadPercentage": 1.47,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "KUJIEUR": { "becameAvailable": "2022-09-01", "askBidSpreadPercentage": 1.27, "strategies": [] },
+  "KUJIEUR": { "becameAvailable": "2022-09-01", "askBidSpreadPercentage": 1.27, "note": "" },
   "JUNOEUR": {
     "becameAvailable": "2022-03-01",
     "askBidSpreadPercentage": 1.85,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "GARIEUR": {
     "becameAvailable": "2022-03-01",
     "askBidSpreadPercentage": 2.63,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "HDXEUR": { "becameAvailable": "2022-11-01", "askBidSpreadPercentage": 2.01, "strategies": [] },
+  "HDXEUR": { "becameAvailable": "2022-11-01", "askBidSpreadPercentage": 2.01, "note": "" },
   "INTREUR": {
     "becameAvailable": "2022-07-01",
     "askBidSpreadPercentage": 5.05,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "ADXEUR": { "becameAvailable": "2022-10-01", "askBidSpreadPercentage": 2.36, "strategies": [] },
-  "MCEUR": { "becameAvailable": "2022-07-01", "askBidSpreadPercentage": 6.55, "strategies": [] },
+  "ADXEUR": { "becameAvailable": "2022-10-01", "askBidSpreadPercentage": 2.36, "note": "" },
+  "MCEUR": { "becameAvailable": "2022-07-01", "askBidSpreadPercentage": 6.55, "note": "" },
   "TURBOEUR": {
     "becameAvailable": "2023-05-05",
     "askBidSpreadPercentage": 0.36,
-    "note": "loser ",
-    "strategies": []
+    "note": "p9 - loser "
   },
   "BIGTIMEEUR": {
     "becameAvailable": "2023-10-12",
     "askBidSpreadPercentage": 1.39,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "MOGEUR": {
     "becameAvailable": "2023-07-22",
     "askBidSpreadPercentage": 1.25,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "PRIMEEUR": {
     "becameAvailable": "2023-03-01",
     "askBidSpreadPercentage": 0.21,
-    "note": "Moving down -",
-    "strategies": []
+    "note": "Moving down -"
   },
   "MEMEEUR": {
     "becameAvailable": "2023-11-01",
     "askBidSpreadPercentage": 0.28,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "NTRNEUR": {
     "becameAvailable": "2023-06-01",
     "askBidSpreadPercentage": 0.34,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "ARKMEUR": {
     "becameAvailable": "2023-07-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
-  "ACAEUR": { "becameAvailable": "2023-06-01", "askBidSpreadPercentage": 2.77, "strategies": [] },
+  "ACAEUR": { "becameAvailable": "2023-06-01", "askBidSpreadPercentage": 2.77, "note": "" },
   "PRCLEUR": {
     "becameAvailable": "2024-04-15",
     "askBidSpreadPercentage": 0.21,
-    "note": "loser ",
-    "strategies": []
+    "note": "p1 - loser "
   },
   "KMNOEUR": {
     "becameAvailable": "2024-04-30",
     "askBidSpreadPercentage": 0.23,
-    "note": "loser ",
-    "strategies": []
+    "note": "p7 - loser "
   },
   "SAGAEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 1.18,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "SAFEEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "TNSREUR": {
     "becameAvailable": "2024-04-10",
     "askBidSpreadPercentage": 0.14,
-    "note": "loser ",
-    "strategies": []
+    "note": "p5 - loser "
   },
   "ZEXEUR": {
     "becameAvailable": "2024-07-01",
     "askBidSpreadPercentage": 0.2,
-    "note": "loser ",
-    "strategies": []
+    "note": "p3 - loser "
   },
   "ZKEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "ZEUSEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 1.31,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "ZETAEUR": {
     "becameAvailable": "2024-04-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "CVCEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.78,
-    "note": "Moving down -",
-    "strategies": []
+    "note": "Moving down -"
   },
   "XRTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.29,
-    "note": "Moving down -",
-    "strategies": []
+    "note": "Moving down -"
   },
   "LCXEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.27,
-    "note": "Moving down -",
-    "strategies": []
+    "note": "Moving down -"
   },
   "KILTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 1.76,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "JTOEUR": {
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.38,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "SDNEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.41,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "WEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.36,
-    "note": "loser",
-    "strategies": []
+    "note": "loser"
   },
   "OCEANEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
   "HONEYEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.38,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "L3EUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 1.66,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "DRIFTEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 1.12,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "WENEUR": {
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 0.7,
-    "note": "WEN trading restricted for NL - ",
-    "strategies": []
+    "note": "WEN trading restricted for NL - "
   },
   "PORTALEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.18,
-    "note": "loser ",
-    "strategies": []
+    "note": "loser "
   },
   "AEVOEUR": {
     "becameAvailable": "2024-03-01",
     "askBidSpreadPercentage": 0.12,
-    "note": "",
-    "strategies": []
+    "note": ""
   },
   "POLEUR": {
     "name": "Polygon Ecosystem Token",
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 6.26,
-    "note": "In migration process from MATICEUR (MATIC Polygon) - Moving down",
-    "strategies": []
+    "note": "In migration process from MATICEUR (MATIC Polygon) - Moving down"
   },
   "POPCATEUR": {
     "becameAvailable": "2024-01-01",
     "askBidSpreadPercentage": 3.18,
-    "note": "no prices data",
-    "strategies": []
+    "note": "no prices data"
   },
   "TREMPEUR": {
     "becameAvailable": "2024-03-01",
     "askBidSpreadPercentage": 6.36,
-    "note": "is not available in to trade with EUR) - ",
-    "strategies": []
+    "note": "is not available in to trade with EUR) - "
   },
   "POLISEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.43,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "TLMEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "ARPAEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.13,
-    "strategies": []
+    "note": ""
   },
   "OMGEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.27,
-    "strategies": []
+    "note": ""
   },
   "UMAEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.13,
-    "strategies": []
+    "note": ""
   },
   "MANAEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "strategies": []
+    "note": ""
   },
   "EGLDEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "strategies": []
+    "note": ""
   },
   "DYDXEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
-    "strategies": []
+    "note": ""
   },
   "FLOWEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
-    "strategies": []
+    "note": ""
   },
   "KNCEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.12,
-    "strategies": []
+    "note": ""
   },
-  "KSMEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.11, "strategies": [] },
+  "KSMEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.11, "note": "" },
   "LMWREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "KAVAEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.11,
-    "strategies": []
+    "note": ""
   },
-  "QTUMEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.13, "strategies": [] },
-  "SNXEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.05, "strategies": [] },
-  "YFIEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.12, "strategies": [] },
-  "SUSHIEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.15, "strategies": [] },
+  "QTUMEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.13,
+    "note": ""
+  },
+  "SNXEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.05, "note": "" },
+  "YFIEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.12, "note": "" },
+  "SUSHIEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.15,
+    "note": ""
+  },
   "DASHEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.15,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "ETHWEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.28, "strategies": [] },
-  "FXSEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.14, "strategies": [] },
-  "ICXEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.14, "strategies": [] },
-  "RENEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.32, "strategies": [] },
-  "COTIEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.12, "strategies": [] },
-  "BNTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.28, "strategies": [] },
-  "OXTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.27, "strategies": [] },
-  "SCRTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.68, "strategies": [] },
-  "GMTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.53, "strategies": [] },
+  "ETHWEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.28,
+    "note": ""
+  },
+  "FXSEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.14, "note": "" },
+  "ICXEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.14, "note": "" },
+  "RENEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.32, "note": "" },
+  "COTIEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.12,
+    "note": ""
+  },
+  "BNTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.28, "note": "" },
+  "OXTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.27, "note": "" },
+  "SCRTEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.68,
+    "note": ""
+  },
+  "GMTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.53, "note": "" },
   "BOBAEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.6,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "CFGEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.05,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "CHREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.61, "strategies": [] },
-  "ALCXEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.33, "strategies": [] },
-  "ANKREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.12, "strategies": [] },
-  "APEEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.13, "strategies": [] },
-  "ASTREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.23, "strategies": [] },
-  "AUCTIONEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.23, "strategies": [] },
-  "CLOUDEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.54, "strategies": [] },
+  "CHREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.61, "note": "" },
+  "ALCXEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.33,
+    "note": ""
+  },
+  "ANKREUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.12,
+    "note": ""
+  },
+  "APEEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.13, "note": "" },
+  "ASTREUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.23,
+    "note": ""
+  },
+  "AUCTIONEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.23,
+    "note": ""
+  },
+  "CLOUDEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.54,
+    "note": ""
+  },
   "SKYEUR": {
     "name": "Sky",
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.0,
-    "note": "In migration process from MKREUR (MKR Maker) - no prices data",
-    "strategies": []
+    "note": "In migration process from MKREUR (MKR Maker) - no prices data"
   },
-  "LRCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.14, "strategies": [] },
-  "MXCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.22, "strategies": [] },
-  "NMREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.82, "strategies": [] },
-  "OGNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.23, "strategies": [] },
-  "PDAEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.7, "strategies": [] },
-  "POWREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.11, "strategies": [] },
-  "SCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.31, "strategies": [] },
-  "SYNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.22, "strategies": [] },
-  "TEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.18, "strategies": [] },
+  "LRCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.14, "note": "" },
+  "MXCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.22, "note": "" },
+  "NMREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.82, "note": "" },
+  "OGNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.23, "note": "" },
+  "PDAEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.7, "note": "" },
+  "POWREUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.11,
+    "note": ""
+  },
+  "SCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.31, "note": "" },
+  "SYNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.22, "note": "" },
+  "TEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.18, "note": "" },
   "TRACEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.17,
-    "note": "Moving up down",
-    "strategies": []
+    "note": "Moving up down"
   },
-  "XBTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.05, "strategies": [] },
-  "REZEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 2.49, "strategies": [] },
-  "PAXGEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.15, "strategies": [] },
+  "XBTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.05, "note": "" },
+  "REZEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 2.49, "note": "" },
+  "PAXGEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.15,
+    "note": ""
+  },
   "TOKEEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.85,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "CVXEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.58,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "RARIEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 1.36,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "CHZEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.15, "strategies": [] },
-  "GHSTEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 1.58, "strategies": [] },
+  "CHZEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.15, "note": "" },
+  "GHSTEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 1.58,
+    "note": ""
+  },
   "NYMEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 0.32,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "MIREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.62, "strategies": [] },
+  "MIREUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.62 },
   "EULEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 1.62,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
   "GSTEUR": {
     "name": "Green Satoshi Token (SOL)",
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 4.21,
-    "note": "In migration process from Green Satoshi Token (SOL) to Green Satoshi Token (BSC)",
-    "strategies": []
+    "note": "In migration process from Green Satoshi Token (SOL) to Green Satoshi Token (BSC)"
   },
   "AIREUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 2.48,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "BITEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.88, "strategies": [] },
+  "BITEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.88 },
   "RBCEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 4.66,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "RADEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 2.44, "strategies": [] },
-  "NODLEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.3, "strategies": [] },
-  "PONDEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 4.21, "strategies": [] },
-  "PYUSDEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.63, "strategies": [] },
-  "XCNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 2.45, "strategies": [] },
-  "TBTCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.7, "strategies": [] },
+  "RADEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 2.44, "note": "" },
+  "NODLEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.3, "note": "" },
+  "PONDEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 4.21,
+    "note": ""
+  },
+  "PYUSDEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 0.63,
+    "note": ""
+  },
+  "XCNEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 2.45, "note": "" },
+  "TBTCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.7, "note": "" },
   "STRDEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 5.34,
-    "note": "Moving down",
-    "strategies": []
+    "note": "Moving down"
   },
-  "RPLEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 1.59, "strategies": [] },
+  "RPLEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 1.59 },
   "ROOKEUR": {
     "becameAvailable": "20xx-xx-01",
     "askBidSpreadPercentage": 2.58,
-    "note": "In migration process",
-    "strategies": []
+    "note": "In migration process"
   },
-  "FARMEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.15, "strategies": [] },
-  "FORTHEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 4.11, "strategies": [] },
-  "FISEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 1.91, "strategies": [] },
-  "BNCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.66, "strategies": [] }
+  "FARMEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 3.15,
+    "note": ""
+  },
+  "FORTHEUR": {
+    "becameAvailable": "20xx-xx-01",
+    "askBidSpreadPercentage": 4.11,
+    "note": ""
+  },
+  "FISEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 1.91, "note": "" },
+  "BNCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.66, "note": "" }
 }

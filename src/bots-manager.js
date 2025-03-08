@@ -67,9 +67,10 @@ class BotsManager {
     this.state.update(this.#bots);
   }
   static async runAll() {
+    const delayTime = Math.min(6000, (5 * 60 * 1000) / Object.keys(this.#bots).length);
     for (const pair in this.#bots) {
       if (!this.#bots[pair].startedOn) {
-        await delay(6000);
+        await delay(delayTime);
         this.#bots[pair].start();
       }
     }
