@@ -33,8 +33,7 @@ module.exports = class LocalState {
   // updateBot() {}
   // removeBot() {}
   getBotOrders(pair) {
-    const state = this.load();
-    return state[pair].orders;
+    return this.load()[pair].orders;
   }
   addBotOrder(pair, orderId) {
     const state = this.load();

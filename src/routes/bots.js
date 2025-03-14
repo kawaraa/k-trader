@@ -107,7 +107,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
 
   router.put("/bots/reset", authRequired, async (request, response) => {
     try {
-      BotsManager.restState(request.query.pair);
+      BotsManager.resetState(request.query.pair);
       response.json({ success: true });
     } catch (error) {
       response.status(500).json({ message: parseError(error) });

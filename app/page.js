@@ -75,7 +75,7 @@ export default function Home() {
   };
 
   const handleActions = async (action, pair) => {
-    if (action == "rest") restState(pair);
+    if (action == "rest") resetState(pair);
     else if (action == "edit") setBotToUpdate({ pair, info: bots[pair] });
     else if (action == "delete") remove(pair);
     else if (action == "sell-all") sellAllOrders(pair);
@@ -100,7 +100,7 @@ export default function Home() {
       .catch(catchErr);
   };
 
-  const restState = async (pair) => {
+  const resetState = async (pair) => {
     if (!confirm(`Are you sure want to rest the state of "${pair || "all"}" pair?`)) return;
     setLoading(true);
     try {
@@ -191,7 +191,7 @@ export default function Home() {
           <span className="flex-1 w-1/5 font-medium">Crypto</span>
           <span className="flex-1 w-1/5 font-medium">Capital</span>
           <p className="relative flex-1 w-1/5">
-            <button onClick={() => restState()} className={`${badgeCls} bg-emerald-400`}>
+            <button onClick={() => resetState()} className={`${badgeCls} bg-emerald-400`}>
               {parseInt(Object.keys(bots).reduce((acc, p) => acc + sum(bots[p].trades), 0))}
             </button>
             <span className="block font-medium">Earings</span>

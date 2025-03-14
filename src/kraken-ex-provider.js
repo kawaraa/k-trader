@@ -12,6 +12,7 @@ module.exports = class KrakenExchangeProvider {
     this.#apiSecret = credentials.privateKey;
     this.state = state;
   }
+
   // Helper function to generate API signature
   #getSignature(urlPath, data) {
     if (typeof data != "object") throw new Error("Invalid data type");
@@ -22,6 +23,7 @@ module.exports = class KrakenExchangeProvider {
     const signature = hmac.update(urlPath + hash_digest, "binary").digest("base64");
     return signature;
   }
+
   #checkError(res) {
     if (!res.error[0]) return res.result;
     else throw new Error(res.error.reduce((acc, err) => acc + "\n" + err, ""));
@@ -44,6 +46,7 @@ module.exports = class KrakenExchangeProvider {
       body,
     }).then(this.#checkError);
   }
+
   // Function to make calls to public API
   publicApi(path, options) {
     return request(`${this.#apiUrl}/0/public${path}`, options).then(this.#checkError);
@@ -57,6 +60,7 @@ module.exports = class KrakenExchangeProvider {
     if (pair == "all") return balance;
     return { eur: +balance.ZEUR, crypto: +(balance[curMap[key]] || balance[key] || 0) };
   }
+
   async currentPrices(pair) {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
     const { a, b, c } = data[Object.keys(data)[0]];
@@ -70,16 +74,19 @@ module.exports = class KrakenExchangeProvider {
     const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${since}`);
     return data[Object.keys(data)[0]].map((p) => p[4]);
   }
+
   async prices(pair, lastHours) {
     // const prices = await this.pricesData(pair, lastDays);
     // return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
     return this.state.getLocalPrices(pair, (lastHours * 60) / 5);
   }
+
   async createOrder(type, ordertype, pair, volume) {
     volume += "";
     const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
     return orderId;
   }
+
   async getOrders(pair, orderIds, times = 1) {
     if (!orderIds) orderIds = this.state.getBotOrders(pair).join(",");
     if (!orderIds) return [];
@@ -92,6 +99,7 @@ module.exports = class KrakenExchangeProvider {
     // await delay(1000);
     return this.getOrders(pair, orderIds, times + 1);
   }
+
   async getOpenClosedOrders(state) {
     if (state == "open") return (await this.#privateApi("OpenOrders")).open;
     else (await this.#privateApi("ClosedOrders")).closed;

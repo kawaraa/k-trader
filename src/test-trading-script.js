@@ -30,8 +30,8 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
 
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
-    const prices1 = getPrices(pair, interval / 5, "");
-    const prices2 = month2 && getPrices(pair, interval / 5, "bots/"); // bots/v-2/
+    const prices1 = getPrices(pair, interval / 5, month2 ? "" : "bots/v-1/");
+    const prices2 = month2 && getPrices(pair, interval / 5, "bots/"); // bots/v-1/
 
     for (const mode of modes) {
       let workers = [];
@@ -61,28 +61,29 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
         })
         .forEach((data) => {
           if (!data.result2) {
-            let { crypto, mode, range, priceChange, transactions, balance } = data.result1;
-            const netProfit = parseInt(balance - capital) / 2;
-            const remain = parseInt(crypto) / 2;
-            transactions = parseInt(transactions) / 2;
-            if (netProfit >= 5) {
+            let { crypto, mode, range, priceChange, transactions, balance, m } = data.result1;
+            const divider = m < 1 ? 1 : m;
+            const netProfit = parseInt((balance - capital) / divider);
+            const remain = parseInt(crypto / divider);
+            transactions = parseInt(transactions / divider);
+            if (netProfit > -10) {
               console.log(
-                `${mode} ${range} ${priceChange}% => €${netProfit} Remain: ${remain} Transactions: ${transactions}`
+                `${mode} ${range} ${priceChange}% => €${netProfit} Remain: ${remain} Transactions: ${transactions} months: ${m}`
               );
             }
           } else {
             const { result1, result2 } = data;
-            const profit1 = parseInt((result1.balance - capital) / 2);
-            const profit2 = parseInt(result2.balance - capital);
+            const profit1 = parseInt((result1.balance - capital) / result1.m);
+            const profit2 = parseInt((result2.balance - capital) / result2.m);
 
             result1.balance += profit2;
             result1.crypto += result2.crypto;
             result1.transactions += result2.transactions;
 
-            const remain = parseInt(result1.crypto / 3);
-            const transactions = parseInt(result1.transactions / 3);
-            const netProfit = parseInt((result1.balance - capital) / 3);
-            if (netProfit >= 5 && profit1 >= 0 && profit2 >= 0) {
+            const remain = parseInt(result1.crypto / result1.m);
+            const transactions = parseInt(result1.transactions / result1.m);
+            const netProfit = parseInt((result1.balance - capital) / result1.m);
+            if (profit1 >= 5 && profit2 >= 5) {
               console.log(
                 `${result1.mode} ${result1.range} ${result1.priceChange}% => €${netProfit} Remain: ${remain} Transactions: ${transactions} Gainer: ${profit1} Loser: ${profit2}`
               );
@@ -120,7 +121,7 @@ async function testStrategy(pair, prices, range, priceChange, mode, interval, sh
   if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
   const balance = +(await ex.balance()).eur.toFixed(2);
 
-  return { range, priceChange, balance, crypto, transactions, mode };
+  return { range, priceChange, balance, crypto, transactions, mode, m: +(prices.length / 8640).toFixed(1) };
 }
 
 function getPrices(pair, skip = 1, path = "") {

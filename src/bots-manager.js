@@ -56,7 +56,7 @@ class BotsManager {
   static async sellAllOrders(pair) {
     await this.#bots[pair].sellAll();
   }
-  static restState(pair) {
+  static resetState(pair) {
     if (this.#bots[pair]) {
       this.#bots[pair].trades = [];
       return;

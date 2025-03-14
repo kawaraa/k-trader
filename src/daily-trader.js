@@ -59,6 +59,7 @@ module.exports = class DailyTrader {
         else {
           this.range = 0.5;
           this.percentage = this.#percentageThreshold * 1.5;
+          this.previouslyDropped = false;
         }
       } else if (earnings > this.#percentageThreshold) {
         this.percentage = this.#percentageThreshold;
@@ -173,17 +174,17 @@ module.exports = class DailyTrader {
 
   async sellAll() {
     const cryptoBalance = (await this.ex.balance(this.#pair)).crypto;
+    let profit = 0;
     if (cryptoBalance > 0) {
       const orders = await this.ex.getOrders(this.#pair);
       const bidPrice = (await this.ex.currentPrices(this.#pair)).bidPrice;
       const orderId = await this.ex.createOrder("sell", "market", this.#pair, cryptoBalance);
       const c = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.4);
       const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
-      const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
-
-      this.dispatch("sell", { profit });
-      this.dispatch("log", `Sold all crypto asset with profit: ${profit}`);
+      profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
     }
+    this.dispatch("sell", { profit });
+    this.dispatch("log", `Sold all crypto asset with profit: ${profit}`);
   }
 
   stop() {
