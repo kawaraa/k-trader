@@ -50,24 +50,26 @@ module.exports = class DailyTrader {
 
   async start() {
     try {
-      // Safety check
+      // Safety check starts
       this.range = this.#strategyRange;
-      const earnings =
-        ((await this.ex.getState(this.#pair, "trades")).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
-      if (earnings < 0) {
-        if (!(earnings < -this.buySellOnThreshold)) this.range = this.#strategyRange / 2;
+      const trades = await this.ex.getState(this.#pair, "trades");
+      const earningsPercentage = (trades.reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
+
+      if (earningsPercentage > this.#percentageThreshold) {
+        this.percentage = this.#percentageThreshold;
+      } else if (earningsPercentage < 0) {
+        if (!(earningsPercentage < -this.buySellOnThreshold)) this.range = this.#strategyRange / 2;
         else {
           this.range = 0.5;
           this.percentage = this.#percentageThreshold * 1.5;
           this.previouslyDropped = false;
         }
-      } else if (earnings > this.#percentageThreshold) {
-        this.percentage = this.#percentageThreshold;
       }
 
       this.buySellOnThreshold = this.percentage / 4;
       this.profitThreshold = this.percentage / 1.2;
       this.lossThreshold = this.percentage;
+      // Safety check ends
 
       // Get data from Kraken
       const balance = await this.ex.balance(this.#pair); // Get current balance in EUR and the "pair"

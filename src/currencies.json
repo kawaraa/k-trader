@@ -641,7 +641,11 @@
     "askBidSpreadPercentage": 0.71,
     "note": "skip"
   },
-  "MPLEUR": { "becameAvailable": "2021-10-01", "askBidSpreadPercentage": 2.07, "note": "" },
+  "SYRUP": {
+    "becameAvailable": "2021-10-01",
+    "askBidSpreadPercentage": 2.07,
+    "note": "Migrated from 'MPLEUR'"
+  },
   "OSMOEUR": {
     "becameAvailable": "2021-06-01",
     "askBidSpreadPercentage": 2.14,

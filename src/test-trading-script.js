@@ -30,7 +30,7 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
 
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
-    const prices1 = getPrices(pair, interval / 5, month2 ? "" : "bots/v-1/");
+    const prices1 = getPrices(pair + "", interval / 5, month2 ? "" : "");
     const prices2 = month2 && getPrices(pair, interval / 5, "bots/"); // bots/v-1/
 
     for (const mode of modes) {
@@ -66,7 +66,7 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
             const netProfit = parseInt((balance - capital) / divider);
             const remain = parseInt(crypto / divider);
             transactions = parseInt(transactions / divider);
-            if (netProfit > -10) {
+            if ("netProfit > 10") {
               console.log(
                 `${mode} ${range} ${priceChange}% => €${netProfit} Remain: ${remain} Transactions: ${transactions} months: ${m}`
               );
