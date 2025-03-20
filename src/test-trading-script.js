@@ -1,18 +1,17 @@
 // test-trading-script is a price-history-analysis-script
 const { Worker, parentPort, workerData, isMainThread } = require("worker_threads");
-const { readFileSync } = require("fs");
+const { readFileSync, existsSync } = require("fs");
 const { extractNumbers } = require("./utilities.js");
 const { getSupportedModes } = require("./trend-analysis.js");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
 
-const month2 = process.argv[2] == "m2";
-const pair = process.argv[3]; // The currency pair E.g. ETHEUR
-const modes = [process.argv[4] || "all"];
-const range = extractNumbers(process.argv[5])[0]; // In days, min value 0.25 day which equivalent to 6 hours
-const priceChange = extractNumbers(process.argv[6])[0]; // Price Percentage Threshold, min value 1.25
-const interval = +process.argv[7] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
-const showLogs = process.argv[8] == "log";
+const pair = process.argv[2]; // The currency pair E.g. ETHEUR
+const modes = [process.argv[3] || "all"];
+const range = extractNumbers(process.argv[4])[0]; // In days, min value 0.25 day which equivalent to 6 hours
+const priceChange = extractNumbers(process.argv[5])[0]; // Price Percentage Threshold, min value 1.25
+const interval = +process.argv[6] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
+const showLogs = process.argv[7] == "log";
 const capital = 100; // Amount in EUR which is the total money that can be used for trading
 
 const strategyModes = getSupportedModes();
@@ -23,25 +22,33 @@ let maxPriceChange = 10;
 if (range) minStrategyRange = maxStrategyRange = range;
 if (priceChange) minPercentagePriceChange = maxPriceChange = priceChange;
 
-async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, interval, month2) {
+async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, interval) {
   try {
     if ((modes || modes[0]) == "all") modes = strategyModes;
     else if (!strategyModes.includes(modes[0])) throw new Error(`"${modes[0]}" is Invalid mode!`);
 
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
-    const prices1 = getPrices(pair + "", interval / 5, month2 ? "" : "");
-    const prices2 = month2 && getPrices(pair, interval / 5, "bots/"); // bots/v-1/
+    const prices1 = getPrices(pair, interval / 5);
+    const prices2 = getPrices(`bots/${pair}`, interval / 5);
+    const prices3 = getPrices(`bots/${pair}-1`, interval / 5);
+    const prices4 = getPrices(`bots/${pair}-2`, interval / 5);
 
     for (const mode of modes) {
       let workers = [];
       for (let range = minStrategyRange; range <= maxStrategyRange; range += range >= 1 ? 1 : 0.5) {
         for (let priceChange = minPriceChange; priceChange <= maxPriceChange; priceChange += 0.5) {
-          const cb = async (data = {}) => {
+          const cb = async (data = []) => {
             // workers.push(runWorker([pair, prices, range, priceChange, mode, interval, showLogs]));
-            data.result1 = await testStrategy(pair, prices1, range, priceChange, mode, interval, showLogs);
-            if (prices2) {
-              data.result2 = await testStrategy(pair, prices2, range, priceChange, mode, interval, showLogs);
+            data.push(await testStrategy(pair, prices1, range, priceChange, mode, interval, showLogs));
+            if (prices2[0]) {
+              data.push(await testStrategy(pair, prices2, range, priceChange, mode, interval, showLogs));
+            }
+            if (prices3[0]) {
+              data.push(await testStrategy(pair, prices3, range, priceChange, mode, interval, showLogs));
+            }
+            if (prices4[0]) {
+              data.push(await testStrategy(pair, prices4, range, priceChange, mode, interval, showLogs));
             }
             return data;
           };
@@ -54,40 +61,59 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
 
       (await Promise.all(workers))
         .sort((a, b) => {
-          if (!a.result2) return b.result1.balance - a.result1.balance;
-          else {
-            return b.result1.balance + b.result2.balance - (a.result1.balance + a.result2.balance);
-          }
+          const aSum = a.reduce((t, res) => t + res.balance, 0);
+          const bSum = b.reduce((t, res) => t + res.balance, 0);
+          return bSum - aSum;
         })
         .forEach((data) => {
-          if (!data.result2) {
-            let { crypto, mode, range, priceChange, transactions, balance, m } = data.result1;
-            const divider = m < 1 ? 1 : m;
-            const netProfit = parseInt((balance - capital) / divider);
-            const remain = parseInt(crypto / divider);
-            transactions = parseInt(transactions / divider);
-            if ("netProfit > 10") {
-              console.log(
-                `${mode} ${range} ${priceChange}% => €${netProfit} Remain: ${remain} Transactions: ${transactions} months: ${m}`
-              );
-            }
-          } else {
-            const { result1, result2 } = data;
-            const profit1 = parseInt((result1.balance - capital) / result1.m);
-            const profit2 = parseInt((result2.balance - capital) / result2.m);
+          const [result1, result2, result3, result4] = data;
+          let log = `${result1.mode} ${result1.range} ${result1.priceChange}% =>`;
+          let otherLog = "";
 
-            result1.balance += profit2;
-            result1.crypto += result2.crypto;
-            result1.transactions += result2.transactions;
+          const profit1 = result1.balance - capital;
+          const remain1 = result1.crypto;
+          const transactions1 = result1.transactions;
 
-            const remain = parseInt(result1.crypto / result1.m);
-            const transactions = parseInt(result1.transactions / result1.m);
-            const netProfit = parseInt((result1.balance - capital) / result1.m);
-            if (profit1 >= 5 && profit2 >= 5) {
-              console.log(
-                `${result1.mode} ${result1.range} ${result1.priceChange}% => €${netProfit} Remain: ${remain} Transactions: ${transactions} Gainer: ${profit1} Loser: ${profit2}`
-              );
-            }
+          let totalProfit = profit1;
+          let totalRemain = remain1;
+          let totalTransactions = transactions1;
+          let totalLong = result1.m;
+
+          otherLog += ` M1:(${parseInt(profit1 / result1.m)} X ${result1.m})`;
+
+          if (result2) {
+            const profit = result2.balance - capital;
+            totalProfit += profit;
+            totalRemain += result2.crypto;
+            totalTransactions += result2.transactions;
+            totalLong += result2.m;
+            otherLog += ` M2:(${parseInt(profit / (result2.m < 1 ? 1 : result2.m))} X ${result2.m})`;
+          }
+          if (result3) {
+            const profit = result3.balance - capital;
+            totalProfit += profit;
+            totalRemain += result3.crypto;
+            totalTransactions += result3.transactions;
+            totalLong += result3.m;
+            otherLog += ` M3:(${parseInt(profit / (result3.m < 1 ? 1 : result3.m))} X ${result3.m})`;
+          }
+          if (result4) {
+            const profit = result4.balance - capital;
+            totalProfit += profit;
+            totalRemain += result4.crypto;
+            totalTransactions += result4.transactions;
+            totalLong += result4.m;
+            otherLog += ` M4:(${parseInt(profit / (result4.m < 1 ? 1 : result4.m))} X ${result4.m})`;
+          }
+
+          totalProfit = parseInt(totalProfit / totalLong);
+          totalRemain = parseInt(totalRemain / totalLong);
+          totalTransactions = parseInt(totalTransactions / totalLong);
+
+          if (totalProfit >= 5) {
+            console.log(
+              `${log} €${totalProfit} Remain: ${totalRemain} Transactions: ${totalTransactions} ${otherLog}`
+            );
           }
         });
     }
@@ -124,12 +150,10 @@ async function testStrategy(pair, prices, range, priceChange, mode, interval, sh
   return { range, priceChange, balance, crypto, transactions, mode, m: +(prices.length / 8640).toFixed(1) };
 }
 
-function getPrices(pair, skip = 1, path = "") {
-  return JSON.parse(readFileSync(`${process.cwd()}/database/prices/${path + pair}.json`)).filter(
-    (p, index) => {
-      return index % skip === 0;
-    }
-  );
+function getPrices(pair, skip = 1) {
+  const path = `${process.cwd()}/database/prices/${pair}.json`;
+  if (!existsSync(path)) return [];
+  return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
 
   // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
   // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
@@ -154,7 +178,7 @@ function runWorker(workerData) {
 
 // Run the runTradingTest function if the script is executed directly
 if (require.main === module && isMainThread) {
-  runTradingTest(pair, minStrategyRange, minPercentagePriceChange, modes, interval, month2);
+  runTradingTest(pair, minStrategyRange, minPercentagePriceChange, modes, interval);
 } else if (!isMainThread && workerData) {
   const [p, prices, minStrategyRange, minPercentPriceChange, mode, interval] = workerData;
   testStrategy(p, prices, minStrategyRange, minPercentPriceChange, mode, interval).then((r) =>

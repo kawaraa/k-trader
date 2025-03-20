@@ -115,19 +115,28 @@ function findHighLowPriceChanges(prices, currentPrice) {
   return priceChanges;
 }
 
-function detectPriceShape(prices) {
-  const result = { shape: "", value: null };
+function detectPriceShape(prices, percentage) {
+  const result = { shape: "unknown", value: null };
+  const third = parseInt(prices.length / 3);
+  const lastPrices = prices[prices.length - 1];
   if (prices.length < 3) return null; // Not enough points for a shape
 
+  const inTheMiddle = (index) => index >= third - 1 && index <= third * 2 - 1;
+
   const minPrice = (result.value = Math.min(...prices));
-  const minIndex = prices.indexOf(minPrice);
+  const VShape =
+    calcPercentageDifference(prices[0], minPrice) <= -percentage &&
+    calcPercentageDifference(minPrice, lastPrices) >= percentage;
   result.shape = "V"; // Check for "V" shape
-  if (minIndex > 0 && minIndex < prices.length - 1) return result;
+
+  if (inTheMiddle(prices.indexOf(minPrice)) && VShape) return result;
 
   const maxPrice = (result.value = Math.max(...prices));
-  const maxIndex = prices.indexOf(maxPrice);
+  const AShape =
+    calcPercentageDifference(prices[0], maxPrice) >= percentage &&
+    calcPercentageDifference(maxPrice, lastPrices) <= -percentage;
   result.shape = "A"; // Check for "A" shape
-  if (maxIndex > 0 && maxIndex < prices.length - 1) return result;
+  if (inTheMiddle(prices.indexOf(maxPrice)) && AShape) return result;
 
   return result; // No clear "V" or "A" shape
 }
@@ -165,7 +174,7 @@ function isOlderThen(timestamp, hours) {
 }
 
 function getSupportedModes() {
-  return ["on-decrease", "on-drop"];
+  return ["on-decrease", "on-drop", "on-v-shape"];
 }
 
 // Methods for testing only:

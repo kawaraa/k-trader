@@ -18,7 +18,12 @@
 4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
 */
 
-const { calcPercentageDifference, calculateFee, calcAveragePrice } = require("./trend-analysis.js");
+const {
+  calcPercentageDifference,
+  calculateFee,
+  calcAveragePrice,
+  detectPriceShape,
+} = require("./trend-analysis.js");
 
 // Smart trader
 module.exports = class DailyTrader {
@@ -79,6 +84,7 @@ module.exports = class DailyTrader {
 
       const enoughPricesData = prices.length >= (this.range * 60) / this.timeInterval;
       const bidPrices = prices.map((p) => p.bidPrice);
+      const priceShape = detectPriceShape(bidPrices, this.percentage).shape;
       const highestBidPr = bidPrices.sort().at(-1);
       const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
 
@@ -90,7 +96,8 @@ module.exports = class DailyTrader {
 
       const shouldTrade = enoughPricesData && askBidSpreadPercentage <= this.averageAskBidSpread;
       const dropped = calcPercentageDifference(highestBidPr, askPrice) < -this.percentage;
-      const priceMove = this.#findPriceMovement(prices, this.buySellOnThreshold);
+      const offset = this.mode.includes("on-drop") ? 0 : prices.length / 2;
+      const priceMove = this.#findPriceMovement(prices, this.buySellOnThreshold, offset);
       const increasing = priceMove == "increasing";
       const dropping = priceMove == "dropping";
       const orderPriceChange = calcPercentageDifference(orders[0]?.price, bidPrice);
@@ -105,7 +112,7 @@ module.exports = class DailyTrader {
       if (this.mode.includes("on-drop")) shouldBuy = dropped && increasing;
       // 2. On price decrease mode "on-decrease"
       else if (this.mode.includes("on-decrease")) shouldBuy = this.previouslyDropped && increasing;
-      // else if (this.mode.includes("on-increase")) shouldBuy = increasing;
+      else if (this.mode.includes("on-v-shape")) shouldBuy = priceShape == "V";
 
       const log = `Should buy: ${shouldBuy} - Should trade: ${shouldTrade}`;
       this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} - Ask: ${askPrice} - Bid: ${bidPrice}`);
@@ -143,7 +150,6 @@ module.exports = class DailyTrader {
 
         if (recoverLoss) orderType = "recoverLoss";
         else if (stopLossLimit) orderType = "stopLossLimit";
-        // Backlog order: If older then stopLossPeriod or when the price drop percentageThreshold, Sell accumulated orders that has been more than xxx days if the current price is higher then highest price in the lest xxx hours.
 
         if (!(goingDown || recoverLoss || stopLossLimit)) order = null;
         else this.dispatch("log", `${orderType} order will be executed`);
@@ -197,12 +203,12 @@ module.exports = class DailyTrader {
     if (this.listener) this.listener(this.#pair + "", event, info);
   }
 
-  #findPriceMovement(prices, minPercent) {
+  #findPriceMovement(prices, minPercent, offset = 0) {
     const length = prices.length - 2;
     let latest = prices.at(-2);
     let lowest = latest;
 
-    for (let i = length; i > 0; i--) {
+    for (let i = length; i > offset; i--) {
       const previous = prices[i + 1];
       const current = prices[i];
       if (current.askPrice <= previous.askPrice) lowest = current;
