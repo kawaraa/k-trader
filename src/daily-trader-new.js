@@ -37,14 +37,13 @@ module.exports = class DailyTrader {
     this.#capital = capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
     this.#strategyRange = Math.max(+strategyRange || 0, 0.5); // Range in hours "0.5 = have an hour"
     this.#percentageThreshold = Math.max(+priceChange || 0, 1.5); // Percentage Change is the price Percentage Threshold
-    this.range = this.#strategyRange;
-    this.percentage = this.#percentageThreshold;
     this.mode = mode;
     this.timeInterval = +timeInterval;
     this.period = +timeInterval; // this.period is deleted in only test trading
     this.listener = null;
-    this.buySellOnThreshold = this.#percentageThreshold / 4;
+    this.buySellOnThreshold = this.#percentageThreshold / 3;
     this.profitThreshold = this.#percentageThreshold / 1.2;
+    this.range = this.#strategyRange;
 
     this.previouslyDropped = false;
     this.previousProfit = 0;
@@ -81,11 +80,9 @@ module.exports = class DailyTrader {
       }
 
       const shouldTrade = enoughPricesData && askBidSpreadPercentage <= this.averageAskBidSpread;
-      const dropped = calcPercentageDifference(highestBidPr, askPrice) < -this.percentage;
+      const dropped = calcPercentageDifference(highestBidPr, askPrice) < -this.#percentageThreshold;
       const offset = this.mode.includes("on-drop") ? 0 : prices.length / 2;
       const priceMove = this.#findPriceMovement(prices, this.buySellOnThreshold, offset);
-      const increasing = priceMove == "increasing";
-      const dropping = priceMove == "dropping";
       const orderPriceChange = calcPercentageDifference(orders[0]?.price, bidPrice);
       const loss = this.previousProfit - orderPriceChange;
       let shouldBuy = false;
@@ -94,10 +91,9 @@ module.exports = class DailyTrader {
       if (orderPriceChange > this.previousProfit) this.previousProfit = orderPriceChange;
       if (orderPriceChange < this.previousLoss) this.previousLoss = orderPriceChange;
 
-      // 1. On price drop mode "on-drop"
-      if (this.mode.includes("on-drop")) shouldBuy = dropped && increasing;
-      // 2. On price decrease mode "on-decrease"
-      else if (this.mode.includes("on-decrease")) shouldBuy = this.previouslyDropped && increasing;
+      if (this.mode.includes("on-drop")) shouldBuy = dropped && priceMove == "increasing";
+      else if (this.mode.includes("on-decrease"))
+        shouldBuy = this.previouslyDropped && priceMove == "increasing";
       else if (this.mode.includes("on-v-shape")) shouldBuy = priceShape == "V";
 
       const log = `Should buy: ${shouldBuy} - Should trade: ${shouldTrade}`;
@@ -123,10 +119,9 @@ module.exports = class DailyTrader {
         // Sell
       } else if (shouldTrade && balance.crypto > 0 && orders[0]) {
         let order = orders[0];
-
-        const goingDown =
-          this.previousProfit > this.profitThreshold && (dropping || loss > this.buySellOnThreshold);
-        const stopLossLimit = loss > this.#percentageThreshold;
+        const goingDown = this.previousProfit > this.buySellOnThreshold && loss > this.buySellOnThreshold;
+        const stopLossLimit =
+          orderPriceChange <= -3 || (this.previousProfit > this.buySellOnThreshold && orderPriceChange <= 0);
 
         if (!(goingDown || stopLossLimit)) order = null;
         else this.dispatch("log", `${stopLossLimit ? "stopLossLimit" : "profitable"} order will be executed`);

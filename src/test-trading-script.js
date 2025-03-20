@@ -79,7 +79,7 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
           let totalTransactions = transactions1;
           let totalLong = result1.m;
 
-          otherLog += ` M1:(${parseInt(profit1 / result1.m)} X ${result1.m})`;
+          otherLog += ` M1:(${parseInt(profit1 / (result1.m < 1 ? 1 : result1.m))} X ${result1.m})`;
 
           if (result2) {
             const profit = result2.balance - capital;

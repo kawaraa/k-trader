@@ -43,8 +43,9 @@ module.exports = class DailyTrader {
     this.timeInterval = +timeInterval;
     this.period = +timeInterval; // this.period is deleted in only test trading
     this.listener = null;
-    this.buySellOnThreshold = this.#percentageThreshold / 4;
-    this.profitThreshold = this.#percentageThreshold / 1.2;
+    this.buySellOnThreshold = this.percentage / 4;
+    this.profitThreshold = this.percentage / 1.2;
+    this.lossThreshold = this.percentage;
 
     this.previouslyDropped = false;
     this.previousProfit = 0;
@@ -57,9 +58,22 @@ module.exports = class DailyTrader {
       // Safety check starts
       this.range = this.#strategyRange;
       const trades = await this.ex.getState(this.#pair, "trades");
-      const earningsPercentage = (trades.slice(-3).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
-      if (earningsPercentage < -(this.#percentageThreshold / 2)) this.range = this.#strategyRange / 2;
-      if (earningsPercentage < -this.#percentageThreshold) this.range = 1;
+      const earningsPercentage = (trades.reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
+
+      if (earningsPercentage > this.#percentageThreshold) {
+        this.percentage = this.#percentageThreshold;
+      } else if (earningsPercentage < 0) {
+        if (!(earningsPercentage < -this.buySellOnThreshold)) this.range = this.#strategyRange / 2;
+        else {
+          this.range = 0.5;
+          this.percentage = this.#percentageThreshold * 1.5;
+          this.previouslyDropped = false;
+        }
+      }
+
+      this.buySellOnThreshold = this.percentage / 4;
+      this.profitThreshold = this.percentage / 1.2;
+      this.lossThreshold = this.percentage;
       // Safety check ends
 
       // Get data from Kraken
@@ -70,7 +84,7 @@ module.exports = class DailyTrader {
 
       const enoughPricesData = prices.length >= (this.range * 60) / this.timeInterval;
       const bidPrices = prices.map((p) => p.bidPrice);
-      const priceShape = detectPriceShape(bidPrices, this.buySellOnThreshold).shape;
+      const priceShape = detectPriceShape(bidPrices, this.percentage).shape;
       const highestBidPr = bidPrices.sort().at(-1);
       const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
 
@@ -122,14 +136,23 @@ module.exports = class DailyTrader {
 
         // Sell
       } else if (shouldTrade && balance.crypto > 0 && orders[0]) {
+        let orderType = "profitable";
         let order = orders[0];
 
         const goingDown =
-          this.previousProfit > this.profitThreshold && (dropping || loss > this.buySellOnThreshold);
-        const stopLossLimit = loss > this.#percentageThreshold;
+          (orderPriceChange >= this.profitThreshold && dropping) ||
+          (this.previousProfit > this.profitThreshold && loss > this.buySellOnThreshold);
 
-        if (!(goingDown || stopLossLimit)) order = null;
-        else this.dispatch("log", `${stopLossLimit ? "stopLossLimit" : "profitable"} order will be executed`);
+        const recoverLoss =
+          this.previousLoss <= -(this.percentage / 1.2) && orderPriceChange >= 0 && dropping;
+
+        const stopLossLimit = loss > this.lossThreshold;
+
+        if (recoverLoss) orderType = "recoverLoss";
+        else if (stopLossLimit) orderType = "stopLossLimit";
+
+        if (!(goingDown || recoverLoss || stopLossLimit)) order = null;
+        else this.dispatch("log", `${orderType} order will be executed`);
 
         if (order) {
           await this.#sell(order, balance.crypto, bidPrice);
