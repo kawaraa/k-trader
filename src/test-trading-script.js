@@ -31,8 +31,7 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
 
     const prices1 = getPrices(pair, interval / 5);
     const prices2 = getPrices(`bots/${pair}`, interval / 5);
-    const prices3 = getPrices(`bots/${pair}-1`, interval / 5);
-    const prices4 = getPrices(`bots/${pair}-2`, interval / 5);
+    // const prices3 = getPrices(`bots/${pair}-1`, interval / 5);
 
     for (const mode of modes) {
       let workers = [];
@@ -44,12 +43,10 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
             if (prices2[0]) {
               data.push(await testStrategy(pair, prices2, range, priceChange, mode, interval, showLogs));
             }
-            if (prices3[0]) {
-              data.push(await testStrategy(pair, prices3, range, priceChange, mode, interval, showLogs));
-            }
-            if (prices4[0]) {
-              data.push(await testStrategy(pair, prices4, range, priceChange, mode, interval, showLogs));
-            }
+            // if (prices3[0]) {
+            //   data.push(await testStrategy(pair, prices3, range, priceChange, mode, interval, showLogs));
+            // }
+
             return data;
           };
 
@@ -72,48 +69,36 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
 
           const profit1 = result1.balance - capital;
           const remain1 = result1.crypto;
-          const transactions1 = result1.transactions;
 
           let totalProfit = profit1;
           let totalRemain = remain1;
-          let totalTransactions = transactions1;
           let totalLong = result1.m;
 
-          otherLog += ` M1:(${parseInt(profit1 / (result1.m < 1 ? 1 : result1.m))} X ${result1.m})`;
+          otherLog += ` (${parseInt(profit1)}) =x= [${result1.m}*${result1.transactions}]`;
+          if (profit1 < 5) return;
 
           if (result2) {
             const profit = result2.balance - capital;
+            if ((result2.m <= 0.5 && profit < -5) || (result2.m > 0.5 && profit < 5)) return;
             totalProfit += profit;
             totalRemain += result2.crypto;
-            totalTransactions += result2.transactions;
             totalLong += result2.m;
-            otherLog += ` M2:(${parseInt(profit / (result2.m < 1 ? 1 : result2.m))} X ${result2.m})`;
+            otherLog += `  +  (${parseInt(profit)}) =x= [${result2.m}*${result2.transactions}]`;
           }
           if (result3) {
             const profit = result3.balance - capital;
+            if ((result2.m <= 0.5 && profit < -5) || (result2.m > 0.5 && profit < 5)) return;
             totalProfit += profit;
             totalRemain += result3.crypto;
-            totalTransactions += result3.transactions;
             totalLong += result3.m;
-            otherLog += ` M3:(${parseInt(profit / (result3.m < 1 ? 1 : result3.m))} X ${result3.m})`;
-          }
-          if (result4) {
-            const profit = result4.balance - capital;
-            totalProfit += profit;
-            totalRemain += result4.crypto;
-            totalTransactions += result4.transactions;
-            totalLong += result4.m;
-            otherLog += ` M4:(${parseInt(profit / (result4.m < 1 ? 1 : result4.m))} X ${result4.m})`;
+            otherLog += `  +  (${parseInt(profit)}) =x= [${result3.m}*${result3.transactions}]`;
           }
 
           totalProfit = parseInt(totalProfit / totalLong);
           totalRemain = parseInt(totalRemain / totalLong);
-          totalTransactions = parseInt(totalTransactions / totalLong);
 
           if (totalProfit >= 5) {
-            console.log(
-              `${log} €${totalProfit} Remain: ${totalRemain} Transactions: ${totalTransactions} ${otherLog}`
-            );
+            console.log(`${log} €${totalProfit} Remain: ${totalRemain} ${otherLog}`);
           }
         });
     }

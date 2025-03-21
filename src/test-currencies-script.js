@@ -9,7 +9,8 @@ const modes = [process.argv[2] || "all"];
 const minStrategyRange = +process.argv[3] || 0.5; // In days, min value 0.25 day which equivalent to 6 hours
 const minPercentPriceChange = +process.argv[4] || 1.5; // Price Percentage Threshold, min value 1.25
 const interval = +process.argv[5] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
-let pairs = Object.keys(currencies).filter((p) => !strIncludes(currencies[p].note, "loser"));
+let pairs = Object.keys(currencies);
+// .filter((p) => !/stable|no price/gim.test(currencies[p].note));
 // stable,no price -  /stable|no price/gim  -  /loser.*g1/gim
 
 (async () => {
