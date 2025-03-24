@@ -17,8 +17,9 @@ module.exports = class TestExchangeProvider {
   async currentPrices() {
     const price = this.allPrices[this.currentPriceIndex] || this.allPrices[this.allPrices.length - 1];
     this.currentPriceIndex += 1;
-
-    this.orders.forEach((o) => (o.createdAt -= this.interval * 60000));
+    const intervalTime = this.interval * 60000;
+    this.strategyTimestamp += this.interval;
+    this.orders.forEach((o) => (o.createdAt -= intervalTime));
     return price;
   }
   async pricesData(pair, period) {

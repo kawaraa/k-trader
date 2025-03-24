@@ -174,7 +174,7 @@ function isOlderThen(timestamp, hours) {
 }
 
 function getSupportedModes() {
-  return ["on-decrease", "on-drop", "on-v-shape"];
+  return ["ON-DECREASE", "ON-DROP", "ON-V-SHAPE"];
 }
 
 // Methods for testing only:

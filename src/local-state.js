@@ -59,7 +59,12 @@ module.exports = class LocalState {
     data.push(prices);
     return writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
   }
-  get(pair, key) {
+  get(pair) {
     return this.getBots(pair)[key];
+  }
+  update(pair, key, data) {
+    const state = this.getBots(pair);
+    state[pair][key] = data;
+    this.update(state);
   }
 };

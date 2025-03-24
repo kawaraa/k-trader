@@ -10,7 +10,6 @@ export default function BotItem({ botInfo, onAction }) {
   const status = botInfo.startedOn ? "off" : "on";
   const btnCls = "text-white rounded-md py-1 px-2 bg-amber-500"; // bg-pc
   const age = ((Date.now() - Date.parse(botInfo.createTime)) / (60000 * 60 * 24)).toFixed(1);
-  const [mode, range, pricePercent] = botInfo.strategy?.split(":");
 
   return (
     <li className={`mb-3 p-2 overflow-y-auto no-srl-bar card rounded-md ${borderCls}`}>
@@ -54,18 +53,24 @@ export default function BotItem({ botInfo, onAction }) {
       <div className={`flex flex-col overflow-hidden px-2 transition-all duration-300 ease-in-out ${cls}`}>
         <div className="flex flex-col mb-5">
           <p className="mb-1">
-            <strong>Strategy</strong>:<span>{mode}</span> | <span>{range}HRS</span> |{" "}
-            <span>{pricePercent}%</span>
+            <strong>Strategy Mode</strong>: <span>{botInfo.mode}</span>
           </p>
+          <p className="mb-1">
+            <strong>Strategy Range</strong>: <span>{botInfo.strategyRange} Hours</span>
+          </p>
+          <p className="">
+            <strong>Price Change</strong>: <span>{botInfo.priceChange}%</span>
+          </p>
+          <hr />
           <p className="mt-1">
             <strong>Created</strong>: <span>{age} days ago</span>
           </p>
-          {/* <p className="mt-1">
+          <p className="mt-1">
             <strong>Balance</strong>:{" "}
             <span>
               {botInfo.balance} {botInfo.pair.replace("EUR", "")}
             </span>
-          </p> */}
+          </p>
           <p className="">
             <strong>Trades</strong>: <span>{botInfo.trades.length}</span>
           </p>

@@ -23,19 +23,18 @@ export default function Home() {
   const close = () => setShowAddBotForm(false) + setBotToUpdate(null);
   const catchErr = (er) => alert(er.message || er.error || er);
   const botsPairs = Object.keys(bots);
-  const stringKeys = ["pair", "mode"];
 
   const sortedBots = orderbyTime
     ? botsPairs.toSorted((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
     : botsPairs.toSorted((p1, p2) => sum(bots[p2].trades) - sum(bots[p1].trades));
 
-  const add = async (e) => {
+  const sendBotData = async (e) => {
     e.preventDefault();
     setLoading(true);
     const data = {};
     let method = "POST";
     try {
-      new FormData(e.target).forEach((v, k) => (data[k] = stringKeys.includes(k) ? v : +v));
+      new FormData(e.target).forEach((v, k) => (data[k] = ["pair", "strategy"].includes(k) ? v : +v));
       if (bots[data.pair]) method = "PUT";
       const newBot = await request("/api/bots", {
         headers: { "Content-Type": "application/json" },
@@ -217,7 +216,7 @@ export default function Home() {
         loading={loading}
         onCancel={close}
       >
-        <AddBotFrom bot={botToUpdate} onSubmit={add} />
+        <AddBotFrom bot={botToUpdate} onSubmit={sendBotData} />
       </Modal>
 
       <button

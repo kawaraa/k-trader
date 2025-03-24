@@ -1,10 +1,9 @@
 "use client";
 import { btnCls, inputCls } from "./tailwind-classes";
 const cryptocurrencies = require("../../src/currencies.json");
-const strategyModes = require("../../src/trend-analysis").getSupportedModes();
 
 export default function AddBotFrom({ bot, onSubmit }) {
-  const mode = bot?.info?.mode || "";
+  // const strategy = bot?.info?.strategy || "";
 
   return (
     <form onSubmit={onSubmit} className="w-full max-w-md mx-auto space-y-2 flex flex-col">
@@ -16,41 +15,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
           </option>
         ))}
       </select>
-      <input
-        name="capital"
-        type="number"
-        placeholder="Investment Capital amount in EUR"
-        step="5"
-        defaultValue={bot?.info?.capital}
-        required
-        className={inputCls}
-      />
-      <select name="mode" defaultValue={mode} required className={inputCls}>
-        <option value="">Trading mode</option>
-        {strategyModes.map((mode, i) => (
-          <option value={mode} key={i}>
-            {mode}
-          </option>
-        ))}
-      </select>
-      <input
-        name="strategyRange"
-        type="number"
-        step="0.5"
-        placeholder="Strategy range in hours"
-        defaultValue={bot?.info?.strategyRange}
-        required
-        className={inputCls}
-      />
-      <input
-        name="priceChange"
-        type="number"
-        step="0.5"
-        placeholder="Price percentage change"
-        defaultValue={bot?.info?.priceChange}
-        required
-        className={inputCls}
-      />
+
       <input
         name="timeInterval"
         type="number"
@@ -60,6 +25,24 @@ export default function AddBotFrom({ bot, onSubmit }) {
         required
         className={inputCls}
       />
+
+      <input
+        name="capital"
+        type="number"
+        placeholder="Investment Capital amount in EUR"
+        step="5"
+        defaultValue={bot?.info?.capital}
+        required
+        className={inputCls}
+      />
+
+      {/* <input
+        name="strategy"
+        type="text"
+        placeholder="Optional: Strategy Settings E.g. on-decrease-12-5"
+        defaultValue={strategy}
+        className={inputCls}
+      /> */}
 
       <button type="submit" className={`${btnCls} !mt-5`}>
         Save

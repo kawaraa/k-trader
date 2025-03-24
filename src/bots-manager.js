@@ -102,6 +102,9 @@ class BotsManager {
       this.#bots[pair].orders = !info.id ? [] : this.#bots[pair].orders.filter((id) => id != info.id);
     } else if (event == "balance") {
       this.#bots[pair].balance = info;
+    } else if (event == "strategy") {
+      this.#bots[pair].strategy = info.strategy;
+      this.#bots[pair].strategyTimestamp = 0;
     }
 
     this.state.update(this.get());
@@ -122,12 +125,11 @@ class BotsManager {
 class Bot {
   #trader;
   constructor(info, trader) {
-    this.capital = +this.#parseValue(info.capital);
-    this.strategyRange = +this.#parseValue(info.strategyRange);
-    this.priceChange = +this.#parseValue(info.priceChange);
-    this.mode = this.#parseValue(info.mode);
     this.timeInterval = +this.#parseValue(info.timeInterval);
-    this.balance = +(this.#parseValue(info.balance) || 0);
+    this.capital = +this.#parseValue(info.capital);
+    this.strategy = this.#parseValue(info.strategy);
+    this.strategyTimestamp = +this.#parseValue(info.strategyTimestamp) || 0;
+    this.balance = +this.#parseValue(info.balance) || 0;
     this.trades = this.#parseValue(info.trades) || [];
     this.orders = this.#parseValue(info.orders) || [];
     this.createTime = this.#parseValue(info.createTime);
