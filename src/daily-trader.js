@@ -56,8 +56,8 @@ class DailyTrader {
     this.previousProfit = 0;
     this.previousLoss = 0;
     this.averageAskBidSpread;
-    this.analysisPeriod = 3 * 24;
-    // this.lastTrade = 0;
+    this.analysisPeriod = 2 * 24;
+    this.lastTrade = 0;
   }
 
   async start() {
@@ -70,14 +70,20 @@ class DailyTrader {
       let prices = await this.ex.prices(this.#pair, period); // For the last xxx days
       const orders = await this.ex.getOrders(this.#pair);
       const enoughPricesData = prices.length >= (period * 60) / this.timeInterval; // 3 days
+      // const lastProfit = (trades.slice(-2).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
+      // const thereIsLoss = lastProfit < -this.halfPercent && this.strategyTimestamp / (60 * 24) > 1;
+      const trades = await this.ex.getState(this.#pair, "trades");
+      const trade1 = (trades.slice(-1) / this.#capital) * 100;
+      const noSpike =
+        trade1 - this.#pricePercentChange < this.halfPercent || !this.lastTrade || this.lastTrade > 60; // 1 hrs
       // const lowestBidPrice = prices.slice(-parseInt(prices.length / 3)).sort().at(0)?.bidPrice;
 
       this.strategyTimestamp = await this.ex.getState(this.#pair, "strategyTimestamp");
       const thereIsStrategy = this.#strategyRange && this.#pricePercentChange;
 
       if (!this.testMode) {
-        const lastProfit = ((await this.ex.getState(this.#pair, "trades")).at(-1) / this.#capital) * 100;
-        const thereIsLoss = lastProfit < -this.halfPercent && this.strategyTimestamp / (60 * 24) > 1;
+        const thereIsLoss = trade1 < -this.halfPercent && this.strategyTimestamp / (60 * 24) > 1;
+        // const thereIsLoss = trade1 <= -1 && trade2 <= -1 && this.strategyTimestamp / (60 * 24) > 1;
 
         if (!enoughPricesData) {
           this.dispatch("strategy", { strategy: "", strategyTimestamp: 0 });
@@ -135,21 +141,20 @@ class DailyTrader {
         else if (this.mode.includes("ON-DECREASE")) shouldBuy = this.previouslyDropped && increasing;
         else if (this.mode.includes("ON-V-SHAPE")) shouldBuy = !tooHigh && priceShape == "V";
 
-        const log = `EUR: ${balance.eur.toFixed(2)} - Should buy: ${shouldBuy} Should trade: ${shouldTrade}`;
+        const log = `€${balance.eur.toFixed(2)} - Should buy: ${shouldBuy} Should trade: ${shouldTrade}`;
         this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`);
 
-        // this.lastTrade += 5;
+        this.lastTrade += 5;
         if (orders[0]) {
-          // this.lastTrade = 0;
+          this.lastTrade = 0;
           this.dispatch(
             "log",
             `Gain: ${this.previousProfit}% - Loss: ${this.previousLoss}% - Current: ${orderPriceChange}%`
           );
         }
 
-        // shouldBuy = shouldBuy && (!this.lastTrade || this.lastTrade > 30); // 30 mins
         // Buy
-        if (shouldTrade && !orders[0] && shouldBuy) {
+        if (shouldTrade && !orders[0] && noSpike && shouldBuy) {
           if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital / 2) {
             const capital = balance.eur < this.#capital ? balance.eur : this.#capital;
             const cost = capital - calculateFee(capital, 0.4);
@@ -167,20 +172,23 @@ class DailyTrader {
 
           const goingDown =
             (this.previousProfit > this.#pricePercentChange && loss >= this.quarterPercent) ||
-            (this.previousProfit > this.halfPercent && loss >= this.thirdPercent / 2);
+            (this.previousProfit > this.halfPercent && loss >= this.thirdPercent / 2) ||
+            (this.previousProfit >= this.thirdPercent && loss >= this.previousProfit / 2);
+          // this.quarterPercent
 
-          const recover =
-            this.previousLoss < 0 &&
-            this.previousProfit > this.thirdPercent &&
-            orderPriceChange > 0 &&
-            loss >= Math.max(1, this.previousProfit / 3);
+          const recoverLoss =
+            this.previousLoss < -this.halfPercent &&
+            orderPriceChange > this.previousLoss / 3 &&
+            priceMove == "dropping";
 
-          const stopLoss = this.previousProfit == 0 && loss >= Math.max(1, this.quarterPercent);
+          const stopLoss = loss >= Math.max(3, this.#pricePercentChange * 1.3);
+          // const stopLoss = loss >= Math.max(3, this.halfPercent);
+          // const stopLoss = loss >= Math.max(2, this.quarterPercent);
 
-          if (!(goingDown || recover || stopLoss)) order = null;
+          if (!(goingDown || recoverLoss || stopLoss)) order = null;
           else {
             if (stopLoss) orderType = "stopLoss";
-            if (recover) orderType = "recover";
+            if (recoverLoss) orderType = "recoverLoss";
             this.dispatch("log", `${orderType} order will be executed`);
           }
 
@@ -188,7 +196,7 @@ class DailyTrader {
             await this.#sell(order, balance.crypto, bidPrice);
             this.previousProfit = 0;
             this.previousLoss = 0;
-            if (orderPriceChange > 0) this.previouslyDropped = false;
+            if (orderPriceChange > this.#pricePercentChange) this.previouslyDropped = false;
           }
         }
       }
