@@ -117,28 +117,49 @@ function findHighLowPriceChanges(prices, currentPrice) {
 
 function detectPriceShape(prices, percentage) {
   const result = { shape: "unknown", value: null };
-  const third = parseInt(prices.length / 3);
-  const lastPrices = prices[prices.length - 1];
-  if (prices.length < 3) return null; // Not enough points for a shape
+  const currentPrice = prices[prices.length - 1];
 
-  const inTheMiddle = (index) => index >= third - 1 && index <= third * 2 - 1;
+  for (let i = prices.length - 1; i >= 0; i--) {
+    const price = prices[i];
+    const down = calcPercentageDifference(price, currentPrice) >= percentage;
+    const up = calcPercentageDifference(price, currentPrice) <= -percentage;
 
-  const minPrice = (result.value = Math.min(...prices));
-  const VShape =
-    calcPercentageDifference(prices[0], minPrice) <= -percentage &&
-    calcPercentageDifference(minPrice, lastPrices) >= percentage;
-  result.shape = "V"; // Check for "V" shape
+    if (!result.value && (up || down)) result.value = price;
+    else if (result.value) {
+      const changePercent = calcPercentageDifference(price, result.value);
+      if (changePercent <= -percentage) {
+        result.shape = "V";
+        return result;
+      } else if (changePercent >= percentage) {
+        result.shape = "A";
+        return result;
+      }
+    }
+  }
+  return result;
 
-  if (inTheMiddle(prices.indexOf(minPrice)) && VShape) return result;
+  // const third = parseInt(prices.length / 3);
 
-  const maxPrice = (result.value = Math.max(...prices));
-  const AShape =
-    calcPercentageDifference(prices[0], maxPrice) >= percentage &&
-    calcPercentageDifference(maxPrice, lastPrices) <= -percentage;
-  result.shape = "A"; // Check for "A" shape
-  if (inTheMiddle(prices.indexOf(maxPrice)) && AShape) return result;
+  // if (prices.length < 3) return null; // Not enough points for a shape
 
-  return result; // No clear "V" or "A" shape
+  // const inTheMiddle = (index) => index >= third - 1 && index <= third * 2 - 1;
+
+  // const minPrice = (result.value = Math.min(...prices));
+  // const VShape =
+  //   calcPercentageDifference(prices[0], minPrice) <= -percentage &&
+  //   calcPercentageDifference(minPrice, lastPrices) >= percentage;
+  // result.shape = "V"; // Check for "V" shape
+
+  // if (inTheMiddle(prices.indexOf(minPrice)) && VShape) return result;
+
+  // const maxPrice = (result.value = Math.max(...prices));
+  // const AShape =
+  //   calcPercentageDifference(prices[0], maxPrice) >= percentage &&
+  //   calcPercentageDifference(maxPrice, lastPrices) <= -percentage;
+  // result.shape = "A"; // Check for "A" shape
+  // if (inTheMiddle(prices.indexOf(maxPrice)) && AShape) return result;
+
+  // return result; // No clear "V" or "A" shape
 }
 
 function calcAveragePrice(prices) {

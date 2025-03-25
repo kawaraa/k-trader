@@ -77,8 +77,8 @@ async function testStrategy(pair, prices, interval, strategy, showLogs) {
   const m = +(prices.length / 8640).toFixed(1);
   let transactions = 0;
   const ex = new TestExchangeProvider({ eur: 100, crypto: 0 }, prices, interval);
-  const testMode = !!(strategy || "").trim();
-  const trader = new DailyTrader(ex, pair, { timeInterval: interval, capital: 100, strategy, testMode });
+
+  const trader = new DailyTrader(ex, pair, { timeInterval: interval, capital: 100, strategy });
 
   delete trader.period;
 
