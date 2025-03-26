@@ -22,6 +22,7 @@ const {
   calcPercentageDifference,
   calculateFee,
   calcAveragePrice,
+  detectPriceShape,
   getSupportedModes,
 } = require("./trend-analysis.js");
 const strategyModes = getSupportedModes();
@@ -55,19 +56,12 @@ class DailyTrader {
     this.previousProfit = 0;
     this.previousLoss = 0;
     this.averageAskBidSpread;
-    this.analysisPeriod = 3 * 24;
+    this.analysisPeriod = 2 * 24;
     this.lastTrade = 0;
   }
 
   async start() {
     try {
-      // const lastProfit = (trades.slice(-2).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
-      // const thereIsLoss = lastProfit < -this.halfPercent && this.strategyTimestamp / (60 * 24) > 1;
-      const trades = await this.ex.getState(this.#pair, "trades");
-      const totalProfit = (trades.filter((t) => t > 0).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
-      const totalLoss = -((trades.filter((t) => t < 0).reduce((acc, n) => acc + n, 0) / this.#capital) * 100);
-      const trade1 = (trades.at(-1) / this.#capital) * 100;
-      const losingTooMuch = totalLoss >= totalProfit / 2;
       const period = this.testMode ? this.#strategyRange : this.analysisPeriod;
 
       // Get data from Kraken
@@ -76,18 +70,23 @@ class DailyTrader {
       let prices = await this.ex.prices(this.#pair, period); // For the last xxx days
       const orders = await this.ex.getOrders(this.#pair);
       const enoughPricesData = prices.length >= (period * 60) / this.timeInterval; // 3 days
-
+      // const lastProfit = (trades.slice(-2).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
+      // const thereIsLoss = lastProfit < -this.halfPercent && this.strategyTimestamp / (60 * 24) > 1;
+      const trades = await this.ex.getState(this.#pair, "trades");
+      const trade1 = (trades.slice(-1) / this.#capital) * 100;
+      const noSpike =
+        trade1 - this.#pricePercentChange < this.halfPercent || !this.lastTrade || this.lastTrade > 60; // 1 hrs
       // const lowestBidPrice = prices.slice(-parseInt(prices.length / 3)).sort().at(0)?.bidPrice;
 
       this.strategyTimestamp = await this.ex.getState(this.#pair, "strategyTimestamp");
       const thereIsStrategy = this.#strategyRange && this.#pricePercentChange;
 
       if (!this.testMode) {
-        const thereIsLoss = losingTooMuch && this.strategyTimestamp / (60 * 24) > 2;
+        const thereIsLoss = trade1 < -this.halfPercent && this.strategyTimestamp / (60 * 24) > 1;
+        // const thereIsLoss = trade1 <= -1 && trade2 <= -1 && this.strategyTimestamp / (60 * 24) > 1;
 
         if (!enoughPricesData) {
           this.dispatch("strategy", { strategy: "", strategyTimestamp: 0 });
-          //
         } else if (!thereIsStrategy || thereIsLoss) {
           const strategy = await this.#findStrategy(this.#pair, prices, this.timeInterval);
 
@@ -96,23 +95,23 @@ class DailyTrader {
           this.#pricePercentChange = strategy.pricePercentChange;
           this.halfPercent = this.#pricePercentChange / 2;
           this.thirdPercent = this.#pricePercentChange / 3;
-          this.buyOnPercentage = this.#pricePercentChange / 4;
-          // this.previouslyDropped = false;
+          this.quarterPercent = this.#pricePercentChange / 4;
 
           const strategyString = `${strategy.mode}:${strategy.strategyRange}:${strategy.pricePercentChange}`;
-          this.dispatch("log", `Strategy changed: ${strategyString}%`);
+          this.dispatch("log", `Strategy change: ${strategyString}%`);
 
-          // if (strategy.profit < 0) return "Stop trading";
+          if (strategy.profit < 0) return "Stop trading";
           this.dispatch("strategy", { strategy: `${strategyString}` });
         }
 
-        prices = prices.slice(-((this.#strategyRange * 60) / this.timeInterval));
+        prices = prices.slice(-((period * 60) / this.timeInterval));
       }
 
       if (thereIsStrategy) {
         if (!strategyModes.includes(this.mode)) throw new Error(`"${this.mode}" is Invalid mode!`);
 
         const bidPrices = prices.map((p) => p.bidPrice);
+        const priceShape = detectPriceShape(bidPrices, this.quarterPercent).shape;
         const sortedBidPrices = bidPrices.sort();
         const highestBidPr = sortedBidPrices.at(-1);
         const lowestBidPrice = sortedBidPrices.at(0);
@@ -124,21 +123,25 @@ class DailyTrader {
           );
         }
 
-        const shouldTrade = enoughPricesData && askBidSpreadPercentage <= this.averageAskBidSpread * 1.5;
+        const shouldTrade = enoughPricesData && askBidSpreadPercentage <= this.averageAskBidSpread * 1.3;
         const dropped = calcPercentageDifference(highestBidPr, askPrice) < -this.#pricePercentChange;
-        const priceMovement = this.#findPriceMovement(prices, this.buyOnPercentage, prices.length / 2);
-        const increasing = priceMovement == "increasing";
-        const orderPriceChange = !orders[0] ? 0 : calcPercentageDifference(orders[0]?.price, bidPrice);
         const tooHigh = calcPercentageDifference(lowestBidPrice, bidPrice) > this.#pricePercentChange;
+        const offset = this.mode.includes("ON-DROP") ? 0 : prices.length / 2;
+        const priceMove = this.#findPriceMovement(prices, this.quarterPercent, offset);
+        const increasing = priceMove == "increasing";
+        const orderPriceChange = calcPercentageDifference(orders[0]?.price, bidPrice);
         const loss = this.previousProfit - orderPriceChange;
-        const noSpike =
-          trade1 - this.#pricePercentChange >= this.halfPercent ? this.lastTrade > 60 : this.lastTrade > 15;
+        let shouldBuy = false;
 
         if (!this.previouslyDropped && dropped) this.previouslyDropped = true;
         if (orderPriceChange > this.previousProfit) this.previousProfit = orderPriceChange;
         if (orderPriceChange < this.previousLoss) this.previousLoss = orderPriceChange;
 
-        const log = `€${balance.eur.toFixed(2)} - Should trade: ${shouldTrade}`;
+        if (this.mode.includes("ON-DROP")) shouldBuy = dropped && increasing;
+        else if (this.mode.includes("ON-DECREASE")) shouldBuy = this.previouslyDropped && increasing;
+        else if (this.mode.includes("ON-V-SHAPE")) shouldBuy = !tooHigh && priceShape == "V";
+
+        const log = `€${balance.eur.toFixed(2)} - Should buy: ${shouldBuy} Should trade: ${shouldTrade}`;
         this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`);
 
         this.lastTrade += 5;
@@ -150,13 +153,8 @@ class DailyTrader {
           );
         }
 
-        const shouldBuy = noSpike && !tooHigh && this.previouslyDropped && increasing;
-        this.dispatch(
-          "log",
-          `shouldBuy: ${noSpike} - ${!tooHigh} - ${this.previouslyDropped} - ${increasing}`
-        );
         // Buy
-        if (shouldTrade && !orders[0] && shouldBuy) {
+        if (shouldTrade && !orders[0] && noSpike && shouldBuy) {
           if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital / 2) {
             const capital = balance.eur < this.#capital ? balance.eur : this.#capital;
             const cost = capital - calculateFee(capital, 0.4);
@@ -171,31 +169,34 @@ class DailyTrader {
           let orderType = "profitable";
           let order = orders[0];
           // const dropSpeed = calcPercentageDifference(prices.at(-2).askPrice, prices.at(-1).askPrice);
-          // this.#pricePercentChange
-          // const takeProfit = orderPriceChange > this.halfPercent && loss >= this.buyOnPercentage;
 
-          const takeProfit = orderPriceChange >= this.halfPercent && loss >= this.#pricePercentChange / 4;
-          let stopLoss = orderPriceChange < -Math.max(3, this.halfPercent);
-          if (trade1 < 0 || losingTooMuch) stopLoss = loss < -Math.min(1, this.#pricePercentChange / 5);
+          const goingDown =
+            (this.previousProfit > this.#pricePercentChange && loss >= this.quarterPercent) ||
+            (this.previousProfit > this.halfPercent && loss >= this.thirdPercent / 2) ||
+            (this.previousProfit >= this.thirdPercent && loss >= this.previousProfit / 2);
+          // this.quarterPercent
 
-          if (!(takeProfit || stopLoss)) order = null;
+          const recoverLoss =
+            this.previousLoss < -this.halfPercent &&
+            orderPriceChange > this.previousLoss / 3 &&
+            priceMove == "dropping";
+
+          const stopLoss = loss >= Math.max(3, this.#pricePercentChange * 1.3);
+          // const stopLoss = loss >= Math.max(3, this.halfPercent);
+          // const stopLoss = loss >= Math.max(2, this.quarterPercent);
+
+          if (!(goingDown || recoverLoss || stopLoss)) order = null;
           else {
-            if (stopLoss) {
-              orderType = "stopLoss";
-              this.buyOnPercentage = this.halfPercent;
-              // this.previouslyDropped = false;
-              // this.lastTrade = -(60 * 24);
-            } else {
-              this.buyOnPercentage = this.#pricePercentChange / 4;
-            }
-            this.dispatch("log", `${orderType} order will be executed ${totalLoss} - ${totalProfit}`);
+            if (stopLoss) orderType = "stopLoss";
+            if (recoverLoss) orderType = "recoverLoss";
+            this.dispatch("log", `${orderType} order will be executed`);
           }
 
           if (order) {
             await this.#sell(order, balance.crypto, bidPrice);
             this.previousProfit = 0;
             this.previousLoss = 0;
-            if (orderPriceChange > this.halfPercent) this.previouslyDropped = false;
+            if (orderPriceChange > this.#pricePercentChange) this.previouslyDropped = false;
           }
         }
       }
@@ -240,14 +241,18 @@ class DailyTrader {
     if (this.listener) this.listener(this.#pair + "", event, info);
   }
 
-  #findPriceMovement(prices, minPercent, offset = 1) {
-    const length = prices.length - 1;
-    const price = prices.at(-1);
+  #findPriceMovement(prices, minPercent, offset = 0) {
+    const length = prices.length - 2;
+    let latest = prices.at(-2);
+    let lowest = latest;
 
     for (let i = length; i > offset; i--) {
+      const previous = prices[i + 1];
       const current = prices[i];
-      if (calcPercentageDifference(current.askPrice, price.askPrice) >= minPercent) return "increasing";
-      else if (calcPercentageDifference(current.askPrice, price.askPrice) <= -minPercent) return "dropping";
+      if (current.askPrice <= previous.askPrice) lowest = current;
+
+      if (calcPercentageDifference(lowest.askPrice, latest.askPrice) >= minPercent) return "increasing";
+      else if (calcPercentageDifference(current.askPrice, latest.askPrice) <= -minPercent) return "dropping";
     }
   }
 
@@ -261,7 +266,9 @@ class DailyTrader {
       }
     }
 
-    return (await Promise.all(workers)).sort((a, b) => b.profit - a.profit)[0];
+    const strategies = (await Promise.all(workers)).sort((a, b) => b.profit - a.profit);
+    console.log(strategies.slice(0, 5));
+    return strategies[0];
   }
 }
 
