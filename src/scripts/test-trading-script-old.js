@@ -1,8 +1,8 @@
 // test-trading-script is a price-history-analysis-script
 const { Worker, parentPort, workerData, isMainThread } = require("worker_threads");
 const { readFileSync, existsSync } = require("fs");
-const { extractNumbers } = require("./utilities.js");
-const { getSupportedModes } = require("./trend-analysis.js");
+const { extractNumbers } = require("../utilities.js");
+const { getSupportedModes } = require("../trend-analysis.js");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const DailyTrader = require("./daily-trader.js");
 

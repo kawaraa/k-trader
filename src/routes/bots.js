@@ -1,7 +1,6 @@
 const { statSync, existsSync, readFileSync } = require("node:fs");
 const { Bot, BotsManager } = require("../bots-manager");
 const { parseError, isValidPair, isNumber } = require("../utilities");
-const { getSupportedModes } = require("../trend-analysis");
 
 module.exports = (router, fireStoreProvider, authRequired, production) => {
   // Get bots
@@ -115,7 +114,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
   });
 
   // Get bot prices history
-  router.get("/bots/prices/:pair", authRequired, (request, response) => {
+  router.get("/bots/prices/:pair", (request, response) => {
     try {
       const pair = request.params.pair;
       const other = parseInt(request.query.other);

@@ -52,9 +52,10 @@ export default function CryptoChart() {
     window.profit = (ask, bid, amt = 9) => (calcInvestmentProfit(ask, bid, amt) + amt) * 0.992;
     window.percentage = (past, current) => `${calcPercentageDifference(past, current)}%`;
 
-    request("/api/auth")
-      .catch(() => router.replace("/signin"))
-      .then(() => !pair && changePair(pairs[0]));
+    !pair && changePair(pairs[0]);
+    // request("/api/auth")
+    //   .catch(() => router.replace("/signin"))
+    //   .then(() => !pair && changePair(pairs[0]));
   }, []);
 
   return (

@@ -24,7 +24,8 @@ const {
   calcAveragePrice,
   detectPriceShape,
   getSupportedModes,
-} = require("./trend-analysis.js");
+  findPriceMovement,
+} = require("../trend-analysis.js");
 const strategyModes = getSupportedModes();
 const TestExchangeProvider = require("./test-ex-provider.js");
 
@@ -127,8 +128,8 @@ class DailyTrader {
         const dropped = calcPercentageDifference(highestBidPr, askPrice) < -this.#pricePercentChange;
         const tooHigh = calcPercentageDifference(lowestBidPrice, bidPrice) > this.#pricePercentChange;
         const offset = this.mode.includes("ON-DROP") ? 0 : prices.length / 2;
-        const priceMove = this.#findPriceMovement(prices, this.quarterPercent, offset);
-        const increasing = priceMove == "increasing";
+        const priceMove = findPriceMovement(prices, this.quarterPercent, offset);
+        const increasing = priceMove == "INCREASING";
         const orderPriceChange = calcPercentageDifference(orders[0]?.price, bidPrice);
         const loss = this.previousProfit - orderPriceChange;
         let shouldBuy = false;
@@ -239,21 +240,6 @@ class DailyTrader {
 
   dispatch(event, info) {
     if (this.listener) this.listener(this.#pair + "", event, info);
-  }
-
-  #findPriceMovement(prices, minPercent, offset = 0) {
-    const length = prices.length - 2;
-    let latest = prices.at(-2);
-    let lowest = latest;
-
-    for (let i = length; i > offset; i--) {
-      const previous = prices[i + 1];
-      const current = prices[i];
-      if (current.askPrice <= previous.askPrice) lowest = current;
-
-      if (calcPercentageDifference(lowest.askPrice, latest.askPrice) >= minPercent) return "increasing";
-      else if (calcPercentageDifference(current.askPrice, latest.askPrice) <= -minPercent) return "dropping";
-    }
   }
 
   async #findStrategy(pair, prices, interval) {

@@ -1,5 +1,5 @@
 const KrakenExchangeProvider = require("./kraken-ex-provider");
-const DailyTrader = require("./daily-trader");
+const SwingTrader = require("./swing-trader");
 const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs");
 const { dateToString, toShortDate, delay } = require("./utilities");
 const LocalState = require("./local-state");

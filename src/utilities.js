@@ -40,6 +40,30 @@ function splitIntoChunks(data) {
   }
   return result;
 }
+function roughSizeOfObject(object) {
+  const seen = new WeakSet();
+
+  const sizeOf = (obj) => {
+    if (obj === null || obj === undefined) return 0;
+    if (typeof obj === "boolean") return 4;
+    if (typeof obj === "number") return 8;
+    if (typeof obj === "string") return obj.length * 2;
+    if (typeof obj === "object") {
+      if (seen.has(obj)) return 0;
+      seen.add(obj);
+      let bytes = 0;
+      for (let key in obj) {
+        bytes += sizeOf(key);
+        bytes += sizeOf(obj[key]);
+      }
+      return bytes;
+    }
+    return 0;
+  };
+
+  return sizeOf(object);
+}
+
 function dateToString(date = new Date(), seconds) {
   const unWantedChar = seconds ? -5 : -8;
   return new Date(date).toISOString().slice(0, unWantedChar).replace("T", " ");
@@ -84,6 +108,7 @@ module.exports = {
   parseError,
   delay,
   splitIntoChunks,
+  roughSizeOfObject,
   dateToString,
   toShortDate,
   parseNumbers,

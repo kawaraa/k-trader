@@ -1,24 +1,6 @@
 // Linear Regression Analysis method is used to analyze a series of price data for a cryptocurrency or other asset to determine the trend direction. is generally more suited for long-term trading.
-function linearRegression(prices) {
-  const n = prices.length;
-  let sumX = 0,
-    sumY = 0,
-    sumXY = 0,
-    sumXX = 0;
 
-  for (let i = 0; i < n; i++) {
-    sumX += i;
-    sumY += prices[i];
-    sumXY += i * prices[i];
-    sumXX += i * i;
-  }
-
-  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-  return slope > 0 ? "buy" : "sell";
-  // If the slope is positive, it indicates an upward trend, which typically suggests buying in anticipation of further gains. Conversely, if the slope is negative, it indicates a downward trend, suggesting selling to avoid further losses.
-  // 1. Positive Slope: Indicates an upward trend, which could be a signal to buy.
-  // 2. Negative Slope: Indicates a downward trend, which could be a signal to sell.
-}
+const { calcPercentageDifference } = require("./services");
 
 // Simple Moving Average (SMA) method is used to calculate the average of past prices. adjust the period to any desired period that better match your analysis needs, for example:
 // 1. Day Traders: Might use shorter periods like 5 or 10 to capture quick market movements.
@@ -46,73 +28,102 @@ function simpleMovingAverage(prices, period) {
   // 2. When SMA Below Last Price, means an upward trend, signaling a potential selling opportunity if the trend is expected to reverse.
 }
 
-// Relative Strength Index (RSI) method is designed to compute the (RSI), which is a momentum oscillator used to measure the speed and change of price movements. It ranges from 0 to 100 and is used to identify overbought or oversold conditions.
-// - When RSI rise means the market is moving upward, and prices are likely to keep rising. It indicates strong buying interest and positive market sentiment.
-// - When the RSI is very low, suggesting that the asset is likely in oversold conditions, which could indicate a potential buying opportunity if the price stabilizes.
+function detectPriceDirection(prices, minPercent, percentBetween = 0, mountains = 0) {
+  let price = null;
+  let currentPrice = null;
+  let up = 0;
+  let down = 0;
+  let uptrendCount = 0;
+  let downtrendCount = 0;
+  let previousPrice = "";
 
-// calcRelativeStrengthIndex
-function calculateRSI(prices, period = 14) {
-  if (prices.length < period) throw new Error("Not enough data to calculate RSI.");
-  // The 14-period setting for the RSI was recommended by J. Welles Wilder, the developer of the RSI, in his book "New Concepts in Technical Trading Systems." This default period is widely used because it has been found to provide a good balance between responsiveness and reliability in identifying overbought and oversold conditions across various markets.
+  for (let i = prices.length - 1; i >= 0; i--) {
+    if (!currentPrice) currentPrice = prices[i];
+    if (!price) price = prices[i];
 
-  let gains = 0;
-  let losses = 0;
-  let rsi = 100;
+    const percentDifference = calcPercentageDifference(prices[i - 1], currentPrice);
 
-  // Calculate initial average gains and losses
-  for (let i = 1; i < period; i++) {
-    const difference = prices[i] - prices[i - 1];
-    if (difference > 0) gains += difference;
-    else losses -= difference;
+    if (percentBetween && !(percentDifference < -percentBetween || percentDifference > percentBetween)) {
+      continue;
+    }
+
+    if (percentDifference > 0) {
+      if (previousPrice == "low") downtrendCount++; // Detected low
+      previousPrice = "high";
+      up += percentDifference;
+    } else if (percentDifference < 0) {
+      if (previousPrice == "high") uptrendCount++; // Detected high
+      previousPrice = "low";
+      down += -percentDifference;
+    }
+
+    currentPrice = prices[i];
   }
-  let averageGain = gains / period;
-  let averageLoss = losses / period;
-
-  // Calculate RSI
-  for (let i = period; i < prices.length; i++) {
-    const difference = prices[i] - prices[i - 1];
-    const gain = difference > 0 ? difference : 0;
-    const loss = difference < 0 ? -difference : 0;
-
-    averageGain = (averageGain * (period - 1) + gain) / period;
-    averageLoss = (averageLoss * (period - 1) + loss) / period;
-
-    const rs = averageLoss === 0 ? 100 : averageGain / averageLoss;
-    rsi = 100 - 100 / (1 + rs);
-    // The RSI values are typically collected over time; here we're just calculating the latest RSI
-  }
-
-  // if (rsi > 70) return "sell"; // Consider selling if the RSI indicates overbought conditions
-  // else if (rsi < 30) return "buy"; // Consider buying if the RSI indicates oversold conditions
-  // return "hold"; // No clear signal; hold the position or wait for better conditions
-  return parseInt(rsi);
-
-  // - The 30 to 70 range for RSI is commonly used because:
-  // 1. RSI above 70: Often indicates the asset is overbought and might be due for a pullback.
-  // 2. RSI below 30: Typically signals that the asset is oversold and might be due for a rebound.
+  const changePercent = up - down;
+  if (changePercent >= minPercent && uptrendCount >= mountains) return "UPTREND";
+  else if (changePercent <= -minPercent && downtrendCount >= mountains) return "DOWNTREND";
+  else return "UNKNOWN";
 }
 
-function findHighLowPriceChanges(prices, currentPrice) {
-  // const sortedPrices = prices.sorted();
-  // const lowestChange = calcPercentageDifference( sortedPrices[0], currentPrice);
-  // const highestChange = calcPercentageDifference( sortedPrices[sortedPrices.length - 1], currentPrice);
+function detectBreakoutOrBreakdown(prices, sensitivity = 0.5) {
+  /* Suggested minimums:
+Interval	| Recommended History
+5m        | Last 2–3 hours (24–36 candles)
+15m       | Last 6–8 hours (24–32 candles)
+1h        | Last 2–4 days (48–96 candles)
+1d        | Last 2–4 weeks (15–30 candles)
+*/
 
-  const priceChanges = {
-    lowest: { price: currentPrice, minsAgo: 0, percent: 0 },
-    highest: { price: currentPrice, minsAgo: 0, percent: 0 },
-  };
-  for (let i = prices.length - 1; 0 <= i; i--) {
-    if (priceChanges.highest.price < prices[i]) {
-      priceChanges.highest.price = prices[i];
-      priceChanges.highest.minsAgo = (prices.length - 1 - i) * 5;
-    } else if (priceChanges.lowest.price > prices[i]) {
-      priceChanges.lowest.price = prices[i];
-      priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 5;
-    }
+  if (prices.length < 20) throw new Error("detectBreakoutOrBreakdown: Not enough data");
+
+  const window = 5; // number of candles to confirm swing highs/lows
+  const highs = [];
+  const lows = [];
+
+  for (let i = window; i < prices.length - window; i++) {
+    const slice = prices.slice(i - window, i + window + 1);
+    const mid = prices[i];
+
+    const isHigh = slice.every((p) => mid >= p);
+    const isLow = slice.every((p) => mid <= p);
+
+    if (isHigh) highs.push({ i, price: mid });
+    if (isLow) lows.push({ i, price: mid });
   }
-  priceChanges.highest.percent = -calcPercentageDifference(priceChanges.highest.price, currentPrice);
-  priceChanges.lowest.percent = -calcPercentageDifference(priceChanges.lowest.price, currentPrice);
-  return priceChanges;
+
+  // Early exit if not enough swings
+  if (highs.length < 2 && lows.length < 2) return "No strong pattern detected";
+
+  // Check rising lows
+  let risingLows = 0;
+  for (let i = 1; i < lows.length; i++) {
+    if (lows[i].price > lows[i - 1].price) risingLows++;
+  }
+
+  // Check falling highs
+  let fallingHighs = 0;
+  for (let i = 1; i < highs.length; i++) {
+    if (highs[i].price < highs[i - 1].price) fallingHighs++;
+  }
+
+  const recentHigh = highs[highs.length - 1]?.price || 0;
+  const recentLow = lows[lows.length - 1]?.price || Infinity;
+  const latestPrice = prices[prices.length - 1];
+
+  const breakout = ((latestPrice - recentHigh) / recentHigh) * 100 >= sensitivity;
+  const breakdown = ((recentLow - latestPrice) / recentLow) * 100 >= sensitivity;
+
+  if (risingLows >= 2 && breakout) {
+    return "Likely breakout (rise)";
+  } else if (fallingHighs >= 2 && breakdown) {
+    return "Likely breakdown (drop)";
+  } else if (risingLows >= 2) {
+    return "Potential breakout forming";
+  } else if (fallingHighs >= 2) {
+    return "Potential breakdown forming";
+  } else {
+    return "No strong pattern detected";
+  }
 }
 
 function detectPriceShape(prices, percentage) {
@@ -162,15 +173,64 @@ function detectPriceShape(prices, percentage) {
   // return result; // No clear "V" or "A" shape
 }
 
-function calcAveragePrice(prices) {
-  if (prices.length === 0) throw new Error("Price list cannot be empty.");
-  const total = prices.reduce((sum, price) => sum + price, 0);
-  return +(total / prices.length).toFixed(8);
+function isGoodTimeToBuy({ now = new Date(), volatility = "normal" } = {}) {
+  const utcHour = now.getUTCHours();
+  const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  const date = now.getUTCDate();
+  const month = now.getUTCMonth(); // 0 = January
+  let score = 0;
+
+  // 1. Day-based signals
+  if (day === 1) score += 2; // Monday morning
+  if (day === 0 && utcHour >= 22) score += 1; // Sunday night
+
+  // 2. Time-based signals
+  if (utcHour >= 0 && utcHour <= 1) score += 1; // New York close (daily reset)
+  if (utcHour >= 13 && utcHour <= 16) score += 1; // US market open
+
+  // 3. Monthly/Quarterly re-entry signals
+  if (date === 1) score += 2; // Start of month
+  const quarterlyMonths = [2, 5, 8, 11]; // Mar, Jun, Sep, Dec
+  if (quarterlyMonths.includes(month) && date >= 29) score += 1;
+
+  // 4. Volatility check (optional)
+  if (volatility === "high") score += 1; // if there's a sudden dip, consider rebound
+
+  return { isBuyTime: score >= 3, score };
 }
 
-function calcPercentageDifference(oldPrice, newPrice) {
-  const difference = newPrice - oldPrice;
-  return +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2);
+function findHighestLowestPrice(prices, currentPrice) {
+  // const sortedPrices = prices.sorted();
+  // const lowestChange = calcPercentageDifference( sortedPrices[0], currentPrice);
+  // const highestChange = calcPercentageDifference( sortedPrices[sortedPrices.length - 1], currentPrice);
+
+  const priceChanges = {
+    lowest: { price: currentPrice, minsAgo: 0, percent: 0 },
+    highest: { price: currentPrice, minsAgo: 0, percent: 0 },
+  };
+  for (let i = prices.length - 1; 0 <= i; i--) {
+    if (priceChanges.highest.price < prices[i]) {
+      priceChanges.highest.price = prices[i];
+      priceChanges.highest.minsAgo = (prices.length - 1 - i) * 5;
+    } else if (priceChanges.lowest.price > prices[i]) {
+      priceChanges.lowest.price = prices[i];
+      priceChanges.lowest.minsAgo = (prices.length - 1 - i) * 5;
+    }
+  }
+  priceChanges.highest.percent = -calcPercentageDifference(priceChanges.highest.price, currentPrice);
+  priceChanges.lowest.percent = -calcPercentageDifference(priceChanges.lowest.price, currentPrice);
+  return priceChanges;
+}
+
+function getDynamicTakeProfitPct(prices) {
+  const changes = [];
+  for (let i = 1; i < prices.length; i++) {
+    const change = Math.abs((prices[i] - prices[i - 1]) / prices[i - 1]);
+    changes.push(change);
+  }
+
+  const avgChange = changes.reduce((sum, c) => sum + c, 0) / changes.length;
+  return avgChange * 2;
 }
 
 // This calculates the earnings from an investment given the current price, previous price, and invested amount.
@@ -186,16 +246,8 @@ function calcTransactionProfit(previousPrice, currentPrice, assetVolume, feePerc
   return revenue - cost; // profit
 }
 
-function calculateFee(amount, feePercentage) {
-  return !feePercentage ? 0 : (amount * feePercentage) / 100;
-}
-
 function isOlderThen(timestamp, hours) {
   return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
-}
-
-function getSupportedModes() {
-  return ["ON-DECREASE", "ON-DROP", "ON-V-SHAPE"];
 }
 
 // Methods for testing only:
@@ -204,7 +256,6 @@ function adjustPrice(price, percentage) {
   const multiplier = percentage / 100;
   return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
 }
-
 function countPriceChanges(prices, percentageThreshold, offset = 864) {
   const changes = [];
   // Find the lowest price in the last 3 days (864) based on 5 mins interval
@@ -223,18 +274,16 @@ function countPriceChanges(prices, percentageThreshold, offset = 864) {
 }
 
 module.exports = {
-  linearRegression,
   simpleMovingAverage,
-  calculateRSI,
-  findHighLowPriceChanges,
+  detectPriceDirection,
+  detectBreakoutOrBreakdown,
+  isGoodTimeToBuy,
+  findHighestLowestPrice,
+  getDynamicTakeProfitPct,
   detectPriceShape,
-  calcAveragePrice,
-  calcPercentageDifference,
-  countPriceChanges,
   calcInvestmentProfit,
   calcTransactionProfit,
-  calculateFee,
   adjustPrice,
   isOlderThen,
-  getSupportedModes,
+  countPriceChanges,
 };

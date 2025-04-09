@@ -2,11 +2,12 @@
 
 const { readdirSync } = require("node:fs");
 const { countPriceChanges } = require("../trend-analysis");
-const currencies = require("../currencies.json");
+const currencies = require("../data/currencies.json");
+
 const pricesFolderPath = `${process.cwd()}/database/test-prices/`;
 const pairArg = process.argv[2];
-const minProfitPercentage = process.argv[3] || 10;
-const minPercentageChange = process.argv[4] || 1.2;
+const minProfitPercentage = process.argv[3] || 1;
+const minPercentageChange = process.argv[4] || 2;
 const fileNames = pairArg ? [`${pairArg}.json`] : readdirSync(pricesFolderPath);
 const cryptocurrenciesPricesChanges = [];
 
@@ -23,6 +24,7 @@ for (const fileName of fileNames) {
   while (percentage <= 25) {
     const result = countPriceChanges(prices, percentage);
     if (result.changes.at(-1) < 1) result.changes.pop();
+
     const pricesChanges = result.changes.filter((p) => p < -1).length / 2;
     const estimateProfitPercentage = parseInt(percentage * pricesChanges);
     // if (mostChanges < pricesChanges) mostChanges = pricesChanges;

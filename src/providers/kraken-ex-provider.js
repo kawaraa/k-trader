@@ -1,5 +1,5 @@
 const { createHash, createHmac } = require("node:crypto");
-const { parseNumbers, request } = require("./utilities.js");
+const { parseNumbers, request } = require("../utilities.js");
 
 module.exports = class KrakenExchangeProvider {
   #apiUrl;
@@ -72,16 +72,27 @@ module.exports = class KrakenExchangeProvider {
     return prices;
   }
 
-  async pricesData(pair, interval = 240, since = Math.round(Date.now() / 1000 - 60 * 60 * 24 * 40)) {
+  async pricesData(pair, interval = 240, days = 0.5) {
+    // const since = Math.round(Date.now() / 1000 - 60 * 60 * 24 * days);
+    let since = ""; // Test it
     // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
     const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${since}`);
-    return data[Object.keys(data)[0]].map((p) => p[4]);
+    return data[Object.keys(data)[0]].map((item) =>  ({
+      time: item[0],
+      open: parseFloat(item[1]),
+      high: parseFloat(item[2]),
+      low: parseFloat(item[3]),
+      close: parseFloat(item[4]),
+      volume: parseFloat(item[6]),
+    }));
+
+    return data.result[pair].map((item) =>);
   }
 
-  async prices(pair, lastHours) {
-    // const prices = await this.pricesData(pair, lastDays);
+  async prices(pair, limit) {
+    // const prices = await this.pricesData(pair, interval);
     // return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
-    return this.state.getLocalPrices(pair, (lastHours * 60) / 5);
+    return this.state.getLocalPrices(pair, limit);
   }
 
   async createOrder(type, ordertype, pair, volume) {

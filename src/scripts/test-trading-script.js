@@ -2,7 +2,8 @@
 const { Worker, parentPort, workerData, isMainThread } = require("worker_threads");
 const { readFileSync, existsSync } = require("fs");
 const TestExchangeProvider = require("./test-ex-provider.js");
-const DailyTrader = require("./daily-trader.js");
+const SwingTrader = require("./swing-trader.js");
+// const ScalpingTrader = require("./scalping-trader.js");
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
@@ -15,9 +16,10 @@ async function runTradingTest(pair, interval, strategy) {
   try {
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
-    const prices1 = getPrices(pair, interval / 5);
-    // const prices2 = getPrices(`bots/${pair}`, interval / 5);
-    // const prices3 = getPrices(`bots/${pair}-1`, interval / 5);
+    // const prices1 = getPrices(pair, interval / 5);
+    // const prices1 = getPrices(`bots/${pair}-1`, interval / 5);
+    // const prices3 = getPrices(`bots/${pair}-2`, interval / 5);
+    const prices1 = getPrices(`test/${pair}-3`, interval / 5);
 
     // workers.push(runWorker([pair, prices, interval, strategy, showLogs]));
     const tests = [await testStrategy(pair, prices1, interval, strategy, showLogs)];
@@ -74,12 +76,11 @@ async function runTradingTest(pair, interval, strategy) {
 }
 
 async function testStrategy(pair, prices, interval, strategy, showLogs) {
-  const m = +(prices.length / 8640).toFixed(1);
+  const m = +(prices.length / 8640).toFixed(1); // 8640 * 5 = the number of mins in one month
   let transactions = 0;
   const ex = new TestExchangeProvider({ eur: 100, crypto: 0 }, prices, interval);
 
-  const trader = new DailyTrader(ex, pair, { timeInterval: interval, capital: 100, strategy });
-
+  const trader = new SwingTrader(ex, pair, { timeInterval: interval, capital: 100, strategy });
   delete trader.period;
 
   trader.listener = (p, event, info) => {

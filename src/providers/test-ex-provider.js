@@ -1,5 +1,5 @@
 const { randomUUID } = require("node:crypto");
-const { calculateFee } = require("./trend-analysis");
+const { calculateFee } = require("../trend-analysis");
 
 module.exports = class TestExchangeProvider {
   constructor(balance, prices, timeInterval) {
@@ -22,11 +22,17 @@ module.exports = class TestExchangeProvider {
     this.orders.forEach((o) => (o.createdAt -= intervalTime));
     return price;
   }
-  async pricesData(pair, period) {
-    return this.allPrices.map((p) => p.tradePrice);
+  async pricesData(pair, interval = 5, days = 0.5) {
+    // X This method does not match Kraken Provider X
+    const skip = interval / 5;
+    const length = -((days * 24 * 60) / 5);
+    return this.allPrices
+      .map((p) => p.tradePrice)
+      .slice(length)
+      .filter((p, index) => index % skip === 0);
   }
-  async prices(pair, lastHours) {
-    const offset = this.currentPriceIndex - (lastHours * 60) / this.interval;
+  async prices(pair, limit) {
+    const offset = this.currentPriceIndex - limit;
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
   async createOrder(tradingType, b, c, volume) {

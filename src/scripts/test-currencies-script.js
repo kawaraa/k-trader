@@ -1,6 +1,6 @@
 // test-currencies-script
 const { readFileSync } = require("fs");
-const currencies = require("./currencies.json");
+const currencies = require("../currencies.json");
 const runTradingTest = require("./test-trading-script.js");
 // const { strIncludes } = require("./utilities.js");
 const getFilePath = (name) => `${process.cwd()}/database/logs/${name}.log`;

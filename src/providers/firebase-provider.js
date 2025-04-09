@@ -1,4 +1,4 @@
-const { request } = require("./utilities");
+const { request } = require("../utilities");
 
 class FireStoreProvider {
   #apiKey;
@@ -101,4 +101,4 @@ class Doc {
   }
 }
 
-module.exports = new FireStoreProvider(require("../.env.json").FIRESTORE_CREDENTIALS);
+module.exports = new FireStoreProvider(require("../../.env.json").FIRESTORE_CREDENTIALS);

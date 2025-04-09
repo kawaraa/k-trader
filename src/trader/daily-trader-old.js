@@ -23,7 +23,8 @@ const {
   calculateFee,
   calcAveragePrice,
   detectPriceShape,
-} = require("./trend-analysis.js");
+  findPriceMovement,
+} = require("../trend-analysis.js");
 
 // Smart trader
 module.exports = class DailyTrader {
@@ -85,9 +86,9 @@ module.exports = class DailyTrader {
       const shouldTrade = enoughPricesData && askBidSpreadPercentage <= this.averageAskBidSpread;
       const dropped = calcPercentageDifference(highestBidPr, askPrice) < -this.percentage;
       const offset = this.mode.includes("ON-DROP") ? 0 : prices.length / 2;
-      const priceMove = this.#findPriceMovement(prices, this.buySellOnThreshold, offset);
-      const increasing = priceMove == "increasing";
-      const dropping = priceMove == "dropping";
+      const priceMove = findPriceMovement(prices, this.buySellOnThreshold, offset);
+      const increasing = priceMove == "INCREASING";
+      const dropping = priceMove == "DROPPING";
       const orderPriceChange = calcPercentageDifference(orders[0]?.price, bidPrice);
       const loss = this.previousProfit - orderPriceChange;
       let shouldBuy = false;
@@ -178,21 +179,6 @@ module.exports = class DailyTrader {
 
   dispatch(event, info) {
     if (this.listener) this.listener(this.#pair + "", event, info);
-  }
-
-  #findPriceMovement(prices, minPercent, offset = 0) {
-    const length = prices.length - 2;
-    let latest = prices.at(-2);
-    let lowest = latest;
-
-    for (let i = length; i > offset; i--) {
-      const previous = prices[i + 1];
-      const current = prices[i];
-      if (current.askPrice <= previous.askPrice) lowest = current;
-
-      if (calcPercentageDifference(lowest.askPrice, latest.askPrice) >= minPercent) return "increasing";
-      else if (calcPercentageDifference(current.askPrice, latest.askPrice) <= -minPercent) return "dropping";
-    }
   }
 };
 

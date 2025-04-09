@@ -1,9 +1,9 @@
 const { existsSync, writeFileSync } = require("node:fs");
-const { request, delay } = require("./utilities");
+const { request, delay } = require("../utilities");
 
 const pair = process.argv[2];
 const minTestPeriod = +process.argv[3] || 60; // Number of days that will be tested
-const cryptocurrencies = pair ? { [pair]: pair } : require(`./currencies.json`);
+const cryptocurrencies = pair ? { [pair]: pair } : require(`../currencies.json`);
 
 (async () => {
   for (const pair in cryptocurrencies) {
