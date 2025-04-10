@@ -12,7 +12,6 @@ class Trader {
     // this.testMode = info.testMode;
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
-    this.run = null; // Should be a function
     this.timeoutID = 0;
 
     // this.strategyRange = +range; // Range in hours "0.5 = have an hour"
@@ -24,13 +23,13 @@ class Trader {
 
   async start() {
     try {
-      if (!this.run) return;
-      await this.run();
+      if (this.run) await this.run();
     } catch (error) {
       this.dispatch("log", `Error running bot: ${error}`);
     }
     if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
   }
+  async run() {} // This is overwritten in derived classes
 
   async sell({ id, volume, cost, price, createdAt }, cryptoBalance, bidPrice) {
     const amount = bidPrice * (cryptoBalance - volume) < 5 ? cryptoBalance : volume;

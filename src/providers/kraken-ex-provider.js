@@ -1,7 +1,7 @@
 const { createHash, createHmac } = require("node:crypto");
 const { parseNumbers, request } = require("../utilities.js");
 
-module.exports = class KrakenExchangeProvider {
+class KrakenExchangeProvider {
   #apiUrl;
   #apiKey;
   #apiSecret;
@@ -77,7 +77,7 @@ module.exports = class KrakenExchangeProvider {
     let since = ""; // Test it
     // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
     const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${since}`);
-    return data[Object.keys(data)[0]].map((item) =>  ({
+    return data[Object.keys(data)[0]].map((item) => ({
       time: item[0],
       open: parseFloat(item[1]),
       high: parseFloat(item[2]),
@@ -85,8 +85,6 @@ module.exports = class KrakenExchangeProvider {
       close: parseFloat(item[4]),
       volume: parseFloat(item[6]),
     }));
-
-    return data.result[pair].map((item) =>);
   }
 
   async prices(pair, limit) {
@@ -98,6 +96,11 @@ module.exports = class KrakenExchangeProvider {
   async createOrder(type, ordertype, pair, volume) {
     volume += "";
     const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
+    return orderId;
+  }
+  async editOrder(id, pair, price, volume) {
+    volume += "";
+    const orderId = (await this.#privateApi("AddOrder", { txid: id, pair, price, volume })).txid[0];
     return orderId;
   }
 
@@ -121,4 +124,6 @@ module.exports = class KrakenExchangeProvider {
   getState(pair) {
     return this.state.get(pair, property);
   }
-};
+}
+
+module.exports = KrakenExchangeProvider;

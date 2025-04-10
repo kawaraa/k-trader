@@ -36,6 +36,53 @@ function calcPercentageDifference(oldPrice, newPrice) {
 function calculateFee(amount, feePercentage) {
   return !feePercentage ? 0 : (amount * feePercentage) / 100;
 }
+function smoothPrices(prices, range = 3) {
+  // This remove noises from prices using a moving average
+  if (range < 1 || range > prices.length) {
+    throw new Error("Invalid range. Must be between 1 and the length of the prices.");
+  }
+  const result = [];
+  for (let i = 0; i <= prices.length - 1; i += range) {
+    const slice = prices.slice(i, Math.max(i, i + range));
+    if (!slice[0].tradePrice) result.push(slice.reduce((a, b) => a + b, 0) / slice.length);
+    else {
+      result.push({
+        tradePrice: slice.reduce((a, b) => a + b.tradePrice, 0) / slice.length,
+        askPrice: slice.reduce((a, b) => a + b.askPrice, 0) / slice.length,
+        bidPrice: slice.reduce((a, b) => a + b.bidPrice, 0) / slice.length,
+      });
+    }
+  }
+
+  return result;
+}
+
+// function analyzePrices(prices) {
+//   const result = { lows: [], highs: [], negativesPercent: 0, positivesPercent: 0, startedWith: "" };
+
+//   for (let i = 0; i < prices.length - 1; i++) {
+//     const previous = prices[i - 1] || prices[i];
+//     const current = prices[i];
+//     const next = prices[i + 1] || prices[i];
+
+//     const percentDifference = calcPercentageDifference(current, next);
+//     if (percentDifference < 0) result.negativesPercent += percentDifference;
+//     if (percentDifference > 0) result.positivesPercent += percentDifference;
+
+//     if (previous > current && current < next) {
+//       if (!result.highs[0] && !result.lows[0]) result.startedWith = "low";
+//       result.lows.push(prices[i]);
+//     } else if (current > previous && current > next) {
+//       if (!result.highs[0] && !result.lows[0]) result.startedWith = "high";
+//       result.highs.push(prices[i]);
+//     }
+//   }
+
+//   const changes = Math.min(result.lows.length, result.highs.length);
+//   result.profitPercent = result.positivesPercent / changes;
+//   result.lossPercent = result.negativesPercent / changes;
+//   return result;
+// }
 
 module.exports = {
   findSupportResistance,
@@ -44,4 +91,5 @@ module.exports = {
   calcAveragePrice,
   calcPercentageDifference,
   calculateFee,
+  smoothPrices,
 };

@@ -1,5 +1,5 @@
 const { randomUUID } = require("node:crypto");
-const { calculateFee } = require("../trend-analysis");
+const { calculateFee } = require("../services");
 
 module.exports = class TestExchangeProvider {
   constructor(balance, prices, timeInterval) {

@@ -222,16 +222,16 @@ function findHighestLowestPrice(prices, currentPrice) {
   return priceChanges;
 }
 
-function getDynamicTakeProfitPct(prices) {
-  const changes = [];
-  for (let i = 1; i < prices.length; i++) {
-    const change = Math.abs((prices[i] - prices[i - 1]) / prices[i - 1]);
-    changes.push(change);
-  }
+// function getDynamicTakeProfitPct(prices) {
+//   const changes = [];
+//   for (let i = 1; i < prices.length; i++) {
+//     const change = Math.abs((prices[i] - prices[i - 1]) / prices[i - 1]);
+//     changes.push(change);
+//   }
 
-  const avgChange = changes.reduce((sum, c) => sum + c, 0) / changes.length;
-  return avgChange * 2;
-}
+//   const avgChange = changes.reduce((sum, c) => sum + c, 0) / changes.length;
+//   return avgChange * 2;
+// }
 
 // This calculates the earnings from an investment given the current price, previous price, and invested amount.
 function calcInvestmentProfit(previousPrice, currentPrice, investedAmount) {
@@ -256,22 +256,6 @@ function adjustPrice(price, percentage) {
   const multiplier = percentage / 100;
   return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
 }
-function countPriceChanges(prices, percentageThreshold, offset = 864) {
-  const changes = [];
-  // Find the lowest price in the last 3 days (864) based on 5 mins interval
-  let picePointer = prices.slice(0, offset).sort()[0];
-
-  for (let i = offset - 10; i < prices.length; i++) {
-    const change = calcPercentageDifference(picePointer, prices[i]);
-    const negative = change >= percentageThreshold && (changes.at(-1) || -1) <= 0;
-    const positive = -percentageThreshold >= change && (changes.at(-1) || 1) > 0;
-    if (negative || positive) {
-      changes.push(change);
-      picePointer = prices[i];
-    }
-  }
-  return { changes, avgPeriod: +((prices.length * 5) / changes.length / 60 / 24).toFixed(2) };
-}
 
 module.exports = {
   simpleMovingAverage,
@@ -279,11 +263,10 @@ module.exports = {
   detectBreakoutOrBreakdown,
   isGoodTimeToBuy,
   findHighestLowestPrice,
-  getDynamicTakeProfitPct,
+  // getDynamicTakeProfitPct,
   detectPriceShape,
   calcInvestmentProfit,
   calcTransactionProfit,
   adjustPrice,
   isOlderThen,
-  countPriceChanges,
 };

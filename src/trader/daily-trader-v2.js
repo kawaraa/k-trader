@@ -1,10 +1,6 @@
-const {
-  calcPercentageDifference,
-  calculateFee,
-  calcAveragePrice,
-  isOlderThen,
-} = require("./trend-analysis.js");
+const { calculateFee, calcAveragePrice, isOlderThen } = require("./trend-analysis.js");
 const TestExchangeProvider = require("./test-ex-provider.js");
+const { calcPercentageDifference } = require("../services.js");
 
 // Smart trader
 class DailyTrader {
@@ -79,7 +75,7 @@ class DailyTrader {
 
       if (thereIsStrategy) {
         const bidPrices = prices.map((p) => p.bidPrice);
-        const highestBidPr = bidPrices.sort().at(-1);
+        const highestBidPr = bidPrices.toSorted().at(-1);
         const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
 
         if (enoughPricesData && !this.averageAskBidSpread) {
@@ -117,7 +113,7 @@ class DailyTrader {
         // Safety check: Make sure there is no spike higher then 10% and the current price is not lower then -10% then the highest price including "x% increase"
         // Todo: readd safeArea
 
-        // const sortedPrices = (allPrices.slice(-288).map((p) => p.askPrice) || []).sort(); //last 24 hrs
+        // const sortedPrices = (allPrices.slice(-288).map((p) => p.askPrice) || []).toSorted(); //last 24 hrs
         // const safeArea =
         //   calcPercentageDifference(sortedPrices.at(0), bidPrice) <=
         //   Math.min(10, this.#pricePercentChange * 1.5);

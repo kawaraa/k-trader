@@ -18,8 +18,8 @@
 4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
 */
 
+const { calcPercentageDifference } = require("../services.js");
 const {
-  calcPercentageDifference,
   calculateFee,
   calcAveragePrice,
   detectPriceShape,
@@ -74,7 +74,7 @@ module.exports = class DailyTrader {
       const enoughPricesData = prices.length >= (this.range * 60) / this.timeInterval;
       const bidPrices = prices.map((p) => p.bidPrice);
       const priceShape = detectPriceShape(bidPrices, this.buySellOnThreshold).shape;
-      const highestBidPr = bidPrices.sort().at(-1);
+      const highestBidPr = bidPrices.toSorted().at(-1);
       const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
 
       if (enoughPricesData && !this.averageAskBidSpread) {

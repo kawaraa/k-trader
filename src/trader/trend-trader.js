@@ -1,3 +1,4 @@
+const { calcPercentageDifference } = require("../services");
 const Trader = require("./trader");
 const { EMA } = require("technicalindicators");
 

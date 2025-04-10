@@ -1,4 +1,4 @@
-const cryptocurrencies = require("./currencies.json");
+const cryptocurrencies = require("./data/currencies.json");
 
 function isNumber(num, min, max) {
   const N = Number.parseFloat(num);

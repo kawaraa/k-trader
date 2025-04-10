@@ -1,16 +1,12 @@
 const Trader = require("./trader.js");
-const {
-  calcPercentageDifference,
-  calculateFee,
-  calcAveragePrice,
-  detectUpDowntrend,
-} = require("../trend-analysis.js");
+const { calcPercentageDifference, calcAveragePrice, calculateFee } = require("../services.js");
+const { runeTradingTest, findPriceMovement } = require("../indicators.js");
 // const TestExchangeProvider = require("./test-ex-provider.js");
 
 // Smart trader
 class MyTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
-    this.supper(exProvider, pair, interval, capital);
+    super(exProvider, pair, interval, capital);
 
     // this.strategyTimestamp = info.strategyTimestamp;
     this.previouslyDropped = 0;
@@ -18,126 +14,106 @@ class MyTrader extends Trader {
     this.previousLoss = 0;
     this.recoveredLoss = 0;
     this.averageAskBidSpread;
-    this.analysisPeriod = 3 * 24;
-    this.paused = false;
-
-    // this.strategyRange = +range; // Range in hours "0.5 = have an hour"
-    // this.pricePercentChange = +pricePercent; // Percentage Change is the price Percentage Threshold
-    // this.halfPercent = this.pricePercentChange / 2;
-    // this.thirdPercent = this.pricePercentChange / 3;
-    // this.buySellOnPercent = this.pricePercentChange / 5;
+    this.analysisPeriod = 1 * 24;
+    this.ranges = [90 / interval, 180 / interval];
+    this.strategyTest = { timestamp: 0, range: this.ranges[0] };
+    this.lastTradeAge = 0;
   }
 
-  async start() {
-    // const trades = await this.ex.getState(this.pair, "trades");
-    // const totalProfit = (trades.filter((t) => t > 0).reduce((acc, n) => acc + n, 0) / this.capital) * 100;
-    // const totalLoss = -((trades.filter((t) => t < 0).reduce((acc, n) => acc + n, 0) / this.capital) * 100);
-    // const trade1 = (trades.at(-1) / this.capital) * 100;
-    // const trade2 = (trades.at(-2) / this.capital) * 100;
-    const period = (12 * 60) / this.timeInterval;
+  async run() {
+    const period = (this.analysisPeriod * 60) / this.interval;
 
     // Get data from Kraken
+    const allPrices = await this.ex.prices(this.pair, period);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.pair);
-    const prices = await this.ex.prices(this.pair, period); // For the last xxx hours
     const positions = await this.ex.getOrders(this.pair);
-    const enoughPricesData = prices.length >= period;
+    const enoughPricesData = allPrices.length >= period;
 
-    this.dispatch(
-      "log",
-      `€${balance.eur.toFixed(2)} - Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`
-    );
+    if (!enoughPricesData) return;
 
-    if (enoughPricesData) {
-      const bidPrices = prices.map((p) => p.bidPrice);
-      const last90MinsPrices = bidPrices.slice(parseInt(bidPrices.length / 8));
-      const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
-      const averageAskBidSpread = calcAveragePrice(
-        prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice))
-      );
+    const strategyExpired = !this.strategyTest.timestamp || this.strategyTest.timestamp / 60 > 24;
+    if (!positions[0] && strategyExpired) {
+      const test1 = runeTradingTest(allPrices, this.ranges[0]);
+      const test2 = runeTradingTest(allPrices, this.ranges[1]);
 
-      const safeAskBidSpread = askBidSpreadPercentage <= averageAskBidSpread;
-      const prc = JSON.stringify({ tradePrice, askPrice, bidPrice });
-      if (positions[0] && balance.crypto > 0) {
-        // Todo, Sell when, DOWNTREND, DROPPING, position profit drops current profit percent / 5 or 4,
-        // and the profit target is 1%, dynamic profit target from the drop percent, specific profit target defined by test of the last 3 days
-        // The same for StopLoss limit
-        const orderPriceChange = calcPercentageDifference(positions[0].price, bidPrice);
-        const profitAndStopLossLimit = this.previouslyDropped / 2;
-        const loss = this.previousProfit - orderPriceChange;
-
-        this.dispatch(
-          "log",
-          `Gain: ${this.previousProfit}% - Loss: ${loss}% - Current: ${orderPriceChange}% - previouslyDropped: ${this.previouslyDropped}%`
-        );
-
-        if (orderPriceChange > this.previousProfit) this.previousProfit = orderPriceChange;
-        // else if (loss >= this.previousLoss) this.previousLoss = loss;
-        // else {
-        //   const recoveredPercent = this.previousLoss - loss;
-        //   if (recoveredPercent > this.recoveredLoss) this.recoveredLoss = recoveredPercent;
-        // }
-
-        // safeAskBidSpread
-        //
-
-        // const droppedAfterLoss = loss - (this.previousLoss - this.recoveredLoss);
-
-        const takeProfit = orderPriceChange > profitAndStopLossLimit && loss >= this.previousProfit / 5;
-
-        const stopLoss = loss > 5 || (loss >= 3 && orderPriceChange < 0);
-        // (isOlderThen(positions[0].createdAt, 48) && orderPriceChange < 0);
-        // && this.recoveredLoss >= this.previousLoss / 4 && droppedAfterLoss > this.recoveredLoss / 5;
-
-        if (takeProfit || stopLoss) {
-          const orderType = stopLoss ? "stopLoss" : "profitable";
-          this.dispatch("log", `Placing ${orderType} order ${prc}`);
-
-          await this.sell(positions[0], balance.crypto, bidPrice);
-          this.previousProfit = 0;
-          // this.previousLoss = 0;
-          // this.recoveredLoss = 0;
-          this.previouslyDropped = 0;
-        }
-      } else if (!positions[0] && safeAskBidSpread && this.capital > 0 && balance.eur >= 5) {
-        // Buy
-        // this.dispatch("log", `shouldBuy: ${safeArea} - ${this.previouslyDropped} - ${shouldBuy}`);
-
-        // Safety check: Make sure there is no spike higher then 10% and the current price is not lower then -10% then the highest price including "x% increase"
-        // const sortedPrices = (allPrices.slice(-144).map((p) => p.askPrice) || []).sort(); //last 12 hrs
-        // const safeArea =
-        //   calcPercentageDifference(sortedPrices.at(0), bidPrice) <=
-        //   Math.max(10, this.pricePercentChange * 1.5);
-
-        // last90MinsPrices
-        // priceChangePercent / 5
-        // const mountainPercent = priceChangePercent / 12;
-        // const mountainPercents = mountainPercent / 2;
-
-        const highestBidPr = [...bidPrices].sort().at(-1);
-        this.previouslyDropped = -calcPercentageDifference(highestBidPr, askPrice);
-
-        let priceMovement = detectUpDowntrend(
-          last90MinsPrices,
-          this.previouslyDropped / 4,
-          this.previouslyDropped / 4,
-          2
-        );
-
-        if (priceMovement == "UPTREND" && this.previouslyDropped > 2) {
-          this.dispatch("log", `Placing BUY at ${askPrice} ${prc}`);
-          const capital = balance.eur < this.capital ? balance.eur : this.capital;
-          const cost = capital - calculateFee(capital, 0.4);
-          const investingVolume = +(cost / askPrice).toFixed(8);
-          const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
-          this.dispatch("buy", orderId);
-        } else {
-          this.dispatch("log", `Waiting for UPTREND signal`);
-        }
+      if (test1.loss == 0 && test1.netProfit >= 0 && test1.netProfit > test2.netProfit) {
+        this.strategyTest = { ...this.strategyTest, ...test1, range: this.ranges[0] };
+      } else if (test2.loss == 0 && test2.netProfit >= 0 && test2.netProfit >= test1.netProfit) {
+        this.strategyTest = { ...this.strategyTest, ...test2, range: this.ranges[1] };
       }
 
-      this.dispatch("log", "");
+      this.strategyTest.timestamp = 0;
     }
+
+    this.strategyTest.timestamp += this.interval;
+    const { dropPercent, buySellOnPercent, profitPercent, stopLossPercent } = this.strategyTest;
+    if (!positions[0] && this.strategyTest.netProfit < 0) return;
+    this.lastTradeAge++;
+
+    // this.dispatch(
+    //   "log",
+    //   `€${balance.eur.toFixed(2)} - Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`
+    // );
+
+    const prices = allPrices.slice(-this.strategyTest.range);
+    const bidPrices = prices.map((p) => p.bidPrice);
+    // const last90MinsPrices = bidPrices.slice(parseInt(bidPrices.length / 8));
+    const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
+    const averageAskBidSpread = calcAveragePrice(
+      prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice))
+    );
+
+    const safeAskBidSpread = askBidSpreadPercentage <= averageAskBidSpread;
+    const prc = JSON.stringify({ tradePrice, askPrice, bidPrice });
+    const pause = this.lastTradeAge < this.strategyTest.range;
+
+    const highestBidPr = bidPrices.toSorted().at(-1);
+    const dropped = calcPercentageDifference(highestBidPr, askPrice) < -dropPercent;
+    const direction = findPriceMovement(bidPrices, buySellOnPercent);
+
+    if (!positions[0] && !pause && safeAskBidSpread && this.capital > 0 && balance.eur >= 5) {
+      if (dropped && direction.includes("INCREASING")) {
+        console.log("sss", `€${balance.eur.toFixed(2)}`, this.strategyTest);
+        this.dispatch("log", `Placing BUY at ${askPrice} ${prc}`);
+        const capital = balance.eur < this.capital ? balance.eur : this.capital;
+        const cost = capital - calculateFee(capital, 0.4);
+        const investingVolume = +(cost / askPrice).toFixed(8);
+        const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
+        this.dispatch("buy", orderId);
+      } else {
+        // this.dispatch("log", `Waiting for UPTREND signal`);
+      }
+    } else if (positions[0] && safeAskBidSpread && balance.crypto > 0) {
+      // Todo, Sell when, DOWNTREND, DROPPING, position profit drops current profit percent / 5 or 4,
+      // and the profit target is 1%, dynamic profit target from the drop percent, specific profit target defined by test of the last 3 days
+      // The same for StopLoss limit
+
+      const orderPriceChange = calcPercentageDifference(positions[0].price, bidPrice);
+      if (orderPriceChange > this.previousProfit) this.previousProfit = orderPriceChange;
+
+      const loss = this.previousProfit - orderPriceChange;
+
+      const takeProfit = orderPriceChange > profitPercent && loss >= buySellOnPercent;
+
+      const stopLoss = orderPriceChange <= -stopLossPercent;
+      // || (orderPriceChange < 0 && direction.includes("DROPPING"));
+      // const stopLoss = loss >= stopLossPercent && orderPriceChange < 0;
+
+      if (takeProfit || stopLoss) {
+        this.dispatch(
+          "log",
+          `Gain: ${this.previousProfit}% - Loss: ${loss}% - Current: ${orderPriceChange}% `
+        );
+        const orderType = stopLoss ? "stopLoss" : "profitable";
+        this.dispatch("log", `Placing ${orderType} order ${prc}`);
+        await this.sell(positions[0], balance.crypto, bidPrice);
+        this.previousProfit = 0;
+        this.lastTradeAge = 0;
+      }
+    }
+
+    // this.dispatch("log", "");
   }
 }
 

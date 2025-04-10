@@ -1,18 +1,18 @@
 // test-trading-script is a price-history-analysis-script
 const { Worker, parentPort, workerData, isMainThread } = require("worker_threads");
 const { readFileSync, existsSync } = require("fs");
-const TestExchangeProvider = require("./test-ex-provider.js");
-const SwingTrader = require("./swing-trader.js");
+const TestExchangeProvider = require("../providers/test-ex-provider.js");
+// const SwingTrader = require("./swing-trader.js");
+const SwingTrader = require("../trader/my-trader.js");
 // const ScalpingTrader = require("./scalping-trader.js");
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
-const strategy = process.argv[4] == "log" ? "" : process.argv[4];
 const showLogs = process.argv.includes("log");
 
 const capital = 100; // Amount in EUR which is the total money that can be used for trading
 
-async function runTradingTest(pair, interval, strategy) {
+async function runTradingTest(pair, interval) {
   try {
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
@@ -21,16 +21,16 @@ async function runTradingTest(pair, interval, strategy) {
     // const prices3 = getPrices(`bots/${pair}-2`, interval / 5);
     const prices1 = getPrices(`test/${pair}-3`, interval / 5);
 
-    // workers.push(runWorker([pair, prices, interval, strategy, showLogs]));
-    const tests = [await testStrategy(pair, prices1, interval, strategy, showLogs)];
+    // workers.push(runWorker([pair, prices, interval, showLogs]));
+    const tests = [await runTest(pair, prices1, interval, showLogs)];
     // if (prices2[0]) {
     //   tests.push(
-    //     await testStrategy(pair, prices2, interval, strategy, showLogs)
+    //     await runTest(pair, prices2, interval, showLogs)
     //   );
     // }
     // if (prices3[0]) {
     //   tests.push(
-    //     await testStrategy(pair, prices3, interval, strategy, showLogs)
+    //     await runTest(pair, prices3, interval, showLogs)
     //   );
     // }
 
@@ -75,21 +75,17 @@ async function runTradingTest(pair, interval, strategy) {
   console.log(`\n`);
 }
 
-async function testStrategy(pair, prices, interval, strategy, showLogs) {
-  const m = +(prices.length / 8640).toFixed(1); // 8640 * 5 = the number of mins in one month
+async function runTest(pair, prices, interval, showLogs) {
+  const m = +((prices.length * interval) / 43200).toFixed(1); // 43200 is the number of mins in one month
   let transactions = 0;
   const ex = new TestExchangeProvider({ eur: 100, crypto: 0 }, prices, interval);
-
-  const trader = new SwingTrader(ex, pair, { timeInterval: interval, capital: 100, strategy });
+  const trader = new SwingTrader(ex, pair, interval, 100);
   delete trader.period;
 
   trader.listener = (p, event, info) => {
     if (event == "sell") {
       ex.removeOrder(info);
       transactions++;
-    } else if (event == "strategy") {
-      ex.strategy = info.strategy;
-      ex.strategyTimestamp = 0;
     }
 
     if (showLogs) event == "log" && console.log(pair, info);
@@ -103,7 +99,7 @@ async function testStrategy(pair, prices, interval, strategy, showLogs) {
   if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
   const balance = +(await ex.balance()).eur.toFixed(2);
 
-  return { balance, crypto, transactions, strategy: strategy || ex.getState(pair, "strategy"), m };
+  return { balance, crypto, transactions, m };
 }
 
 function getPrices(pair, skip = 1) {
@@ -134,10 +130,10 @@ function runWorker(workerData) {
 
 // Run the runTradingTest function if the script is executed directly
 if (require.main === module && isMainThread) {
-  runTradingTest(pair, interval, strategy);
+  runTradingTest(pair, interval);
 } else if (!isMainThread && workerData) {
-  const [p, prices, interval, strategy] = workerData;
-  testStrategy(p, prices, interval, strategy).then((r) => parentPort.postMessage(r));
+  const [p, prices, interval] = workerData;
+  runTest(p, prices, interval).then((r) => parentPort.postMessage(r));
 } else {
   module.exports = runTradingTest; // Export the runTradingTest function for use as a module
 }

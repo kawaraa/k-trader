@@ -5,7 +5,7 @@ const { calcPercentageDifference, calcAveragePrice, calculateFee } = require("..
 // Smart trader
 class ScalpingTrader extends Trader {
   constructor(exProvider, pair, interval, capital, profitTarget, stopLoss) {
-    this.supper(exProvider, pair, interval, capital);
+    super(exProvider, pair, interval, capital);
     this.profitTarget = +profitTarget;
     this.stopLoss = +stopLoss;
     this.listener = null;
@@ -31,7 +31,7 @@ class ScalpingTrader extends Trader {
       const safeAskBidSpread = askBidSpreadPercentage <= averageAskBidSpread;
 
       if (!orders[0] && this.capital > 0 && balance.eur >= this.capital / 2) {
-        const highestBidPr = (prices.map((p) => p.bidPrice) || []).sort().at(-1);
+        const highestBidPr = (prices.map((p) => p.bidPrice) || []).toSorted().at(-1);
         this.breakdowns.push(Math.max(-calcPercentageDifference(highestBidPr, bidPrice), 1));
         if (this.breakdowns.length > 10) this.breakdowns.shift();
 

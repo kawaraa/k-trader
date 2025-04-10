@@ -1,3 +1,5 @@
+const { calcPercentageDifference, calcAveragePrice } = require("./services");
+
 /* ========== trend analysis Indicators ========== */
 
 // const { RSI } = require("technicalindicators");
@@ -122,8 +124,6 @@ function detectTrendlines(data, lookback = 20) {
 }
 
 /*
-
-
 ===== My implementations ===== 
 */
 function findPriceMovement(prices, minPercent) {
@@ -139,9 +139,87 @@ function findPriceMovement(prices, minPercent) {
   return "STABLE";
 }
 
+function runeTradingTest(prices, range = 18) {
+  const calculateLimits = (percent) => ({
+    dropPercent: percent * 1.2,
+    buySellOnPercent: percent / 5,
+    profitPercent: percent / 2,
+    stopLossPercent: percent,
+  });
+
+  let percentage = 2;
+  const maxPercentage = 20;
+  const result = {
+    netProfit: 0,
+    profit: 0,
+    loss: 0,
+    ...calculateLimits(maxPercentage),
+    trades: 0,
+  };
+
+  while (percentage <= maxPercentage) {
+    let prevProfit = 0;
+    let loss = 0;
+    let profit = 0;
+    let pricePointer = null;
+    let trades = 0;
+    const { dropPercent, buySellOnPercent, profitPercent, stopLossPercent } = calculateLimits(percentage);
+    let lastTradeAge = 0;
+
+    for (let i = range; i < prices.length; i++) {
+      const newPrices = prices.slice(i - range, i);
+      const bidPrices = newPrices.map((p) => p.bidPrice);
+      const price = newPrices.at(-1);
+      const highest = bidPrices.toSorted().at(-1);
+      const dropped = calcPercentageDifference(highest, price.askPrice) < -dropPercent;
+      const increasing = findPriceMovement(bidPrices, buySellOnPercent).includes("INCREASING");
+
+      const askBidSpreadPercentage = calcPercentageDifference(price.bidPrice, price.askPrice);
+      const averageAskBidSpread = calcAveragePrice(
+        newPrices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice))
+      );
+      const safeAskBidSpread = askBidSpreadPercentage <= averageAskBidSpread;
+
+      lastTradeAge++;
+      if (lastTradeAge < range) continue;
+
+      if (!pricePointer && safeAskBidSpread && dropped && increasing) pricePointer = price.askPrice;
+      else if (pricePointer && safeAskBidSpread) {
+        const priceDifferent = calcPercentageDifference(pricePointer, price.bidPrice);
+
+        if (priceDifferent > prevProfit) prevProfit = priceDifferent;
+
+        if (priceDifferent > profitPercent && prevProfit >= profitPercent + buySellOnPercent) {
+          profit += priceDifferent;
+          trades++;
+          pricePointer = null;
+          prevProfit = 0;
+        } else if (priceDifferent <= -stopLossPercent) {
+          loss += priceDifferent;
+          trades++;
+          pricePointer = null;
+          prevProfit = 0;
+        }
+      }
+    }
+
+    if (profit + loss > result.profit + result.loss) {
+      result.profit = +profit.toFixed(2);
+      result.loss = +loss.toFixed(2);
+      result.netProfit = result.profit + result.loss;
+      result.dropPercent = dropPercent;
+      result.buySellOnPercent = buySellOnPercent;
+      result.profitPercent = profitPercent;
+      result.stopLossPercent = stopLossPercent;
+      result.trades = trades;
+    }
+
+    percentage++;
+  }
+  return result;
+}
+
 /*
-
-
 ===== Pattern detection Methods ===== 
 */
 function detectBasicPattern(data) {
@@ -207,6 +285,7 @@ module.exports = {
   detectTrendlines,
 
   findPriceMovement,
+  runeTradingTest,
 
   detectBasicPattern,
   detectAdvancedPattern,

@@ -4,7 +4,7 @@ const services = require("../services");
 
 class GptMadeTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
-    this.supper(exProvider, pair, interval, capital);
+    super(exProvider, pair, interval, capital);
     //
   }
 

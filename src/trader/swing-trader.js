@@ -1,17 +1,13 @@
 const Trader = require("./trader.js");
 
 const { calcPercentageDifference, calcAveragePrice, calculateFee } = require("../services.js");
-const {
-  detectPriceDirection,
-  detectBreakoutOrBreakdown,
-  getDynamicTakeProfitPct,
-} = require("./trend-analysis.js");
+const { detectPriceDirection, detectBreakoutOrBreakdown } = require("../trend-analysis.js");
 // const TestExchangeProvider = require("./test-ex-provider.js");
 
 // Smart Swing Trader
 class SwingTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
-    this.supper(exProvider, pair, interval, capital);
+    super(exProvider, pair, interval, capital);
     this.listener = null;
 
     this.previouslyDropped = 0;
@@ -25,7 +21,7 @@ class SwingTrader extends Trader {
     this.breakdowns = [1];
   }
 
-  async start() {
+  async run() {
     // const trades = await this.ex.getState(this.pair, "trades");
     // const totalProfit = (trades.filter((t) => t > 0).reduce((acc, n) => acc + n, 0) / this.capital) * 100;
     // const totalLoss = -((trades.filter((t) => t < 0).reduce((acc, n) => acc + n, 0) / this.capital) * 100);
@@ -50,7 +46,7 @@ class SwingTrader extends Trader {
       const bidPrices = prices.map((p) => p.bidPrice);
       // const shortLength = parseInt(bidPrices.length / 8); // <==================XXXXXX
       const shortLength = parseInt(bidPrices.length / 8); // <==================XXXXXX
-      const highestBidPr = bidPrices.slice(-shortLength).sort().at(-1);
+      const highestBidPr = bidPrices.slice(-shortLength).toSorted().at(-1);
       this.breakdowns.push(Math.max(-calcPercentageDifference(highestBidPr, bidPrice), 1));
       if (this.breakdowns.length > 10) this.breakdowns.shift();
 
@@ -137,7 +133,7 @@ class SwingTrader extends Trader {
         // this.dispatch("log", `shouldBuy: ${safeArea} - ${this.previouslyDropped} - ${shouldBuy}`);
 
         // Safety check: Make sure there is no spike higher then 10% and the current price is not lower then -10% then the highest price including "x% increase"
-        // const sortedPrices = (allPrices.slice(-144).map((p) => p.askPrice) || []).sort(); //last 12 hrs
+        // const sortedPrices = (allPrices.slice(-144).map((p) => p.askPrice) || []).toSorted(); //last 12 hrs
         // const safeArea =
         //   calcPercentageDifference(sortedPrices.at(0), bidPrice) <=
         //   Math.max(10, this.pricePercentChange * 1.5);
@@ -147,7 +143,7 @@ class SwingTrader extends Trader {
         // const mountainPercent = priceChangePercent / 12;
         // const mountainPercents = mountainPercent / 2;
 
-        const highestBidPr = [...bidPrices].sort().at(-1);
+        const highestBidPr = bidPrices.toSorted().at(-1);
         this.previouslyDropped = -calcPercentageDifference(highestBidPr, askPrice);
         prices;
 
