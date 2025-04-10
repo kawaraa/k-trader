@@ -1,14 +1,11 @@
 const Trader = require("./trader.js");
 const { calcPercentageDifference, calcAveragePrice, calculateFee } = require("../services.js");
 const { runeTradingTest, findPriceMovement } = require("../indicators.js");
-// const TestExchangeProvider = require("./test-ex-provider.js");
 
 // Smart trader
 class MyTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
     super(exProvider, pair, interval, capital);
-
-    // this.strategyTimestamp = info.strategyTimestamp;
     this.previouslyDropped = 0;
     this.previousProfit = 0;
     this.previousLoss = 0;
@@ -51,14 +48,13 @@ class MyTrader extends Trader {
     if (!positions[0] && this.strategyTest.netProfit < 0) return;
     this.lastTradeAge++;
 
-    // this.dispatch(
-    //   "log",
-    //   `€${balance.eur.toFixed(2)} - Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`
-    // );
+    this.dispatch(
+      "log",
+      `€${balance.eur.toFixed(2)} - Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`
+    );
 
     const prices = allPrices.slice(-this.strategyTest.range);
     const bidPrices = prices.map((p) => p.bidPrice);
-    // const last90MinsPrices = bidPrices.slice(parseInt(bidPrices.length / 8));
     const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
     const averageAskBidSpread = calcAveragePrice(
       prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice))
@@ -72,9 +68,10 @@ class MyTrader extends Trader {
     const dropped = calcPercentageDifference(highestBidPr, askPrice) < -dropPercent;
     const direction = findPriceMovement(bidPrices, buySellOnPercent);
 
+    console.log("safeAskBidSpread", safeAskBidSpread);
     if (!positions[0] && !pause && safeAskBidSpread && this.capital > 0 && balance.eur >= 5) {
       if (dropped && direction.includes("INCREASING")) {
-        console.log("sss", `€${balance.eur.toFixed(2)}`, this.strategyTest);
+        console.log("sss", this.strategyTest);
         this.dispatch("log", `Placing BUY at ${askPrice} ${prc}`);
         const capital = balance.eur < this.capital ? balance.eur : this.capital;
         const cost = capital - calculateFee(capital, 0.4);
@@ -82,7 +79,7 @@ class MyTrader extends Trader {
         const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
         this.dispatch("buy", orderId);
       } else {
-        // this.dispatch("log", `Waiting for UPTREND signal`);
+        this.dispatch("log", `Waiting for UPTREND signal`);
       }
     } else if (positions[0] && safeAskBidSpread && balance.crypto > 0) {
       // Todo, Sell when, DOWNTREND, DROPPING, position profit drops current profit percent / 5 or 4,
@@ -94,17 +91,27 @@ class MyTrader extends Trader {
 
       const loss = this.previousProfit - orderPriceChange;
 
-      const takeProfit = orderPriceChange > profitPercent && loss >= buySellOnPercent;
+      // const takeProfit = orderPriceChange >= profitPercent;
+      const takeProfit = this.previousProfit > profitPercent && loss >= buySellOnPercent;
+      // const takeProfit =
+      //   (orderPriceChange > profitPercent && loss >= buySellOnPercent) ||
+      //   (!safeAskBidSpread &&
+      //     this.previousProfit > profitPercent &&
+      //     loss >= buySellOnPercent &&
+      //     direction.includes("DROPPING"));
 
-      const stopLoss = orderPriceChange <= -stopLossPercent;
-      // || (orderPriceChange < 0 && direction.includes("DROPPING"));
+      const stopLoss = orderPriceChange <= -Math.max(stopLossPercent, 10);
+      // || (orderPriceChange < -profitPercent && direction.includes("DROPPING"));
+      //  const stopLoss =
+      //    orderPriceChange <= -stopLossPercent || (orderPriceChange <= 0 && direction.includes("DROPPING"));
       // const stopLoss = loss >= stopLossPercent && orderPriceChange < 0;
 
+      this.dispatch(
+        "log",
+        `Gain: ${this.previousProfit}% - Loss: ${loss.toFixed(8)}% - Current: ${orderPriceChange}% `
+      );
+
       if (takeProfit || stopLoss) {
-        this.dispatch(
-          "log",
-          `Gain: ${this.previousProfit}% - Loss: ${loss}% - Current: ${orderPriceChange}% `
-        );
         const orderType = stopLoss ? "stopLoss" : "profitable";
         this.dispatch("log", `Placing ${orderType} order ${prc}`);
         await this.sell(positions[0], balance.crypto, bidPrice);
@@ -113,7 +120,7 @@ class MyTrader extends Trader {
       }
     }
 
-    // this.dispatch("log", "");
+    this.dispatch("log", "");
   }
 }
 

@@ -143,7 +143,7 @@ function runeTradingTest(prices, range = 18) {
   const calculateLimits = (percent) => ({
     dropPercent: percent * 1.2,
     buySellOnPercent: percent / 5,
-    profitPercent: percent / 2,
+    profitPercent: percent,
     stopLossPercent: percent,
   });
 
@@ -185,17 +185,17 @@ function runeTradingTest(prices, range = 18) {
 
       if (!pricePointer && safeAskBidSpread && dropped && increasing) pricePointer = price.askPrice;
       else if (pricePointer && safeAskBidSpread) {
-        const priceDifferent = calcPercentageDifference(pricePointer, price.bidPrice);
+        const priceChange = calcPercentageDifference(pricePointer, price.bidPrice);
 
-        if (priceDifferent > prevProfit) prevProfit = priceDifferent;
+        if (priceChange > prevProfit) prevProfit = priceChange;
 
-        if (priceDifferent > profitPercent && prevProfit >= profitPercent + buySellOnPercent) {
-          profit += priceDifferent;
+        if (prevProfit > profitPercent && prevProfit - profitPercent >= buySellOnPercent) {
+          profit += priceChange;
           trades++;
           pricePointer = null;
           prevProfit = 0;
-        } else if (priceDifferent <= -stopLossPercent) {
-          loss += priceDifferent;
+        } else if (priceChange <= -Math.max(stopLossPercent, 10)) {
+          loss += priceChange;
           trades++;
           pricePointer = null;
           prevProfit = 0;
