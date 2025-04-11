@@ -25,7 +25,7 @@ class Trader {
     try {
       if (this.run) await this.run();
     } catch (error) {
-      this.dispatch("log", `Error running bot: ${error}`);
+      this.dispatch("LOG", `Error running bot: ${error}`);
     }
     if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
   }
@@ -37,8 +37,8 @@ class Trader {
     const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.4);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
-    this.dispatch("sell", { id, profit });
-    this.dispatch("log", `Sold crypto with profit/loss: ${profit} - Age: ${orderAge}hrs`);
+    this.dispatch("SELL", { id, profit });
+    this.dispatch("LOG", `Sold crypto with profit/loss: ${profit} - Age: ${orderAge}hrs`);
   }
 
   async sellAll() {
@@ -52,8 +52,8 @@ class Trader {
       const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
       profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
     }
-    this.dispatch("sell", { profit });
-    this.dispatch("log", `Sold all crypto asset with profit: ${profit}`);
+    this.dispatch("SELL", { profit });
+    this.dispatch("LOG", `Sold all crypto asset with profit: ${profit}`);
   }
 
   stop() {

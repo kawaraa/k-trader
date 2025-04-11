@@ -13,7 +13,7 @@ class BotsManager {
 
   static loadBots() {
     const bots = this.state.getBots();
-    Object.keys(bots).forEach((p) => (this.#bots[p] = new Bot(bots[p], new DailyTrader(ex, p, bots[p]))));
+    Object.keys(bots).forEach((p) => (this.#bots[p] = new Bot(bots[p], new SwingTrader(ex, p, bots[p]))));
   }
   static getEurBalance() {
     return ex.balance("all");
@@ -32,14 +32,14 @@ class BotsManager {
     return null;
   }
   static add(pair, info) {
-    this.#bots[pair] = new Bot(info, new DailyTrader(ex, pair, info));
+    this.#bots[pair] = new Bot(info, new SwingTrader(ex, pair, info));
     this.state.update(this.#bots);
     writeFileSync(`database/logs/${pair}.log`, "");
     writeFileSync(`database/prices/${pair}.json`, "[]");
   }
   static update(pair, info) {
     this.#bots[pair].stop();
-    this.#bots[pair] = new Bot(info, new DailyTrader(ex, pair, info));
+    this.#bots[pair] = new Bot(info, new SwingTrader(ex, pair, info));
     this.state.update(this.#bots);
   }
   static remove(pair) {
@@ -82,7 +82,7 @@ class BotsManager {
   }
 
   static updateBotProgress(pair, event, info) {
-    if (event == "log") {
+    if (event == "LOG") {
       const filePath = `database/logs/${pair}.log`;
 
       if (!info) info = "\n";
@@ -96,13 +96,13 @@ class BotsManager {
       }
     }
 
-    if (event == "buy") this.#bots[pair].orders.push(info);
-    else if (event == "sell") {
+    if (event == "BUY") this.#bots[pair].orders.push(info);
+    else if (event == "SELL") {
       this.#bots[pair].trades.push(info.profit);
       this.#bots[pair].orders = !info.id ? [] : this.#bots[pair].orders.filter((id) => id != info.id);
-    } else if (event == "balance") {
+    } else if (event == "BALANCE") {
       this.#bots[pair].balance = info;
-    } else if (event == "strategy") {
+    } else if (event == "STRATEGY") {
       this.#bots[pair].strategy = info.strategy;
       this.#bots[pair].strategyTimestamp = 0;
     }

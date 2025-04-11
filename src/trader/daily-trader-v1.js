@@ -87,7 +87,7 @@ class DailyTrader {
         // const thereIsLoss = trade1 <= -1 && trade2 <= -1 && this.strategyTimestamp / (60 * 24) > 1;
 
         if (!enoughPricesData) {
-          this.dispatch("strategy", { strategy: "", strategyTimestamp: 0 });
+          this.dispatch("STRATEGY", { strategy: "", strategyTimestamp: 0 });
         } else if (!thereIsStrategy || thereIsLoss) {
           const strategy = await this.#findStrategy(this.#pair, prices, this.timeInterval);
 
@@ -99,10 +99,10 @@ class DailyTrader {
           this.quarterPercent = this.#pricePercentChange / 4;
 
           const strategyString = `${strategy.mode}:${strategy.strategyRange}:${strategy.pricePercentChange}`;
-          this.dispatch("log", `Strategy change: ${strategyString}%`);
+          this.dispatch("LOG", `Strategy change: ${strategyString}%`);
 
           if (strategy.profit < 0) return "Stop trading";
-          this.dispatch("strategy", { strategy: `${strategyString}` });
+          this.dispatch("STRATEGY", { strategy: `${strategyString}` });
         }
 
         prices = prices.slice(-((period * 60) / this.timeInterval));
@@ -143,7 +143,7 @@ class DailyTrader {
         else if (this.mode.includes("ON-V-SHAPE")) shouldBuy = !tooHigh && priceShape == "V";
 
         const log = `€${balance.eur.toFixed(2)} - Should buy: ${shouldBuy} Should trade: ${shouldTrade}`;
-        this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`);
+        this.dispatch("LOG", `${log} - Prices => Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`);
 
         this.lastTrade += 5;
         if (orders[0]) {
@@ -161,8 +161,8 @@ class DailyTrader {
             const cost = capital - calculateFee(capital, 0.4);
             const investingVolume = +(cost / askPrice).toFixed(8);
             const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
-            this.dispatch("buy", orderId);
-            this.dispatch("log", `Bought crypto with order ID "${orderId}" at ask Price above 👆`);
+            this.dispatch("BUY", orderId);
+            this.dispatch("LOG", `Bought crypto with order ID "${orderId}" at ask Price above 👆`);
           }
 
           // Sell
@@ -190,7 +190,7 @@ class DailyTrader {
           else {
             if (stopLoss) orderType = "stopLoss";
             if (recoverLoss) orderType = "recoverLoss";
-            this.dispatch("log", `${orderType} order will be executed`);
+            this.dispatch("LOG", `${orderType} order will be executed`);
           }
 
           if (order) {
@@ -201,9 +201,9 @@ class DailyTrader {
           }
         }
       }
-      this.dispatch("log", "");
+      this.dispatch("LOG", "");
     } catch (error) {
-      this.dispatch("log", `Error running bot: ${error}`);
+      this.dispatch("LOG", `Error running bot: ${error}`);
     }
 
     if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
@@ -215,8 +215,8 @@ class DailyTrader {
     const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.4);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
-    this.dispatch("sell", { id, profit });
-    this.dispatch("log", `Sold crypto with profit: ${profit} - Age: ${orderAge}hrs - ID: "${id}"`);
+    this.dispatch("SELL", { id, profit });
+    this.dispatch("LOG", `Sold crypto with profit: ${profit} - Age: ${orderAge}hrs - ID: "${id}"`);
   }
 
   async sellAll() {
@@ -230,8 +230,8 @@ class DailyTrader {
       const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
       profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
     }
-    this.dispatch("sell", { profit });
-    this.dispatch("log", `Sold all crypto asset with profit: ${profit}`);
+    this.dispatch("SELL", { profit });
+    this.dispatch("LOG", `Sold all crypto asset with profit: ${profit}`);
   }
 
   stop() {
@@ -271,7 +271,7 @@ async function testStrategy(pair, prices, interval, mode, strategyRange, pricePe
   delete trader.period;
 
   trader.listener = (p, event, info) => {
-    if (event == "sell") {
+    if (event == "SELL") {
       ex.removeOrder(info);
       transactions++;
     }
@@ -282,7 +282,7 @@ async function testStrategy(pair, prices, interval, mode, strategyRange, pricePe
   }
 
   const crypto = (await ex.balance()).crypto + 0;
-  if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
+  if (crypto > 0) await ex.createOrder("SELL", "", "", crypto);
   const profit = +(await ex.balance()).eur.toFixed(2) - 100;
 
   return { profit, crypto, transactions, mode, strategyRange, pricePercentChange };

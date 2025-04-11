@@ -15,6 +15,5 @@ for (const fileName of fileNames) {
 
   // console.log(JSON.stringify(smoothPrices(prices, 12)));
 
-  console.log("Range: 1.5hrs ", trader.runeTradingTest(prices, 18));
-  console.log("Range: 3hrs ", trader.runeTradingTest(prices, 36));
+  console.log(trader.runeTradingTest(prices));
 }

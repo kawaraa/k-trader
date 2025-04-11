@@ -41,12 +41,12 @@ class GPTrader extends Trader {
           const cost = capital - calculateFee(capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
-          this.dispatch("buy", orderId);
-          this.dispatch("log", `[${new Date().toISOString()}] Placing BUY at ${askPrice}`);
+          this.dispatch("BUY", orderId);
+          this.dispatch("LOG", `[${new Date().toISOString()}] Placing BUY at ${askPrice}`);
         }
       } else if (positions[0]) {
         if (decisionSignal === "SELL") {
-          this.dispatch("log", `[${new Date().toISOString()}] Placing SELL at ${askPrice}`);
+          this.dispatch("LOG", `[${new Date().toISOString()}] Placing SELL at ${askPrice}`);
         } else {
           const priceChangePercent = calcPercentageDifference(positions[0].price, bidPrice); // 0.01 = 1%
           const profitAndStopLossPercent = getDynamicTakeProfitPct(prices);
@@ -54,16 +54,16 @@ class GPTrader extends Trader {
           // const shouldTakeProfit = bidPrice >= positions[0].price * (1 + profitAndStopLossPercent);
 
           if (priceChangePercent >= profitAndStopLossPercent * 100) {
-            this.dispatch("log", `[${new Date().toISOString()}] Placing TAKE PROFIT at ${bidPrice}`);
+            this.dispatch("LOG", `[${new Date().toISOString()}] Placing TAKE PROFIT at ${bidPrice}`);
             await this.sell(positions[0], balance.crypto, bidPrice);
           } else if (priceChangePercent <= -((profitAndStopLossPercent * 100) / 2)) {
-            this.dispatch("log", `[${new Date().toISOString()}] STOP LOSS at ${bidPrice}`);
+            this.dispatch("LOG", `[${new Date().toISOString()}] STOP LOSS at ${bidPrice}`);
             await this.sell(positions[0], balance.crypto, bidPrice);
           }
         }
       }
 
-      this.dispatch("log", "");
+      this.dispatch("LOG", "");
     }
   }
 

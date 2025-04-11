@@ -46,8 +46,8 @@ class ScalpingTrader extends Trader {
           const cost = capital - calculateFee(capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
-          this.dispatch("buy", orderId);
-          this.dispatch("log", `Placing BUY at ${askPrice}`);
+          this.dispatch("BUY", orderId);
+          this.dispatch("LOG", `Placing BUY at ${askPrice}`);
         }
       } else if (orders[0] && balance.crypto > 0) {
         const orderPriceChange = calcPercentageDifference(orders[0].price, bidPrice);
@@ -55,16 +55,16 @@ class ScalpingTrader extends Trader {
 
         if (orderPriceChange >= profitAndStoLossLimit) {
           await this.sell(orders[0], balance.crypto, bidPrice);
-          this.dispatch("log", `Target reached. sold at ${bidPrice}`);
+          this.dispatch("LOG", `Target reached. sold at ${bidPrice}`);
         } else if (safeAskBidSpread && orderPriceChange + averageAskBidSpread < -profitAndStoLossLimit) {
           await this.sell(orders[0], balance.crypto, bidPrice);
-          this.dispatch("log", `Stop loss hit. sold at ${bidPrice}`);
+          this.dispatch("LOG", `Stop loss hit. sold at ${bidPrice}`);
         } else {
-          this.dispatch("log", `Monitoring for ${profitAndStoLossLimit}% profit or stop loss`);
+          this.dispatch("LOG", `Monitoring for ${profitAndStoLossLimit}% profit or stop loss`);
         }
       }
 
-      this.dispatch("log", "");
+      this.dispatch("LOG", "");
     }
   }
 }

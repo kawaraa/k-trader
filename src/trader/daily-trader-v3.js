@@ -54,7 +54,7 @@ class DailyTrader {
           (!orders[0] && totalLoss > totalProfit / 3 && this.strategyTimestamp / 60 > 1);
 
         if (!enoughPricesData) {
-          this.dispatch("strategy", { strategy: "", strategyTimestamp: 0 });
+          this.dispatch("STRATEGY", { strategy: "", strategyTimestamp: 0 });
           //
         } else if (!thereIsStrategy || thereIsLoss) {
           const strategy = await this.#findStrategy(this.#pair, allPrices, this.timeInterval);
@@ -63,9 +63,9 @@ class DailyTrader {
           this.#setStrategySettings(strategy.settings);
           this.previouslyDropped = false;
 
-          this.dispatch("log", `Strategy changed: ${strategy.settings}%`);
+          this.dispatch("LOG", `Strategy changed: ${strategy.settings}%`);
 
-          this.dispatch("strategy", { strategy: `${strategy.settings}` });
+          this.dispatch("STRATEGY", { strategy: `${strategy.settings}` });
         }
       }
 
@@ -96,7 +96,7 @@ class DailyTrader {
         }
 
         const log = `€${balance.eur.toFixed(2)} - Should trade: ${shouldTrade}`;
-        this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`);
+        this.dispatch("LOG", `${log} - Prices => Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`);
 
         if (orders[0]) {
           this.dispatch(
@@ -115,7 +115,7 @@ class DailyTrader {
         //   dropped && this.#findPriceMovement(prices, this.thirdPercent, prices.length / 2) == "increasing";
 
         const shouldBuy = this.previouslyDropped && increasing;
-        this.dispatch("log", `shouldBuy: ${safeArea} - ${this.previouslyDropped} - ${increasing}`);
+        this.dispatch("LOG", `shouldBuy: ${safeArea} - ${this.previouslyDropped} - ${increasing}`);
 
         // Buy
         if (shouldTrade && !orders[0] && safeArea && shouldBuy) {
@@ -124,8 +124,8 @@ class DailyTrader {
             const cost = capital - calculateFee(capital, 0.4);
             const investingVolume = +(cost / askPrice).toFixed(8);
             const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
-            this.dispatch("buy", orderId);
-            this.dispatch("log", `Bought crypto with order ID "${orderId}" at ask Price above 👆`);
+            this.dispatch("BUY", orderId);
+            this.dispatch("LOG", `Bought crypto with order ID "${orderId}" at ask Price above 👆`);
           }
 
           // Sell
@@ -142,7 +142,7 @@ class DailyTrader {
 
           if (takeProfit || stopLoss || recoverLoss) {
             const orderType = stopLoss ? "stopLoss" : recoverLoss ? "recoverLoss" : "profitable";
-            this.dispatch("log", `${orderType} order will be executed`);
+            this.dispatch("LOG", `${orderType} order will be executed`);
 
             if (orders[0]) {
               await this.#sell(orders[0], balance.crypto, bidPrice);
@@ -155,9 +155,9 @@ class DailyTrader {
         }
       }
 
-      if (enoughPricesData) this.dispatch("log", "");
+      if (enoughPricesData) this.dispatch("LOG", "");
     } catch (error) {
-      this.dispatch("log", `Error running bot: ${error}`);
+      this.dispatch("LOG", `Error running bot: ${error}`);
     }
 
     if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
@@ -169,8 +169,8 @@ class DailyTrader {
     const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.4);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
-    this.dispatch("sell", { id, profit });
-    this.dispatch("log", `Sold crypto with profit: ${profit} - Age: ${orderAge}hrs - ID: "${id}"`);
+    this.dispatch("SELL", { id, profit });
+    this.dispatch("LOG", `Sold crypto with profit: ${profit} - Age: ${orderAge}hrs - ID: "${id}"`);
   }
 
   async sellAll() {
@@ -184,8 +184,8 @@ class DailyTrader {
       const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
       profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
     }
-    this.dispatch("sell", { profit });
-    this.dispatch("log", `Sold all crypto asset with profit: ${profit}`);
+    this.dispatch("SELL", { profit });
+    this.dispatch("LOG", `Sold all crypto asset with profit: ${profit}`);
   }
 
   stop() {
@@ -241,7 +241,7 @@ async function testStrategy(pair, prices, interval, strategyRange, pricePercentC
   delete trader.period;
 
   trader.listener = (p, event, info) => {
-    if (event == "sell") {
+    if (event == "SELL") {
       ex.removeOrder(info);
       transactions++;
     }

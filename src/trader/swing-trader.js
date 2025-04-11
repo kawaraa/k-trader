@@ -120,7 +120,7 @@ class SwingTrader extends Trader {
 
         if (takeProfit || stopLoss) {
           const orderType = stopLoss ? "stopLoss" : "profitable";
-          this.dispatch("log", `Placing ${orderType} order ${prc}`);
+          this.dispatch("LOG", `Placing ${orderType} order ${prc}`);
 
           await this.sell(positions[0], balance.crypto, bidPrice);
           this.previousProfit = 0;
@@ -130,7 +130,7 @@ class SwingTrader extends Trader {
         }
       } else if (!positions[0] && safeAskBidSpread && this.capital > 0 && balance.eur >= 5) {
         // Buy
-        // this.dispatch("log", `shouldBuy: ${safeArea} - ${this.previouslyDropped} - ${shouldBuy}`);
+        // this.dispatch("LOG", `shouldBuy: ${safeArea} - ${this.previouslyDropped} - ${shouldBuy}`);
 
         // Safety check: Make sure there is no spike higher then 10% and the current price is not lower then -10% then the highest price including "x% increase"
         // const sortedPrices = (allPrices.slice(-144).map((p) => p.askPrice) || []).toSorted(); //last 12 hrs
@@ -156,18 +156,18 @@ class SwingTrader extends Trader {
         );
 
         if (priceMovement12Hours == "UNKNOWN" && priceMovement == "UPTREND" && this.previouslyDropped > 2) {
-          this.dispatch("log", `Placing BUY at ${askPrice} ${prc}`);
+          this.dispatch("LOG", `Placing BUY at ${askPrice} ${prc}`);
           const capital = balance.eur < this.capital ? balance.eur : this.capital;
           const cost = capital - calculateFee(capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
-          this.dispatch("buy", orderId);
+          this.dispatch("BUY", orderId);
         } else {
-          this.dispatch("log", `Waiting for UPTREND signal`);
+          this.dispatch("LOG", `Waiting for UPTREND signal`);
         }
       }
 
-      this.dispatch("log", "");
+      this.dispatch("LOG", "");
 
       // this.wasBreakdownPattern = pattern.includes("breakdown");
     }

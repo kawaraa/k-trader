@@ -2,35 +2,38 @@ const Trader = require("./trader");
 const indicators = require("../indicators");
 const services = require("../services");
 
-class GptMadeTrader extends Trader {
-  constructor(exProvider, pair, interval, capital) {
+class AdvanceSwingTrader extends Trader {
+  constructor(exProvider, pair, interval, capital, testMode) {
     super(exProvider, pair, interval, capital);
-    //
+    this.testMode = testMode;
+    this.positions = [];
+    this.profit = 0;
+    this.loss = 0;
   }
 
   async run() {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
-    const positions = await this.ex.getOrders(this.pair);
-    const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.pair);
-    const ohlc = await this.ex.pricesData(PAIR, INTERVAL);
+    const positions = this.testMode ? this.positions : await this.ex.getOrders(this.pair);
+    const currentPrice = await this.ex.currentPrices(this.pair); // { tradePrice, askPrice, bidPrice }
+    const ohlc = await this.ex.pricesData(this.pair, this.interval);
+
     const closes = ohlc.map((d) => d.close);
-    const rsi = indicators.calculateRSI(closes, RSI_PERIOD);
+    const rsi = indicators.calculateRSI(closes, this.rsiPeriod);
+    const decision = this.decide(ohlc, rsi);
 
-    const decisionSignal = this.decide(ohlc, rsi);
-
-    if (decisionSignal === "buy") {
-      this.dispatch("log", `[+] Breakout detected. Placing BUY at ${askPrice}`);
+    if (!positions[0] && decision === "BUY") {
+      this.dispatch("LOG", `[+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
       const cost = capital - calculateFee(capital, 0.4);
-      const investingVolume = +(cost / askPrice).toFixed(8);
-      const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
-      // this.dispatch("log", JSON.stringify({ tradePrice, askPrice, bidPrice }));
-    } else if (decisionSignal === "sell") {
-      this.dispatch("log", `[-] Breakdown detected. Placing SELL order at ${bidPrice}`);
-      await this.sell(positions[0], balance.crypto, bidPrice);
-      // this.dispatch("log", JSON.stringify({ tradePrice, askPrice, bidPrice }));
+      const investingVolume = +(cost / currentPrice.askPrice).toFixed(8);
+      await this.placeTestOrder("BUY", investingVolume, currentPrice.askPrice);
+      //
+    } else if (positions[0] && decision === "SELL") {
+      this.dispatch("LOG", `[-] Breakdown detected. Placing SELL order at ${bidPrice}`);
+      await this.placeTestOrder("SELL", balance.crypto, currentPrice, positions[0]);
+      this.placeTestOrder("SELL", this.orderVolume, currentPrice.bidPrice);
     } else {
-      this.dispatch("log", "[=] No trade signal.");
+      this.dispatch("LOG", `[=] No trade signal. decision: ${decision} order: ${this.orderPrice}`);
     }
   }
 
@@ -80,8 +83,30 @@ class GptMadeTrader extends Trader {
       trend === "downtrend" &&
       slope < 0;
 
-    return breakout ? "buy" : breakdown ? "sell" : null;
+    return breakout ? "BUY" : breakdown ? "SELL" : "HOLD";
+  }
+
+  placeTestOrder(type, volume, price, position) {
+    if (type == "BUY") {
+      if (!this.testMode) {
+        return this.ex.createOrder("buy", "market", this.pair, volume);
+      } else {
+        this.positions.push({ price: price.askPrice, volume });
+        this.dispatch("LOG", "Placing-BUY: " + JSON.stringify(price));
+      }
+    } else {
+      if (!this.testMode) {
+        return this.sell(position, volume, price.bidPrice);
+      } else {
+        let cost = this.positions[0].volume * price.bidPrice;
+        cost = cost - calculateFee(cost, 0.4);
+        if (cost > 0) this.profit += cost;
+        else this.loss += cost;
+        this.positions = [];
+        this.dispatch("LOG", "Placing-SELL: " + JSON.stringify(price));
+      }
+    }
   }
 }
 
-module.exports = GptMadeTrader;
+module.exports = AdvanceSwingTrader;

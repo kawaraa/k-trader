@@ -102,7 +102,7 @@ module.exports = class DailyTrader {
       else if (this.mode.includes("ON-V-SHAPE")) shouldBuy = priceShape == "V";
 
       const log = `Should buy: ${shouldBuy} - Should trade: ${shouldTrade}`;
-      this.dispatch("log", `${log} - Prices => Trade: ${tradePrice} - Ask: ${askPrice} - Bid: ${bidPrice}`);
+      this.dispatch("LOG", `${log} - Prices => Trade: ${tradePrice} - Ask: ${askPrice} - Bid: ${bidPrice}`);
       if (orders[0]) {
         this.dispatch(
           "log",
@@ -117,8 +117,8 @@ module.exports = class DailyTrader {
           const cost = capital - calculateFee(capital, 0.4);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
-          this.dispatch("buy", orderId);
-          this.dispatch("log", `Bought crypto with order ID "${orderId}" at ask Price above 👆`);
+          this.dispatch("BUY", orderId);
+          this.dispatch("LOG", `Bought crypto with order ID "${orderId}" at ask Price above 👆`);
         }
 
         // Sell
@@ -130,7 +130,7 @@ module.exports = class DailyTrader {
         const stopLoss = loss > this.#pricePercentChangeThreshold;
 
         if (!(goingDown || stopLoss)) order = null;
-        else this.dispatch("log", `${stopLoss ? "stopLoss" : "profitable"} order will be executed`);
+        else this.dispatch("LOG", `${stopLoss ? "stopLoss" : "profitable"} order will be executed`);
 
         if (order) {
           await this.#sell(order, balance.crypto, bidPrice);
@@ -140,9 +140,9 @@ module.exports = class DailyTrader {
         }
       }
 
-      this.dispatch("log", "");
+      this.dispatch("LOG", "");
     } catch (error) {
-      this.dispatch("log", `Error running bot: ${error}`);
+      this.dispatch("LOG", `Error running bot: ${error}`);
     }
 
     if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
@@ -154,8 +154,8 @@ module.exports = class DailyTrader {
     const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.4);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
-    this.dispatch("sell", { id, profit });
-    this.dispatch("log", `Sold crypto with profit: ${profit} - Age: ${orderAge}hrs - ID: "${id}"`);
+    this.dispatch("SELL", { id, profit });
+    this.dispatch("LOG", `Sold crypto with profit: ${profit} - Age: ${orderAge}hrs - ID: "${id}"`);
   }
 
   async sellAll() {
@@ -169,8 +169,8 @@ module.exports = class DailyTrader {
       const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
       profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
     }
-    this.dispatch("sell", { profit });
-    this.dispatch("log", `Sold all crypto asset with profit: ${profit}`);
+    this.dispatch("SELL", { profit });
+    this.dispatch("LOG", `Sold all crypto asset with profit: ${profit}`);
   }
 
   stop() {
