@@ -189,7 +189,7 @@ function runeTradingTest(prices, range = 18) {
 
         if (priceChange > prevProfit) prevProfit = priceChange;
 
-        if (prevProfit > profitPercent && prevProfit - profitPercent >= buySellOnPercent) {
+        if (prevProfit > profitPercent && prevProfit - priceChange >= buySellOnPercent) {
           profit += priceChange;
           trades++;
           pricePointer = null;
