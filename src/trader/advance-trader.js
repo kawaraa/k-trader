@@ -33,7 +33,7 @@ class AdvanceSwingTrader extends Trader {
       await this.placeTestOrder("SELL", balance.crypto, currentPrice, positions[0]);
       this.placeTestOrder("SELL", this.orderVolume, currentPrice.bidPrice);
     } else {
-      this.dispatch("LOG", `[=] No trade signal. decision: ${decision} order: ${this.orderPrice}`);
+      this.dispatch("LOG", `[=] No trade signal. decision: ${decision} order: ${this.positions[0] || "NO"}`);
     }
   }
 

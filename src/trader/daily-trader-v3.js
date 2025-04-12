@@ -71,7 +71,7 @@ class DailyTrader {
 
       if (thereIsStrategy) {
         const bidPrices = prices.map((p) => p.bidPrice);
-        const highestBidPr = bidPrices.toSorted().at(-1);
+        const highestBidPr = bidPrices.toSorted((a, b) => a - b).at(-1);
         const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
 
         if (enoughPricesData && !this.averageAskBidSpread) {
@@ -106,7 +106,7 @@ class DailyTrader {
         }
 
         // Safety check: Make sure there is no spike higher then 10% and the current price is not lower then -10% then the highest price including "x% increase"
-        const sortedPrices = (allPrices.slice(-144).map((p) => p.askPrice) || []).toSorted(); //last 12 hrs
+        const sortedPrices = (allPrices.slice(-144).map((p) => p.askPrice) || []).toSorted((a, b) => a - b); //last 12 hrs
         const safeArea =
           calcPercentageDifference(sortedPrices.at(0), bidPrice) <=
           Math.max(8, this.#pricePercentChange * 1.5);

@@ -77,7 +77,7 @@ class DailyTrader {
       const trade1 = (trades.slice(-1) / this.#capital) * 100;
       const noSpike =
         trade1 - this.#pricePercentChange < this.halfPercent || !this.lastTrade || this.lastTrade > 60; // 1 hrs
-      // const lowestBidPrice = prices.slice(-parseInt(prices.length / 3)).toSorted().at(0)?.bidPrice;
+      // const lowestBidPrice = prices.slice(-parseInt(prices.length / 3)).toSorted((a, b) => a - b).at(0)?.bidPrice;
 
       this.strategyTimestamp = await this.ex.getState(this.#pair, "strategyTimestamp");
       const thereIsStrategy = this.#strategyRange && this.#pricePercentChange;
@@ -113,7 +113,7 @@ class DailyTrader {
 
         const bidPrices = prices.map((p) => p.bidPrice);
         const priceShape = detectPriceShape(bidPrices, this.quarterPercent).shape;
-        const sortedBidPrices = bidPrices.toSorted();
+        const sortedBidPrices = bidPrices.toSorted((a, b) => a - b);
         const highestBidPr = sortedBidPrices.at(-1);
         const lowestBidPrice = sortedBidPrices.at(0);
         const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);

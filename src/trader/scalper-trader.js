@@ -31,7 +31,7 @@ class ScalpingTrader extends Trader {
       const safeAskBidSpread = askBidSpreadPercentage <= averageAskBidSpread;
 
       if (!orders[0] && this.capital > 0 && balance.eur >= this.capital / 2) {
-        const highestBidPr = (prices.map((p) => p.bidPrice) || []).toSorted().at(-1);
+        const highestBidPr = (prices.map((p) => p.bidPrice) || []).toSorted((a, b) => a - b).at(-1);
         this.breakdowns.push(Math.max(-calcPercentageDifference(highestBidPr, bidPrice), 1));
         if (this.breakdowns.length > 10) this.breakdowns.shift();
 

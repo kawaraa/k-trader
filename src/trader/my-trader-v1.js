@@ -145,7 +145,7 @@ class MyTrader extends Trader {
       // The same for StopLoss limit
     } else {
       result.priceChange = 0;
-      const highest = bidPrices.toSorted().at(-1);
+      const highest = bidPrices.toSorted((a, b) => a - b).at(-1);
       const orderChange = calcPercentageDifference(highest, currentPrice.askPrice);
       if (!result.droppedPercent || orderChange < result.droppedPercent) {
         result.droppedPercent = orderChange;

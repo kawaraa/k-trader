@@ -74,7 +74,7 @@ module.exports = class DailyTrader {
       const enoughPricesData = prices.length >= (this.range * 60) / this.timeInterval;
       const bidPrices = prices.map((p) => p.bidPrice);
       const priceShape = detectPriceShape(bidPrices, this.buySellOnThreshold).shape;
-      const highestBidPr = bidPrices.toSorted().at(-1);
+      const highestBidPr = bidPrices.toSorted((a, b) => a - b).at(-1);
       const askBidSpreadPercentage = calcPercentageDifference(bidPrice, askPrice);
 
       if (enoughPricesData && !this.averageAskBidSpread) {

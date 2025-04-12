@@ -65,10 +65,7 @@ class KrakenExchangeProvider {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
     const { a, b, c } = data[Object.keys(data)[0]];
     const prices = { tradePrice: +c[0], askPrice: +a[0], bidPrice: +b[0] };
-    this.strategyTimestamp += 5;
-    const strategyTimestamp = this.state.get(pair, "strategyTimestamp");
-    this.state.update(pair, "strategyTimestamp", strategyTimestamp);
-    this.state.updateLocalPrices(pair, prices);
+    // this.state.updateLocalPrices(pair, prices);
     return prices;
   }
 

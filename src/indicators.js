@@ -126,17 +126,33 @@ function detectTrendlines(data, lookback = 20) {
 /*
 ===== My implementations ===== 
 */
-function findPriceMovement(prices, minPercent) {
+function findPriceMovement(prices, minPercent, dropRisePercent) {
   const length = prices.length - 1;
-  const price = prices.at(-1);
+  let pricePointer = prices.at(-1);
+  let result = "";
 
-  for (let i = length; i > 1; i--) {
-    const movements = length - i + 1;
-    const changePercent = calcPercentageDifference(prices[i], price);
-    if (changePercent >= minPercent) return `INCREASING:${movements}`;
-    else if (changePercent <= -minPercent) return `DROPPING:${movements}`;
+  for (let i = length; i > -1; i--) {
+    const movements = length - i;
+    const changePercent = calcPercentageDifference(prices[i], pricePointer);
+
+    if (!result && changePercent >= minPercent) {
+      result = `INCREASING:${movements}`;
+      pricePointer = prices[i];
+      if (!dropRisePercent) return result;
+    } else if (!result && changePercent <= -minPercent) {
+      result = `DROPPING:${movements}`;
+      pricePointer = prices[i];
+      if (!dropRisePercent) return result;
+    } else if (result && dropRisePercent) {
+      if (result.includes("INCREASING")) {
+        if (changePercent <= -dropRisePercent) return result;
+      } else {
+        if (changePercent >= dropRisePercent) return result;
+      }
+    }
   }
-  return "STABLE";
+
+  return dropRisePercent ? "STABLE" : result;
 }
 
 function runeTradingTest(prices, range = 18) {
@@ -170,7 +186,7 @@ function runeTradingTest(prices, range = 18) {
       const newPrices = prices.slice(i - range, i);
       const bidPrices = newPrices.map((p) => p.bidPrice);
       const price = newPrices.at(-1);
-      const highest = bidPrices.toSorted().at(-1);
+      const highest = bidPrices.toSorted((a, b) => a - b).at(-1);
       const dropped = calcPercentageDifference(highest, price.askPrice) < -dropPercent;
       const increasing = findPriceMovement(bidPrices, buySellOnPercent).includes("INCREASING");
 
