@@ -127,32 +127,42 @@ function detectTrendlines(data, lookback = 20) {
 ===== My implementations ===== 
 */
 function findPriceMovement(prices, minPercent, dropRisePercent) {
+  const limitPercent = minPercent * 1.2;
   const length = prices.length - 1;
-  let pricePointer = prices.at(-1);
-  let result = "";
+  const price = prices.at(-1);
+  let pricePointerIndex = prices.length - 1;
+  let result = "STABLE";
 
   for (let i = length; i > -1; i--) {
     const movements = length - i;
-    const changePercent = calcPercentageDifference(prices[i], pricePointer);
+    const changePercent = calcPercentageDifference(prices[i], price);
 
-    if (!result && changePercent >= minPercent) {
+    if (changePercent >= minPercent) {
       result = `INCREASING:${movements}`;
-      pricePointer = prices[i];
-      if (!dropRisePercent) return result;
-    } else if (!result && changePercent <= -minPercent) {
-      result = `DROPPING:${movements}`;
-      pricePointer = prices[i];
-      if (!dropRisePercent) return result;
-    } else if (result && dropRisePercent) {
-      if (result.includes("INCREASING")) {
-        if (changePercent <= -dropRisePercent) return result;
-      } else {
-        if (changePercent >= dropRisePercent) return result;
+      if (changePercent > limitPercent) {
+        result = `HIGH`;
+        i = -1;
       }
+      pricePointerIndex = i;
+    } else if (changePercent <= -minPercent) {
+      result = `DROPPING:${movements}`;
+      if (changePercent < -limitPercent) {
+        result = `LOW`;
+        i = -1;
+      }
+      pricePointerIndex = i;
     }
   }
 
-  return dropRisePercent ? "STABLE" : result;
+  if (!dropRisePercent || /LOW|HIGH/gim.test(result)) return result;
+
+  for (let i = pricePointerIndex; i > -1; i--) {
+    const changePercent = calcPercentageDifference(prices[i], prices[pricePointerIndex]);
+    if (result.includes("INCREASING") && changePercent <= -dropRisePercent) return result;
+    else if (changePercent >= dropRisePercent) return result;
+  }
+
+  return result;
 }
 
 function runeTradingTest(prices, range = 18) {

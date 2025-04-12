@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import PageHeader from "../components/page-header";
 import Loader from "../components/loader";
 import ChartCanvas from "../components/chart-canvas";
-const pairs = Object.keys(require("../../src/currencies.json"));
+const pairs = Object.keys(require("../../src/data/currencies.json"));
 
 export default function CryptoChart() {
   const router = useRouter();

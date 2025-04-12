@@ -9,6 +9,7 @@ class MyTrader extends Trader {
     super(exProvider, pair, interval, capital);
     this.strategyTest = { timestamp: 0, percentThreshold: 20 };
     this.analysisPeriod = 3 * 24 * 60;
+    this.minPeriodBetweenOrders = (3 * 60) / 5;
 
     this.profitPercent = 0;
     this.lossPercent = 0;
@@ -34,6 +35,7 @@ class MyTrader extends Trader {
     if (!positions[0] && strategyExpired) {
       const test = this.runeTradingTest(allPrices);
 
+      // if (!(trades.at(-1) > 0)) test.percentThreshold = test.percentThreshold * 1.2;
       if (test.loss == 0 && test.netProfit >= 0) this.strategyTest = { ...this.strategyTest, ...test };
       this.strategyTest.timestamp = 0;
       console.log("strategyTest: ", this.strategyTest);
@@ -42,11 +44,6 @@ class MyTrader extends Trader {
     this.strategyTest.timestamp += this.interval;
     if (!positions[0] && this.strategyTest.netProfit < 0) return;
     this.lastTradeAge++;
-
-    this.dispatch(
-      "LOG",
-      `€${balance.eur.toFixed(2)} - Trade: ${tradePrice} Ask: ${askPrice} Bid: ${bidPrice}`
-    );
 
     const currentPrice = { tradePrice, askPrice, bidPrice };
     const decision = this.decide(
@@ -57,25 +54,25 @@ class MyTrader extends Trader {
       this.profitPercent,
       this.lossPercent
     );
-    console.log("decision: ", this.strategyTest.percentThreshold, decision);
-
     this.profitPercent = decision.profitPercent;
     this.lossPercent = decision.lossPercent;
 
-    const prc = JSON.stringify(currentPrice);
-    const pause = this.lastTradeAge < (6 * 60) / 5;
+    const pause = this.lastTradeAge < this.minPeriodBetweenOrders;
+    console.log("decision: ", this.strategyTest.percentThreshold, decision);
+    const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
+    this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${prc}`);
 
     if (positions[0]) {
       this.dispatch(
         "log",
         `Gain: ${this.profitPercent}% - Loss: ${(this.profitPercent - decision.gainLossPercent).toFixed(
           8
-        )}% - Current: ${decision.gainLossPercent}% `
+        )}% - Current: ${decision.gainLossPercent}%`
       );
     }
-    // console.log(pause, !positions[0]);
+
     if (decision.signal.includes("BUY") && !pause && !positions[0] && this.capital > 0 && balance.eur >= 5) {
-      this.dispatch("LOG", `Placing BUY at ${currentPrice.askPrice} ${prc}`);
+      this.dispatch("LOG", `Placing BUY at ${currentPrice.askPrice}`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
       const cost = capital - calculateFee(capital, 0.4);
       const investingVolume = +(cost / currentPrice.askPrice).toFixed(8);
@@ -83,7 +80,7 @@ class MyTrader extends Trader {
       this.dispatch("BUY", orderId);
       //
     } else if (positions[0] && balance.crypto > 0 && decision.signal.includes("SELL")) {
-      this.dispatch("LOG", `Placing ${decision.signal} order ${prc}`);
+      this.dispatch("LOG", `Placing ${decision.signal} order`);
       await this.sell(positions[0], balance.crypto, currentPrice.bidPrice);
       this.previousProfit = 0;
       this.lastTradeAge = 0;
@@ -100,7 +97,7 @@ class MyTrader extends Trader {
     position,
     prices,
     currentPrice,
-    priceChangeLimit = 3, //  priceChangePercent,
+    priceChangePercent = 3, //  priceChangePercent,
     profitPercent = 0,
     lossPercent = 0
   ) {
@@ -110,14 +107,21 @@ class MyTrader extends Trader {
       profitPercent,
       lossPercent,
     };
+
+    const askBidSpreadPercentage = calcPercentageDifference(currentPrice.bidPrice, currentPrice.askPrice);
+    const averageAskBidSpread = calcAveragePrice(
+      prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice))
+    );
+    if (!position && askBidSpreadPercentage > averageAskBidSpread) return result; // safeAskBidSpread
+
     const bidPrice = prices.map((p) => p.bidPrice);
     const sortedBidPrices = bidPrice.toSorted((a, b) => a - b);
     const averagePrice = calcAveragePrice(bidPrice);
-    const pricePercentThreshold = calcPercentageDifference(sortedBidPrices[0], sortedBidPrices.at(-1));
-    if (pricePercentThreshold < priceChangeLimit) return result;
+    // const pricePercentThreshold = calcPercentageDifference(sortedBidPrices[0], sortedBidPrices.at(-1));
+    // if (pricePercentThreshold < priceChangePercent) return result;
 
     const percentFroLowest = calcPercentageDifference(sortedBidPrices[0], currentPrice.bidPrice);
-    const buySellOnPercent = Math.min(2, pricePercentThreshold / 5);
+    const buySellOnPercent = Math.min(2, priceChangePercent / 5);
 
     if (position) {
       // Sell
@@ -126,9 +130,9 @@ class MyTrader extends Trader {
       if (result.gainLossPercent < result.lossPercent) result.lossPercent = result.gainLossPercent;
 
       const loss = result.profitPercent - result.gainLossPercent;
-      const stopLossLimit = Math.max(Math.min(7, pricePercentThreshold / 2), 3);
+      const stopLossLimit = Math.max(Math.min(7, priceChangePercent), 3);
 
-      if (result.profitPercent >= pricePercentThreshold / 2 && loss >= buySellOnPercent) {
+      if (result.profitPercent >= priceChangePercent / 2) {
         result.signal = "SELL-PROFITABLE";
         result.profitPercent = 0;
         result.lossPercent = 0;
@@ -144,7 +148,7 @@ class MyTrader extends Trader {
 
         // const recoveryStopLoss =
         //   calcPercentageDifference(result.recoveredPrice?.bidPrice, currentPrice.bidPrice) <=
-        //   -(pricePercentThreshold / 5);
+        //   -(priceChangePercent / 5);
 
         result.signal = "SELL-STOP-LOSS";
         result.profitPercent = 0;
@@ -153,10 +157,10 @@ class MyTrader extends Trader {
     } else {
       // Buy
 
-      const last3HrsPrices = bidPrice.slice(-parseInt(bidPrice.length / 3));
-      const movement = findPriceMovement(last3HrsPrices, buySellOnPercent, pricePercentThreshold / 2);
+      const last3HrsPrices = bidPrice.slice(-parseInt(bidPrice.length / 2));
+      const movement = findPriceMovement(last3HrsPrices, buySellOnPercent, priceChangePercent);
       const tooHigh = calcPercentageDifference(averagePrice, currentPrice.bidPrice) >= buySellOnPercent;
-      const tooLow = percentFroLowest < 0;
+      const tooLow = percentFroLowest < -buySellOnPercent;
       if (!tooHigh && !tooLow && movement.includes("INCREASING")) result.signal = "BUY";
     }
 
@@ -193,7 +197,7 @@ class MyTrader extends Trader {
         lossPercent = decision.lossPercent;
         lastTradeAge++;
 
-        const pause = lastTradeAge <= range;
+        const pause = lastTradeAge <= this.minPeriodBetweenOrders;
 
         if (!pause && decision.signal.includes("BUY")) {
           // console.log("currentPrice: ", decision.signal, JSON.stringify(currentPrice));
@@ -215,7 +219,7 @@ class MyTrader extends Trader {
         }
       }
 
-      // console.log(loss, profit, trades, percentage);
+      // if (profit + loss > 0) {
       if (profit + loss > result.profit + result.loss) {
         result.percentThreshold = percentage;
         result.profit = +profit.toFixed(2);
@@ -224,6 +228,7 @@ class MyTrader extends Trader {
         result.trades = trades;
       }
 
+      //  console.log(profit , loss, percentage);
       percentage++;
     }
     return result;
