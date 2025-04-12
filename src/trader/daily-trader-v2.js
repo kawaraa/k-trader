@@ -1,4 +1,4 @@
-const { calculateFee, calcAveragePrice, isOlderThen } = require("./trend-analysis.js");
+const { calculateFee, calcAveragePrice } = require("./trend-analysis.js");
 const TestExchangeProvider = require("./test-ex-provider.js");
 const { calcPercentageDifference } = require("../services.js");
 

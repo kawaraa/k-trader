@@ -246,10 +246,6 @@ function calcTransactionProfit(previousPrice, currentPrice, assetVolume, feePerc
   return revenue - cost; // profit
 }
 
-function isOlderThen(timestamp, hours) {
-  return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
-}
-
 // Methods for testing only:
 function adjustPrice(price, percentage) {
   // This increases the tradePrice 0.10% by multiply it by 1.001, And decreases the tradePrice 0.10%, by multiply it by 0.999
@@ -268,5 +264,4 @@ module.exports = {
   calcInvestmentProfit,
   calcTransactionProfit,
   adjustPrice,
-  isOlderThen,
 };

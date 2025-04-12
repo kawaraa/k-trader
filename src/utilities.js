@@ -74,6 +74,9 @@ function toShortDate(date = new Date()) {
     .replace(date.getFullYear() + " ", "")
     .slice(4, 16);
 }
+function isOlderThen(timestamp, hours) {
+  return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
+}
 
 function isValidPair(pair, throwError) {
   if (cryptocurrencies[pair]) return pair;
@@ -111,6 +114,7 @@ module.exports = {
   roughSizeOfObject,
   dateToString,
   toShortDate,
+  isOlderThen,
   parseNumbers,
   extractNumbers,
   isValidPair,
