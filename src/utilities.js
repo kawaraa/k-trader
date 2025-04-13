@@ -15,6 +15,9 @@ function parseNumbers(data) {
 function extractNumbers(str) {
   return !str ? 0 : parseNumbers(str.match(/\d+(\.\d+)?/gim));
 }
+function getMaxMin(number, min, max) {
+  Math.min(Math.max(number, min), max);
+}
 function strIncludes(str = "", text) {
   return text.split(",").every((w) => str.toLowerCase().includes(w.toLowerCase()));
 }
@@ -74,7 +77,7 @@ function toShortDate(date = new Date()) {
     .replace(date.getFullYear() + " ", "")
     .slice(4, 16);
 }
-function isOlderThen(timestamp, hours) {
+function isOlderThan(timestamp, hours) {
   return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
 }
 
@@ -114,9 +117,10 @@ module.exports = {
   roughSizeOfObject,
   dateToString,
   toShortDate,
-  isOlderThen,
+  isOlderThan,
   parseNumbers,
   extractNumbers,
+  getMaxMin,
   isValidPair,
   isNumber,
   strIncludes,

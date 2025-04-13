@@ -1,5 +1,5 @@
 const Trader = require("./trader.js");
-const { isOlderThan, getMaxMin } = require("../utilities.js");
+const { isOlderThan } = require("../utilities.js");
 const { calcPercentageDifference, calculateFee, calcAveragePrice } = require("../services.js");
 const { findPriceMovement } = require("../indicators.js");
 const calcPercentage = calcPercentageDifference;
@@ -11,7 +11,7 @@ class MyTrader extends Trader {
     super(exProvider, pair, interval, capital);
     this.strategyTest = { timestamp: 0, percentThreshold: 20 };
     this.range = (24 * 60) / this.interval;
-    this.analysisPeriod = 3 * 24 * 60 + this.range * 5;
+    this.analysisPeriod = 2 * 24 * 60 + this.range * 5;
     this.lossLimit = 8;
     this.minPeriodBetweenOrders = (12 * 60) / 5;
 
@@ -42,7 +42,7 @@ class MyTrader extends Trader {
 
       // if (!(trades.at(-1) > 0)) test.percentThreshold = test.percentThreshold * 1.2;
       // test.loss == 0 &&
-      if (test.loss == 0 && test.netProfit > 0) this.strategyTest = { ...this.strategyTest, ...test };
+      if (test.netProfit > 0) this.strategyTest = { ...this.strategyTest, ...test };
       this.strategyTest.timestamp = 0;
 
       // console.log("strategyTest: ", this.strategyTest);
@@ -131,15 +131,14 @@ class MyTrader extends Trader {
       if (result.gainLossPercent < result.lossPercent) result.lossPercent = result.gainLossPercent;
 
       const loss = result.profitPercent - result.gainLossPercent;
-      const stopLossLimit = getMaxMin(priceChangePercent, 3, 7);
+      const stopLossLimit = Math.max(Math.min(7, priceChangePercent), 3);
       const dropping =
-        isOlderThan(position.createdAt, 8) &&
-        result.profitPercent >= getMaxMin(priceChangePercent / 3, 3, 4) &&
+        isOlderThan(position.createdAt, 6) &&
+        result.profitPercent >= Math.min(Math.max(priceChangePercent / 3, 3), 4) &&
         loss >= result.profitPercent / 4;
-
       if (result.profitPercent >= priceChangePercent / 2 || dropping) result.signal = "SELL-PROFITABLE";
       else {
-        const case1 = result.gainLossPercent < -stopLossLimit || loss > stopLossLimit;
+        const case1 = result.gainLossPercent < -stopLossLimit; // || loss > stopLossLimit
         const case2 =
           result.profitPercent >= Math.max(priceChangePercent / 4, 4) && result.gainLossPercent <= 0;
         const case3 =
@@ -158,7 +157,7 @@ class MyTrader extends Trader {
     } else {
       // Buy
 
-      const shortPeriodPrices = bidPrices.slice(-parseInt(bidPrices.length / 2));
+      const shortPeriodPrices = bidPrices.slice(-parseInt(Math.min(bidPrices.length / 2, 12)));
       const movement = findPriceMovement(shortPeriodPrices, buySellOnPercent, priceChangePercent);
       // const movement = findPriceMovement(shortPeriodPrices, bidPrice, priceChangePercent); // To try
 

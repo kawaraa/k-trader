@@ -118,7 +118,7 @@ class SwingTrader extends Trader {
         const stopLoss =
           loss > profitAndStopLossLimit ||
           (loss >= profitAndStopLossPercentLimit / 3 && orderPriceChange < 0);
-        // (isOlderThen(positions[0].createdAt, 48) && orderPriceChange < 0);
+        // (isOlderThan(positions[0].createdAt, 48) && orderPriceChange < 0);
         // && this.recoveredLoss >= this.previousLoss / 4 && droppedAfterLoss > this.recoveredLoss / 5;
 
         if (takeProfit || stopLoss) {

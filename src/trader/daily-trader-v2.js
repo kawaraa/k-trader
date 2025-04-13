@@ -148,7 +148,7 @@ class DailyTrader {
 
           const stopLoss =
             (this.previousLoss <= -Math.max(5, this.#pricePercentChange) &&
-              isOlderThen(orders[0].createdAt, 24)) ||
+              isOlderThan(orders[0].createdAt, 24)) ||
             (this.previousLoss <= -Math.max(3, this.halfPercent) &&
               recovered &&
               droppedAfterLoss > -(this.previousLoss / 4) &&

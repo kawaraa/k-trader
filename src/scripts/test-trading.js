@@ -8,6 +8,7 @@ const SwingTrader = require("../trader/my-trader.js");
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
+const suffix = +process.argv[4] || "";
 const showLogs = process.argv.includes("log");
 
 const capital = 100; // Amount in EUR which is the total money that can be used for trading
@@ -17,7 +18,7 @@ async function runTradingTest(pair, interval) {
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
     // const prices1 = getPrices(pair, interval / 5);
-    const prices1 = getPrices(`test/${pair}-1`, interval / 5);
+    const prices1 = getPrices(`test/${pair + suffix}`, interval / 5);
 
     // workers.push(runWorker([pair, prices, interval, showLogs]));
     const tests = [await runTest(pair, prices1, interval, showLogs)];
