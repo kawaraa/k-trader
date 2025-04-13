@@ -16,7 +16,14 @@ function extractNumbers(str) {
   return !str ? 0 : parseNumbers(str.match(/\d+(\.\d+)?/gim));
 }
 function getMaxMin(number, min, max) {
-  Math.min(Math.max(number, min), max);
+  return Math.min(Math.max(number, min), max);
+}
+function isNumberInRangeOf(num, min, max) {
+  const N = Number.parseFloat(num);
+  if (Number.isNaN(N)) return false;
+  else if (min && min > N) return false;
+  else if (max && max < N) return false;
+  return true;
 }
 function strIncludes(str = "", text) {
   return text.split(",").every((w) => str.toLowerCase().includes(w.toLowerCase()));
@@ -121,6 +128,7 @@ module.exports = {
   parseNumbers,
   extractNumbers,
   getMaxMin,
+  isNumberInRangeOf,
   isValidPair,
   isNumber,
   strIncludes,

@@ -3,7 +3,7 @@
 const { readdirSync, readFileSync } = require("node:fs");
 const MyTrader = require("../trader/my-trader");
 // const { runeTradingTest } = require("../indicators");
-const trader = new MyTrader();
+const trader = new MyTrader(null, null, 5);
 
 const pricesFolderPath = `${process.cwd()}/database/prices/test/`;
 const pairArg = process.argv[2];

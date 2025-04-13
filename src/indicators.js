@@ -127,123 +127,114 @@ function detectTrendlines(data, lookback = 20) {
 ===== My implementations ===== 
 */
 function findPriceMovement(prices, minPercent, dropRisePercent) {
-  const limitPercent = minPercent * 1.2;
   const length = prices.length - 1;
-  const price = prices.at(-1);
-  let pricePointerIndex = prices.length - 1;
+  let price = prices.at(-1);
+  let movements = 0;
   let result = "STABLE";
 
   for (let i = length; i > -1; i--) {
-    const movements = length - i;
     const changePercent = calcPercentageDifference(prices[i], price);
 
-    if (changePercent >= minPercent) {
-      result = `INCREASING:${movements}`;
-      if (changePercent > limitPercent) {
-        result = `HIGH`;
-        i = -1;
+    if (result.includes("INCREASING")) {
+      if (!dropRisePercent || changePercent <= -dropRisePercent) return result;
+    } else if (result.includes("DROPPING")) {
+      if (!dropRisePercent || changePercent >= dropRisePercent) return result;
+    } else {
+      movements++;
+      if (changePercent >= minPercent) {
+        result = `INCREASING:${movements}`;
+        price = prices[i];
+      } else if (changePercent <= -minPercent) {
+        result = `DROPPING:${movements}`;
+        price = prices[i];
       }
-      pricePointerIndex = i;
-    } else if (changePercent <= -minPercent) {
-      result = `DROPPING:${movements}`;
-      if (changePercent < -limitPercent) {
-        result = `LOW`;
-        i = -1;
-      }
-      pricePointerIndex = i;
     }
   }
 
   if (!dropRisePercent || /LOW|HIGH/gim.test(result)) return result;
 
-  for (let i = pricePointerIndex; i > -1; i--) {
-    const changePercent = calcPercentageDifference(prices[i], prices[pricePointerIndex]);
-    if (result.includes("INCREASING") && changePercent <= -dropRisePercent) return result;
-    else if (changePercent >= dropRisePercent) return result;
-  }
-
-  return result;
+  return "STABLE";
 }
 
-function runeTradingTest(prices, range = 18) {
-  const calculateLimits = (percent) => ({
-    dropPercent: percent * 1.2,
-    buySellOnPercent: percent / 5,
-    profitPercent: percent,
-    stopLossPercent: percent,
-  });
+// function runeTradingTest(prices, range = 18) {
+//   const calculateLimits = (percent) => ({
+//     dropPercent: percent * 1.2,
+//     buySellOnPercent: percent / 5,
+//     profitPercent: percent,
+//     stopLossPercent: percent,
+//   });
 
-  let percentage = 2;
-  const maxPercentage = 20;
-  const result = {
-    netProfit: 0,
-    profit: 0,
-    loss: 0,
-    ...calculateLimits(maxPercentage),
-    trades: 0,
-  };
+//   let percentage = 2;
+//   const maxPercentage = 20;
+//   const result = {
+//     netProfit: 0,
+//     profit: 0,
+//     loss: 0,
+//     ...calculateLimits(maxPercentage),
+//     trades: 0,
+//   };
 
-  while (percentage <= maxPercentage) {
-    let prevProfit = 0;
-    let loss = 0;
-    let profit = 0;
-    let pricePointer = null;
-    let trades = 0;
-    const { dropPercent, buySellOnPercent, profitPercent, stopLossPercent } = calculateLimits(percentage);
-    let lastTradeAge = 0;
+//   while (percentage <= maxPercentage) {
+//     let prevProfit = 0;
+//     let loss = 0;
+//     let profit = 0;
+//     let pricePointer = null;
+//     let trades = 0;
+//     const { dropPercent, buySellOnPercent, profitPercent, stopLossPercent } = calculateLimits(percentage);
+//     let lastTradeAge = 0;
 
-    for (let i = range; i < prices.length; i++) {
-      const newPrices = prices.slice(i - range, i);
-      const bidPrices = newPrices.map((p) => p.bidPrice);
-      const price = newPrices.at(-1);
-      const highest = bidPrices.toSorted((a, b) => a - b).at(-1);
-      const dropped = calcPercentageDifference(highest, price.askPrice) < -dropPercent;
-      const increasing = findPriceMovement(bidPrices, buySellOnPercent).includes("INCREASING");
+//     for (let i = range; i < prices.length; i++) {
+//       const newPrices = prices.slice(i - range, i);
+//       const bidPrices = newPrices.map((p) => p.bidPrice);
+//       const price = newPrices.at(-1);
+//       const highest = bidPrices.toSorted((a, b) => a - b).at(-1);
+//       const dropped = calcPercentageDifference(highest, price.askPrice) < -dropPercent;
+//       const increasing = findPriceMovement(bidPrices, buySellOnPercent).includes("INCREASING");
 
-      const askBidSpreadPercentage = calcPercentageDifference(price.bidPrice, price.askPrice);
-      const averageAskBidSpread = calcAveragePrice(
-        newPrices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice))
-      );
-      const safeAskBidSpread = askBidSpreadPercentage <= averageAskBidSpread;
+//       const askBidSpreadPercentage = calcPercentageDifference(price.bidPrice, price.askPrice);
+//       const averageAskBidSpread = calcAveragePrice(
+//         newPrices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice))
+//       );
+//       const safeAskBidSpread = askBidSpreadPercentage <= averageAskBidSpread;
 
-      lastTradeAge++;
-      if (lastTradeAge < range) continue;
+//       lastTradeAge++;
+//       if (lastTradeAge < range) continue;
 
-      if (!pricePointer && safeAskBidSpread && dropped && increasing) pricePointer = price.askPrice;
-      else if (pricePointer && safeAskBidSpread) {
-        const priceChange = calcPercentageDifference(pricePointer, price.bidPrice);
+//       if (!pricePointer && safeAskBidSpread && dropped && increasing) pricePointer = price.askPrice;
+//       else if (pricePointer && safeAskBidSpread) {
+//         const priceChange = calcPercentageDifference(pricePointer, price.bidPrice);
 
-        if (priceChange > prevProfit) prevProfit = priceChange;
+//         if (priceChange > prevProfit) prevProfit = priceChange;
 
-        if (prevProfit > profitPercent && prevProfit - priceChange >= buySellOnPercent) {
-          profit += priceChange;
-          trades++;
-          pricePointer = null;
-          prevProfit = 0;
-        } else if (priceChange <= -Math.max(stopLossPercent, 10)) {
-          loss += priceChange;
-          trades++;
-          pricePointer = null;
-          prevProfit = 0;
-        }
-      }
-    }
+//         if (prevProfit > profitPercent && prevProfit - priceChange >= buySellOnPercent) {
+//           profit += priceChange;
+//           trades++;
+//           pricePointer = null;
+//           prevProfit = 0;
+//         } else if (priceChange <= -Math.max(stopLossPercent, 10)) {
+//           loss += priceChange;
+//           trades++;
+//           pricePointer = null;
+//           prevProfit = 0;
+//         }
+//       }
+//     }
 
-    if (profit + loss > result.profit + result.loss) {
-      result.profit = +profit.toFixed(2);
-      result.loss = +loss.toFixed(2);
-      result.netProfit = result.profit + result.loss;
-      result.dropPercent = dropPercent;
-      result.buySellOnPercent = buySellOnPercent;
-      result.profitPercent = profitPercent;
-      result.stopLossPercent = stopLossPercent;
-      result.trades = trades;
-    }
+//     if (profit + loss > result.profit + result.loss) {
+//       result.profit = +profit.toFixed(2);
+//       result.loss = +loss.toFixed(2);
+//       result.netProfit = result.profit + result.loss;
+//       result.dropPercent = dropPercent;
+//       result.buySellOnPercent = buySellOnPercent;
+//       result.profitPercent = profitPercent;
+//       result.stopLossPercent = stopLossPercent;
+//       result.trades = trades;
+//     }
 
-    percentage++;
-  }
-  return result;
-}
+//     percentage++;
+//   }
+//   return result;
+// }
 
 /*
 ===== Pattern detection Methods ===== 
@@ -311,7 +302,7 @@ module.exports = {
   detectTrendlines,
 
   findPriceMovement,
-  runeTradingTest,
+  // runeTradingTest,
 
   detectBasicPattern,
   detectAdvancedPattern,

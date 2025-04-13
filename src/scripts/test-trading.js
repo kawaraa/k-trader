@@ -17,11 +17,12 @@ async function runTradingTest(pair, interval) {
   try {
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
-    // const prices1 = getPrices(pair, interval / 5);
-    const prices1 = getPrices(`test/${pair + suffix}`, interval / 5);
+    // const prices = getPrices(pair, interval / 5);
+    // const prices = getPrices(`bots/${pair}`, interval / 5);
+    const prices = getPrices(`test/${pair + suffix}`, interval / 5);
 
     // workers.push(runWorker([pair, prices, interval, showLogs]));
-    const tests = [await runTest(pair, prices1, interval, showLogs)];
+    const tests = [await runTest(pair, prices, interval, showLogs)];
     // if (prices2[0]) {
     //   tests.push(
     //     await runTest(pair, prices2, interval, showLogs)

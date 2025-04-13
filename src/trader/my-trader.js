@@ -1,7 +1,7 @@
 const Trader = require("./trader.js");
-const { isOlderThan, getMaxMin } = require("../utilities.js");
+const { isOlderThan, getMaxMin, isNumberInRangeOf } = require("../utilities.js");
 const { calcPercentageDifference, calculateFee, calcAveragePrice } = require("../services.js");
-const { findPriceMovement } = require("../indicators.js");
+const { findPriceMovement, linearRegression } = require("../indicators.js");
 const calcPercentage = calcPercentageDifference;
 const maxPercentThreshold = 25;
 
@@ -10,10 +10,10 @@ class MyTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
     super(exProvider, pair, interval, capital);
     this.strategyTest = { timestamp: 0, percentThreshold: 20 };
-    this.range = (24 * 60) / this.interval;
+    this.range = (6 * 60) / this.interval;
     this.analysisPeriod = 3 * 24 * 60 + this.range * 5;
     this.lossLimit = 8;
-    this.minPeriodBetweenOrders = (12 * 60) / 5;
+    // this.minPeriodBetweenOrders = this.range; // Or (12 * 60) / 5;
 
     this.profitPercent = 0;
     this.lossPercent = 0;
@@ -37,6 +37,7 @@ class MyTrader extends Trader {
       !this.strategyTest.timestamp ||
       this.strategyTest.timestamp / 60 > 12 ||
       (trades.at(-1) < 0 && this.strategyTest.timestamp / 60 > 3);
+
     if (!positions[0] && strategyExpired) {
       const test = this.runeTradingTest(allPrices);
 
@@ -44,7 +45,6 @@ class MyTrader extends Trader {
       // test.loss == 0 &&
       if (test.loss == 0 && test.netProfit > 0) this.strategyTest = { ...this.strategyTest, ...test };
       this.strategyTest.timestamp = 0;
-
       // console.log("strategyTest: ", this.strategyTest);
     }
 
@@ -114,7 +114,7 @@ class MyTrader extends Trader {
 
     const askBidSpreadPercentage = calcPercentage(bidPrice, askPrice);
     const averageAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentage(p.bidPrice, p.askPrice)));
-    if (!position && askBidSpreadPercentage > averageAskBidSpread) return result; // safeAskBidSpread
+    if (askBidSpreadPercentage > averageAskBidSpread * 1.1) return result; // safeAskBidSpread
 
     const bidPrices = prices.map((p) => p.bidPrice);
 
@@ -122,34 +122,31 @@ class MyTrader extends Trader {
     // const pricePercentThreshold = calcPercentage(sortedBidPrices[0], sortedBidPrices.at(-1));
     // if (pricePercentThreshold < priceChangePercent) return result;
 
-    const buySellOnPercent = priceChangePercent / 5;
+    const buySellOnPercent = getMaxMin(priceChangePercent / 5, 0.5, 3);
 
     if (position) {
       // Sell
       result.gainLossPercent = calcPercentage(position.price, bidPrice);
-      if (result.gainLossPercent > result.profitPercent) result.profitPercent = result.gainLossPercent;
-      if (result.gainLossPercent < result.lossPercent) result.lossPercent = result.gainLossPercent;
 
       const loss = result.profitPercent - result.gainLossPercent;
       const stopLossLimit = getMaxMin(priceChangePercent, 3, 7);
       const dropping =
-        isOlderThan(position.createdAt, 8) &&
-        result.profitPercent >= getMaxMin(priceChangePercent / 3, 3, 4) &&
+        isOlderThan(position.createdAt, (this.range * 5) / 60) &&
+        result.profitPercent >= getMaxMin(priceChangePercent / 2, 2, 4) &&
         loss >= result.profitPercent / 4;
 
-      if (result.profitPercent >= priceChangePercent / 2 || dropping) result.signal = "SELL-PROFITABLE";
+      if (result.profitPercent >= priceChangePercent || dropping) result.signal = "SELL-PROFITABLE";
       else {
-        const case1 = result.gainLossPercent < -stopLossLimit || loss > stopLossLimit;
+        const case1 =
+          isNumberInRangeOf(result.gainLossPercent, -stopLossLimit * 1.3, -stopLossLimit) ||
+          isNumberInRangeOf(loss, stopLossLimit, stopLossLimit * 1.3);
         const case2 =
-          result.profitPercent >= Math.max(priceChangePercent / 4, 4) && result.gainLossPercent <= 0;
+          result.profitPercent >= Math.max(priceChangePercent / 4, 2) && result.gainLossPercent <= 0;
         const case3 =
           // result.lossPercent < -(stopLossLimit / 1.5) &&
           result.lossPercent <= -Math.max(stopLossLimit / 1.3, 3) &&
           result.gainLossPercent > result.lossPercent / 2 &&
-          findPriceMovement(
-            bidPrices.slice(-parseInt(bidPrices.length / 8)),
-            Math.abs(result.lossPercent / 4)
-          ).includes("DROPPING");
+          findPriceMovement(bidPrices.slice(-12), Math.abs(result.lossPercent / 4)).includes("DROPPING");
 
         if (case1 || case2 || case3) result.signal = "SELL-STOP-LOSS";
       }
@@ -158,21 +155,29 @@ class MyTrader extends Trader {
     } else {
       // Buy
 
-      const shortPeriodPrices = bidPrices.slice(-parseInt(bidPrices.length / 2));
-      const movement = findPriceMovement(shortPeriodPrices, buySellOnPercent, priceChangePercent);
-      // const movement = findPriceMovement(shortPeriodPrices, bidPrice, priceChangePercent); // To try
+      // const shouldBuy = linearRegression(bidPrices) < 0;
+      const movement = findPriceMovement(bidPrices, buySellOnPercent, priceChangePercent);
+      // console.log(movement, priceChangePercent, buySellOnPercent);
+      // console.log(JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
+      if (movement.includes("INCREASING")) {
+        // const shortPeriodPrices = bidPrices.slice(-parseInt(bidPrices.length / 2));
+        // const movement = findPriceMovement(shortPeriodPrices, bidPrice, priceChangePercent); // To try
+        // console.log("decision", movement);
 
-      // const averagePrice = calcAveragePrice(bidPrice);
-      // const tooHigh = calcPercentage(averagePrice, currentPrice.bidPrice) > 0;
-      // const percentFroLowest = calcPercentageDifference(sortedBidPrices[0], currentPrice.bidPrice);
-      // const tooLow = percentFroLowest < -buySellOnPercent;
-      if (movement.includes("INCREASING")) result.signal = "BUY";
+        // const averagePrice = calcAveragePrice(bidPrice);
+        // const tooHigh = calcPercentage(averagePrice, currentPrice.bidPrice) > 0;
+        // const percentFroLowest = calcPercentageDifference(sortedBidPrices[0], currentPrice.bidPrice);
+        // const tooLow = percentFroLowest < -buySellOnPercent;
+        if (movement.includes("INCREASING")) result.signal = "BUY";
+      }
     }
 
+    if (result.gainLossPercent > result.profitPercent) result.profitPercent = result.gainLossPercent;
+    if (result.gainLossPercent < result.lossPercent) result.lossPercent = result.gainLossPercent;
     return result;
   }
 
-  runeTradingTest(prices, range = (6 * 60) / 5) {
+  runeTradingTest(prices) {
     let percentage = 2;
     const result = { percentThreshold: maxPercentThreshold, netProfit: 0, trades: [] };
 
@@ -183,8 +188,8 @@ class MyTrader extends Trader {
       let lossPercent = 0;
       let lastTradeAge = 0;
 
-      for (let i = range; i < prices.length; i++) {
-        const newPrices = prices.slice(i - range, i);
+      for (let i = this.range; i < prices.length; i++) {
+        const newPrices = prices.slice(i - this.range, i);
         const currentPrice = prices[i];
         const position = !price ? null : { price };
         // const lastTowTradesAreLoss = trades.at(-1) < 0 && trades.at(-2) < 0;
@@ -227,6 +232,7 @@ class MyTrader extends Trader {
       const gain = trades.reduce((t, it) => t + (it > 0 ? it : 0), 0);
       const loss = trades.reduce((t, it) => t + (it < 0 ? it : 0), 0);
       // (loss == 0 && gain > 0) ||
+      // console.log("NetProfit:", netProfit, "Trades:", trades.length);
       if (netProfit > result.trades.reduce((t, it) => t + it, 0)) {
         result.percentThreshold = percentage;
         result.netProfit = netProfit;

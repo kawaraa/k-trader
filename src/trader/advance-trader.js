@@ -15,7 +15,7 @@ class AdvanceSwingTrader extends Trader {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const positions = this.testMode ? this.positions : await this.ex.getOrders(this.pair);
     const currentPrice = await this.ex.currentPrices(this.pair); // { tradePrice, askPrice, bidPrice }
-    const ohlc = await this.ex.pricesData(this.pair, this.interval);
+    const ohlc = await this.ex.pricesData(this.pair, this.interval); // Returns 720 item (720 * 5 / 60 = 60hrs)
 
     const closes = ohlc.map((d) => d.close);
     const rsi = indicators.calculateRSI(closes, this.rsiPeriod);
