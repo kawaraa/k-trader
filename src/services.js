@@ -36,7 +36,7 @@ function calcPercentageDifference(oldPrice, newPrice) {
 function calculateFee(amount, feePercentage) {
   return !feePercentage ? 0 : (amount * feePercentage) / 100;
 }
-function smoothPrices(prices, range = 3) {
+function smoothPricesAndUpdate(prices, range = 3) {
   // This remove noises from prices using a moving average
   if (range < 1 || range > prices.length) {
     throw new Error("Invalid range. Must be between 1 and the length of the prices.");
@@ -55,6 +55,24 @@ function smoothPrices(prices, range = 3) {
   }
 
   return result;
+}
+function smoothPrices(prices, round = 1) {
+  for (let i = 0; i < round; i++) {
+    prices = prices.map((_, i, arr) => {
+      const slice = arr.slice(Math.max(0, i - 2), i + 1);
+
+      if (!slice[0].tradePrice) return slice.reduce((a, b) => a + b, 0) / slice.length;
+      else {
+        return {
+          tradePrice: slice.reduce((a, b) => a + b.tradePrice, 0) / slice.length,
+          askPrice: slice.reduce((a, b) => a + b.askPrice, 0) / slice.length,
+          bidPrice: slice.reduce((a, b) => a + b.bidPrice, 0) / slice.length,
+        };
+      }
+    });
+  }
+
+  return prices;
 }
 
 // function analyzePrices(prices) {
@@ -91,5 +109,6 @@ module.exports = {
   calcAveragePrice,
   calcPercentageDifference,
   calculateFee,
+  smoothPricesAndUpdate,
   smoothPrices,
 };

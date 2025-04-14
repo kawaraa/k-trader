@@ -114,7 +114,7 @@ module.exports = class DailyTrader {
       if (shouldTrade && shouldBuy) {
         if (!orders[0] && this.#capital > 0 && balance.eur >= this.#capital / 2) {
           const capital = balance.eur < this.#capital ? balance.eur : this.#capital;
-          const cost = capital - calculateFee(capital, 0.4);
+          const cost = capital - calculateFee(capital, 0.3);
           const investingVolume = +(cost / askPrice).toFixed(8);
           const orderId = await this.ex.createOrder("buy", "market", this.#pair, investingVolume);
           this.dispatch("BUY", orderId);
@@ -151,7 +151,7 @@ module.exports = class DailyTrader {
   async #sell({ id, volume, cost, price, createdAt }, cryptoBalance, bidPrice) {
     const amount = bidPrice * (cryptoBalance - volume) < 5 ? cryptoBalance : volume;
     const orderId = await this.ex.createOrder("sell", "market", this.#pair, amount);
-    const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.4);
+    const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.3);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
     this.dispatch("SELL", { id, profit });
@@ -165,7 +165,7 @@ module.exports = class DailyTrader {
       const orders = await this.ex.getOrders(this.#pair);
       const bidPrice = (await this.ex.currentPrices(this.#pair)).bidPrice;
       const orderId = await this.ex.createOrder("sell", "market", this.#pair, cryptoBalance);
-      const c = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.4);
+      const c = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.3);
       const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
       profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
     }

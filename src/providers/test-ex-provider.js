@@ -18,7 +18,6 @@ module.exports = class TestExchangeProvider {
     const price = this.allPrices[this.currentPriceIndex] || this.allPrices[this.allPrices.length - 1];
     this.currentPriceIndex += 1;
     const intervalTime = this.interval * 60000;
-    this.strategyTimestamp += this.interval;
     this.orders.forEach((o) => (o.createdAt -= intervalTime));
     return price;
   }
@@ -32,6 +31,7 @@ module.exports = class TestExchangeProvider {
       .filter((p, index) => index % skip === 0);
   }
   async prices(pair, limit) {
+    await this.currentPrices();
     const offset = this.currentPriceIndex - limit;
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
@@ -42,7 +42,7 @@ module.exports = class TestExchangeProvider {
     if (newOrder.type == "buy") {
       const cost = volume * askPrice;
       newOrder.price = askPrice;
-      newOrder.cost = cost + calculateFee(cost, 0.4);
+      newOrder.cost = cost + calculateFee(cost, 0.3);
 
       const remainingBalance = this.currentBalance.eur - newOrder.cost;
       if (remainingBalance < 0) throw new Error("No enough money");
@@ -52,8 +52,7 @@ module.exports = class TestExchangeProvider {
     } else {
       const cost = volume * bidPrice;
       newOrder.price = bidPrice;
-      newOrder.cost = cost - calculateFee(cost, 0.4);
-
+      newOrder.cost = cost - calculateFee(cost, 0.3);
       const remainingCrypto = +(this.currentBalance.crypto - volume).toFixed(8);
       if (remainingCrypto < 0) throw new Error("No enough crypto");
       this.currentBalance.eur += newOrder.cost;

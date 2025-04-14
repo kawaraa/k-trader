@@ -87,6 +87,7 @@ class KrakenExchangeProvider {
   async prices(pair, limit) {
     // const prices = await this.pricesData(pair, interval);
     // return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
+    await this.currentPrices(pair);
     return this.state.getLocalPrices(pair, limit);
   }
 

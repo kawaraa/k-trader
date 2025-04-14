@@ -24,7 +24,7 @@ class AdvanceSwingTrader extends Trader {
     if (!positions[0] && decision === "BUY") {
       this.dispatch("LOG", `[+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
-      const cost = capital - calculateFee(capital, 0.4);
+      const cost = capital - calculateFee(capital, 0.3);
       const investingVolume = +(cost / currentPrice.askPrice).toFixed(8);
       await this.placeTestOrder("BUY", investingVolume, currentPrice.askPrice);
       //
@@ -99,7 +99,7 @@ class AdvanceSwingTrader extends Trader {
         return this.sell(position, volume, price.bidPrice);
       } else {
         let cost = this.positions[0].volume * price.bidPrice;
-        cost = cost - calculateFee(cost, 0.4);
+        cost = cost - calculateFee(cost, 0.3);
         if (cost > 0) this.profit += cost;
         else this.loss += cost;
         this.positions = [];

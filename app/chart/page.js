@@ -85,6 +85,19 @@ export default function CryptoChart() {
 
         {error && <p className="my-5 text-red">{error}</p>}
 
+        <label className="flex flex-auto items-center">
+          <input
+            id="smoother"
+            type="range"
+            min="0"
+            max="30"
+            step="1"
+            defaultValue="0"
+            onChange={(e) => setPrices(smoothPrices2(prices))}
+            className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
+          />
+        </label>
+
         <ChartCanvas
           type="line"
           labels={labels}
@@ -127,4 +140,19 @@ export default function CryptoChart() {
       <Loader loading={loading} />
     </>
   );
+}
+
+function smoothPrices2(prices) {
+  return prices.map((_, i, arr) => {
+    const slice = arr.slice(Math.max(0, i - 2), i + 1);
+
+    if (!slice[0].tradePrice) return slice.reduce((a, b) => a + b, 0) / slice.length;
+    else {
+      return {
+        tradePrice: slice.reduce((a, b) => a + b.tradePrice, 0) / slice.length,
+        askPrice: slice.reduce((a, b) => a + b.askPrice, 0) / slice.length,
+        bidPrice: slice.reduce((a, b) => a + b.bidPrice, 0) / slice.length,
+      };
+    }
+  });
 }
