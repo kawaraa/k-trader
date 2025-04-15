@@ -155,6 +155,52 @@ function findPriceMovement(prices, minPercent, dropRisePercent) {
 
   return "STABLE";
 }
+function analyzeTrend(prices, minPercentageThreshold = 0) {
+  if (prices.length < 2) {
+    return { isDowntrend: false, highCount: 0, averageHighsPercentage: 0 };
+  }
+
+  let highCount = 0;
+  let highPercentTotal = 0;
+
+  for (let i = 1; i < prices.length; i++) {
+    const change = prices[i] - prices[i - 1];
+    if (change > 0) {
+      const percent = (change / prices[i - 1]) * 100;
+      if (percent >= minPercentageThreshold) {
+        highPercentTotal += percent;
+        highCount++;
+      }
+    }
+  }
+
+  const averageHighsPercentage = highCount ? +(highPercentTotal / highCount).toFixed(2) : 0;
+  const isDowntrend = prices[prices.length - 1] < prices[0];
+
+  return { isDowntrend, highCount, averageHighsPercentage };
+}
+// function analyzeTrend(prices) {
+//   let isDowntrend = false;
+//   let highCount = 0;
+//   let averageHighsPercentage = 0;
+//   let highPercentTotal = 0;
+
+//   if (prices.length < 2) return { isDowntrend, highCount, averageHighsPercentage };
+
+//   for (let i = 1; i < prices.length; i++) {
+//     const change = prices[i] - prices[i - 1];
+//     if (change > 0) {
+//       const percent = (change / prices[i - 1]) * 100;
+//       highPercentTotal += percent;
+//       highCount++;
+//     }
+//   }
+
+//   averageHighsPercentage = highCount ? +(highPercentTotal / highCount).toFixed(2) : 0;
+//   isDowntrend = prices[prices.length - 1] < prices[0];
+
+//   return { isDowntrend, highCount, averageHighsPercentage };
+// }
 
 // function runeTradingTest(prices, range = 18) {
 //   const calculateLimits = (percent) => ({
@@ -302,7 +348,8 @@ module.exports = {
   detectTrendlines,
 
   findPriceMovement,
-  // runeTradingTest,
+  // analyzeTrend,
+  analyzeTrend,
 
   detectBasicPattern,
   detectAdvancedPattern,

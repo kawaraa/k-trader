@@ -125,7 +125,7 @@ class MyTrader extends Trader {
     const askBidSpreadPercentage = calcPercentage(bidPrice, askPrice);
     const averageAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentage(p.bidPrice, p.askPrice)));
 
-    // prices = smoothPrices(prices, 5);
+    prices = smoothPrices(prices, 5);
     const bidPrices = prices.map((p) => p.bidPrice);
 
     const buyOnPercent = getMaxMin(priceChangePercent / 5, 0.5, 4);
@@ -147,6 +147,7 @@ class MyTrader extends Trader {
       if (case1 || case2) result.signal = "SELL-PROFITABLE";
       else {
         const stopLossLimit = Math.max(buyOnPercent + averageAskBidSpread, 2);
+        // const stopLossLimit = Math.max(priceChangePercent / 2, 2);
         const case1 = loss > stopLossLimit;
         const case2 =
           result.lossPercent <= -(stopLossLimit / 1.2) &&
@@ -218,11 +219,11 @@ class MyTrader extends Trader {
         if (decision.signal.includes("BUY")) {
           price = currentPrice.askPrice;
         } else if (decision.signal.includes("SELL-PROFITABLE")) {
-          trades.push(decision.gainLossPercent);
+          trades.push(decision.gainLossPercent - 0.06);
           price = null;
           lastTradeAge = 0;
         } else if (decision.signal.includes("SELL")) {
-          trades.push(decision.gainLossPercent);
+          trades.push(decision.gainLossPercent - 0.06);
           price = null;
           lastTradeAge = 0;
         }
