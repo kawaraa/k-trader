@@ -142,7 +142,7 @@ export default function CryptoChart() {
   );
 }
 
-function smoothPrices2(prices) {
+function smoothPrices2(prices, range = 2) {
   return prices.map((_, i, arr) => {
     const slice = arr.slice(Math.max(0, i - 2), i + 1);
 
@@ -155,4 +155,22 @@ function smoothPrices2(prices) {
       };
     }
   });
+
+  // // This remove noises from prices using a moving average
+  // if (range < 1 || range > prices.length) return prices;
+
+  // const result = [];
+  // for (let i = 0; i < prices.length; i += range) {
+  //   const slice = prices.slice(i, Math.max(i, i + range));
+  //   if (!slice[0].tradePrice) result.push(slice.reduce((a, b) => a + b, 0) / slice.length);
+  //   else {
+  //     result.push({
+  //       tradePrice: slice.reduce((a, b) => a + b.tradePrice, 0) / slice.length,
+  //       askPrice: slice.reduce((a, b) => a + b.askPrice, 0) / slice.length,
+  //       bidPrice: slice.reduce((a, b) => a + b.bidPrice, 0) / slice.length,
+  //     });
+  //   }
+  // }
+
+  // return result;
 }

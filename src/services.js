@@ -38,11 +38,10 @@ function calculateFee(amount, feePercentage) {
 }
 function smoothPricesAndUpdate(prices, range = 3) {
   // This remove noises from prices using a moving average
-  if (range < 1 || range > prices.length) {
-    throw new Error("Invalid range. Must be between 1 and the length of the prices.");
-  }
+  if (range < 1 || range > prices.length) return prices;
+
   const result = [];
-  for (let i = 0; i <= prices.length - 1; i += range) {
+  for (let i = 0; i < prices.length; i += range) {
     const slice = prices.slice(i, Math.max(i, i + range));
     if (!slice[0].tradePrice) result.push(slice.reduce((a, b) => a + b, 0) / slice.length);
     else {

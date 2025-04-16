@@ -155,29 +155,47 @@ function findPriceMovement(prices, minPercent, dropRisePercent) {
 
   return "STABLE";
 }
-function analyzeTrend(prices, minPercentageThreshold = 0) {
-  if (prices.length < 2) {
-    return { isDowntrend: false, highCount: 0, averageHighsPercentage: 0 };
-  }
+function analyzeTrend(prices) {
+  const highs = [0];
+  const lows = [0];
+  let accumulator = 0;
 
-  let highCount = 0;
-  let highPercentTotal = 0;
+  if (prices.length < 2) return { highs, lows, trend: null };
 
-  for (let i = 1; i < prices.length; i++) {
-    const change = prices[i] - prices[i - 1];
-    if (change > 0) {
-      const percent = (change / prices[i - 1]) * 100;
-      if (percent >= minPercentageThreshold) {
-        highPercentTotal += percent;
-        highCount++;
+  for (let i = 0; i < prices.length; i++) {
+    accumulator += calcPercentageDifference(prices[i], prices[i + 1]);
+
+    if (accumulator > 0 && accumulator > Math.max(0, highs.at(-1) - 0.5))
+      highs[highs.length - 1] = accumulator;
+    else {
+      const negativePercent = accumulator - highs.at(-1);
+      if (accumulator >= 0 && negativePercent <= -0.5) {
+        accumulator = negativePercent;
+        if (lows.at(-1) == 0) lows[lows.length - 1] = negativePercent;
+        else lows.push(negativePercent);
+      }
+    }
+
+    if (accumulator < 0 && accumulator < Math.min(0, lows.at(-1) + 0.25)) lows[lows.length - 1] = accumulator;
+    else {
+      const positivePercent = accumulator - lows.at(-1);
+      if (accumulator <= 0 && positivePercent >= 0.5) {
+        accumulator = positivePercent;
+        if (highs.at(-1) == 0) highs[highs.length - 1] = positivePercent;
+        else highs.push(positivePercent);
       }
     }
   }
 
-  const averageHighsPercentage = highCount ? +(highPercentTotal / highCount).toFixed(2) : 0;
-  const isDowntrend = prices[prices.length - 1] < prices[0];
-
-  return { isDowntrend, highCount, averageHighsPercentage };
+  const increased = highs.reduce((t, it) => t + it, 0);
+  const dropped = Math.abs(lows.reduce((t, it) => t + it, 0));
+  return {
+    highs,
+    lows,
+    increased,
+    dropped,
+    trend: increased > dropped + 0.5 ? "UPTREND" : increased + 0.5 < dropped ? "DOWNTREND" : "SIDEWAY",
+  };
 }
 // function analyzeTrend(prices) {
 //   let isDowntrend = false;
