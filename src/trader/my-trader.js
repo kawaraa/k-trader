@@ -6,8 +6,8 @@ const calcPercentage = calcPercentageDifference;
 
 function detectTrendBasedCloses(prices) {
   const slope = linearRegression(prices);
-  if (slope > 0.0000001) return "UPTREND";
-  if (slope < -0.0000001) return "DOWNTREND";
+  if (slope > 0) return "UPTREND";
+  if (slope < 0) return "DOWNTREND";
   return "SIDEWAYS";
 }
 
@@ -16,14 +16,17 @@ class MyTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
     super(exProvider, pair, interval, capital);
     this.strategyTest = { timestamp: 0, percentThreshold: 20 };
-    this.range = (10 * 60) / this.interval;
+    this.range = (8 * 60) / this.interval;
     this.priceChangePercent = 4;
 
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
-    this.trends = "x-x-x";
-    this.lastTradeAge = 0;
-    this.lastOrderPrice = 0;
+    // this.trends = "0-x-x-x-x";
+    this.trends = [];
+    this.highestPrice = null;
+    this.lowestPrice = null;
+    this.lastTradeTimer = 0;
+    this.lastTradePrice = 0;
   }
 
   async run() {
@@ -49,7 +52,7 @@ class MyTrader extends Trader {
 
     const askBidSpreadPercentage = calcPercentage(currentPrice.bidPrice, currentPrice.askPrice);
     const averageAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentage(p.bidPrice, p.askPrice)));
-    const safeAskBidSpread = askBidSpreadPercentage <= averageAskBidSpread * 1.1; // safeAskBidSpread
+    const safeAskBidSpread = askBidSpreadPercentage < Math.min(averageAskBidSpread * 2, 1); // safeAskBidSpread
 
     const sortedBidPrices = bidPrices.toSorted((a, b) => a - b);
     const pricePercentThreshold = calcPercentage(sortedBidPrices[0], sortedBidPrices.at(-1));
@@ -59,47 +62,46 @@ class MyTrader extends Trader {
 
     const movement = findPriceMovement(
       bidPrices,
-      Math.max(this.priceChangePercent / 6, 1),
-      Math.max(this.priceChangePercent, 3)
+      Math.max(this.priceChangePercent / 5, 1.5),
+      Math.max(this.priceChangePercent, 5)
+      //  Math.min(Math.max(this.priceChangePercent / 2, 2), 4)
     );
     const increasing = movement.includes("INCREASING");
-    const dropping = movement.includes("DROPPING");
 
-    console.log("priceChangePercent", this.priceChangePercent);
-    console.log("trend", this.trends, movement);
+    // console.log("priceChangePercent", this.priceChangePercent);
+    console.log("trend", this.trends, movement, this.lastTradeTimer < this.range, this.priceChangePercent);
+
+    let shouldBuy = this.trends[0] == "UPTREND" && this.trends.at(-1) == "DOWNTREND" && increasing;
+    // if (!shouldBuy) shouldBuy = this.trends.includes("UPTREND-DOWNTREND-DOWNTREND-UPTREND") && increasing;
+    // if (!shouldBuy) shouldBuy = this.trends.includes("UPTREND-UPTREND-DOWNTREND-UPTREND") && increasing;
+    // if (!shouldBuy) {
+    //   shouldBuy = this.trends.includes("DOWNTREND-UPTREND-UPTREND-DOWNTREND") && increasing;
+    // }
+
+    // const buyOnUptrend =
+    //   (this.trends.includes("DOWNTREND-DOWNTREND-UPTREND-UPTREND") ||
+    //     this.trends.includes("UPTREND-DOWNTREND-UPTREND-UPTREND") ||
+    //     this.trends.includes("DOWNTREND-UPTREND-UPTREND-UPTREND")) &&
+    //   findPriceMovement(
+    //     bidPrices,
+    //     Math.max(this.priceChangePercent / 5, 1),
+    //     Math.max(this.priceChangePercent / 2, 2)
+    //   ).includes("INCREASING") &&
+    //   trades.at(-1) > 0;
 
     if (!positions[0] && this.capital > 0 && balance.eur >= 5) {
       // Buy
-      let shouldBuy = false;
+      const pause = trades.at(-1) > 3 && this.lastTradeTimer < this.range;
 
-      const case1 = this.trends.includes("UPTREND-SIDEWAYS-DOWNTREND") && increasing;
-      const case2 = this.trends.includes("SIDEWAYS-UPTREND-DOWNTREND") && increasing;
-      const case3 = this.trends.includes("DOWNTREND-UPTREND-DOWNTREND") && increasing;
-
-      // const case1 = this.trends.includes("-DOWNTREND-SIDEWAYS");
-      // const case2 = this.trends.includes("SIDEWAYS-UPTREND-SIDEWAYS");
-      // const case3 = this.trends.at(-2) == "DOWNTREND" && this.trends.at(-1) == "SIDEWAYS";
-      // DOWNTREND-SIDEWAYS-DOWNTREND
-      // SIDEWAYS-DOWNTREND-SIDEWAYS
-      // SIDEWAYS-UPTREND-SIDEWAYS
-      // UPTREND-DOWNTREND-SIDEWAYS
-
-      // DOWNTREND-UPTREND-DOWNTREND INCREASING
-
-      // Don't buy: DOWNTREND-UPTREND-DOWNTREND
-
-      if ((case1 || case2 || case3) && this.lastTradeAge > this.range) {
-        shouldBuy = true;
-      }
-
-      if (shouldBuy && safeAskBidSpread) {
+      if (shouldBuy && !pause && safeAskBidSpread) {
         this.dispatch("LOG", `Placing BUY at ${currentPrice.askPrice}`);
         const capital = balance.eur < this.capital ? balance.eur : this.capital;
         const cost = capital - calculateFee(capital, 0.3);
         const investingVolume = +(cost / currentPrice.askPrice).toFixed(8);
         const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
         this.dispatch("BUY", orderId);
-
+        this.lastTradeTimer = 0;
+        this.lastTradePrice = currentPrice.askPrice;
         //
       }
     } else if (positions[0] && balance.crypto > 0) {
@@ -117,40 +119,56 @@ class MyTrader extends Trader {
         }
       }
 
-      // if (this.losses[1]) {
-      //   this.losses[2] = +(loss - (this.losses[0] - this.losses[1])).toFixed(2); // drops after it's recovered
-      // }
+      if (this.losses[1]) {
+        this.losses[2] = +(loss - (this.losses[0] - this.losses[1])).toFixed(2); // drops after it's recovered
+      }
 
       this.dispatch(
         "LOG",
         `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
       );
 
-      const profitable =
-        gainLossPercent > Math.max(this.priceChangePercent / 2, 4) && loss > this.priceChangePercent / 4;
+      // const profitable =
+      //   gainLossPercent > Math.max(this.priceChangePercent / 2, 4) && loss > this.priceChangePercent / 4;
       // const stopLoss =
       //   gainLossPercent < -5 ||
       //   (this.losses[0] > Math.max(this.priceChangePercent / 3, 4) &&
       //     this.losses[1] > Math.max(this.losses[0] / 2, 2) &&
       //     this.losses[2] > Math.max(this.losses[1] / 2, 1));
 
-      // DOWNTREND-SIDEWAYS-UPTREND DROPPING
-      const case1 = this.trends.includes("-SIDEWAYS-UPTREND") && dropping;
-      const case2 =
-        this.trends.includes("-DOWNTREND-UPTREND") &&
-        (dropping || gainLossPercent < -this.priceChangePercent);
-      const case3 = this.trends.includes("-SIDEWAYS-UPTREND");
-      const case4 = this.trends.includes("-UPTREND-UPTREND") && dropping;
+      const movement = findPriceMovement(
+        bidPrices,
+        Math.max(this.priceChangePercent / 5, 1),
+        Math.max(this.priceChangePercent / 2, 3)
+      );
+      const shouldSell = (this.trends.at(-1) == "UPTREND" && movement.includes("DROPPING")) || loss > 4;
 
-      console.log(case1, case2, case3, safeAskBidSpread);
+      // const case1 =
+      //   (this.trends.includes("DOWNTREND-DOWNTREND-UPTREND-DOWNTREND") ||
+      //     this.trends.includes("DOWNTREND-DOWNTREND-UPTREND-DOWNTREND") ||
+      //     this.trends.includes("UPTREND-UPTREND-UPTREND-DOWNTREND")) &&
+      //   (dropping || loss > 2);
+      // const case2 =
+      //   (this.trends.includes("UPTREND-DOWNTREND-UPTREND-UPTREND") ||
+      //     this.trends.includes("DOWNTREND-DOWNTREND-UPTREND-UPTREND")) &&
+      //   (dropping || loss > 2);
+      // const case3 =
+      //   (this.trends.includes("DOWNTREND-UPTREND-UPTREND-UPTREND") ||
+      //     this.trends.includes("UPTREND-UPTREND-UPTREND-UPTREND")) &&
+      //   loss > Math.max(this.prevGainPercent / 4, 3);
+      // const case4 = this.trends.includes("DOWNTREND-UPTREND-DOWNTREND-DOWNTREND");
 
-      if ((case1 || case2 || case3 || case4) && safeAskBidSpread) {
-        this.dispatch("LOG", `Placing ${profitable ? "PROFITABLE" : "STOPLOSS"} order`);
+      // const aboveZero = (gainLossPercent > 0 && gainLossPercent > this.priceChangePercent / 2) || true;
+      // const case2 = this.trends.includes("DOWNTREND-DOWNTREND-UPTREND") && dropping;
+
+      if (shouldSell && safeAskBidSpread && this.lastTradeTimer > 60 / 5) {
+        this.dispatch("LOG", `Placing SELL order ${currentPrice.bidPrice}`);
         await this.sell(positions[0], balance.crypto, currentPrice.bidPrice);
         this.prevGainPercent = 0;
         this.losses = [0, 0, 0];
-        this.lastTradeAge = 0;
-        this.lastOrderPrice = positions[0].price;
+        this.lastTradeTimer = 0;
+        this.lastTradePrice = currentPrice.askPrice;
+        if (gainLossPercent < 0) this.trends.shift();
         // this.trends = "x-x-x";
         //
       }
@@ -160,15 +178,25 @@ class MyTrader extends Trader {
       //   this.dispatch("LOG", `Waiting for UPTREND signal`); // Log decision
     }
 
-    this.lastTradeAge++;
+    this.lastTradeTimer++;
     this.dispatch("LOG", "");
   }
 
   updateTrends(trend) {
-    const arr = this.trends.split("-");
-    if (arr.at(-1) != trend) arr.push(trend);
-    if (arr.length > 3) arr.shift();
-    this.trends = arr.join("-");
+    // const arr = this.trends.split("-");
+    if (this.trends.at(-1) != trend) this.trends.push(trend);
+    if (this.trends.length > 2) this.trends.shift();
+    // this.trends = arr.join("-")
+
+    //   let arr = this.trends.split("-");
+    //   let timer = +arr.at(0);
+    //   if (timer > this.range || this.trends == "0-x-x-x-x") {
+    //     arr.push(trend);
+    //     timer = 0;
+    //   }
+    //   if (arr.length > 5) arr = arr.slice(2);
+    //   else arr.shift();
+    //   this.trends = timer + 1 + ("-" + arr.join("-"));
   }
 }
 
