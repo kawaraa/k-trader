@@ -74,14 +74,13 @@ class MyTrader extends Trader {
     const dropping = movement.includes("DROPPING");
 
     const trendsFlow = this.trends.slice(1).join("-") || "";
-    if (trendsFlow.includes(conditions[0][0]) || trendsFlow.includes(conditions[3][0])) this.breakdown = true;
-    else if (trendsFlow.includes(conditions[1][0])) this.breakdown = false;
+    if (trendsFlow.includes(conditions[0][0]) || trendsFlow.includes(conditions[2][0])) this.breakdown = true;
 
     let [_, signal] = conditions.find((c) => trendsFlow.includes(c[0])) || ["", "NO-SIGNAL"];
 
-    shouldBuy = (signal == "BUY" && increasing) || (this.breakdown && signal == "BREAKDOWN-BUY");
+    shouldBuy = signal == "BUY" || (this.breakdown && signal == "BREAKDOWN-BUY");
 
-    console.log("trend", signal, trendsFlow, movement, this.breakdown, this.priceChangePercent);
+    console.log("===> ", signal, trendsFlow, movement, this.breakdown, this.priceChangePercent);
 
     // let shouldBuy = this.trends[0] == "UPTREND" && this.trends.at(-1) == "DOWNTREND" && increasing;
     // if (!shouldBuy) shouldBuy = this.trends.includes("UPTREND-DOWNTREND-DOWNTREND-UPTREND") && increasing;
@@ -105,7 +104,7 @@ class MyTrader extends Trader {
       // Buy
       // const pause = trades.at(-1) > 3 && this.lastTradeTimer < this.range;
 
-      if (shouldBuy && safeAskBidSpread) {
+      if (shouldBuy && safeAskBidSpread && this.lastTradeTimer >= this.range) {
         this.dispatch("LOG", `Placing BUY at ${currentPrice.askPrice}`);
         const capital = balance.eur < this.capital ? balance.eur : this.capital;
         const cost = capital - calculateFee(capital, 0.3);
@@ -156,12 +155,19 @@ class MyTrader extends Trader {
       // );
 
       const dropping = prevDropAgain > this.losses[2];
-      // DOWNTREND-DOWNTREND-UPTREND-UPTREND-UPTREND-DOWNTREND
+
       // const exception = trendsFlow.includes("UPTREND-UPTREND-DOWNTREND-UPTREND-UPTREND-UPTREND");
       // const stopLoss =
       //   signal == "HOLD" && gainLossPercent <= 1 && loss > Math.max(this.prevGainPercent / 5, 3);
       // const shouldSell = (signal == "SELL" || exception) && loss > Math.max(this.prevGainPercent / 5, 1);
-      const shouldSell = signal == "SELL";
+      let shouldSell = signal == "SELL" && loss > Math.max(gainLossPercent / 5, 1.5);
+      if (!shouldSell) shouldSell = !signal.includes("BUY") && loss > Math.max(gainLossPercent / 5, 4);
+      if (!shouldSell && gainLossPercent > 1) {
+        shouldSell = findPriceMovement(bidPrices.slice(-parseInt(60 / this.interval)), 1, 4).includes(
+          "DROPPING"
+        );
+      }
+
       // (this.prevGainPercent >= 15 && loss > 2)
 
       // const aboveZero = (gainLossPercent > 0 && gainLossPercent > this.priceChangePercent / 2) || true;
@@ -174,7 +180,7 @@ class MyTrader extends Trader {
         this.losses = [0, 0, 0];
         this.lastTradeTimer = 0;
         this.lastTradePrice = currentPrice.askPrice;
-
+        if (gainLossPercent > 4) this.breakdown = false;
         // this.trends = "x-x-x";
         //
       }
@@ -224,29 +230,34 @@ const conditions = [
   ["UPTREND-UPTREND-UPTREND-UPTREND-UPTREND-UPTREND", "HOLD"],
 
   ["DOWNTREND-DOWNTREND-DOWNTREND-DOWNTREND-DOWNTREND-UPTREND", "BUY"],
-  ["UPTREND-DOWNTREND-DOWNTREND-DOWNTREND-DOWNTREND-UPTREND", "BUY"],
-  // ["DOWNTREND-DOWNTREND-DOWNTREND-UPTREND-DOWNTREND-UPTREND", "BREAKDOWN-BUY"],
-  // ["UPTREND-UPTREND-UPTREND-DOWNTREND-DOWNTREND-UPTREND", "BREAKDOWN-BUY"],
-  // ["DOWNTREND-UPTREND-DOWNTREND-UPTREND-DOWNTREND-UPTREND", "BREAKDOWN-BUY"],
+  // ["UPTREND-DOWNTREND-DOWNTREND-DOWNTREND-DOWNTREND-UPTREND", "BUY"], // To remove
+  ["DOWNTREND-DOWNTREND-UPTREND-UPTREND-DOWNTREND-DOWNTREND", "BUY"],
+  ["DOWNTREND-DOWNTREND-UPTREND-DOWNTREND-DOWNTREND-UPTREND", "BUY"],
+  ["UPTREND-DOWNTREND-UPTREND-UPTREND-DOWNTREND-UPTREND", "BUY"],
 
-  // UPTREND-UPTREND-DOWNTREND-DOWNTREND-DOWNTREND-UPTREND
+  ["UPTREND-UPTREND-DOWNTREND-DOWNTREND-DOWNTREND-UPTREND", "BUY"],
+  ["DOWNTREND-DOWNTREND-DOWNTREND-UPTREND-DOWNTREND-UPTREND", "BREAKDOWN-BUY"],
+  ["UPTREND-UPTREND-DOWNTREND-UPTREND-UPTREND-DOWNTREND", "BREAKDOWN-BUY"],
+  // ["DOWNTREND-UPTREND-DOWNTREND-DOWNTREND-UPTREND-UPTREND", "BREAKDOWN-BUY"],
 
-  ["DOWNTREND-DOWNTREND-DOWNTREND-DOWNTREND-UPTREND-DOWNTREND", "SELL"],
   ["UPTREND-UPTREND-UPTREND-UPTREND-UPTREND-DOWNTREND", "SELL"],
+  ["UPTREND-UPTREND-UPTREND-UPTREND-DOWNTREND-DOWNTREND", "SELL"],
+  ["UPTREND-UPTREND-UPTREND-DOWNTREND-DOWNTREND-DOWNTREND", "SELL"],
+  ["UPTREND-UPTREND-DOWNTREND-DOWNTREND-DOWNTREND-DOWNTREND", "SELL"],
+  ["DOWNTREND-DOWNTREND-DOWNTREND-DOWNTREND-UPTREND-DOWNTREND", "SELL"],
   ["DOWNTREND-UPTREND-UPTREND-UPTREND-UPTREND-DOWNTREND", "SELL"],
+  ["DOWNTREND-DOWNTREND-DOWNTREND-UPTREND-UPTREND-DOWNTREND", "SELL"],
+  ["UPTREND-UPTREND-DOWNTREND-DOWNTREND-UPTREND-UPTREND", "SELL"],
+  ["UPTREND-UPTREND-DOWNTREND-DOWNTREND-UPTREND-DOWNTREND", "SELL"],
+  ["DOWNTREND-UPTREND-UPTREND-DOWNTREND-DOWNTREND-DOWNTREND", "SELL"],
 
-  // ["DOWNTREND-DOWNTREND-UPTREND-UPTREND-UPTREND-DOWNTREND", "SELL"],
-  // ["DOWNTREND-DOWNTREND-UPTREND-UPTREND-UPTREND-DOWNTREND", "SELL"],
-  // ["DOWNTREND-DOWNTREND-DOWNTREND-UPTREND-UPTREND-DOWNTREND", "SELL"],
+  ["DOWNTREND-DOWNTREND-UPTREND-DOWNTREND-UPTREND-DOWNTREND", "SELL"],
+  ["UPTREND-DOWNTREND-UPTREND-DOWNTREND-UPTREND-UPTREND", "SELL"],
+  ["UPTREND-UPTREND-DOWNTREND-UPTREND-DOWNTREND-DOWNTREND", "SELL"],
 ];
 
 /**
 
-"tradePrice": 0.1378, "askPrice": 0.1392, "bidPrice": 0.1387
-"tradePrice": 0.1327, "askPrice": 0.1323, "bidPrice": 0.132
-"tradePrice": 0.1218, "askPrice": 0.1214, "bidPrice": 0.1209
-"tradePrice": 0.1344, "askPrice": 0.1371, "bidPrice": 0.1365
-"tradePrice": 0.1218, "askPrice": 0.1224, "bidPrice": 0.122
-"tradePrice": 0.0971, "askPrice": 0.0968, "bidPrice": 0.0963
+"tradePrice": 0.2559, "askPrice": 0.2542, "bidPrice": 0.2535
 
  */
