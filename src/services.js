@@ -73,6 +73,65 @@ function smoothPrices(prices, round = 1) {
 
   return prices;
 }
+function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, round = 1) {
+  function smoother(pricesData) {
+    let newPrices = [];
+
+    for (let i = 0; i < pricesData.length; i++) {
+      const start = i;
+      const end = Math.min(pricesData.length, i + window + 1);
+      const windowSlice = pricesData.slice(start, end).map((p) => p || p);
+      const price1 = windowSlice[0];
+      const price2 = windowSlice.at(-1);
+
+      const max = Math.max(...windowSlice);
+      const min = Math.min(...windowSlice);
+      const highFromPrice1 = calcPercentageDifference(price1, max) >= percentThreshold;
+      const highFromPrice2 = calcPercentageDifference(max, price2) <= -percentThreshold;
+
+      const lowFromPrice1 = calcPercentageDifference(price1, min) <= percentThreshold;
+      const lowFromPrice2 = calcPercentageDifference(min, price2) >= -percentThreshold;
+
+      if (
+        !(percentThreshold > 0 && highFromPrice1 && highFromPrice2) &&
+        !(percentThreshold < 0 && lowFromPrice1 && lowFromPrice2)
+      ) {
+        newPrices.push(pricesData[i]);
+      } else {
+        newPrices = newPrices.slice(0, i).concat(generateRange(price1, price2, window));
+        i = end;
+      }
+    }
+
+    return newPrices;
+  }
+
+  for (let time = 1; time < round; time++) {
+    prices = smoother(prices);
+  }
+
+  return prices;
+}
+
+function normalizePrices(prices, averageAskBidSpread = 0.5) {
+  const normalAskBidSpreed = (spreed) => spreed <= Math.min(averageAskBidSpread * 2, 1);
+  const normalizedPrices = [];
+  for (let i = 0; i < prices.length; i++) {
+    const askBidSpreedPercent = calcPercentageDifference(prices[i].bidPrice, prices[i].askPrice);
+    if (normalAskBidSpreed(askBidSpreedPercent)) {
+      normalizedPrices.push(calcAveragePrice([prices[i].askPrice, prices[i].bidPrice]));
+    } else if (normalizedPrices.at(-1)) {
+      normalizedPrices.push(normalizedPrices.at(-1));
+    }
+  }
+  return normalizedPrices;
+}
+
+function generateRange(start, end, length) {
+  if (length < 2) return length === 1 ? [start] : [];
+  const step = (end - start) / (length - 1);
+  return Array.from({ length }, (_, i) => start + i * step);
+}
 
 // function analyzePrices(prices) {
 //   const result = { lows: [], highs: [], negativesPercent: 0, positivesPercent: 0, startedWith: "" };
@@ -110,4 +169,7 @@ module.exports = {
   calculateFee,
   smoothPricesAndUpdate,
   smoothPrices,
+  normalizePrices,
+  generateRange,
+  removeLowsOrHighs,
 };

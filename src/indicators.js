@@ -76,7 +76,29 @@ function detectTrend(data, lookback = 5) {
   return "sideways";
 }
 
-function linearRegression(prices) {
+function computeDynamicThreshold(prices) {
+  const changes = [];
+  for (let i = 1; i < prices.length; i++) {
+    changes.push(prices[i] - prices[i - 1]);
+  }
+
+  const mean = changes.reduce((a, b) => a + b, 0) / changes.length;
+  const variance = changes.reduce((sum, val) => sum + (val - mean) ** 2, 0) / changes.length;
+  const stdDev = Math.sqrt(variance);
+
+  // Coefficient of Variation (CV)
+  const avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length;
+  const cv = stdDev / avgPrice;
+
+  // Dynamic multiplier: lower for low CV, higher for high CV
+  const multiplier = Math.min(Math.max(cv * 2, 0.01), 0.1); // clamps between 0.01 and 0.1
+
+  return stdDev * multiplier;
+}
+
+function linearRegression(prices, returnString, threshold) {
+  threshold = threshold < 1 ? threshold : computeDynamicThreshold(prices); // 0.0001 works best for me
+
   const n = prices.length;
   let sumX = 0,
     sumY = 0,
@@ -91,8 +113,12 @@ function linearRegression(prices) {
   }
 
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+
+  if (!returnString) return slope;
   // return slope > 0 ? "buy" : "sell";
-  return slope;
+  if (slope > threshold) return "UPTREND";
+  if (slope < -threshold) return "DOWNTREND";
+  return "SIDEWAYS";
 
   // If the slope is positive, it indicates an upward trend, which typically suggests buying in anticipation of further gains. Conversely, if the slope is negative, it indicates a downward trend, suggesting selling to avoid further losses.
   // 1. Positive Slope: Indicates an upward trend, which could be a signal to buy.
@@ -155,7 +181,7 @@ function findPriceMovement(prices, minPercent, dropRisePercent) {
 
   return "STABLE";
 }
-function analyzeTrend(prices) {
+function analyzeTrend(prices, weakness = 0.5) {
   const highs = [0];
   const lows = [0];
   let accumulator = 0;
@@ -194,7 +220,8 @@ function analyzeTrend(prices) {
     lows,
     increased,
     dropped,
-    trend: increased > dropped + 0.5 ? "UPTREND" : increased + 0.5 < dropped ? "DOWNTREND" : "SIDEWAY",
+    trend:
+      increased > dropped + weakness ? "UPTREND" : dropped > increased + weakness ? "DOWNTREND" : "SIDEWAY",
   };
 }
 // function analyzeTrend(prices) {

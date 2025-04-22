@@ -88,7 +88,9 @@ async function runTest(pair, prices, interval, showLogs) {
       transactions++;
     }
 
-    if (showLogs) event == "LOG" && console.log(pair, info);
+    if (showLogs && event == "LOG") {
+      console.log(info ? pair : "", info || "");
+    }
   };
 
   for (const i in prices) {
