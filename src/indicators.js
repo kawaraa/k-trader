@@ -58,7 +58,7 @@ function calculateRSI(prices, period = 14) {
   // else if (rsi < 30) return "buy"; // Consider buying if the RSI indicates oversold conditions
   // return "hold"; // No clear signal; hold the position or wait for better conditions
 
-  return rsi.toFixed(2); // Return RSI value rounded to two decimal places
+  return +rsi.toFixed(2); // Return RSI value rounded to two decimal places
 
   // - The 30 to 70 range for RSI is commonly used because:
   // 1. RSI above 70: Often indicates the asset is overbought and might be due for a pullback.
@@ -191,7 +191,7 @@ function analyzeTrend(prices, weakness = 0.5) {
   for (let i = 0; i < prices.length; i++) {
     accumulator += calcPercentageDifference(prices[i], prices[i + 1]);
 
-    if (accumulator > 0 && accumulator > Math.max(0, highs.at(-1) - 0.5))
+    if (accumulator > 0 && accumulator > Math.max(0, highs.at(-1) - 0.25))
       highs[highs.length - 1] = accumulator;
     else {
       const negativePercent = accumulator - highs.at(-1);
@@ -221,7 +221,7 @@ function analyzeTrend(prices, weakness = 0.5) {
     increased,
     dropped,
     trend:
-      increased > dropped + weakness ? "UPTREND" : dropped > increased + weakness ? "DOWNTREND" : "SIDEWAY",
+      increased > dropped + weakness ? "UPTREND" : dropped > increased + weakness ? "DOWNTREND" : "SIDEWAYS",
   };
 }
 // function analyzeTrend(prices) {
@@ -334,27 +334,44 @@ function detectBasicPattern(data) {
   const last = data.at(-1);
   const prev = data.at(-2);
 
-  const bullishEngulfing =
-    prev.close < prev.open && last.close > last.open && last.open < prev.close && last.close > prev.open;
+  const isBullishEngulfing =
+    prev.close < prev.open && last.close > last.open && last.close > prev.open && last.open < prev.close;
 
-  const bearishEngulfing =
+  const isBearishEngulfing =
     prev.close > prev.open && last.close < last.open && last.open > prev.close && last.close < prev.open;
 
-  const body = Math.abs(last.close - last.open);
-  const hammer =
-    body < (last.high - last.low) * 0.3 &&
-    (last.open - last.low > body * 2 || last.close - last.low > body * 2);
+  const bodySize = Math.abs(last.close - last.open);
+  const upperWick = last.high - Math.max(last.close, last.open);
+  const lowerWick = Math.min(last.close, last.open) - last.low;
 
-  const shootingStar =
-    body < (last.high - last.low) * 0.3 &&
-    (last.high - last.open > body * 2 || last.high - last.close > body * 2);
+  const isHammer = lowerWick > bodySize * 2 && upperWick < bodySize;
+  const isInvertedHammer = upperWick > bodySize * 2 && lowerWick < bodySize;
 
-  if (bullishEngulfing) return "bullish-engulfing";
-  if (bearishEngulfing) return "bearish-engulfing";
-  if (hammer && last.close > last.open) return "hammer";
-  if (shootingStar && last.open > last.close) return "shooting-star";
+  const isShootingStar = isInvertedHammer && last.close < last.open;
+  const isDoji = bodySize < (last.high - last.low) * 0.1;
 
-  return null;
+  const isPiercing =
+    prev.close < prev.open &&
+    last.open < prev.low &&
+    last.close > (prev.open + prev.close) / 2 &&
+    last.close < prev.open;
+
+  const isDarkCloudCover =
+    prev.close > prev.open &&
+    last.open > prev.high &&
+    last.close < (prev.open + prev.close) / 2 &&
+    last.close > prev.open;
+
+  if (isBullishEngulfing) return "bullish-engulfing";
+  if (isBearishEngulfing) return "bearish-engulfing";
+  if (isHammer) return "hammer";
+  if (isInvertedHammer) return "inverted-hammer";
+  if (isPiercing) return "piercing";
+  if (isDarkCloudCover) return "dark-cloud-cover";
+  if (isShootingStar) return "shooting-star";
+  if (isDoji) return "doji";
+
+  return "none";
 }
 
 function detectAdvancedPattern(data) {
