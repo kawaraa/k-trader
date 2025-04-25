@@ -10,101 +10,101 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    environment: production
+  # build:
+  #   runs-on: ubuntu-latest
+  #   environment: production
 
-    steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
+  #   steps:
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: "20.x"
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Build project
-        run: NODE_ENV=production npm run build
+  #     - name: Build project
+  #       run: NODE_ENV=production npm run build
 
-      - name: Save production build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: artifact
-          path: out
+  #     - name: Save production build artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: artifact
+  #         path: out
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment: production
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   environment: production
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Download saved production build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: artifact
-          path: out
+  #     - name: Download saved production build artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: artifact
+  #         path: out
 
-      - name: Add the environment variables
-        run: |
-          cat <<EOF> .env.json
-          {
-          "KRAKEN_CREDENTIALS":${{ secrets.KRAKEN_CREDENTIALS }},
-          "FIRESTORE_CREDENTIALS":${{ secrets.FIRESTORE_CREDENTIALS }}
-          }
-          EOF
+  #     - name: Add the environment variables
+  #       run: |
+  #         cat <<EOF> .env.json
+  #         {
+  #         "KRAKEN_CREDENTIALS":${{ secrets.KRAKEN_CREDENTIALS }},
+  #         "FIRESTORE_CREDENTIALS":${{ secrets.FIRESTORE_CREDENTIALS }}
+  #         }
+  #         EOF
 
-      - name: Prepare SSL certificate files
-        run: |
-          echo "$(echo "${{ secrets.SSL_ORIGIN_CERTIFICATE }}" | base64 --decode)" > cloudflare.crt
-          echo "$(echo "${{ secrets.SSL_PRIVATE_KEY }}" | base64 --decode)" > cloudflare.key
+  #     - name: Prepare SSL certificate files
+  #       run: |
+  #         echo "$(echo "${{ secrets.SSL_ORIGIN_CERTIFICATE }}" | base64 --decode)" > cloudflare.crt
+  #         echo "$(echo "${{ secrets.SSL_PRIVATE_KEY }}" | base64 --decode)" > cloudflare.key
 
-      - name: Archive production artifacts
-        run: tar -czf ../app.tar.gz .  && mv ../app.tar.gz .
+  #     - name: Archive production artifacts
+  #       run: tar -czf ../app.tar.gz .  && mv ../app.tar.gz .
 
-      - name: Prepare SSH keys and tfstate files for Terraform
-        run: |
-          echo "${{ secrets.SSH_FINGERPRINT_KEY }}" > iac/id_rsa.pub
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > iac/id_rsa
-          DECODED_VALUE=$(echo "${{ secrets.TERRAFORM_STATE }}" | base64 --decode)
-          [ "$DECODED_VALUE" = "{}" ] || echo "$DECODED_VALUE" > iac/terraform.tfstate
+  #     - name: Prepare SSH keys and tfstate files for Terraform
+  #       run: |
+  #         echo "${{ secrets.SSH_FINGERPRINT_KEY }}" > iac/id_rsa.pub
+  #         echo "${{ secrets.SSH_PRIVATE_KEY }}" > iac/id_rsa
+  #         DECODED_VALUE=$(echo "${{ secrets.TERRAFORM_STATE }}" | base64 --decode)
+  #         [ "$DECODED_VALUE" = "{}" ] || echo "$DECODED_VALUE" > iac/terraform.tfstate
 
-      # Provisioning the infrastructure and configure it
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-      - name: Terraform Init
-        run: terraform -chdir=iac init
-      - name: Terraform Apply - Provision Resources
-        run: terraform -chdir=iac apply -auto-approve -var "digitalocean_token=${{ secrets.DIGITALOCEAN_IAC_TOKEN }}"
+  #     # Provisioning the infrastructure and configure it
+  #     - name: Set up Terraform
+  #       uses: hashicorp/setup-terraform@v3
+  #       with:
+  #         terraform_wrapper: false
+  #     - name: Terraform Init
+  #       run: terraform -chdir=iac init
+  #     - name: Terraform Apply - Provision Resources
+  #       run: terraform -chdir=iac apply -auto-approve -var "digitalocean_token=${{ secrets.DIGITALOCEAN_IAC_TOKEN }}"
 
-      - name: Update Terraform tfstate file
-        if: always()
-        run: |
-          echo "${{ secrets.GH_ALM_REPO_TOKEN }}" | gh auth login --with-token
-          gh secret set "TERRAFORM_STATE" --body "$(base64 -i iac/terraform.tfstate)"
+  #     - name: Update Terraform tfstate file
+  #       if: always()
+  #       run: |
+  #         echo "${{ secrets.GH_ALM_REPO_TOKEN }}" | gh auth login --with-token
+  #         gh secret set "TERRAFORM_STATE" --body "$(base64 -i iac/terraform.tfstate)"
 
-      - name: Prepare SSH Private key for deployment
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan $(terraform -chdir=iac output -raw droplet_ip) >> ~/.ssh/known_hosts
+  #     - name: Prepare SSH Private key for deployment
+  #       run: |
+  #         mkdir -p ~/.ssh
+  #         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+  #         chmod 600 ~/.ssh/id_rsa
+  #         ssh-keyscan $(terraform -chdir=iac output -raw droplet_ip) >> ~/.ssh/known_hosts
 
-      - name: Waiting for the VM to boot up
-        run: sleep 10
+  #     - name: Waiting for the VM to boot up
+  #       run: sleep 10
 
-      - name: Deploy application
-        run: |
-          scp -r app.tar.gz root@$(terraform -chdir=iac output -raw droplet_ip):/root &&
-          ssh root@$(terraform -chdir=iac output -raw droplet_ip) "tar -xzf /root/app.tar.gz && /root/iac/retry-script.sh init-setup"
+  #     - name: Deploy application
+  #       run: |
+  #         scp -r app.tar.gz root@$(terraform -chdir=iac output -raw droplet_ip):/root &&
+  #         ssh root@$(terraform -chdir=iac output -raw droplet_ip) "tar -xzf /root/app.tar.gz && /root/iac/retry-script.sh init-setup"
 
-      - name: Cleanup
-        if: always()
-        run: rm -f .env.json app.tar.gz id_rsa id_rsa.pub iac/terraform.tfstate cloudflare.crt cloudflare.key
+  #     - name: Cleanup
+  #       if: always()
+  #       run: rm -f .env.json app.tar.gz id_rsa id_rsa.pub iac/terraform.tfstate cloudflare.crt cloudflare.key

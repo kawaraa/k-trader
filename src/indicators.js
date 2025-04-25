@@ -65,11 +65,12 @@ function calculateRSI(prices, period = 14) {
   // 2. RSI below 30: Typically signals that the asset is oversold and might be due for a rebound.
 }
 
-function detectTrend(data, lookback = 5) {
-  const lows = data.slice(-lookback).map((d) => d.low);
-  const highs = data.slice(-lookback).map((d) => d.high);
-  const lowSlope = lows.at(-1) - lows[0];
-  const highSlope = highs.at(-1) - highs[0];
+function detectTrend(data) {
+  const n = data.length - 1;
+  const lows = data.map((d) => d.low);
+  const highs = data.map((d) => d.high);
+  const lowSlope = (lows.at(-1) - lows[0]) / n;
+  const highSlope = (highs.at(-1) - highs[0]) / n;
 
   if (lowSlope > 0 && highSlope > 0) return "uptrend";
   if (lowSlope < 0 && highSlope < 0) return "downtrend";
@@ -77,13 +78,14 @@ function detectTrend(data, lookback = 5) {
 }
 
 function computeDynamicThreshold(prices) {
-  const changes = [];
-  for (let i = 1; i < prices.length; i++) {
-    changes.push(prices[i] - prices[i - 1]);
-  }
+  if (prices.length < 2) return 0.0001;
 
-  const mean = changes.reduce((a, b) => a + b, 0) / changes.length;
-  const variance = changes.reduce((sum, val) => sum + (val - mean) ** 2, 0) / changes.length;
+  const deltas = [];
+  for (let i = 1; i < prices.length; i++) {
+    deltas.push(prices[i] - prices[i - 1]);
+  }
+  const mean = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+  const variance = deltas.reduce((sum, val) => sum + (val - mean) ** 2, 0) / deltas.length;
   const stdDev = Math.sqrt(variance);
 
   // Coefficient of Variation (CV)
@@ -116,34 +118,45 @@ function linearRegression(prices, returnString, threshold) {
 
   if (!returnString) return slope;
   // return slope > 0 ? "buy" : "sell";
-  if (slope > threshold) return "UPTREND";
-  if (slope < -threshold) return "DOWNTREND";
-  return "SIDEWAYS";
+  if (slope > threshold) return "uptrend";
+  if (slope < -threshold) return "downtrend";
+  return "sideways";
 
   // If the slope is positive, it indicates an upward trend, which typically suggests buying in anticipation of further gains. Conversely, if the slope is negative, it indicates a downward trend, suggesting selling to avoid further losses.
   // 1. Positive Slope: Indicates an upward trend, which could be a signal to buy.
   // 2. Negative Slope: Indicates a downward trend, which could be a signal to sell.
 }
 
-function detectTrendlines(data, lookback = 20) {
-  const pivots = { support: [], resistance: [] };
-  const slice = data.slice(-lookback);
+function hasStrongSlope(points, type = "high", threshold = 0.05) {
+  /* ====> threshold <====
+    0.05 (default) → Good for general fast-moving markets
+    Higher (e.g. 0.1) → Only consider steep slopes (fewer but stronger signals)
+    Lower (e.g. 0.02) → Accept flatter trendlines (more signals, but riskier) 
+  */
+  if (points.length < 2) return false;
+  const values = points.map((d) => d[type]);
+  const slope = linearRegression(values);
+  return Math.abs(slope) > threshold;
+}
 
-  for (let i = 2; i < slice.length - 2; i++) {
+function detectTrendlines(data) {
+  const pivots = { support: [], resistance: [] };
+
+  for (let i = 2; i < data.length - 2; i++) {
     const isSupport =
-      slice[i].low < slice[i - 1].low &&
-      slice[i].low < slice[i - 2].low &&
-      slice[i].low < slice[i + 1].low &&
-      slice[i].low < slice[i + 2].low;
+      data[i].low < data[i - 1].low &&
+      data[i].low < data[i - 2].low &&
+      data[i].low < data[i + 1].low &&
+      data[i].low < data[i + 2].low;
 
     const isResistance =
-      slice[i].high > slice[i - 1].high &&
-      slice[i].high > slice[i - 2].high &&
-      slice[i].high > slice[i + 1].high &&
-      slice[i].high > slice[i + 2].high;
+      data[i].high > data[i - 1].high &&
+      data[i].high > data[i - 2].high &&
+      data[i].high > data[i + 1].high &&
+      data[i].high > data[i + 2].high;
 
-    if (isSupport) pivots.support.push(slice[i]);
-    if (isResistance) pivots.resistance.push(slice[i]);
+    if (isSupport) pivots.support.push({ ...data[i], index: i });
+    if (isResistance) pivots.resistance.push({ ...data[i], index: i });
   }
 
   return pivots;
@@ -156,22 +169,22 @@ function findPriceMovement(prices, minPercent, dropRisePercent) {
   const length = prices.length - 1;
   let price = prices.at(-1);
   let movements = 0;
-  let result = "STABLE";
+  let result = "stable";
 
   for (let i = length; i > -1; i--) {
     const changePercent = calcPercentageDifference(prices[i], price);
 
-    if (result.includes("INCREASING")) {
+    if (result.includes("increasing")) {
       if (!dropRisePercent || changePercent <= -dropRisePercent) return result;
-    } else if (result.includes("DROPPING")) {
+    } else if (result.includes("dropping")) {
       if (!dropRisePercent || changePercent >= dropRisePercent) return result;
     } else {
       movements++;
       if (changePercent >= minPercent) {
-        result = `INCREASING:${movements}`;
+        result = `increasing:${movements}`;
         price = prices[i];
       } else if (changePercent <= -minPercent) {
-        result = `DROPPING:${movements}`;
+        result = `dropping:${movements}`;
         price = prices[i];
       }
     }
@@ -375,28 +388,31 @@ function detectBasicPattern(data) {
 }
 
 function detectAdvancedPattern(data) {
-  if (data.length < 3) throw new Error("detectAdvancedPattern: No enough data");
+  if (data.length < 3) return null;
+
   const last = data.at(-1);
   const prev = data.at(-2);
   const prevPrev = data.at(-3);
 
-  // Check for Morning Star (Bullish Reversal)
+  // Morning Star (Bullish Reversal) - refined check
   const isMorningStar =
     last.close > prevPrev.close &&
     last.open < prev.close &&
     last.close > prevPrev.close &&
     prev.open > prev.close &&
     prevPrev.open > prevPrev.close &&
-    Math.abs(last.close - prevPrev.open) > Math.abs(prev.close - prevPrev.open);
+    Math.abs(last.close - prevPrev.open) > Math.abs(prev.close - prevPrev.open) &&
+    Math.abs(prev.close - prev.open) < 0.2 * (prevPrev.high - prevPrev.low); // Additional check for small middle candle
 
-  // Check for Evening Star (Bearish Reversal)
+  // Evening Star (Bearish Reversal) - refined check
   const isEveningStar =
     last.close < prevPrev.close &&
     last.open > prev.close &&
     last.close < prevPrev.close &&
     prev.open < prev.close &&
     prevPrev.open < prevPrev.close &&
-    Math.abs(last.open - prevPrev.close) > Math.abs(prev.open - prevPrev.close);
+    Math.abs(last.open - prevPrev.close) > Math.abs(prev.open - prevPrev.close) &&
+    Math.abs(prev.close - prev.open) < 0.2 * (prevPrev.high - prevPrev.low); // Additional check for small middle candle
 
   if (isMorningStar) return "morning-star";
   if (isEveningStar) return "evening-star";
@@ -407,6 +423,7 @@ module.exports = {
   calculateRSI,
   detectTrend,
   linearRegression,
+  hasStrongSlope,
   detectTrendlines,
 
   findPriceMovement,
