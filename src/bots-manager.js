@@ -1,5 +1,5 @@
 const KrakenExchangeProvider = require("./providers/kraken-ex-provider");
-const BasicTrader = require("./trader/my-trader");
+const BasicTrader = require("./trader/basic-trader");
 const AdvanceTrader = require("./trader/advance-trader");
 const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs");
 const { dateToString, toShortDate, delay } = require("./utilities");

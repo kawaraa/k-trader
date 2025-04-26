@@ -10,7 +10,7 @@ class Trader {
     // this.strategyTimestamp = info.strategyTimestamp;
     this.period = +interval; // this.period is deleted in only test trading
     // this.testMode = info.testMode;
-    this.testMode = mode == "live";
+    this.testMode = mode != "live";
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
     this.timeoutID = 0;
@@ -50,7 +50,7 @@ class Trader {
         if (cost > 0) this.profit += cost;
         else this.loss += cost;
         this.position = null;
-        this.dispatch("LOG", `TEST: Sold at: ${price} - Gain: ${this.profit} - Loss: ${this.loss}`);
+        this.dispatch("LOG", `Sold at: ${price} - Gain: ${this.profit} - Loss: ${this.loss}`);
       }
     }
   }

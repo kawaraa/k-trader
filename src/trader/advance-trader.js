@@ -27,15 +27,15 @@ class AdvanceTrader extends Trader {
     const log = this.testMode ? "TEST:" : "";
 
     if (!position && decision === "BUY") {
-      this.dispatch("LOG", ` ${log} [+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
+      this.dispatch("LOG", `${log} [+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
       await this.placeOrder("BUY", capital, currentPrice.askPrice);
       //
     } else if (position && decision === "SELL") {
-      this.dispatch("LOG", ` ${log} [-] Breakdown detected. Placing SELL at ${currentPrice.bidPrice}`);
+      this.dispatch("LOG", `${log} [-] Breakdown detected. Placing SELL at ${currentPrice.bidPrice}`);
       await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
     } else {
-      this.dispatch("LOG", ` ${log} [=] No trade signal.decision: ${decision} position: ${position ? 1 : 0}`);
+      this.dispatch("LOG", `${log} [=] No trade signal.decision: ${decision} position: ${position ? 1 : 0}`);
     }
   }
 
