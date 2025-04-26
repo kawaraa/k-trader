@@ -1,4 +1,4 @@
-const { calculateFee, calcPercentageDifference } = require("../services");
+const { calculateFee } = require("../services");
 
 // Smart trader
 class Trader {
@@ -34,11 +34,13 @@ class Trader {
 
   placeOrder(type, cryptoOrEurBalance, price, position) {
     if (type == "BUY") {
-      const cost = cryptoOrEurBalance - services.calcPercentageDifference(cryptoOrEurBalance, 0.3);
+      const cost = cryptoOrEurBalance - calculateFee(cryptoOrEurBalance, 0.3);
       const investingCryptoVolume = +(cost / price).toFixed(8);
 
       if (!this.testMode) return this.buy(investingCryptoVolume, price);
       else this.position = { price, volume: investingCryptoVolume };
+
+      //
     } else if (type == "SELL") {
       const volume =
         price * (cryptoOrEurBalance - position.volume) < 5 ? cryptoOrEurBalance : position.volume;
@@ -56,7 +58,8 @@ class Trader {
   }
 
   async buy(volume, price) {
-    this.ex.createOrder("buy", "market", this.pair, volume);
+    const orderId = await this.ex.createOrder("buy", "market", this.pair, volume);
+    this.dispatch("BUY", orderId);
     this.dispatch("LOG", `Placing BUY at: ${price}`);
   }
 

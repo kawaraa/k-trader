@@ -138,8 +138,8 @@ class AdvanceTrader extends Trader {
       "LOG",
       `Volume (Prev): ${fixNum(prev.volume)} (Last): ${fixNum(last.volume)} (Avg): ${avgVolume}`
     );
-    this.dispatch("LOG", `RSI (Prev): ${prevRSI} (Last): ${currentRS}`);
-    this.dispatch("LOG", `Pattern (basic): ${basic} (advanced): ${advance}`);
+    this.dispatch("LOG", `RSI (Prev): ${prevRSI} (Last): ${currentRSI}`);
+    this.dispatch("LOG", `Pattern (basic): ${basic} (advanced): ${advanced}`);
     this.dispatch("LOG", `Trend: ${trend}`);
     this.dispatch("LOG", `Slope Trend: ${slopeTrend}`);
     this.dispatch("LOG", `Support: ${support} Resistance: ${resistance}`);
@@ -147,7 +147,7 @@ class AdvanceTrader extends Trader {
     this.dispatch("LOG", `Valid Resistance Line: ${validResistance}`);
     this.dispatch("LOG", `Broke Resistance Line: ${brokeResistanceLine}`);
     this.dispatch("LOG", `Broke Support Line: ${brokeSupportLine}`);
-    this.dispatch("LOG", `Score (breakout): ${score.breakout} (breakdown):${score.breakdown}  `);
+    this.dispatch("LOG", `Score (breakout): ${score.breakout} (breakdown): ${score.breakdown}  `);
     this.dispatch("LOG", `Decision: ${decision}`);
     this.dispatch("LOG", `======================`);
 

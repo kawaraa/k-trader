@@ -1,20 +1,12 @@
 const Trader = require("./trader.js");
 
-const {
-  calcPercentageDifference,
-  calculateFee,
-  calcAveragePrice,
-  normalizePrices,
-  removeLowsOrHighs,
-  smoothPrices,
-} = require("../services.js");
-const { linearRegression, analyzeTrend } = require("../indicators.js");
-const { isOlderThan } = require("../utilities.js");
+const { calcPercentageDifference, calcAveragePrice, normalizePrices } = require("../services.js");
+const { linearRegression } = require("../indicators.js");
 const calcPercentage = calcPercentageDifference;
 
 // Smart trader
 class MyTrader extends Trader {
-  constructor(exProvider, pair, interval, capital) {
+  constructor(exProvider, pair, interval, capital, mode) {
     super(exProvider, pair, interval, capital, mode);
     this.range = (6 * 60) / this.interval;
     this.percentThreshold = 4;
@@ -24,8 +16,9 @@ class MyTrader extends Trader {
     this.losses = [0, 0, 0];
     // this.trends = "0-x-x-x-x";
     this.trends = [];
-    this.highestPrice = null;
-    this.lowestPrice = null;
+    this.highestPrice = 0;
+    this.lowestPrice = 0;
+    this.lowestPriceTimestamp = 0;
     this.lastTradeTimer = 0;
     this.lastTradePrice = 0;
     this.breakdown = false;
@@ -38,7 +31,7 @@ class MyTrader extends Trader {
     const prices = await this.ex.prices(this.pair, this.range); // Change this to 12 hrs if 24 is not used
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
-    // const trades = await this.ex.getState(this.pair, "trades");
+    const trades = await this.ex.getState(this.pair, "trades");
     const currentPrice = prices.at(-1);
 
     if (prices.length < this.range) return;
@@ -55,50 +48,62 @@ class MyTrader extends Trader {
     const priceChangePercent = calcPercentage(sortedBidPrices[0], sortedBidPrices.at(-1));
     if (priceChangePercent > this.percentThreshold) this.percentThreshold = priceChangePercent;
 
-    let cleanedPrices = removeLowsOrHighs(removeLowsOrHighs(normalizedPrices, 12, 1.5, 3), 18, -1.5, 4);
-    cleanedPrices = smoothPrices(removeLowsOrHighs(cleanedPrices, 18, 1.5, 3));
-    this.updateTrends(linearRegression(cleanedPrices, true, 0));
+    this.updateTrends(linearRegression(normalizedPrices, true, 0));
 
-    // const trendsFlow = this.trends.slice(1).join("-") || "";
-    // let [_, signal] = conditions.find((c) => trendsFlow.includes(c[0])) || ["", "NO-SIGNAL"];
+    const droppedPercent = calcPercentage(normalizedPrices.at(-1), this.lowestPrice);
+    if (this.lowestPriceTimestamp > (24 * 60) / 5 || droppedPercent >= 10) {
+      this.lowestPrice = normalizedPrices.at(-1);
+      this.lowestPriceTimestamp = 0;
+    }
 
     const trends = this.trends.slice(0, -1);
     const downtrend = trends.every((t) => t == "downtrend");
     let shouldBuy = downtrend && this.trends.at(-1) == "uptrend";
 
     if (this.lastTradePrice > 0) {
-      const percent = calcPercentage(this.lastTradePrice, cleanedPrices.at(-1));
-      if (percent > this.droppedPercent) {
-        this.percentThreshold += percent - this.droppedPercent;
-        this.droppedPercent = Math.max(percent, 0);
-      } else if (this.droppedPercent - percent > 1.5) {
+      const percent = calcPercentage(this.lastTradePrice, normalizedPrices.at(-1));
+      if (percent < this.droppedPercent) {
+        this.percentThreshold += Math.abs(percent - this.droppedPercent);
+        this.droppedPercent = percent;
+      } else if (
+        Math.abs(this.droppedPercent - percent) > Math.max(Math.min(this.percentThreshold / 4, 4), 2)
+      ) {
         shouldBuy = true;
+      } else {
+        shouldBuy = false;
       }
 
-      // this.profitTarget = this.percentThreshold + this.droppedPercent;
-      console.log("=====> Increased", this.droppedPercent, percent, this.droppedPercent - percent, "-");
+      console.log("===>", this.droppedPercent, percent, Math.abs(this.droppedPercent - percent));
     }
 
-    this.profitTarget = Math.min(Math.max(this.percentThreshold / 3, 4), 10);
-    console.log(this.profitTarget, this.percentThreshold, this.droppedPercent);
+    this.profitTarget = Math.min(Math.max(this.percentThreshold / 4, 4), 10);
+    console.log(
+      "===>",
+      this.lowestPrice,
+      this.lowestPriceTimestamp,
+      this.trends.at(-1),
+      this.profitTarget,
+      this.percentThreshold,
+      this.droppedPercent
+    );
+
+    shouldBuy = shouldBuy && normalizedPrices.at(-1) > this.lowestPrice;
 
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 5) {
       if (shouldBuy && safeAskBidSpread && this.lastTradeTimer <= 0) {
-        this.dispatch("LOG", `Placing BUY at ${currentPrice.askPrice}`);
         const capital = balance.eur < this.capital ? balance.eur : this.capital;
-        const cost = capital - calculateFee(capital, 0.3);
-        const investingVolume = +(cost / currentPrice.askPrice).toFixed(8);
-        const orderId = await this.ex.createOrder("buy", "market", this.pair, investingVolume);
-        this.dispatch("BUY", orderId);
+        await this.placeOrder("BUY", capital, currentPrice.askPrice, position);
         this.lastTradePrice = 0;
+        this.lowestPrice = normalizedPrices.at(-1);
+        this.lowestPriceTimestamp = 0;
         this.droppedPercent = 0;
         this.prevGainPercent = 0;
       }
 
       // Sell
     } else if (position && balance.crypto > 0) {
-      const gainLossPercent = calcPercentage(position.price, cleanedPrices.at(-1));
+      const gainLossPercent = calcPercentage(position.price, normalizedPrices.at(-1));
       if (gainLossPercent > this.prevGainPercent) this.prevGainPercent = gainLossPercent;
       const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
       // const prevDropAgain = this.losses[2];
@@ -122,19 +127,17 @@ class MyTrader extends Trader {
 
       const shouldSell =
         this.prevGainPercent >= this.profitTarget && loss > Math.max(this.prevGainPercent / 5, 1);
-      // const stopLoss = gainLossPercent < -10 || (isOlderThan(position.createdAt, 12) && gainLossPercent < -5);
-      const stopLoss = gainLossPercent < -2;
+      const stopLoss = gainLossPercent < -3 && normalizedPrices.at(-1) < this.lowestPrice;
 
-      // (this.prevGainPercent > 3 && loss > Math.max(gainLossPercent / 4, 1)) ||
-      // this.prevGainPercent <= 3 && loss > 3;
-
-      // console.log(shouldSell, "stopLoss: ", stopLoss);
+      console.log("shouldSell: ", shouldSell, "stopLoss: ", stopLoss);
       if ((shouldSell || stopLoss) && safeAskBidSpread) {
-        this.dispatch("LOG", `Placing SELL order ${currentPrice.bidPrice}`);
-        await this.sell(position, balance.crypto, currentPrice.bidPrice);
+        await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
 
-        if (stopLoss) this.lastTradePrice = cleanedPrices.at(-1);
-        else if (gainLossPercent >= this.profitTarget / 1.3) {
+        if (stopLoss) {
+          this.lastTradePrice = normalizedPrices.at(-1);
+          this.lowestPrice = normalizedPrices.at(-1);
+          this.lowestPriceTimestamp = 0;
+        } else if (gainLossPercent >= this.profitTarget / 1.3) {
           this.percentThreshold = 4;
           this.profitTarget = 4;
         }
@@ -145,6 +148,7 @@ class MyTrader extends Trader {
       //   this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
     }
 
+    this.lowestPriceTimestamp++;
     this.dispatch("LOG", "");
   }
 

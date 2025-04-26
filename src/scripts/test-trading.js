@@ -3,6 +3,7 @@ const { Worker, parentPort, workerData, isMainThread } = require("worker_threads
 const { readFileSync, existsSync } = require("fs");
 const TestExchangeProvider = require("../providers/test-ex-provider.js");
 const BasicTrader = require("../trader/basic-trader.js");
+const { parseNumInLog } = require("../utilities.js");
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
@@ -76,8 +77,8 @@ async function runTradingTest(pair, interval) {
 async function runTest(pair, prices, interval, showLogs) {
   const m = +((prices.length * interval) / 43200).toFixed(1); // 43200 is the number of mins in one month
   let transactions = 0;
-  const ex = new TestExchangeProvider({ eur: 100, crypto: 0 }, prices, interval);
-  const trader = new BasicTrader(ex, pair, interval, 100, "test");
+  const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, interval);
+  const trader = new BasicTrader(ex, pair, interval, capital, "live");
   delete trader.period;
 
   trader.listener = (p, event, info) => {
@@ -87,7 +88,7 @@ async function runTest(pair, prices, interval, showLogs) {
     }
 
     if (showLogs && event == "LOG") {
-      console.log(info ? pair : "", info || "");
+      console.log(...parseNumInLog((info ? pair + " " : "") + (info || "")));
     }
   };
 

@@ -116,6 +116,10 @@ function request() {
     });
 }
 
+function parseNumInLog(str) {
+  return str.split(" ").map((p = (item) => parseFloat(item) || item));
+}
+
 module.exports = {
   request,
   parseError,
@@ -133,4 +137,5 @@ module.exports = {
   isNumber,
   strIncludes,
   removeDuplicateElements,
+  parseNumInLog,
 };
