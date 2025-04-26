@@ -26,16 +26,16 @@ class AdvanceTrader extends Trader {
     const decision = this.decideBaseOnScore(ohlc);
     const log = this.testMode ? "TEST:" : "";
 
-    if (!position && decision === "BUY") {
+    if (decision === "BUY") {
       this.dispatch("LOG", `${log} [+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
-      await this.placeOrder("BUY", capital, currentPrice.askPrice);
+      if (!position) await this.placeOrder("BUY", capital, currentPrice.askPrice);
       //
-    } else if (position && decision === "SELL") {
+    } else if (decision === "SELL") {
       this.dispatch("LOG", `${log} [-] Breakdown detected. Placing SELL at ${currentPrice.bidPrice}`);
-      await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
+      if (position) await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
     } else {
-      this.dispatch("LOG", `${log} [=] No trade signal.decision: ${decision} position: ${position ? 1 : 0}`);
+      this.dispatch("LOG", `${log} [=] No trade signal. decision: ${decision}`);
     }
   }
 
@@ -129,25 +129,29 @@ class AdvanceTrader extends Trader {
 
     const breakout = score.breakout >= 5;
     const breakdown = score.breakdown >= 5;
+    const decision = breakout ? "BUY" : breakdown ? "SELL" : "HOLD";
 
     // === Debug Logs ===
-    console.log("\n=== Decision Debug based on scoring system ===");
-    console.log("Last Close:", fixNum(last.close));
-    console.log("Volume (Prev):", fixNum(prev.volume), "(Last):", fixNum(last.volume), "(Avg):", avgVolume);
-    console.log("RSI (Prev):", prevRSI, "(Last):", currentRSI);
-    console.log("Pattern (basic):", basic, "(advanced):", advanced);
-    console.log("Trend:", trend);
-    console.log("Slope Trend:", slopeTrend);
-    console.log("Support:", support, "Resistance:", resistance);
-    console.log("Valid Support Line:", validSupport);
-    console.log("Valid Resistance Line:", validResistance);
-    console.log("Broke Resistance Line:", brokeResistanceLine);
-    console.log("Broke Support Line:", brokeSupportLine);
-    console.log("Score:", score);
-    console.log("Decision:", breakout ? "BUY" : breakdown ? "SELL" : "HOLD");
-    console.log("======================");
+    this.dispatch("LOG", `\n=== Decision Debug based on scoring system ===`);
+    this.dispatch("LOG", `Last Close: ${fixNum(last.close)}`);
+    this.dispatch(
+      "LOG",
+      `Volume (Prev): ${fixNum(prev.volume)} (Last): ${fixNum(last.volume)} (Avg): ${avgVolume}`
+    );
+    this.dispatch("LOG", `RSI (Prev): ${prevRSI} (Last): ${currentRS}`);
+    this.dispatch("LOG", `Pattern (basic): ${basic} (advanced): ${advance}`);
+    this.dispatch("LOG", `Trend: ${trend}`);
+    this.dispatch("LOG", `Slope Trend: ${slopeTrend}`);
+    this.dispatch("LOG", `Support: ${support} Resistance: ${resistance}`);
+    this.dispatch("LOG", `Valid Support Line: ${validSupport}`);
+    this.dispatch("LOG", `Valid Resistance Line: ${validResistance}`);
+    this.dispatch("LOG", `Broke Resistance Line: ${brokeResistanceLine}`);
+    this.dispatch("LOG", `Broke Support Line: ${brokeSupportLine}`);
+    this.dispatch("LOG", `Score (breakout): ${score.breakout} (breakdown):${score.breakdown}  `);
+    this.dispatch("LOG", `Decision: ${decision}`);
+    this.dispatch("LOG", `======================`);
 
-    return breakout ? "BUY" : breakdown ? "SELL" : "HOLD";
+    return decision;
   }
 
   logScoreTable(result) {
