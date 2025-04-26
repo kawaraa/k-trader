@@ -15,8 +15,7 @@ const calcPercentage = calcPercentageDifference;
 // Smart trader
 class MyTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
-    super(exProvider, pair, interval, capital);
-    this.strategyTest = { timestamp: 0, percentThreshold: 20 };
+    super(exProvider, pair, interval, capital, mode);
     this.range = (6 * 60) / this.interval;
     this.percentThreshold = 4;
     this.profitTarget = 4;

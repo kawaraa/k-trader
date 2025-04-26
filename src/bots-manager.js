@@ -1,11 +1,13 @@
 const KrakenExchangeProvider = require("./providers/kraken-ex-provider");
-const SwingTrader = require("./trader/swing-trader");
+const BasicTrader = require("./trader/my-trader");
+const AdvanceTrader = require("./trader/advance-trader");
 const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs");
 const { dateToString, toShortDate, delay } = require("./utilities");
 const LocalState = require("./local-state");
 
 const state = new LocalState("state");
 const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
+const traders = { basic: BasicTrader, advance: AdvanceTrader };
 
 class BotsManager {
   static #bots = {};
@@ -13,7 +15,10 @@ class BotsManager {
 
   static loadBots() {
     const bots = this.state.getBots();
-    Object.keys(bots).forEach((p) => (this.#bots[p] = new Bot(bots[p], new SwingTrader(ex, p, bots[p]))));
+    Object.keys(bots).forEach((p) => {
+      const Trader = traders[bots[p].trader];
+      this.#bots[p] = new Bot(bots[p], new Trader(ex, p, bots[p]));
+    });
   }
   static getEurBalance() {
     return ex.balance("all");
@@ -127,8 +132,7 @@ class Bot {
   constructor(info, trader) {
     this.timeInterval = +this.#parseValue(info.timeInterval);
     this.capital = +this.#parseValue(info.capital);
-    this.strategy = this.#parseValue(info.strategy);
-    this.strategyTimestamp = +this.#parseValue(info.strategyTimestamp) || 0;
+    this.mode = this.#parseValue(info.mode);
     this.balance = +this.#parseValue(info.balance) || 0;
     this.trades = this.#parseValue(info.trades) || [];
     this.orders = this.#parseValue(info.orders) || [];

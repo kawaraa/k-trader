@@ -114,7 +114,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
   });
 
   // Get bot prices history
-  router.get("/bots/prices/:pair", (request, response) => {
+  router.get("/bots/prices/:pair", authRequired, (request, response) => {
     try {
       const pair = request.params.pair;
       const other = parseInt(request.query.other);
@@ -148,10 +148,10 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
 
 class BotInfo {
   constructor(info) {
-    this.timeInterval = this.setNumber(info.timeInterval, 3, "timeInterval", true);
+    this.timeInterval = this.setNumber(info.timeInterval, 5, "timeInterval", true);
     this.capital = this.setNumber(info.capital, 0, "capital", true);
-    this.strategy = info.strategy;
-    this.strategyTimestamp = this.setNumber(info.strategyTimestamp, null, "strategyTimestamp", true);
+    this.mode = info.mode;
+    this.trader = info.trader;
   }
   setNumber(value, minValue, name, throwError) {
     if (isNumber(value, minValue)) return value;

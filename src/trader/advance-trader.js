@@ -3,10 +3,9 @@ const indicators = require("../indicators");
 const services = require("../services");
 const fixNum = (n) => +n.toFixed(2);
 
-class AdvanceSwingTrader extends Trader {
-  constructor(exProvider, pair, interval, capital, testMode) {
-    super(exProvider, pair, interval, capital);
-    this.testMode = testMode;
+class AdvanceTrader extends Trader {
+  constructor(exProvider, pair, interval, capital, mode) {
+    super(exProvider, pair, interval, capital, mode);
     this.position = null;
     this.profit = 0;
     this.loss = 0;
@@ -25,20 +24,18 @@ class AdvanceSwingTrader extends Trader {
     if (this.rsi.length > 2) this.rsi.shift();
 
     const decision = this.decideBaseOnScore(ohlc);
+    const log = this.testMode ? "TEST:" : "";
 
     if (!position && decision === "BUY") {
-      this.dispatch("LOG", `[+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
+      this.dispatch("LOG", ` ${log} [+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
-      const cost = capital - services.calcPercentageDifference(capital, 0.3);
-      const investingVolume = +(cost / currentPrice.askPrice).toFixed(8);
-      await this.placeTestOrder("BUY", investingVolume, currentPrice.askPrice);
+      await this.placeOrder("BUY", capital, currentPrice.askPrice);
       //
     } else if (position && decision === "SELL") {
-      this.dispatch("LOG", `[-] Breakdown detected. Placing SELL order at ${bidPrice}`);
-      await this.placeTestOrder("SELL", balance.crypto, currentPrice, position);
-      this.placeTestOrder("SELL", this.orderVolume, currentPrice.bidPrice);
+      this.dispatch("LOG", ` ${log} [-] Breakdown detected. Placing SELL at ${currentPrice.bidPrice}`);
+      await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
     } else {
-      this.dispatch("LOG", `[=] No trade signal. decision: ${decision} order: ${position || "NO"}`);
+      this.dispatch("LOG", ` ${log} [=] No trade signal.decision: ${decision} position: ${position ? 1 : 0}`);
     }
   }
 
@@ -153,28 +150,6 @@ class AdvanceSwingTrader extends Trader {
     return breakout ? "BUY" : breakdown ? "SELL" : "HOLD";
   }
 
-  placeTestOrder(type, volume, price, position) {
-    if (type == "BUY") {
-      if (!this.testMode) {
-        return this.ex.createOrder("buy", "market", this.pair, volume);
-      } else {
-        this.positions.push({ price: price.askPrice, volume });
-        this.dispatch("LOG", "Placing-BUY: " + JSON.stringify(price));
-      }
-    } else {
-      if (!this.testMode) {
-        return this.sell(position, volume, price.bidPrice);
-      } else {
-        let cost = this.positions[0].volume * price.bidPrice;
-        cost = cost - calculateFee(cost, 0.3);
-        if (cost > 0) this.profit += cost;
-        else this.loss += cost;
-        this.positions = [];
-        this.dispatch("LOG", "Placing-SELL: " + JSON.stringify(price));
-      }
-    }
-  }
-
   logScoreTable(result) {
     console.table([
       {
@@ -283,4 +258,4 @@ class AdvanceSwingTrader extends Trader {
   }
 }
 
-module.exports = AdvanceSwingTrader;
+module.exports = AdvanceTrader;

@@ -1,8 +1,8 @@
-const { calculateFee } = require("../services");
+const { calculateFee, calcPercentageDifference } = require("../services");
 
 // Smart trader
 class Trader {
-  constructor(exProvider, pair, interval, capital) {
+  constructor(exProvider, pair, interval, capital, mode) {
     this.ex = exProvider;
     this.pair = pair;
     this.interval = +interval;
@@ -10,6 +10,7 @@ class Trader {
     // this.strategyTimestamp = info.strategyTimestamp;
     this.period = +interval; // this.period is deleted in only test trading
     // this.testMode = info.testMode;
+    this.testMode = mode == "live";
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
     this.timeoutID = 0;
@@ -31,14 +32,41 @@ class Trader {
   }
   async run() {} // This is overwritten in derived classes
 
-  async sell({ id, volume, cost, price, createdAt }, cryptoBalance, bidPrice) {
-    const amount = bidPrice * (cryptoBalance - volume) < 5 ? cryptoBalance : volume;
-    const orderId = await this.ex.createOrder("sell", "market", this.pair, amount);
-    const c = bidPrice * amount - calculateFee(bidPrice * amount, 0.3);
+  placeOrder(type, cryptoOrEurBalance, price, position) {
+    if (type == "BUY") {
+      const cost = cryptoOrEurBalance - services.calcPercentageDifference(cryptoOrEurBalance, 0.3);
+      const investingCryptoVolume = +(cost / price).toFixed(8);
+
+      if (!this.testMode) return this.buy(investingCryptoVolume, price);
+      else this.position = { price, volume: investingCryptoVolume };
+    } else if (type == "SELL") {
+      const volume =
+        price * (cryptoOrEurBalance - position.volume) < 5 ? cryptoOrEurBalance : position.volume;
+
+      if (!this.testMode) return this.sell(position, volume, price);
+      else {
+        let cost = volume * price;
+        cost = cost - calculateFee(cost, 0.3);
+        if (cost > 0) this.profit += cost;
+        else this.loss += cost;
+        this.position = null;
+        this.dispatch("LOG", `TEST: Sold at: ${price} - Gain: ${this.profit} - Loss: ${this.loss}`);
+      }
+    }
+  }
+
+  async buy(volume, price) {
+    this.ex.createOrder("buy", "market", this.pair, volume);
+    this.dispatch("LOG", `Placing BUY at: ${price}`);
+  }
+
+  async sell({ id, cost, createdAt }, volume, price) {
+    const orderId = await this.ex.createOrder("sell", "market", this.pair, volume);
+    const c = price * volume - calculateFee(price * volume, 0.3);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
     this.dispatch("SELL", { id, profit });
-    this.dispatch("LOG", `Sold crypto at ${bidPrice} with profit/loss: ${profit} - Age: ${orderAge}hrs`);
+    this.dispatch("LOG", `Placing SELL at ${price} with profit/loss: ${profit} - Age: ${orderAge}hrs`);
   }
 
   async sellAll() {

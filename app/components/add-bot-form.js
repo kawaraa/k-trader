@@ -36,6 +36,26 @@ export default function AddBotFrom({ bot, onSubmit }) {
         className={inputCls}
       />
 
+      <select name="trader" defaultValue={bot?.info?.trader} required className={inputCls}>
+        <option value="">Trader</option>
+        <option value="Basic" key="basic">
+          Basic
+        </option>
+        <option value="Advance" key="advance">
+          Advance
+        </option>
+      </select>
+
+      <select name="mode" defaultValue={bot?.info?.mode} required className={inputCls}>
+        <option value="">Mode</option>
+        <option value="test" key="test">
+          Test
+        </option>
+        <option value="live" key="live">
+          Live
+        </option>
+      </select>
+
       {/* <input
         name="strategy"
         type="text"
