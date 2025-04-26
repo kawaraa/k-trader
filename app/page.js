@@ -132,9 +132,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // request("/api/auth")
-    //   .then(fetchBots)
-    //   .catch(() => router.replace("/signin"));
+    request("/api/auth")
+      .then(fetchBots)
+      .catch(() => router.replace("/signin"));
   }, []);
 
   return (

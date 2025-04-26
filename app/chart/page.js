@@ -60,9 +60,9 @@ export default function CryptoChart() {
     };
 
     !pair && changePair(pairs[0]);
-    // request("/api/auth")
-    //   .catch(() => router.replace("/signin"))
-    //   .then(() => !pair && changePair(pairs[0]));
+    request("/api/auth")
+      .catch(() => router.replace("/signin"))
+      .then(() => !pair && changePair(pairs[0]));
   }, []);
 
   return (
