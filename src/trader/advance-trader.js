@@ -7,7 +7,7 @@ class AdvanceSwingTrader extends Trader {
   constructor(exProvider, pair, interval, capital, testMode) {
     super(exProvider, pair, interval, capital);
     this.testMode = testMode;
-    this.positions = [];
+    this.position = null;
     this.profit = 0;
     this.loss = 0;
     this.rsi = [];
@@ -15,7 +15,7 @@ class AdvanceSwingTrader extends Trader {
 
   async run() {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
-    const positions = this.testMode ? this.positions : await this.ex.getOrders(this.pair);
+    const position = this.testMode ? this.position : (await this.ex.getOrders(this.pair))[0];
     const currentPrice = await this.ex.currentPrices(this.pair); // { tradePrice, askPrice, bidPrice }
     const ohlc = await this.ex.pricesData(this.pair, this.interval); // Returns 720 item (720 * 5 / 60 = 60hrs)
 
@@ -24,22 +24,21 @@ class AdvanceSwingTrader extends Trader {
     if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
     if (this.rsi.length > 2) this.rsi.shift();
 
-    // this.decide(ohlc);
     const decision = this.decideBaseOnScore(ohlc);
 
-    if (!positions[0] && decision === "BUY") {
+    if (!position && decision === "BUY") {
       this.dispatch("LOG", `[+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
       const cost = capital - services.calcPercentageDifference(capital, 0.3);
       const investingVolume = +(cost / currentPrice.askPrice).toFixed(8);
       await this.placeTestOrder("BUY", investingVolume, currentPrice.askPrice);
       //
-    } else if (positions[0] && decision === "SELL") {
+    } else if (position && decision === "SELL") {
       this.dispatch("LOG", `[-] Breakdown detected. Placing SELL order at ${bidPrice}`);
-      await this.placeTestOrder("SELL", balance.crypto, currentPrice, positions[0]);
+      await this.placeTestOrder("SELL", balance.crypto, currentPrice, position);
       this.placeTestOrder("SELL", this.orderVolume, currentPrice.bidPrice);
     } else {
-      this.dispatch("LOG", `[=] No trade signal. decision: ${decision} order: ${this.positions[0] || "NO"}`);
+      this.dispatch("LOG", `[=] No trade signal. decision: ${decision} order: ${position || "NO"}`);
     }
   }
 
@@ -57,8 +56,8 @@ class AdvanceSwingTrader extends Trader {
     const advanced = indicators.detectAdvancedPattern(data);
     const trend = indicators.detectTrend(data.slice(-30));
 
-    const shortData = data.slice(-10).map((d) => d.close);
-    const slopeTrend = indicators.linearRegression(shortData, true, 1);
+    const shortData = data.slice(-15).map((d) => d.close); // Slightly longer for better slope
+    const slopeTrend = indicators.linearRegression(shortData, true);
     const trendlines = indicators.detectTrendlines(data);
 
     const maxPivotAge = 30;
@@ -73,34 +72,63 @@ class AdvanceSwingTrader extends Trader {
       validResistance && recentResistancePivots.some((pivot) => last.close > pivot.high);
     const brokeSupportLine = validSupport && recentSupportPivots.some((pivot) => last.close < pivot.low);
 
-    const score = {
-      breakout: 0,
-      breakdown: 0,
-    };
+    const score = { breakout: 0, breakdown: 0 };
 
-    // BREAKOUT CONDITIONS (weighted)
+    // BREAKOUT CONDITIONS
     if (last.close > resistance) score.breakout += 2;
     if (brokeResistanceLine) score.breakout += 2;
-    if (last.volume > prev.volume) score.breakout += 1;
-    if (last.volume > avgVolume * 1.2) score.breakout += 1;
-    if (currentRSI > 52) score.breakout += 1;
+    if (avgVolume >= 10 && last.volume > prev.volume && last.volume > avgVolume * 1.3) score.breakout += 1;
+    if (currentRSI > 52 && currentRSI - prevRSI > 2) score.breakout += 1;
+    if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1; // breakdown momentum
     if (["bullish-engulfing", "hammer"].includes(basic)) score.breakout += 2;
     if (basic === "doji" && trend === "uptrend") score.breakout += 1;
     if (advanced === "morning-star") score.breakout += 2;
     if (trend === "uptrend") score.breakout += 1;
     if (slopeTrend === "uptrend") score.breakout += 1;
+    const closes = data.slice(-4).map((d) => d.close);
+    const trendingUp = closes.every((v, i, arr) => i === 0 || v >= arr[i - 1]);
+    if (trendingUp) score.breakout += 1;
 
-    // BREAKDOWN CONDITIONS (weighted)
+    // BREAKDOWN CONDITIONS
     if (last.close < support) score.breakdown += 2;
     if (brokeSupportLine) score.breakdown += 2;
-    if (last.volume > prev.volume) score.breakdown += 1;
-    if (last.volume > avgVolume * 1.2) score.breakdown += 1;
-    if (currentRSI < 48) score.breakdown += 1;
-    if (["bearish-engulfing", "shooting-star"].includes(basic)) score.breakdown += 2;
+    if (avgVolume >= 10 && last.volume > prev.volume && last.volume > avgVolume * 1.3) score.breakdown += 1;
+    if (currentRSI < 48 && prevRSI - currentRSI > 2) score.breakdown += 1;
+    if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1; // breakdown momentum
+    if (["bearish-engulfing", "shooting-star", "dark-cloud-cover"].includes(basic)) score.breakdown += 2;
     if (basic === "doji" && trend === "downtrend") score.breakdown += 1;
     if (advanced === "evening-star") score.breakdown += 2;
     if (trend === "downtrend") score.breakdown += 1;
     if (slopeTrend === "downtrend") score.breakdown += 1;
+    const closesDown = data.slice(-4).map((d) => d.close);
+    const trendingDown = closesDown.every((v, i, arr) => i === 0 || v <= arr[i - 1]);
+    if (trendingDown) score.breakdown += 1;
+
+    // === FAKEOUT PROTECTION ===
+    // If resistance line broke but retraced or volume is low, lower breakout score
+    if (brokeResistanceLine) {
+      const retracedResistance = last.close < resistance && prev.close < resistance;
+      const recentCloseBelowResistance = data.slice(-3).every((d) => d.close < resistance);
+      if (retracedResistance || (recentCloseBelowResistance && last.volume < avgVolume)) {
+        score.breakout = Math.max(0, score.breakout - 2);
+      }
+      if (retracedResistance && last.close < resistance - resistance * 0.002) {
+        score.breakout = Math.max(0, score.breakout - 1);
+      }
+    }
+
+    // If support line broke but retraced, lower breakdown score
+    if (brokeSupportLine) {
+      const retracedSupport = last.close > support && prev.close > support;
+      const recentCloseAboveSupport = data.slice(-3).every((d) => d.close > support);
+
+      if (retracedSupport || recentCloseAboveSupport) {
+        score.breakdown = Math.max(0, score.breakdown - 2);
+        if (last.close > support + support * 0.002) {
+          score.breakdown = Math.max(0, score.breakdown - 1);
+        }
+      }
+    }
 
     const breakout = score.breakout >= 5;
     const breakdown = score.breakdown >= 5;
@@ -109,7 +137,6 @@ class AdvanceSwingTrader extends Trader {
     console.log("\n=== Decision Debug based on scoring system ===");
     console.log("Last Close:", fixNum(last.close));
     console.log("Volume (Prev):", fixNum(prev.volume), "(Last):", fixNum(last.volume), "(Avg):", avgVolume);
-    if (avgVolume < 10) console.log("⛔️ low volume");
     console.log("RSI (Prev):", prevRSI, "(Last):", currentRSI);
     console.log("Pattern (basic):", basic, "(advanced):", advanced);
     console.log("Trend:", trend);
@@ -132,18 +159,18 @@ class AdvanceSwingTrader extends Trader {
         return this.ex.createOrder("buy", "market", this.pair, volume);
       } else {
         this.positions.push({ price: price.askPrice, volume });
-        this.dispatch("LOG", "Placing BUY at" + JSON.stringify(price));
+        this.dispatch("LOG", "Placing-BUY: " + JSON.stringify(price));
       }
     } else {
       if (!this.testMode) {
         return this.sell(position, volume, price.bidPrice);
       } else {
         let cost = this.positions[0].volume * price.bidPrice;
-        cost = cost - services.calcPercentageDifference(cost, 0.3);
+        cost = cost - calculateFee(cost, 0.3);
         if (cost > 0) this.profit += cost;
         else this.loss += cost;
         this.positions = [];
-        this.dispatch("LOG", "Placing SELL at", JSON.stringify(price), "Profit:", this.profit);
+        this.dispatch("LOG", "Placing-SELL: " + JSON.stringify(price));
       }
     }
   }
