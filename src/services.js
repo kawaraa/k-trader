@@ -1,5 +1,5 @@
 function findSupportResistance(data) {
-  if (!data.length) return { support: null, resistance: null };
+  if (!data || data.length < 3) return { support: null, resistance: null };
 
   const highs = data.map((d) => d.high);
   const lows = data.map((d) => d.low);

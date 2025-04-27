@@ -65,15 +65,25 @@ function calculateRSI(prices, period = 14) {
   // 2. RSI below 30: Typically signals that the asset is oversold and might be due for a rebound.
 }
 
-function detectTrend(data) {
+function detectTrend(data, baseFlatThreshold = 0.003) {
+  if (!data || data.length < 2) return "sideways";
+
   const n = data.length - 1;
   const lows = data.map((d) => d.low);
   const highs = data.map((d) => d.high);
+
   const lowSlope = (lows.at(-1) - lows[0]) / n;
   const highSlope = (highs.at(-1) - highs[0]) / n;
 
+  const volatility = Math.max(...highs) - Math.min(...lows);
+  const dynamicFlatThreshold = volatility < 0.01 ? baseFlatThreshold : baseFlatThreshold / 2;
+
+  if (Math.abs(lowSlope) < dynamicFlatThreshold && Math.abs(highSlope) < dynamicFlatThreshold) {
+    return "sideways";
+  }
   if (lowSlope > 0 && highSlope > 0) return "uptrend";
   if (lowSlope < 0 && highSlope < 0) return "downtrend";
+
   return "sideways";
 }
 
@@ -98,7 +108,8 @@ function computeDynamicThreshold(prices) {
   return stdDev * multiplier;
 }
 
-function linearRegression(prices, returnString, threshold) {
+function linearRegression(prices, returnString, threshold = 0) {
+  if (prices.length < 2) return "sideways";
   threshold = threshold < 1 ? threshold : computeDynamicThreshold(prices); // 0.0001 works best for me
 
   const n = prices.length;
@@ -116,8 +127,11 @@ function linearRegression(prices, returnString, threshold) {
 
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
 
+  // Flat slope check: If slope is very small, consider as sideways
+  // const flatThreshold = 0.0001; // Tolerance for very small slopes
+  // if (Math.abs(slope) < flatThreshold) return "sideways";
+
   if (!returnString) return slope;
-  // return slope > 0 ? "buy" : "sell";
   if (slope > threshold) return "uptrend";
   if (slope < -threshold) return "downtrend";
   return "sideways";
@@ -162,6 +176,14 @@ function detectTrendlines(data) {
   return pivots;
 }
 
+function isVolumeRising(data) {
+  if (!data || data.length < 1) return false;
+  const vols = data.map((d) => d.volume);
+  for (let i = 1; i < vols.length; i++) {
+    if (vols[i] < vols[i - 1]) return false; // if any volume drops, not rising
+  }
+  return true;
+}
 /*
 ===== My implementations ===== 
 */
@@ -343,19 +365,23 @@ function analyzeTrend(prices, weakness = 0.5) {
 /*
 ===== Pattern detection Methods ===== 
 */
-function detectBasicPattern(data) {
+function detectCandlestickPattern(data) {
+  if (data.length < 3) return "none"; // Ensure there is enough data for complex patterns
+
   const last = data.at(-1);
   const prev = data.at(-2);
+  const prevPrev = data.at(-3);
 
+  const bodySize = Math.abs(last.close - last.open);
+  const upperWick = last.high - Math.max(last.close, last.open);
+  const lowerWick = Math.min(last.close, last.open) - last.low;
+
+  // Basic patterns
   const isBullishEngulfing =
     prev.close < prev.open && last.close > last.open && last.close > prev.open && last.open < prev.close;
 
   const isBearishEngulfing =
     prev.close > prev.open && last.close < last.open && last.open > prev.close && last.close < prev.open;
-
-  const bodySize = Math.abs(last.close - last.open);
-  const upperWick = last.high - Math.max(last.close, last.open);
-  const lowerWick = Math.min(last.close, last.open) - last.low;
 
   const isHammer = lowerWick > bodySize * 2 && upperWick < bodySize;
   const isInvertedHammer = upperWick > bodySize * 2 && lowerWick < bodySize;
@@ -375,6 +401,28 @@ function detectBasicPattern(data) {
     last.close < (prev.open + prev.close) / 2 &&
     last.close > prev.open;
 
+  // Advanced patterns (Morning Star & Evening Star)
+  const isMorningStar =
+    last.open < prev.close &&
+    last.close > prevPrev.close &&
+    prev.open > prev.close &&
+    prevPrev.open > prevPrev.close &&
+    Math.abs(last.close - prevPrev.open) > Math.abs(prev.close - prevPrev.open) &&
+    Math.abs(prev.close - prev.open) < 0.2 * (prevPrev.high - prevPrev.low);
+
+  const isEveningStar =
+    last.open > prev.close &&
+    last.close < prevPrev.close &&
+    prev.open < prev.close &&
+    prevPrev.open < prevPrev.close &&
+    Math.abs(last.open - prevPrev.close) > Math.abs(prev.open - prevPrev.close) &&
+    Math.abs(prev.close - prev.open) < 0.2 * (prevPrev.high - prevPrev.low);
+
+  // Advanced Pattern;
+  if (isMorningStar) return "morning-star";
+  if (isEveningStar) return "evening-star";
+
+  // Basic pattern
   if (isBullishEngulfing) return "bullish-engulfing";
   if (isBearishEngulfing) return "bearish-engulfing";
   if (isHammer) return "hammer";
@@ -401,36 +449,42 @@ function detectBasicPattern(data) {
   // Evening Star: 3-candle pattern, Big green, Small-bodied candle (indecision) and Big red candle. Strong reversal down signal.
 }
 
-function detectAdvancedPattern(data) {
-  if (data.length < 3) return null;
+function detectVolumeDivergence(candles) {
+  if (candles.length < 1) return null;
+  const first = candles[0];
+  const last = candles.at(-1);
 
-  const last = data.at(-1);
-  const prev = data.at(-2);
-  const prevPrev = data.at(-3);
+  const priceDirection = last.close > first.close ? "up" : "down";
+  const volumeSumFirstHalf = candles
+    .slice(0, Math.floor(candles.length / 2))
+    .reduce((sum, c) => sum + c.volume, 0);
+  const volumeSumSecondHalf = candles
+    .slice(Math.floor(candles.length / 2))
+    .reduce((sum, c) => sum + c.volume, 0);
+  const volumeDirection = volumeSumSecondHalf > volumeSumFirstHalf ? "up" : "down";
 
-  // Morning Star (Bullish Reversal) - refined check
-  const isMorningStar =
-    last.close > prevPrev.close &&
-    last.open < prev.close &&
-    last.close > prevPrev.close &&
-    prev.open > prev.close &&
-    prevPrev.open > prevPrev.close &&
-    Math.abs(last.close - prevPrev.open) > Math.abs(prev.close - prevPrev.open) &&
-    Math.abs(prev.close - prev.open) < 0.2 * (prevPrev.high - prevPrev.low); // Additional check for small middle candle
+  if (priceDirection === "up" && volumeDirection === "down") return "weak-uptrend";
+  if (priceDirection === "down" && volumeDirection === "down") return "weak-downtrend";
 
-  // Evening Star (Bearish Reversal) - refined check
-  const isEveningStar =
-    last.close < prevPrev.close &&
-    last.open > prev.close &&
-    last.close < prevPrev.close &&
-    prev.open < prev.close &&
-    prevPrev.open < prevPrev.close &&
-    Math.abs(last.open - prevPrev.close) > Math.abs(prev.open - prevPrev.close) &&
-    Math.abs(prev.close - prev.open) < 0.2 * (prevPrev.high - prevPrev.low); // Additional check for small middle candle
+  return "healthy";
+}
 
-  if (isMorningStar) return "morning-star";
-  if (isEveningStar) return "evening-star";
-  return null;
+function detectVolumeSpike(candles, threshold = 3) {
+  if (candles.length < 2) return false; // Can't detect with less than 2 candles
+
+  // Calculate the average volume of the last N candles (let's use 5 as default)
+  const recentVolumes = candles.slice(-6).map((candle) => candle.volume);
+  const avgVolume = recentVolumes.reduce((sum, vol) => sum + vol, 0) / recentVolumes.length;
+
+  // Check if the latest volume is much higher than the average (e.g. 3x or more)
+  const lastVolume = candles.at(-1).volume;
+
+  if (lastVolume > avgVolume * threshold) {
+    console.log(`Volume spike detected: Last Volume: ${lastVolume}, Avg Volume: ${avgVolume}`);
+    return true; // Volume spike detected
+  }
+
+  return false; // No significant spike
 }
 
 module.exports = {
@@ -439,11 +493,11 @@ module.exports = {
   linearRegression,
   hasStrongSlope,
   detectTrendlines,
-
+  isVolumeRising,
   findPriceMovement,
   // analyzeTrend,
   analyzeTrend,
 
-  detectBasicPattern,
-  detectAdvancedPattern,
+  detectCandlestickPattern,
+  detectVolumeDivergence,
 };

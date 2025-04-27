@@ -1,7 +1,6 @@
 const Trader = require("./trader");
 const indicators = require("../indicators");
 const services = require("../services");
-const { isNumberInRangeOf } = require("../utilities");
 const fixNum = (n) => +n.toFixed(2);
 
 class AdvanceTrader extends Trader {
@@ -11,7 +10,6 @@ class AdvanceTrader extends Trader {
     this.profit = 0;
     this.loss = 0;
     this.rsi = [];
-    this.decisions = ["HOLD"];
   }
 
   async run() {
@@ -25,36 +23,34 @@ class AdvanceTrader extends Trader {
     if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
     if (this.rsi.length > 2) this.rsi.shift();
 
-    this.decisions.push(this.decideBaseOnScore(ohlc));
-    if (this.decisions.length > 2) this.decisions.shift();
-
+    const decision = this.decideBaseOnScore(ohlc);
     const log = this.testMode ? "TEST:" : "";
 
-    if (this.decisions.every((d) => d === "BUY")) {
+    if (decision === "BUY") {
       this.dispatch("LOG", `${log} [+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
       if (!position) await this.placeOrder("BUY", capital, currentPrice.askPrice);
       //
-    } else if (this.decisions.every((d) => d === "SELL")) {
+    } else if (decision === "SELL") {
       this.dispatch("LOG", `${log} [-] Breakdown detected. Placing SELL at ${currentPrice.bidPrice}`);
       if (position) await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
     } else {
-      this.dispatch("LOG", `${log} [=] No trade signal. decision: ${this.decisions.join("-")}`);
+      this.dispatch("LOG", `${log} [=] No trade signal. decision: ${decision}`);
     }
   }
 
   // ===== breakout breakdown based Strategy
   decideBaseOnScore(data) {
-    data = data.slice(0, -1); /* ignore last open candle */
     const currentRSI = this.rsi.at(-1);
     const prevRSI = this.rsi.at(-2);
     const last = data.at(-1);
     const prev = data.at(-2);
-    const period = parseInt((0.5 * 60) / this.interval);
+    const period = parseInt((10 * 60) / this.interval);
     const avgVolume = fixNum(data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period);
 
     const { support, resistance } = services.findSupportResistance(data.slice(-20));
-    const pattern = indicators.detectCandlestickPattern(data);
+    const basic = indicators.detectBasicPattern(data);
+    const advanced = indicators.detectAdvancedPattern(data);
     const trend = indicators.detectTrend(data.slice(-30));
 
     const shortData = data.slice(-15).map((d) => d.close); // Slightly longer for better slope
@@ -78,12 +74,14 @@ class AdvanceTrader extends Trader {
     // BREAKOUT CONDITIONS
     if (last.close > resistance) score.breakout += 2;
     if (brokeResistanceLine) score.breakout += 2;
+    if (avgVolume >= 10 && last.volume > prev.volume && last.volume > avgVolume * 1.3) score.breakout += 1;
     if (currentRSI > 52 && currentRSI - prevRSI > 2) score.breakout += 1;
     if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1; // breakdown momentum
-    if (["bullish-engulfing", "hammer"].includes(pattern)) score.breakout += 2;
-    if (pattern === "doji" && trend === "uptrend") score.breakout += 1;
-    if (pattern === "morning-star") score.breakout += 2;
-    if (trend === "uptrend" && slopeTrend === "uptrend") score.breakout += 1;
+    if (["bullish-engulfing", "hammer"].includes(basic)) score.breakout += 2;
+    if (basic === "doji" && trend === "uptrend") score.breakout += 1;
+    if (advanced === "morning-star") score.breakout += 2;
+    if (trend === "uptrend") score.breakout += 1;
+    if (slopeTrend === "uptrend") score.breakout += 1;
     const closes = data.slice(-4).map((d) => d.close);
     const trendingUp = closes.every((v, i, arr) => i === 0 || v >= arr[i - 1]);
     if (trendingUp) score.breakout += 1;
@@ -91,25 +89,17 @@ class AdvanceTrader extends Trader {
     // BREAKDOWN CONDITIONS
     if (last.close < support) score.breakdown += 2;
     if (brokeSupportLine) score.breakdown += 2;
+    if (avgVolume >= 10 && last.volume > prev.volume && last.volume > avgVolume * 1.3) score.breakdown += 1;
     if (currentRSI < 48 && prevRSI - currentRSI > 2) score.breakdown += 1;
     if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1; // breakdown momentum
-    if (["bearish-engulfing", "shooting-star", "dark-cloud-cover"].includes(pattern)) score.breakdown += 2;
-    if (pattern === "doji" && trend === "downtrend") score.breakdown += 1;
-    if (pattern === "evening-star") score.breakdown += 2;
-    if (trend === "downtrend" && slopeTrend === "downtrend") score.breakdown += 1;
+    if (["bearish-engulfing", "shooting-star", "dark-cloud-cover"].includes(basic)) score.breakdown += 2;
+    if (basic === "doji" && trend === "downtrend") score.breakdown += 1;
+    if (advanced === "evening-star") score.breakdown += 2;
+    if (trend === "downtrend") score.breakdown += 1;
+    if (slopeTrend === "downtrend") score.breakdown += 1;
     const closesDown = data.slice(-4).map((d) => d.close);
     const trendingDown = closesDown.every((v, i, arr) => i === 0 || v <= arr[i - 1]);
     if (trendingDown) score.breakdown += 1;
-
-    if (last.volume > prev.volume && isNumberInRangeOf(last.volume, avgVolume, avgVolume * 2)) {
-      score.breakout += 1;
-      score.breakdown += 1;
-    }
-
-    const volumeDivergence = indicators.detectVolumeDivergence(data.slice(-4));
-    if (volumeDivergence == "weak-downtrend") score.breakdown = Math.max(0, score.breakdown - 1);
-    if (volumeDivergence == "weak-uptrend") score.breakout = Math.max(0, score.breakout - 1);
-    // if(volumeDivergence =="health")
 
     // === FAKEOUT PROTECTION ===
     // If resistance line broke but retraced or volume is low, lower breakout score
@@ -137,8 +127,8 @@ class AdvanceTrader extends Trader {
       }
     }
 
-    const breakout = score.breakout >= 4;
-    const breakdown = score.breakdown >= 4;
+    const breakout = score.breakout >= 5;
+    const breakdown = score.breakdown >= 5;
     const decision = breakout ? "BUY" : breakdown ? "SELL" : "HOLD";
 
     // === Debug Logs ===
@@ -149,7 +139,7 @@ class AdvanceTrader extends Trader {
       `Volume (Prev): ${fixNum(prev.volume)} (Last): ${fixNum(last.volume)} (Avg): ${avgVolume}`
     );
     this.dispatch("LOG", `RSI (Prev): ${prevRSI} (Last): ${currentRSI}`);
-    this.dispatch("LOG", `Pattern: ${pattern}`);
+    this.dispatch("LOG", `Pattern (basic): ${basic} (advanced): ${advanced}`);
     this.dispatch("LOG", `Trend: ${trend}`);
     this.dispatch("LOG", `Slope Trend: ${slopeTrend}`);
     this.dispatch("LOG", `Support: ${support} Resistance: ${resistance}`);
