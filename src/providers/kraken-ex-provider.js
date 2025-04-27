@@ -74,7 +74,8 @@ class KrakenExchangeProvider {
     let since = ""; // Test it
     // "OHLC Data" stands for Open, High, Low, Close data, which represents the prices at which an asset opens, reaches its highest, reaches its lowest, and closes during a specific time interval.
     const data = await this.publicApi(`/OHLC?pair=${pair}&interval=${interval}&since=${since}`);
-    return data[Object.keys(data)[0]].map((item) => ({
+
+    return data[Object.keys(data)[0]].slice(0, -1 /* ignore last open candle */).map((item) => ({
       time: item[0],
       open: parseFloat(item[1]),
       high: parseFloat(item[2]),

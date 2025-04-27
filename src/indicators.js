@@ -385,6 +385,20 @@ function detectBasicPattern(data) {
   if (isDoji) return "doji";
 
   return "none";
+
+  // 1. Bullish Patterns (Signal possible price up moves)
+  // Bullish Engulfing: Small red candle followed by a bigger green candle that engulfs the red body. Strong reversal up.
+  // Hammer: Small body at top, long lower wick. Reversal up after a downtrend (buyers pushed price back up).
+  // Inverted Hammer: Small body at bottom, long upper wick. Reversal up, but weaker than regular hammer.
+  // Piercing Pattern: Red candle then a green candle that opens lower but closes above 50% of the red body. Reversal up — buyers are fighting back.
+  // Morning Star: 3-candle pattern, Big red, Small-bodied candle (indecision) and Big green candle. Strong reversal up.
+  // Doji: Open Close price, very small body. Indecision, often seen before reversals.
+
+  // 2. Bearish Patterns (Signal possible price down moves)
+  // Bearish Engulfing: Small green candle then a big red candle that engulfs it. Strong reversal down.
+  // Shooting Star: Small body at bottom, long upper wick. Reversal down after an uptrend.
+  // Dark Cloud Cover: Green candle then a red candle that opens higher but closes below 50% of green body. Reversal down — sellers are stepping in.
+  // Evening Star: 3-candle pattern, Big green, Small-bodied candle (indecision) and Big red candle. Strong reversal down signal.
 }
 
 function detectAdvancedPattern(data) {

@@ -158,99 +158,21 @@ class AdvanceTrader extends Trader {
     console.table([
       {
         Condition: "Close > Resistance",
-        Result: last.close > resistance,
+        Result: true,
         Weight: 2,
         Side: "Breakout",
       },
       {
         Condition: "Broke Resistance Line",
-        Result: brokeResistanceLine,
+        Result: false,
         Weight: 2,
         Side: "Breakout",
       },
       {
         Condition: "Volume > Prev",
-        Result: last.volume > prev.volume,
+        Result: true,
         Weight: 1,
         Side: "Both",
-      },
-      {
-        Condition: "Volume > Avg * 1.2",
-        Result: last.volume > avgVolume * 1.2,
-        Weight: 1,
-        Side: "Both",
-      },
-      {
-        Condition: "RSI > 52",
-        Result: currentRSI > 52,
-        Weight: 1,
-        Side: "Breakout",
-      },
-      {
-        Condition: "RSI < 48",
-        Result: currentRSI < 48,
-        Weight: 1,
-        Side: "Breakdown",
-      },
-      {
-        Condition: "Pattern (bullish)",
-        Result: ["bullish-engulfing", "hammer"].includes(basic),
-        Weight: 2,
-        Side: "Breakout",
-      },
-      {
-        Condition: "Pattern (bearish)",
-        Result: ["bearish-engulfing", "shooting-star"].includes(basic),
-        Weight: 2,
-        Side: "Breakdown",
-      },
-      {
-        Condition: "Doji + Uptrend",
-        Result: basic === "doji" && trend === "uptrend",
-        Weight: 1,
-        Side: "Breakout",
-      },
-      {
-        Condition: "Doji + Downtrend",
-        Result: basic === "doji" && trend === "downtrend",
-        Weight: 1,
-        Side: "Breakdown",
-      },
-      {
-        Condition: "Advanced: Morning Star",
-        Result: advanced === "morning-star",
-        Weight: 2,
-        Side: "Breakout",
-      },
-      {
-        Condition: "Advanced: Evening Star",
-        Result: advanced === "evening-star",
-        Weight: 2,
-        Side: "Breakdown",
-      },
-      {
-        Condition: "Trend == uptrend",
-        Result: trend === "uptrend",
-        Weight: 1,
-        Side: "Breakout",
-      },
-      {
-        Condition: "Trend == downtrend",
-        Result: trend === "downtrend",
-        Weight: 1,
-        Side: "Breakdown",
-      },
-      {
-        Condition: "Slope > Threshold",
-        Result: slope > dynamicSlopeThreshold,
-        Weight: 1,
-        Side: "Breakout",
-      },
-      {
-        Condition: "Slope < -Threshold",
-        Result: slope < -dynamicSlopeThreshold,
-        Weight: 1,
-        Side: "Breakdown",
       },
     ]);
   }
