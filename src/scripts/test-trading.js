@@ -82,10 +82,7 @@ async function runTest(pair, prices, interval, showLogs) {
   delete trader.period;
 
   trader.listener = (p, event, info) => {
-    if (event == "SELL") {
-      ex.removeOrder(info);
-      transactions++;
-    }
+    if (event == "SELL") transactions++;
 
     if (showLogs && event == "LOG") {
       console.log((info ? pair + " " : "") + (info || ""));

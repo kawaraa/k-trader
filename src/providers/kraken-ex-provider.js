@@ -104,7 +104,7 @@ class KrakenExchangeProvider {
   }
 
   async getOrders(pair, orderIds, times = 1) {
-    if (!orderIds) orderIds = this.state.getBotOrders(pair).join(",");
+    if (!orderIds) orderIds = this.state.getBot(pair).orders.join(",");
     if (!orderIds) return [];
     let orders = await this.#privateApi("QueryOrders", { txid: orderIds });
     orders = Object.keys(orders).map((id) => {
@@ -119,9 +119,6 @@ class KrakenExchangeProvider {
   async getOpenClosedOrders(state) {
     if (state == "open") return (await this.#privateApi("OpenOrders")).open;
     else (await this.#privateApi("ClosedOrders")).closed;
-  }
-  getState(pair) {
-    return this.state.get(pair, property);
   }
 }
 

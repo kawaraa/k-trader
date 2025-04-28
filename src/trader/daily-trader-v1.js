@@ -73,13 +73,13 @@ class DailyTrader {
       const enoughPricesData = prices.length >= (period * 60) / this.interval; // 3 days
       // const lastProfit = (trades.slice(-2).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
       // const thereIsLoss = lastProfit < -this.halfPercent && this.strategyTimestamp / (60 * 24) > 1;
-      const trades = await this.ex.getState(this.#pair, "trades");
+      const { trades, strategyTimestamp } = await this.ex.state.getBot(this.#pair);
       const trade1 = (trades.slice(-1) / this.#capital) * 100;
       const noSpike =
         trade1 - this.#pricePercentChange < this.halfPercent || !this.lastTrade || this.lastTrade > 60; // 1 hrs
       // const lowestBidPrice = prices.slice(-parseInt(prices.length / 3)).toSorted((a, b) => a - b).at(0)?.bidPrice;
 
-      this.strategyTimestamp = await this.ex.getState(this.#pair, "strategyTimestamp");
+      this.strategyTimestamp = strategyTimestamp;
       const thereIsStrategy = this.#strategyRange && this.#pricePercentChange;
 
       if (!this.testMode) {
@@ -271,10 +271,7 @@ async function testStrategy(pair, prices, interval, mode, strategyRange, pricePe
   delete trader.period;
 
   trader.listener = (p, event, info) => {
-    if (event == "SELL") {
-      ex.removeOrder(info);
-      transactions++;
-    }
+    if (event == "SELL") transactions++;
   };
 
   for (const i in prices) {

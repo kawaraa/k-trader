@@ -34,7 +34,7 @@ class MyTrader extends Trader {
     const bidPrices = prices.map((p) => p.bidPrice);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const positions = await this.ex.getOrders(this.pair);
-    const trades = await this.ex.getState(this.pair, "trades");
+    const { trades } = await this.ex.state.getBot(this.pair);
     const currentPrice = prices.at(-1);
 
     if (prices.length < this.range) return;

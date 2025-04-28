@@ -22,7 +22,7 @@ class SwingTrader extends Trader {
   }
 
   async run() {
-    // const trades = await this.ex.getState(this.pair, "trades");
+    // const { trades } = await this.ex.state.getBot(this.pair);
     // const totalProfit = (trades.filter((t) => t > 0).reduce((acc, n) => acc + n, 0) / this.capital) * 100;
     // const totalLoss = -((trades.filter((t) => t < 0).reduce((acc, n) => acc + n, 0) / this.capital) * 100);
     // const trade1 = (trades.at(-1) / this.capital) * 100;

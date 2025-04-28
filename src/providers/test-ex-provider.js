@@ -9,6 +9,11 @@ module.exports = class TestExchangeProvider {
     this.orders = [];
     this.trades = [];
     this.interval = interval;
+    // This is custom functions only for running test.
+    this.state = {
+      getBot: (pair) => ({ ...this }),
+      updateBot: (pair, data) => Object.keys(data).forEach((k) => (this[k] = data[k])),
+    };
   }
 
   async balance() {
@@ -64,15 +69,6 @@ module.exports = class TestExchangeProvider {
   async getOrders(pair, ordersIds) {
     if (!ordersIds) return this.orders;
     return this.orders.filter((o) => ordersIds.includes(o.id));
-  }
-
-  // This is custom function only for running test.
-  removeOrder(info) {
-    this.orders = this.orders.filter((o) => o.id !== info.id);
-    this.trades.push(info.profit);
-  }
-  getState(pair, property) {
-    return this[property];
   }
 };
 

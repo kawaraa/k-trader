@@ -53,7 +53,7 @@ export default function BotItem({ botInfo, onAction }) {
       <div className={`flex flex-col overflow-hidden px-2 transition-all duration-300 ease-in-out ${cls}`}>
         <div className="flex flex-col mb-5">
           <p className="mt-1">
-            <strong>Timeinterval</strong>: <span>{botInfo.timeinterval} mins</span>
+            <strong>Timeinterval</strong>: <span>{botInfo.interval} mins</span>
           </p>
           <p className="">
             <strong>Trader</strong>: <span>{botInfo.trader}</span>

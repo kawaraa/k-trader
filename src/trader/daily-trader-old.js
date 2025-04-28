@@ -59,7 +59,7 @@ module.exports = class DailyTrader {
     try {
       // Safety check starts
       this.range = this.#strategyRange;
-      const trades = await this.ex.getState(this.#pair, "trades");
+      const { trades } = await this.ex.state.getBot(this.#pair);
       const earningsPercentage = (trades.slice(-3).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
       if (earningsPercentage < -(this.#pricePercentChangeThreshold / 2)) this.range = this.#strategyRange / 2;
       if (earningsPercentage < -this.#pricePercentChangeThreshold) this.range = 1;

@@ -5,8 +5,8 @@ const { linearRegression } = require("../indicators.js");
 const calcPercentage = calcPercentageDifference;
 
 // Smart trader
-class MyTrader extends Trader {
-  constructor(exProvider, pair, interval, capital, mode) {
+class BasicTrader extends Trader {
+  constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.range = (6 * 60) / this.interval;
     this.percentThreshold = 4;
@@ -28,37 +28,50 @@ class MyTrader extends Trader {
 
   async run() {
     // Get data from Kraken
-    const prices = await this.ex.prices(this.pair, this.range); // Change this to 12 hrs if 24 is not used
+    const last24HrsPrices = await this.ex.prices(this.pair, this.range * 4);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
-    const trades = await this.ex.getState(this.pair, "trades");
-    const currentPrice = prices.at(-1);
+    // const { trades } = await this.ex.state.getBot(this.pair);
+    const currentPrice = last24HrsPrices.at(-1);
 
-    if (prices.length < this.range) return;
+    if (last24HrsPrices.length < this.range) return;
 
     const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
     this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${prc}`);
 
     const askBidSpreadPercentage = calcPercentage(currentPrice.bidPrice, currentPrice.askPrice);
-    const averageAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentage(p.bidPrice, p.askPrice)));
+    const averageAskBidSpread = calcAveragePrice(
+      last24HrsPrices.map((p) => calcPercentage(p.bidPrice, p.askPrice))
+    );
     const safeAskBidSpread = askBidSpreadPercentage <= Math.min(averageAskBidSpread * 2, 1); // safeAskBidSpread
-    const normalizedPrices = normalizePrices(prices, averageAskBidSpread);
+    const normalizedPrices = normalizePrices(last24HrsPrices, averageAskBidSpread);
+    const prices = normalizedPrices.slice(-parseInt(this.range));
+    const averagePrice = calcAveragePrice(normalizedPrices);
 
     const sortedBidPrices = normalizedPrices.toSorted((a, b) => a - b);
     const priceChangePercent = calcPercentage(sortedBidPrices[0], sortedBidPrices.at(-1));
     if (priceChangePercent > this.percentThreshold) this.percentThreshold = priceChangePercent;
 
-    this.updateTrends(linearRegression(normalizedPrices, true, 0));
+    const last24HrsUptrend = linearRegression(last24HrsPrices, true, 0.002) == "uptrend";
+    this.updateTrends(linearRegression(prices, true, 0));
 
     const droppedPercent = calcPercentage(normalizedPrices.at(-1), this.lowestPrice);
-    if (this.lowestPriceTimestamp > (24 * 60) / 5 || droppedPercent >= 10) {
+    if (this.lowestPriceTimestamp > (12 * 60) / 5 || droppedPercent >= 10) {
       this.lowestPrice = normalizedPrices.at(-1);
       this.lowestPriceTimestamp = 0;
     }
 
     const trends = this.trends.slice(0, -1);
     const downtrend = trends.every((t) => t == "downtrend");
-    let shouldBuy = downtrend && this.trends.at(-1) == "uptrend";
+    let shouldBuy = last24HrsUptrend && downtrend && this.trends.at(-1) == "uptrend";
+    if (!shouldBuy) {
+      // shouldBuy =
+      //   trends.filter((t) => t == "downtrend").length / 2 <= trends.filter((t) => t == "uptrend").length;
+      // shouldBuy =
+      //   trends.slice(0, parseInt(trends.length)).every((t) => t == "downtrend") &&
+      //   trends.slice(-parseInt(trends.length)).every((t) => t == "uptrend");
+    }
+    // shouldBuy = shouldBuy && normalizedPrices.at(-1) < averagePrice * 1.2;
 
     if (this.lastTradePrice > 0) {
       const percent = calcPercentage(this.lastTradePrice, normalizedPrices.at(-1));
@@ -76,7 +89,7 @@ class MyTrader extends Trader {
       console.log("===>", this.droppedPercent, percent, Math.abs(this.droppedPercent - percent));
     }
 
-    this.profitTarget = Math.min(Math.max(this.percentThreshold / 4, 4), 10);
+    this.profitTarget = Math.min(Math.max(this.percentThreshold / 3, 4), 10);
     console.log(
       "===>",
       this.lowestPrice,
@@ -169,7 +182,7 @@ class MyTrader extends Trader {
   }
 }
 
-module.exports = MyTrader;
+module.exports = BasicTrader;
 
 const conditions = [
   ["downtrend-downtrend-downtrend-downtrend-downtrend-uptrend", "buy"],

@@ -15,6 +15,7 @@ module.exports = class LocalState {
   #getPricesFilePath(pair) {
     return `${this.#databaseFolder}prices/${pair}.json`;
   }
+
   load() {
     try {
       return JSON.parse(readFileSync(this.#filePath, "utf8"));
@@ -22,28 +23,18 @@ module.exports = class LocalState {
       return {};
     }
   }
+
   update(state) {
     writeFileSync(this.#filePath, JSON.stringify(state, null, 2));
   }
 
-  getBots(pair) {
-    const state = this.load();
-    return !state ? {} : !pair ? state : state[pair];
+  getBot(pair) {
+    return this.load()[pair] || {};
   }
-  // addBot() {}
-  // updateBot() {}
-  // removeBot() {}
-  getBotOrders(pair) {
-    return this.load()[pair].orders;
-  }
-  addBotOrder(pair, orderId) {
+
+  updateBot(pair, data) {
     const state = this.load();
-    state[pair].orders.push(orderId);
-    this.update(state);
-  }
-  removeBotOrder(pair, orderId) {
-    const state = this.load();
-    state[pair].orders = state[pair].orders.filter((id) => id != orderId);
+    Object.keys(data).forEach((key) => (state[pair][key] = data[key]));
     this.update(state);
   }
 
@@ -57,17 +48,9 @@ module.exports = class LocalState {
       return [];
     }
   }
-  async updateLocalPrices(pair, prices) {
-    let data = await this.getLocalPrices(pair);
+  updateLocalPrices(pair, prices) {
+    let data = this.getLocalPrices(pair);
     data.push(prices);
     return writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
-  }
-  get(pair) {
-    return this.getBots(pair)[key];
-  }
-  updateBot(pair, key, data) {
-    const state = this.getBots();
-    state[pair][key] = data;
-    this.update(state);
   }
 };

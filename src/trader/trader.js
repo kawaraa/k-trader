@@ -38,7 +38,11 @@ class Trader {
       const investingCryptoVolume = +(cost / price).toFixed(8);
 
       if (!this.testMode) return this.buy(investingCryptoVolume, price);
-      else this.position = { price, volume: investingCryptoVolume };
+      else {
+        let cost = volume * price;
+        cost = cost + calculateFee(cost, 0.3);
+        this.position = { price, volume: investingCryptoVolume, cost };
+      }
 
       //
     } else if (type == "SELL") {
@@ -47,12 +51,13 @@ class Trader {
 
       if (!this.testMode) return this.sell(position, volume, price);
       else {
+        const { trades } = this.ex.state.getBot(this.pair);
         let cost = volume * price;
-        cost = cost - calculateFee(cost, 0.3);
-        if (cost > 0) this.profit += cost;
-        else this.loss += cost;
+        const profit = cost - calculateFee(cost, 0.3) - position.cost;
+        trades.push(profit);
+        this.ex.state.updateProperty(this.pair, { trades });
         this.position = null;
-        this.dispatch("LOG", `Sold at: ${price} - Gain: ${this.profit} - Loss: ${this.loss}`);
+        this.dispatch("LOG", `Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
       }
     }
   }
@@ -60,7 +65,9 @@ class Trader {
   async buy(volume, price) {
     this.dispatch("LOG", `Placing BUY at: ${price}`);
     const orderId = await this.ex.createOrder("buy", "market", this.pair, volume);
-    this.dispatch("BUY", orderId);
+    const { orders } = this.ex.state.getBot(this.pair);
+    orders.push(orderId);
+    this.ex.state.updateBot(this.pair, { orders });
   }
 
   async sell({ id, cost, createdAt }, volume, price) {
@@ -69,7 +76,13 @@ class Trader {
     const c = price * volume - calculateFee(price * volume, 0.3);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
-    this.dispatch("SELL", { id, profit });
+
+    const { orders, trades } = this.ex.state.getBot(this.pair, "orders");
+    orders = this.orders.filter((o) => o.id !== id);
+    trades.push(profit);
+    this.ex.state.updateBot(this.pair, { orders, trades });
+    this.dispatch("SELL");
+
     this.dispatch("LOG", `Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
   }
 

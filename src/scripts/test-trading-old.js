@@ -115,10 +115,7 @@ async function testStrategy(pair, prices, range, priceChange, mode, interval, sh
   delete trader.period;
 
   trader.listener = (p, event, info) => {
-    if (event == "SELL") {
-      ex.removeOrder(info);
-      transactions++;
-    }
+    if (event == "SELL") transactions++;
     if (showLogs) event == "LOG" && console.log(pair, info);
   };
 
