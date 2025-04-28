@@ -13,7 +13,7 @@ class BotsManager {
   static state = state;
 
   static loadBots() {
-    const bots = this.state.getBots();
+    const bots = this.state.getBot();
     Object.keys(bots).forEach((p) => {
       this.#bots[p] = new Bot(bots[p], BotsManager.getTrader(p, bots[p]));
     });
