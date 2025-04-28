@@ -3,8 +3,6 @@ import { btnCls, inputCls } from "./tailwind-classes";
 const cryptocurrencies = require("../../src/data/currencies.json");
 
 export default function AddBotFrom({ bot, onSubmit }) {
-  // const strategy = bot?.info?.strategy || "";
-
   return (
     <form onSubmit={onSubmit} className="w-full max-w-md mx-auto space-y-2 flex flex-col">
       <select name="pair" defaultValue={bot?.pair} required className={inputCls}>
@@ -17,11 +15,11 @@ export default function AddBotFrom({ bot, onSubmit }) {
       </select>
 
       <input
-        name="timeInterval"
+        name="interval"
         type="number"
         placeholder="Time Interval in mins"
         min={5}
-        defaultValue={bot?.info?.timeInterval}
+        defaultValue={bot?.info?.interval}
         required
         className={inputCls}
       />
@@ -38,10 +36,10 @@ export default function AddBotFrom({ bot, onSubmit }) {
 
       <select name="trader" defaultValue={bot?.info?.trader} required className={inputCls}>
         <option value="">Trader</option>
-        <option value="Basic" key="basic">
+        <option value="basic" key="basic">
           Basic
         </option>
-        <option value="Advance" key="advance">
+        <option value="advance" key="advance">
           Advance
         </option>
       </select>
@@ -55,14 +53,6 @@ export default function AddBotFrom({ bot, onSubmit }) {
           Live
         </option>
       </select>
-
-      {/* <input
-        name="strategy"
-        type="text"
-        placeholder="Optional: Strategy Settings E.g. on-decrease-12-5"
-        defaultValue={strategy}
-        className={inputCls}
-      /> */}
 
       <button type="submit" className={`${btnCls} !mt-5`}>
         Save

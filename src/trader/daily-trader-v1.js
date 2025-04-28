@@ -38,7 +38,7 @@ class DailyTrader {
   constructor(exProvider, pair, info) {
     this.ex = exProvider;
     this.#pair = pair;
-    this.timeInterval = +info.timeInterval;
+    this.interval = +info.interval;
     const strategySettings = (info.strategy || "").split(":");
     this.#capital = info.capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
     this.mode = strategySettings[0];
@@ -49,7 +49,7 @@ class DailyTrader {
     this.thirdPercent = this.#pricePercentChange / 3;
     this.quarterPercent = this.#pricePercentChange / 4;
 
-    this.period = +info.timeInterval; // this.period is deleted in only test trading
+    this.period = +info.interval; // this.period is deleted in only test trading
     this.testMode = info.testMode;
     this.listener = null;
 
@@ -70,7 +70,7 @@ class DailyTrader {
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
       let prices = await this.ex.prices(this.#pair, period); // For the last xxx days
       const orders = await this.ex.getOrders(this.#pair);
-      const enoughPricesData = prices.length >= (period * 60) / this.timeInterval; // 3 days
+      const enoughPricesData = prices.length >= (period * 60) / this.interval; // 3 days
       // const lastProfit = (trades.slice(-2).reduce((acc, n) => acc + n, 0) / this.#capital) * 100;
       // const thereIsLoss = lastProfit < -this.halfPercent && this.strategyTimestamp / (60 * 24) > 1;
       const trades = await this.ex.getState(this.#pair, "trades");
@@ -89,7 +89,7 @@ class DailyTrader {
         if (!enoughPricesData) {
           this.dispatch("STRATEGY", { strategy: "", strategyTimestamp: 0 });
         } else if (!thereIsStrategy || thereIsLoss) {
-          const strategy = await this.#findStrategy(this.#pair, prices, this.timeInterval);
+          const strategy = await this.#findStrategy(this.#pair, prices, this.interval);
 
           this.mode = strategy.mode;
           this.#strategyRange = strategy.strategyRange;
@@ -105,7 +105,7 @@ class DailyTrader {
           this.dispatch("STRATEGY", { strategy: `${strategyString}` });
         }
 
-        prices = prices.slice(-((period * 60) / this.timeInterval));
+        prices = prices.slice(-((period * 60) / this.interval));
       }
 
       if (thereIsStrategy) {
@@ -262,7 +262,7 @@ async function testStrategy(pair, prices, interval, mode, strategyRange, pricePe
   let transactions = 0;
   const ex = new TestExchangeProvider({ eur: 100, crypto: 0 }, prices, interval);
   const trader = new DailyTrader(ex, pair, {
-    timeInterval: interval,
+    interval: interval,
     capital: 100,
     strategy: `${mode}:${strategyRange}:${pricePercentChange}`,
     testMode: true,

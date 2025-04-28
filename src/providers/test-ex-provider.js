@@ -2,13 +2,13 @@ const { randomUUID } = require("node:crypto");
 const { calculateFee } = require("../services");
 
 module.exports = class TestExchangeProvider {
-  constructor(balance, prices, timeInterval) {
+  constructor(balance, prices, interval) {
     this.currentBalance = balance;
     this.allPrices = prices;
     this.currentPriceIndex = 0;
     this.orders = [];
     this.trades = [];
-    this.interval = timeInterval;
+    this.interval = interval;
   }
 
   async balance() {

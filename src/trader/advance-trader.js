@@ -5,7 +5,7 @@ const { isNumberInRangeOf } = require("../utilities");
 const fixNum = (n) => +n.toFixed(2);
 
 class AdvanceTrader extends Trader {
-  constructor(exProvider, pair, interval, capital, mode) {
+  constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.position = null;
     this.profit = 0;
@@ -25,18 +25,19 @@ class AdvanceTrader extends Trader {
     if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
     if (this.rsi.length > 2) this.rsi.shift();
 
-    this.decisions.push(this.decideBaseOnScore(ohlc));
+    const decision = this.decideBaseOnScore(ohlc);
+    if (decision !== "HOLD") this.decisions.push();
     if (this.decisions.length > 2) this.decisions.shift();
 
     const log = this.testMode ? "TEST:" : "";
 
     if (this.decisions.every((d) => d === "BUY")) {
-      this.dispatch("LOG", `${log} [+] Breakout detected. Placing BUY at ${currentPrice.askPrice}`);
+      this.dispatch("LOG", `${log} [+] Breakout detected.`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
       if (!position) await this.placeOrder("BUY", capital, currentPrice.askPrice);
       //
     } else if (this.decisions.every((d) => d === "SELL")) {
-      this.dispatch("LOG", `${log} [-] Breakdown detected. Placing SELL at ${currentPrice.bidPrice}`);
+      this.dispatch("LOG", `${log} [-] Breakdown detected.`);
       if (position) await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
     } else {
       this.dispatch("LOG", `${log} [=] No trade signal. decision: ${this.decisions.join("-")}`);
@@ -50,8 +51,10 @@ class AdvanceTrader extends Trader {
     const prevRSI = this.rsi.at(-2);
     const last = data.at(-1);
     const prev = data.at(-2);
+
     const period = parseInt((0.5 * 60) / this.interval);
-    const avgVolume = fixNum(data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period);
+    const avgVolume = data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period;
+    const volumeRising = indicators.isVolumeRising(data.slice(-5));
 
     const { support, resistance } = services.findSupportResistance(data.slice(-20));
     const pattern = indicators.detectCandlestickPattern(data);
@@ -72,6 +75,7 @@ class AdvanceTrader extends Trader {
     const brokeResistanceLine =
       validResistance && recentResistancePivots.some((pivot) => last.close > pivot.high);
     const brokeSupportLine = validSupport && recentSupportPivots.some((pivot) => last.close < pivot.low);
+    const volumeDivergence = indicators.detectVolumeDivergence(data.slice(-8));
 
     const score = { breakout: 0, breakdown: 0 };
 
@@ -79,63 +83,99 @@ class AdvanceTrader extends Trader {
     if (last.close > resistance) score.breakout += 2;
     if (brokeResistanceLine) score.breakout += 2;
     if (currentRSI > 52 && currentRSI - prevRSI > 2) score.breakout += 1;
-    if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1; // breakdown momentum
-    if (["bullish-engulfing", "hammer"].includes(pattern)) score.breakout += 2;
+    if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1;
+    if (pattern === "bullish-engulfing") {
+      if (last.close > last.open && prev.close < prev.open) {
+        if (last.close > support && last.close < support * 1.02) {
+          score.breakout += 2; // give more weight if pattern is near support
+        } else {
+          score.breakout += 1; // normal weight if pattern is not near support
+        }
+      }
+    }
+    if (pattern === "hammer") {
+      if (last.close > last.open && prev.low < support) {
+        score.breakout += 2; // Hammer pattern at support is strong indication of reversal
+      } else {
+        score.breakout += 1;
+      }
+    }
+    if (pattern === "morning-star") {
+      if (prev.close < support && last.close > support) {
+        score.breakout += 3; // The pattern must form after a pullback to support and show a reversal
+      } else {
+        score.breakout += 1;
+      }
+    }
     if (pattern === "doji" && trend === "uptrend") score.breakout += 1;
-    if (pattern === "morning-star") score.breakout += 2;
-    if (trend === "uptrend" && slopeTrend === "uptrend") score.breakout += 1;
-    const closes = data.slice(-4).map((d) => d.close);
-    const trendingUp = closes.every((v, i, arr) => i === 0 || v >= arr[i - 1]);
-    if (trendingUp) score.breakout += 1;
+    if (trend === "uptrend" && slopeTrend === "uptrend") {
+      score.breakout += volumeDivergence == "weak-uptrend" ? 1 : 2;
+    }
 
     // BREAKDOWN CONDITIONS
     if (last.close < support) score.breakdown += 2;
     if (brokeSupportLine) score.breakdown += 2;
     if (currentRSI < 48 && prevRSI - currentRSI > 2) score.breakdown += 1;
-    if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1; // breakdown momentum
-    if (["bearish-engulfing", "shooting-star", "dark-cloud-cover"].includes(pattern)) score.breakdown += 2;
-    if (pattern === "doji" && trend === "downtrend") score.breakdown += 1;
-    if (pattern === "evening-star") score.breakdown += 2;
-    if (trend === "downtrend" && slopeTrend === "downtrend") score.breakdown += 1;
-    const closesDown = data.slice(-4).map((d) => d.close);
-    const trendingDown = closesDown.every((v, i, arr) => i === 0 || v <= arr[i - 1]);
-    if (trendingDown) score.breakdown += 1;
-
-    if (last.volume > prev.volume && isNumberInRangeOf(last.volume, avgVolume, avgVolume * 2)) {
-      score.breakout += 1;
-      score.breakdown += 1;
-    }
-
-    const volumeDivergence = indicators.detectVolumeDivergence(data.slice(-4));
-    if (volumeDivergence == "weak-downtrend") score.breakdown = Math.max(0, score.breakdown - 1);
-    if (volumeDivergence == "weak-uptrend") score.breakout = Math.max(0, score.breakout - 1);
-    // if(volumeDivergence =="health")
-
-    // === FAKEOUT PROTECTION ===
-    // If resistance line broke but retraced or volume is low, lower breakout score
-    if (brokeResistanceLine) {
-      const retracedResistance = last.close < resistance && prev.close < resistance;
-      const recentCloseBelowResistance = data.slice(-3).every((d) => d.close < resistance);
-      if (retracedResistance || (recentCloseBelowResistance && last.volume < avgVolume)) {
-        score.breakout = Math.max(0, score.breakout - 2);
-      }
-      if (retracedResistance && last.close < resistance - resistance * 0.002) {
-        score.breakout = Math.max(0, score.breakout - 1);
-      }
-    }
-
-    // If support line broke but retraced, lower breakdown score
-    if (brokeSupportLine) {
-      const retracedSupport = last.close > support && prev.close > support;
-      const recentCloseAboveSupport = data.slice(-3).every((d) => d.close > support);
-
-      if (retracedSupport || recentCloseAboveSupport) {
-        score.breakdown = Math.max(0, score.breakdown - 2);
-        if (last.close > support + support * 0.002) {
-          score.breakdown = Math.max(0, score.breakdown - 1);
+    if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1;
+    if (["dark-cloud-cover"].includes(pattern)) score.breakdown += 2;
+    if (pattern === "bearish-engulfing") {
+      if (last.close < last.open && prev.close > prev.open) {
+        if (last.close < resistance && last.close > resistance * 0.98) {
+          score.breakdown += 2; // give more weight if pattern is near resistance
+        } else {
+          score.breakdown += 1; // normal weight if pattern is not near resistance
         }
       }
     }
+    if (pattern === "shooting-star") {
+      if (last.close < last.open && last.high > resistance) {
+        score.breakdown += 2; // Shooting star at resistance is strong indication of reversal
+      } else {
+        score.breakdown += 1;
+      }
+    }
+
+    if (pattern === "doji" && trend === "downtrend") score.breakdown += 1;
+    if (pattern === "evening-star") score.breakdown += 2;
+    if (trend === "downtrend" && slopeTrend === "downtrend") {
+      score.breakdown += volumeDivergence == "weak-downtrend" ? 1 : 2;
+    }
+
+    if (last.volume > prev.volume && isNumberInRangeOf(last.volume, avgVolume, avgVolume * 2)) {
+      if (trend === "uptrend") score.breakout += 1;
+      if (trend === "downtrend") score.breakdown += 1;
+    }
+    if (volumeRising) {
+      if (trend === "uptrend") score.breakout += 1;
+      if (trend === "downtrend") score.breakdown += 1;
+    }
+
+    // console.log(score);
+
+    // === FAKEOUT PROTECTION ===
+    // If resistance line broke but retraced or volume is low, lower breakout score
+    // if (brokeResistanceLine) {
+    //   const retracedResistance = last.close < resistance && prev.close < resistance;
+    //   const recentCloseBelowResistance = data.slice(-3).every((d) => d.close < resistance);
+    //   if (retracedResistance || (recentCloseBelowResistance && last.volume < avgVolume)) {
+    //     score.breakout = Math.max(0, score.breakout - 1);
+    //     if (last.close < resistance - resistance * 0.002) {
+    //       score.breakout = Math.max(0, score.breakout - 1);
+    //     }
+    //   }
+    // }
+
+    // // If support line broke but retraced, lower breakdown score
+    // if (brokeSupportLine) {
+    //   const retracedSupport = last.close > support && prev.close > support;
+    //   const recentCloseAboveSupport = data.slice(-3).every((d) => d.close > support);
+    //   if (retracedSupport || recentCloseAboveSupport) {
+    //     score.breakdown = Math.max(0, score.breakdown - 1);
+    //     if (last.close > support + support * 0.002) {
+    //       score.breakdown = Math.max(0, score.breakdown - 1);
+    //     }
+    //   }
+    // }
 
     const breakout = score.breakout >= 4;
     const breakdown = score.breakdown >= 4;
@@ -146,7 +186,7 @@ class AdvanceTrader extends Trader {
     this.dispatch("LOG", `Last Close: ${fixNum(last.close)}`);
     this.dispatch(
       "LOG",
-      `Volume (Prev): ${fixNum(prev.volume)} (Last): ${fixNum(last.volume)} (Avg): ${avgVolume}`
+      `Volume (Prev): ${fixNum(prev.volume)} (Last): ${fixNum(last.volume)} (Avg): ${fixNum(avgVolume)}`
     );
     this.dispatch("LOG", `RSI (Prev): ${prevRSI} (Last): ${currentRSI}`);
     this.dispatch("LOG", `Pattern: ${pattern}`);

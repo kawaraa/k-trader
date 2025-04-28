@@ -52,11 +52,11 @@ export default function AddBotFrom({ bot, onSubmit }) {
         className={inputCls}
       />
       <input
-        name="timeInterval"
+        name="timeinterval"
         type="number"
         placeholder="Time Interval in mins"
         min={5}
-        defaultValue={bot?.info?.timeInterval}
+        defaultValue={bot?.info?.timeinterval}
         required
         className={inputCls}
       />

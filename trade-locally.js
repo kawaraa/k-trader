@@ -17,6 +17,6 @@ const exProvider = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CRED
 //   })
 //   .catch(console.log);
 
-const trader = new AdvanceSwingTrader(exProvider, "LTCEUR", 5, 100, "test");
+const trader = new AdvanceSwingTrader(exProvider, "LTCEUR", { interval: 5, capital: 100, mode: "test" });
 trader.listener = (pair, event, log) => event == "LOG" && console.log(...parseNumInLog(log));
 trader.start();

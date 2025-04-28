@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { request } from "../../src/utilities";
 import { btnCls, inputCls } from "../components/tailwind-classes";
+import Loader from "../components/loader";
 
 export default function Signin() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await request("/api/auth", {
         method: "POST",
@@ -20,6 +23,7 @@ export default function Signin() {
     } catch (error) {
       setError(error.message);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -29,18 +33,21 @@ export default function Signin() {
   }, []);
 
   return (
-    <main className="no-select h-screen p-3 flex justify-center">
-      <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-6 mt-[15vh]">
-        <h1 className="text-center text-2xl font-bold">Sign in</h1>
+    <>
+      <main className="no-select h-screen p-3 flex justify-center">
+        <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-6 mt-[15vh]">
+          <h1 className="text-center text-2xl font-bold">Sign in</h1>
 
-        <input name="email" type="email" placeholder="Email" required className={`${inputCls} `} />
-        <input name="password" type="password" placeholder="Password" required className={`${inputCls} `} />
-        <button type="submit" className={`${btnCls} !mt-5`}>
-          Sign In
-        </button>
+          <input name="email" type="email" placeholder="Email" required className={`${inputCls} `} />
+          <input name="password" type="password" placeholder="Password" required className={`${inputCls} `} />
+          <button type="submit" className={`${btnCls} !mt-5`}>
+            Sign In
+          </button>
 
-        {error && <p className="mt-5 text-red">{error}</p>}
-      </form>
-    </main>
+          {error && <p className="mt-5 text-red">{error}</p>}
+        </form>
+      </main>
+      <Loader loading={loading} />
+    </>
   );
 }

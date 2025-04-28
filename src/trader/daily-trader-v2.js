@@ -11,12 +11,12 @@ class DailyTrader {
   constructor(exProvider, pair, info) {
     this.ex = exProvider;
     this.#pair = pair;
-    this.timeInterval = +info.timeInterval;
+    this.interval = +info.interval;
     this.#capital = info.capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
     this.#setStrategySettings(info.strategy);
     this.strategyTimestamp = info.strategyTimestamp;
 
-    this.period = +info.timeInterval; // this.period is deleted in only test trading
+    this.period = +info.interval; // this.period is deleted in only test trading
     this.testMode = info.testMode;
     this.listener = null;
 
@@ -41,8 +41,8 @@ class DailyTrader {
       const { tradePrice, askPrice, bidPrice } = await this.ex.currentPrices(this.#pair);
       const allPrices = await this.ex.prices(this.#pair, period); // For the last xxx days
       const orders = await this.ex.getOrders(this.#pair);
-      const prices = allPrices.slice(-((this.#strategyRange * 60) / this.timeInterval));
-      const enoughPricesData = allPrices.length >= (period * 60) / this.timeInterval; // 3 days
+      const prices = allPrices.slice(-((this.#strategyRange * 60) / this.interval));
+      const enoughPricesData = allPrices.length >= (period * 60) / this.interval; // 3 days
 
       this.strategyTimestamp = await this.ex.getState(this.#pair, "strategyTimestamp");
       const thereIsStrategy = this.#strategyRange && this.#pricePercentChange;
@@ -61,7 +61,7 @@ class DailyTrader {
           this.dispatch("STRATEGY", { strategy: "", strategyTimestamp: 0 });
           //
         } else if (!thereIsStrategy || thereIsLoss) {
-          const strategy = await this.#findStrategy(this.#pair, allPrices, this.timeInterval);
+          const strategy = await this.#findStrategy(this.#pair, allPrices, this.interval);
 
           // Todo: Try this if (strategy.profit < 0) strategy.pricePercentChange = 12;
           this.#setStrategySettings(strategy.settings);
@@ -246,7 +246,7 @@ async function testStrategy(pair, prices, interval, strategyRange, pricePercentC
   const strategy = `${strategyRange}:${pricePercentChange}`;
   const ex = new TestExchangeProvider({ eur: 100, crypto: 0 }, prices, interval);
   const trader = new DailyTrader(ex, pair, {
-    timeInterval: interval,
+    interval: interval,
     capital: 100,
     strategy,
     testMode: true,

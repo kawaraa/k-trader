@@ -32,10 +32,10 @@ module.exports = class DailyTrader {
   #capital;
   #strategyRange;
   #pricePercentChangeThreshold;
-  constructor(exProvider, pair, { capital, strategyRange, pricePercentChange, mode, timeInterval }) {
+  constructor(exProvider, pair, { capital, strategyRange, pricePercentChange, mode, interval }) {
     this.ex = exProvider;
     this.#pair = pair;
-    this.timeInterval = +timeInterval;
+    this.interval = +interval;
     this.#capital = capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
     const strategySettings = info.strategy.split(":");
     this.mode = strategySettings[0];
@@ -46,7 +46,7 @@ module.exports = class DailyTrader {
     this.buySellOnThreshold = this.#pricePercentChangeThreshold / 4;
     this.profitThreshold = this.#pricePercentChangeThreshold / 1.2;
 
-    this.period = +timeInterval; // this.period is deleted in only test trading
+    this.period = +interval; // this.period is deleted in only test trading
     this.listener = null;
 
     this.previouslyDropped = false;
@@ -71,7 +71,7 @@ module.exports = class DailyTrader {
       const prices = await this.ex.prices(this.#pair, this.range); // For the last xxx days
       const orders = await this.ex.getOrders(this.#pair);
 
-      const enoughPricesData = prices.length >= (this.range * 60) / this.timeInterval;
+      const enoughPricesData = prices.length >= (this.range * 60) / this.interval;
       const bidPrices = prices.map((p) => p.bidPrice);
       const priceShape = detectPriceShape(bidPrices, this.buySellOnThreshold).shape;
       const highestBidPr = bidPrices.toSorted((a, b) => a - b).at(-1);

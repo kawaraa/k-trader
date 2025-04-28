@@ -58,18 +58,19 @@ class Trader {
   }
 
   async buy(volume, price) {
+    this.dispatch("LOG", `Placing BUY at: ${price}`);
     const orderId = await this.ex.createOrder("buy", "market", this.pair, volume);
     this.dispatch("BUY", orderId);
-    this.dispatch("LOG", `Placing BUY at: ${price}`);
   }
 
   async sell({ id, cost, createdAt }, volume, price) {
+    this.dispatch("LOG", `Placing SELL at ${price}`);
     const orderId = await this.ex.createOrder("sell", "market", this.pair, volume);
     const c = price * volume - calculateFee(price * volume, 0.3);
     const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
     const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
     this.dispatch("SELL", { id, profit });
-    this.dispatch("LOG", `Placing SELL at ${price} with profit/loss: ${profit} - Age: ${orderAge}hrs`);
+    this.dispatch("LOG", `Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
   }
 
   async sellAll() {

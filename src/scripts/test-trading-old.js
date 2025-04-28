@@ -110,7 +110,7 @@ async function runTradingTest(pair, minStrategyRange, minPriceChange, modes, int
 async function testStrategy(pair, prices, range, priceChange, mode, interval, showLogs) {
   let transactions = 0;
   const ex = new TestExchangeProvider({ eur: 100, crypto: 0 }, prices, interval);
-  const info = { capital: 100, strategyRange: range, priceChange, mode, timeInterval: interval };
+  const info = { capital: 100, strategyRange: range, priceChange, mode, interval: interval };
   const trader = new DailyTrader(ex, pair, info);
   delete trader.period;
 

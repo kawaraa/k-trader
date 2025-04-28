@@ -7,7 +7,6 @@ const LocalState = require("./local-state");
 
 const state = new LocalState("state");
 const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
-const traders = { basic: BasicTrader, advance: AdvanceTrader };
 
 class BotsManager {
   static #bots = {};
@@ -16,12 +15,21 @@ class BotsManager {
   static loadBots() {
     const bots = this.state.getBots();
     Object.keys(bots).forEach((p) => {
-      const Trader = traders[bots[p].trader];
-      this.#bots[p] = new Bot(bots[p], new Trader(ex, p, bots[p]));
+      this.#bots[p] = new Bot(bots[p], BotsManager.getTrader(p, bots[p]));
     });
   }
   static getEurBalance() {
     return ex.balance("all");
+  }
+  static syncBots(bots) {
+    const pairs = Object.keys(this.get());
+    const pairsFromFirestore = Object.keys(bots);
+    if (pairsFromFirestore.length == 0) pairs.forEach((pair) => this.remove(pair));
+    else {
+      pairsFromFirestore.forEach((pair) => !this.get(pair) && this.add(pair, bots[pair]));
+      pairs.forEach((pair) => !bots[pair] && this.remove(pair));
+    }
+    return this.get();
   }
 
   static get(pair) {
@@ -37,14 +45,14 @@ class BotsManager {
     return null;
   }
   static add(pair, info) {
-    this.#bots[pair] = new Bot(info, new SwingTrader(ex, pair, info));
+    this.#bots[pair] = new Bot(info, BotsManager.getTrader(pair, info));
     this.state.update(this.#bots);
     writeFileSync(`database/logs/${pair}.log`, "");
-    writeFileSync(`database/prices/${pair}.json`, "[]");
+    // writeFileSync(`database/prices/${pair}.json`, "[]");
   }
   static update(pair, info) {
     this.#bots[pair].stop();
-    this.#bots[pair] = new Bot(info, new SwingTrader(ex, pair, info));
+    this.#bots[pair] = new Bot(info, BotsManager.getTrader(pair, info));
     this.state.update(this.#bots);
   }
   static remove(pair) {
@@ -115,23 +123,19 @@ class BotsManager {
     this.state.update(this.get());
   }
 
-  static syncBots(bots) {
-    const pairs = Object.keys(this.get());
-    const pairsFromFirestore = Object.keys(bots);
-    if (pairsFromFirestore.length == 0) pairs.forEach((pair) => this.remove(pair));
-    else {
-      pairsFromFirestore.forEach((pair) => !this.get(pair) && this.add(pair, bots[pair]));
-      pairs.forEach((pair) => !bots[pair] && this.remove(pair));
-    }
-    return this.get();
+  static getTrader(pair, info) {
+    const traders = { basic: BasicTrader, advance: AdvanceTrader };
+    const Trader = traders[info.trader] || BasicTrader;
+    return new Trader(ex, pair, info);
   }
 }
 
 class Bot {
   #trader;
   constructor(info, trader) {
-    this.timeInterval = +this.#parseValue(info.timeInterval);
+    this.interval = +this.#parseValue(info.interval);
     this.capital = +this.#parseValue(info.capital);
+    this.trader = this.#parseValue(info.trader);
     this.mode = this.#parseValue(info.mode);
     this.balance = +this.#parseValue(info.balance) || 0;
     this.trades = this.#parseValue(info.trades) || [];

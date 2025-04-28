@@ -78,7 +78,7 @@ async function runTest(pair, prices, interval, showLogs) {
   const m = +((prices.length * interval) / 43200).toFixed(1); // 43200 is the number of mins in one month
   let transactions = 0;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, interval);
-  const trader = new BasicTrader(ex, pair, interval, capital, "live");
+  const trader = new BasicTrader(ex, pair, { interval, capital, mode: "live" });
   delete trader.period;
 
   trader.listener = (p, event, info) => {
@@ -88,7 +88,8 @@ async function runTest(pair, prices, interval, showLogs) {
     }
 
     if (showLogs && event == "LOG") {
-      console.log(...parseNumInLog((info ? pair + " " : "") + (info || "")));
+      console.log((info ? pair + " " : "") + (info || ""));
+      // console.log(...parseNumInLog((info ? pair + " " : "") + (info || "")));
     }
   };
 
