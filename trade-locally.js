@@ -1,6 +1,7 @@
 const KrakenExchangeProvider = require("./src/providers/kraken-ex-provider");
 const LocalState = require("./src/local-state");
-const AdvanceSwingTrader = require("./src/trader/advance-trader");
+const AdvanceTrader = require("./src/trader/advance-trader");
+const IntermediateTrader = require("./src/trader/Intermediate-trader");
 const { parseNumInLog } = require("./src/utilities");
 
 const state = new LocalState("state");
@@ -17,6 +18,8 @@ const exProvider = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CRED
 //   })
 //   .catch(console.log);
 
-const trader = new AdvanceSwingTrader(exProvider, "LTCEUR", { interval: 5, capital: 100, mode: "test" });
+const trader = new AdvanceTrader(exProvider, "LTCEUR", { interval: 5, capital: 100, mode: "test" });
+// const trader = new IntermediateTrader(exProvider, "LTCEUR", { interval: 5, capital: 100, mode: "test" });
+
 trader.listener = (pair, event, log) => event == "LOG" && console.log(...parseNumInLog(log));
 trader.start();

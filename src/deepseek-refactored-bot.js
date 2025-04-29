@@ -397,7 +397,7 @@ class AdvancedTrader {
     }
   }
 
-  analyzeMarket(ohlc, currentRSI) {
+  analyzeMarket(ohlc) {
     const data = ohlc.slice(0, -1); // Ignore last open candle
     const last = data.at(-1);
     const prev = data.at(-2);

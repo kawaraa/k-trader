@@ -2,9 +2,10 @@ const Trader = require("./trader");
 const fixNum = (n) => +n.toFixed(2);
 
 class AdvanceTrader extends Trader {
-  constructor(exProvider, pair, interval, capital, mode) {
+  constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.position = null;
+    this.decisions = ["HOLD"];
     this.rsi = [];
   }
 
@@ -15,7 +16,7 @@ class AdvanceTrader extends Trader {
     const ohlc = await this.ex.pricesData(this.pair, this.interval); // Returns 720 item (720 * 5 / 60 = 60hrs)
 
     const closes = ohlc.map((d) => d.close);
-    this.rsi.push(TechnicalAnalysis.calculateRSI(closes, this.rsiPeriod));
+    this.rsi.push(TechnicalAnalysis.calculateRSI(closes, this.rsiPeriod).value);
     if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
     if (this.rsi.length > 2) this.rsi.shift();
 
@@ -53,18 +54,21 @@ class AdvanceTrader extends Trader {
 
     // Technical indicators with adaptive lookback periods
     const { supports, resistances } = TechnicalAnalysis.findSupportResistance(data.slice(-50));
-    const support = Math.min(...supports);
-    const resistance = Math.max(...resistances);
+    const support = supports[0]?.price ?? null;
+    const resistance = resistances[0]?.price ?? null;
+
     const { pattern, reliability } = TechnicalAnalysis.detectCandlestickPattern(data.slice(-5));
     const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
     const volumeDivergence = TechnicalAnalysis.detectVolumeDivergence(data.slice(-10));
-    const volumeRising = TechnicalAnalysis.isVolumeRising(data.slice(-5));
+    const volumeRising = TechnicalAnalysis.analyzeVolume(data.slice(-5)) == "rising";
     const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-20).map((it) => it.close));
 
     // Enhanced trendline analysis
     const trendlines = TechnicalAnalysis.detectTrendlines(data);
     const validResistance = TechnicalAnalysis.isTrendlineValid(trendlines.resistances.map((it) => it.price));
     const validSupport = TechnicalAnalysis.isTrendlineValid(trendlines.supports.map((it) => it.price));
+
+    const avgVolume = data.slice(-6).reduce((sum, d) => sum + d.volume, 0) / 6;
 
     // Breakout confirmation conditions
     const resistanceBreakoutConfirmed =
@@ -235,7 +239,7 @@ module.exports = AdvanceTrader;
 class TechnicalAnalysis {
   // Enhanced SMA with better performance
   static simpleMovingAverage(data, period = 14) {
-    if (data.length < period) return null;
+    if (!data || data.length < period) return null;
 
     const sma = [];
     for (let i = 0; i <= data.length - period; i++) {
@@ -261,7 +265,7 @@ class TechnicalAnalysis {
 
   // Improved RSI using Wilder's smoothing
   static calculateRSI(prices, period = 14) {
-    if (prices.length < period + 1) return null;
+    if (!prices || prices.length < period + 1) return null;
 
     let avgGain = 0;
     let avgLoss = 0;
@@ -294,29 +298,6 @@ class TechnicalAnalysis {
       trend: rsi > 70 ? "overbought" : rsi < 30 ? "oversold" : "neutral",
       momentum: avgGain - avgLoss,
     };
-  }
-
-  static analyzeVolume(data) {
-    if (!data || data.length < 5) return "insufficient-data";
-
-    const volumes = data.map((d) => d.volume);
-    const currentVol = volumes.at(-1);
-
-    // Dynamic moving average period (20% of data length, min 3 periods)
-    const period = Math.max(3, Math.floor(data.length * 0.2));
-    const volumeMA = TechnicalAnalysis.simpleMovingAverage(volumes, period).values.at(-1);
-
-    // Self-calibrating thresholds based on recent volatility
-    const recentVolumes = volumes.slice(-period);
-    const avgDeviation = recentVolumes.reduce((sum, vol) => sum + Math.abs(vol - volumeMA), 0) / period;
-
-    // Dynamic thresholds adapt to market conditions
-    const upperThreshold = 1 + avgDeviation / (volumeMA || 1);
-    const lowerThreshold = 1 - (avgDeviation / (volumeMA || 1)) * 0.5;
-
-    if (currentVol > volumeMA * upperThreshold) return "rising";
-    if (currentVol < volumeMA * lowerThreshold) return "falling";
-    return "sideways";
   }
 
   // Improved support/resistance detection
@@ -554,7 +535,7 @@ class TechnicalAnalysis {
     }
 
     // Return the highest reliability pattern, or none if below threshold
-    return patterns.length >= 0
+    return patterns.length > 0
       ? patterns.sort((a, b) => b.reliability - a.reliability)[0]
       : { pattern: "none", reliability: 0 };
 
@@ -566,8 +547,7 @@ class TechnicalAnalysis {
     period = period ?? 14;
 
     // Validation
-    if (!Array.isArray(data)) return "invalid-data";
-    if (data.length < period + 1) return "insufficient-data";
+    if (!Array.isArray(data) || data.length < period + 1) return "insufficient-data";
 
     let plusDM = 0,
       minusDM = 0,
@@ -648,6 +628,7 @@ class TechnicalAnalysis {
 
   static linearRegression(data) {
     if (!data || data.length < 2) return { slope: 0, intercept: 0, r2: 0 };
+    const formatDecimal = (n, decimals = 4) => parseFloat(n.toFixed(decimals));
 
     const xValues = Array.from({ length: data.length }, (_, i) => i);
 
@@ -731,6 +712,29 @@ class TechnicalAnalysis {
     if (points.length < 2) return false;
     const regression = TechnicalAnalysis.linearRegression(points);
     return Math.abs(regression.slope) > 0.005 && regression.r2 > 0.4;
+  }
+
+  static analyzeVolume(data) {
+    if (!data || data.length < 5) return "insufficient-data";
+
+    const volumes = data.map((d) => d.volume);
+    const currentVol = volumes.at(-1);
+
+    // Dynamic moving average period (20% of data length, min 3 periods)
+    const period = Math.max(3, Math.floor(data.length * 0.2));
+    const volumeMA = TechnicalAnalysis.simpleMovingAverage(volumes, period).values.at(-1);
+
+    // Self-calibrating thresholds based on recent volatility
+    const recentVolumes = volumes.slice(-period);
+    const avgDeviation = recentVolumes.reduce((sum, vol) => sum + Math.abs(vol - volumeMA), 0) / period;
+
+    // Dynamic thresholds adapt to market conditions
+    const upperThreshold = 1 + avgDeviation / (volumeMA || 1);
+    const lowerThreshold = 1 - (avgDeviation / (volumeMA || 1)) * 0.5;
+
+    if (currentVol > volumeMA * upperThreshold) return "rising";
+    if (currentVol < volumeMA * lowerThreshold) return "falling";
+    return "sideways";
   }
 
   static detectVolumeDivergence(candles) {
