@@ -1,5 +1,6 @@
 const KrakenExchangeProvider = require("./providers/kraken-ex-provider");
 const BasicTrader = require("./trader/basic-trader");
+const IntermediateTrader = require("./trader/Intermediate-trader");
 const AdvanceTrader = require("./trader/advance-trader");
 const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs");
 const { dateToString, toShortDate, delay } = require("./utilities");
@@ -124,7 +125,7 @@ class BotsManager {
   }
 
   static getTrader(pair, info) {
-    const traders = { basic: BasicTrader, advance: AdvanceTrader };
+    const traders = { basic: BasicTrader, intermediate: IntermediateTrader, advance: AdvanceTrader };
     const Trader = traders[info.trader] || BasicTrader;
     return new Trader(ex, pair, info);
   }

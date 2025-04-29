@@ -39,6 +39,9 @@ export default function AddBotFrom({ bot, onSubmit }) {
         <option value="basic" key="basic">
           Basic
         </option>
+        <option value="intermediate" key="intermediate">
+          Intermediate
+        </option>
         <option value="advance" key="advance">
           Advance
         </option>

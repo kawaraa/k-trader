@@ -1,17 +1,11 @@
 const Trader = require("./trader");
-const indicators = require("../indicators");
-const services = require("../services");
-const { isNumberInRangeOf } = require("../utilities");
 const fixNum = (n) => +n.toFixed(2);
 
 class AdvanceTrader extends Trader {
-  constructor(exProvider, pair, { interval, capital, mode }) {
+  constructor(exProvider, pair, interval, capital, mode) {
     super(exProvider, pair, interval, capital, mode);
     this.position = null;
-    this.profit = 0;
-    this.loss = 0;
     this.rsi = [];
-    this.decisions = ["HOLD"];
   }
 
   async run() {
@@ -21,13 +15,13 @@ class AdvanceTrader extends Trader {
     const ohlc = await this.ex.pricesData(this.pair, this.interval); // Returns 720 item (720 * 5 / 60 = 60hrs)
 
     const closes = ohlc.map((d) => d.close);
-    this.rsi.push(indicators.calculateRSI(closes, this.rsiPeriod));
+    this.rsi.push(TechnicalAnalysis.calculateRSI(closes, this.rsiPeriod));
     if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
     if (this.rsi.length > 2) this.rsi.shift();
 
-    const decision = this.decideBaseOnScore(ohlc);
+    const decision = this.analyzeMarket(ohlc);
     if (decision !== "HOLD") this.decisions.push(decision);
-    if (this.decisions.length > 2) this.decisions.shift();
+    if (this.decisions.length > 1) this.decisions.shift();
 
     const log = this.testMode ? "TEST:" : "";
 
@@ -45,141 +39,169 @@ class AdvanceTrader extends Trader {
   }
 
   // ===== breakout breakdown based Strategy
-  decideBaseOnScore(data) {
-    data = data.slice(0, -1); /* ignore last open candle */
-    const currentRSI = this.rsi.at(-1);
-    const prevRSI = this.rsi.at(-2);
+  analyzeMarket(ohlc) {
+    // Data preparation with more context
+    const data = ohlc.slice(0, -1); // Ignore last open candle
     const last = data.at(-1);
     const prev = data.at(-2);
+    const currentRSI = this.rsi.at(-1);
+    const prevRSI = this.rsi.at(-2);
 
-    const period = parseInt((0.5 * 60) / this.interval);
-    const avgVolume = data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period;
-    const volumeRising = indicators.isVolumeRising(data.slice(-5));
+    // Calculate market volatility (ATR-like measure)
+    const volatility = TechnicalAnalysis.calculateVolatility(data.slice(-14));
+    const isHighVolatility = volatility > last.close * 0.015;
 
-    const { support, resistance } = services.findSupportResistance(data.slice(-20));
-    const pattern = indicators.detectCandlestickPattern(data);
-    const trend = indicators.detectTrend(data.slice(-30));
+    // Technical indicators with adaptive lookback periods
+    const { supports, resistances } = TechnicalAnalysis.findSupportResistance(data.slice(-50));
+    const support = Math.min(...supports);
+    const resistance = Math.max(...resistances);
+    const { pattern, reliability } = TechnicalAnalysis.detectCandlestickPattern(data.slice(-5));
+    const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
+    const volumeDivergence = TechnicalAnalysis.detectVolumeDivergence(data.slice(-10));
+    const volumeRising = TechnicalAnalysis.isVolumeRising(data.slice(-5));
+    const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-20).map((it) => it.close));
 
-    const shortData = data.slice(-15).map((d) => d.close); // Slightly longer for better slope
-    const slopeTrend = indicators.linearRegression(shortData, true);
-    const trendlines = indicators.detectTrendlines(data);
+    // Enhanced trendline analysis
+    const trendlines = TechnicalAnalysis.detectTrendlines(data);
+    const validResistance = TechnicalAnalysis.isTrendlineValid(trendlines.resistances.map((it) => it.price));
+    const validSupport = TechnicalAnalysis.isTrendlineValid(trendlines.supports.map((it) => it.price));
 
-    const maxPivotAge = 30;
-    const lng = data.length;
-    const recentSupportPivots = services.filterRecentTrendlines(trendlines.support, lng, maxPivotAge);
-    const recentResistancePivots = services.filterRecentTrendlines(trendlines.resistance, lng, maxPivotAge);
+    // Breakout confirmation conditions
+    const resistanceBreakoutConfirmed =
+      last.close > resistance && last.close > last.open + (last.high - last.low) * 0.7;
+    const supportBreakdownConfirmed =
+      last.close < support && last.close < last.open + (last.high - last.low) * 0.3;
 
-    const validSupport = indicators.hasStrongSlope(recentSupportPivots, "low", 0.05);
-    const validResistance = indicators.hasStrongSlope(recentResistancePivots, "high", 0.05);
+    // Trendline breakout conditions with confirmation
+    const resistanceTrendlineBreakout =
+      validResistance &&
+      last.close > Math.max(...trendlines.resistances.map((t) => t.price)) &&
+      last.close > last.open &&
+      last.volume > data.slice(-5).reduce((a, b) => a + b.volume, 0) / 5;
 
-    const brokeResistanceLine =
-      validResistance && recentResistancePivots.some((pivot) => last.close > pivot.high);
-    const brokeSupportLine = validSupport && recentSupportPivots.some((pivot) => last.close < pivot.low);
-    const volumeDivergence = indicators.detectVolumeDivergence(data.slice(-8));
+    const supportTrendlineBreakdown =
+      validSupport &&
+      last.close < Math.min(...trendlines.supports.map((t) => t.price)) &&
+      last.close < last.open &&
+      last.volume > data.slice(-5).reduce((a, b) => a + b.volume, 0) / 5;
 
+    // Calculate scores with volatility adjustment
+    const baseScore = isHighVolatility ? 6 : 5; // Require higher confidence in volatile markets
     const score = { breakout: 0, breakdown: 0 };
 
-    // BREAKOUT CONDITIONS
-    if (last.close > resistance) score.breakout += 2;
-    if (brokeResistanceLine) score.breakout += 2;
-    if (currentRSI > 52 && currentRSI - prevRSI > 2) score.breakout += 1;
-    if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1;
+    // Breakout scoring (more conservative in high volatility)
+    if (resistanceBreakoutConfirmed) score.breakout += isHighVolatility ? 1.5 : 2;
+    if (resistanceTrendlineBreakout) score.breakout += isHighVolatility ? 1.5 : 2.5;
+
     if (pattern === "bullish-engulfing") {
-      if (last.close > last.open && prev.close < prev.open) {
-        if (last.close > support && last.close < support * 1.02) {
-          score.breakout += 2; // give more weight if pattern is near support
-        } else {
-          score.breakout += 1; // normal weight if pattern is not near support
-        }
-      }
-    }
-    if (pattern === "hammer") {
-      if (last.close > last.open && prev.low < support) {
-        score.breakout += 2; // Hammer pattern at support is strong indication of reversal
-      } else {
-        score.breakout += 1;
-      }
-    }
-    if (pattern === "morning-star") {
-      if (prev.close < support && last.close > support) {
-        score.breakout += 3; // The pattern must form after a pullback to support and show a reversal
-      } else {
-        score.breakout += 1;
-      }
-    }
-    if (pattern === "doji" && trend === "uptrend") score.breakout += 1;
-    if (trend === "uptrend" && slopeTrend === "uptrend") {
-      score.breakout += volumeDivergence == "weak-uptrend" ? 1 : 2;
+      const nearSupport = last.close >= support && last.close <= support * 1.01;
+      score.breakout += nearSupport ? (isHighVolatility ? 2 : 1.5) : 1;
     }
 
-    // BREAKDOWN CONDITIONS
-    if (last.close < support) score.breakdown += 2;
-    if (brokeSupportLine) score.breakdown += 2;
-    if (currentRSI < 48 && prevRSI - currentRSI > 2) score.breakdown += 1;
-    if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1;
-    if (["dark-cloud-cover"].includes(pattern)) score.breakdown += 2;
-    if (pattern === "bearish-engulfing") {
-      if (last.close < last.open && prev.close > prev.open) {
-        if (last.close < resistance && last.close > resistance * 0.98) {
-          score.breakdown += 2; // give more weight if pattern is near resistance
-        } else {
-          score.breakdown += 1; // normal weight if pattern is not near resistance
-        }
-      }
-    }
-    if (pattern === "shooting-star") {
-      if (last.close < last.open && last.high > resistance) {
-        score.breakdown += 2; // Shooting star at resistance is strong indication of reversal
-      } else {
-        score.breakdown += 1;
-      }
+    if (pattern === "hammer" && last.close > last.open && prev.low < support) {
+      score.breakout += isHighVolatility ? 2 : 1;
     }
 
-    if (pattern === "doji" && trend === "downtrend") score.breakdown += 1;
-    if (pattern === "evening-star") score.breakdown += 2;
-    if (trend === "downtrend" && slopeTrend === "downtrend") {
-      score.breakdown += volumeDivergence == "weak-downtrend" ? 1 : 2;
+    if (pattern === "morning-star" && prev.close < support && last.close > support) {
+      score.breakout += isHighVolatility ? 3 : 2;
     }
 
-    if (last.volume > prev.volume && isNumberInRangeOf(last.volume, avgVolume, avgVolume * 2)) {
-      if (trend === "uptrend") score.breakout += 1;
-      if (trend === "downtrend") score.breakdown += 1;
+    // Bullish patterns
+    if (
+      [
+        "dragonfly-doji",
+        "inverted-hammer",
+        "bullish-harami",
+        "piercing-line",
+        "three-white-soldiers",
+        "three-inside-up",
+      ].includes(pattern)
+    ) {
+      if (last.close > support && last.close > last.open && isHighVolatility) score.breakout += 2;
+      else score.breakout += isHighVolatility ? 1.5 : 1;
     }
+
+    if (trend === "uptrend") {
+      if (volumeDivergence === "strong-uptrend") score.breakout += 1.5;
+      else if (volumeDivergence === "weak-uptrend") score.breakout -= 0.5; // Penalize weak volume
+    }
+
+    // RSI scoring with trend context
+    if (trend === "uptrend" || trend === "sideways") {
+      if (currentRSI > 50 && currentRSI - prevRSI > 3) score.breakout += 1;
+      if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1.5;
+    }
+
+    if (closeRegression.strength === "strong" && closeRegression.slope > 0) {
+      score.breakout += isHighVolatility ? 1 : 0.5;
+    }
+
+    // Breakdown scoring
+    if (supportBreakdownConfirmed) score.breakdown += isHighVolatility ? 2 : 1.5;
+    if (supportTrendlineBreakdown) score.breakdown += isHighVolatility ? 2.5 : 1.5;
+
+    if (["dark-cloud-cover", "bearish-engulfing"].includes(pattern)) {
+      const nearResistance = last.close < resistance && last.close > resistance * 0.99;
+      score.breakdown += nearResistance ? (isHighVolatility ? 1.5 : 2) : 1;
+    }
+
+    if (pattern === "shooting-star" && last.close < last.open && last.high > resistance) {
+      score.breakdown += isHighVolatility ? 2 : 1;
+    }
+
+    if (pattern === "evening-star") {
+      score.breakdown += isHighVolatility ? 3 : 2;
+    }
+    // Bearish patterns
+    if (
+      ["gravestone-doji", "hanging-man", "bearish-harami", "three-black-crows", "three-inside-down"].includes(
+        pattern
+      )
+    ) {
+      if (last.close < resistance && last.close < last.open && isHighVolatility) score.breakdown += 2;
+      else score.breakdown += isHighVolatility ? 1.5 : 1;
+    }
+
+    if (trend === "downtrend") {
+      if (volumeDivergence === "strong-downtrend") score.breakdown += 1.5;
+      else if (volumeDivergence === "weak-downtrend") score.breakdown -= 0.5;
+    }
+
+    // RSI scoring with trend context
+    if (trend === "downtrend" || trend === "sideways") {
+      if (currentRSI < 50 && prevRSI - currentRSI > 3) score.breakdown += 1;
+      if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1.5;
+    }
+
+    if (closeRegression.strength === "strong" && closeRegression.slope < 0) {
+      score.breakdown += isHighVolatility ? 1 : 0.5;
+    }
+
+    // Volume confirmation (more nuanced)
     if (volumeRising) {
-      if (trend === "uptrend") score.breakout += 1;
-      if (trend === "downtrend") score.breakdown += 1;
+      if (score.breakout > score.breakdown) score.breakout += 1;
+      else if (score.breakdown > score.breakout) score.breakdown += 1;
+    } else {
+      // Penalize signals without volume confirmation
+      if (score.breakout > 0) score.breakout -= 0.5;
+      if (score.breakdown > 0) score.breakdown -= 0.5;
     }
 
-    // console.log(score);
+    // Final decision with dynamic threshold and confirmation
+    const breakoutConfirmed =
+      score.breakout >= baseScore && (resistanceBreakoutConfirmed || resistanceTrendlineBreakout);
 
-    // === FAKEOUT PROTECTION ===
-    // If resistance line broke but retraced or volume is low, lower breakout score
-    // if (brokeResistanceLine) {
-    //   const retracedResistance = last.close < resistance && prev.close < resistance;
-    //   const recentCloseBelowResistance = data.slice(-3).every((d) => d.close < resistance);
-    //   if (retracedResistance || (recentCloseBelowResistance && last.volume < avgVolume)) {
-    //     score.breakout = Math.max(0, score.breakout - 1);
-    //     if (last.close < resistance - resistance * 0.002) {
-    //       score.breakout = Math.max(0, score.breakout - 1);
-    //     }
-    //   }
-    // }
+    const breakdownConfirmed =
+      score.breakdown >= baseScore && (supportBreakdownConfirmed || supportTrendlineBreakdown);
 
-    // // If support line broke but retraced, lower breakdown score
-    // if (brokeSupportLine) {
-    //   const retracedSupport = last.close > support && prev.close > support;
-    //   const recentCloseAboveSupport = data.slice(-3).every((d) => d.close > support);
-    //   if (retracedSupport || recentCloseAboveSupport) {
-    //     score.breakdown = Math.max(0, score.breakdown - 1);
-    //     if (last.close > support + support * 0.002) {
-    //       score.breakdown = Math.max(0, score.breakdown - 1);
-    //     }
-    //   }
-    // }
+    // Additional filter: Don't trade against strong trend without strong signals
+    // const strongTrendFilter =
+    //   (trend === "uptrend" && score.breakdown - score.breakout < 1.5) ||
+    //   (trend === "downtrend" && score.breakout - score.breakdown < 1.5);
+    // if (breakoutConfirmed && !strongTrendFilter) return "BUY";
+    // if (breakdownConfirmed && !strongTrendFilter) return "SELL";
 
-    const breakout = score.breakout >= 4;
-    const breakdown = score.breakdown >= 4;
-    const decision = breakout ? "BUY" : breakdown ? "SELL" : "HOLD";
+    const decision = breakoutConfirmed ? "BUY" : breakdownConfirmed ? "SELL" : "HOLD";
 
     // === Debug Logs ===
     this.dispatch("LOG", `\n=== Decision Debug based on scoring system ===`);
@@ -189,49 +211,561 @@ class AdvanceTrader extends Trader {
       `Volume (Prev): ${fixNum(prev.volume)} (Last): ${fixNum(last.volume)} (Avg): ${fixNum(avgVolume)}`
     );
     this.dispatch("LOG", `RSI (Prev): ${prevRSI} (Last): ${currentRSI}`);
-    this.dispatch("LOG", `Pattern: ${pattern}`);
-    this.dispatch("LOG", `Trend: ${trend}`);
-    this.dispatch("LOG", `Slope Trend: ${slopeTrend}`);
+    this.dispatch("LOG", `Pattern: ${pattern} - reliability: ${reliability}`);
+    this.dispatch("LOG", `Trend: ${trend} - crossover: ${crossover}`);
+    this.dispatch("LOG", `Slope Trend: ${closeRegression.slope} - ${closeRegression.strength}`);
     this.dispatch("LOG", `Support: ${support} Resistance: ${resistance}`);
     this.dispatch("LOG", `Valid Support Line: ${validSupport}`);
     this.dispatch("LOG", `Valid Resistance Line: ${validResistance}`);
-    this.dispatch("LOG", `Broke Resistance Line: ${brokeResistanceLine}`);
-    this.dispatch("LOG", `Broke Support Line: ${brokeSupportLine}`);
+    this.dispatch("LOG", `Resistance Breakout Confirmed: ${resistanceBreakoutConfirmed}`);
+    this.dispatch("LOG", `Support Breakdown Confirmed: ${supportBreakdownConfirmed}`);
+    this.dispatch("LOG", `Resistance Trendline Breakout: ${resistanceTrendlineBreakout}`);
+    this.dispatch("LOG", `Support Trendline Breakdown: ${supportTrendlineBreakdown}`);
     this.dispatch("LOG", `Score (breakout): ${score.breakout} (breakdown): ${score.breakdown}  `);
     this.dispatch("LOG", `Decision: ${decision}`);
     this.dispatch("LOG", `======================`);
 
     return decision;
   }
-
-  logScoreTable(result) {
-    console.table([
-      {
-        Condition: "Close > Resistance",
-        Result: true,
-        Weight: 2,
-        Side: "Breakout",
-      },
-      {
-        Condition: "Broke Resistance Line",
-        Result: false,
-        Weight: 2,
-        Side: "Breakout",
-      },
-      {
-        Condition: "Volume > Prev",
-        Result: true,
-        Weight: 1,
-        Side: "Both",
-      },
-    ]);
-  }
-
-  writeLogToFile(content) {
-    const logPath = path.join(process.cwd(), "trade-decisions.log");
-    const timestamp = new Date().toISOString();
-    fs.appendFileSync(logPath, `[${timestamp}]\n${content}\n\n`);
-  }
 }
 
 module.exports = AdvanceTrader;
+
+// Technical Analysis Functions
+class TechnicalAnalysis {
+  // Enhanced SMA with better performance
+  static simpleMovingAverage(data, period = 14) {
+    if (data.length < period) return null;
+
+    const sma = [];
+    for (let i = 0; i <= data.length - period; i++) {
+      const slice = data.slice(i, i + period);
+      const avg = slice.reduce((sum, val) => sum + val, 0) / period;
+      sma.push(avg);
+    }
+
+    const len = sma.length;
+    let slope = 0;
+    let trend = "sideways";
+
+    if (len >= 2) {
+      const delta = sma[len - 1] - sma[len - 2];
+      slope = delta;
+
+      if (slope > 0) trend = "bullish";
+      else if (slope < 0) trend = "bearish";
+    }
+
+    return { values: sma, slope, trend };
+  }
+
+  // Improved RSI using Wilder's smoothing
+  static calculateRSI(prices, period = 14) {
+    if (prices.length < period + 1) return null;
+
+    let avgGain = 0;
+    let avgLoss = 0;
+
+    // Initial averages
+    for (let i = 1; i <= period; i++) {
+      const change = prices[i] - prices[i - 1];
+      avgGain += Math.max(change, 0);
+      avgLoss += Math.abs(Math.min(change, 0));
+    }
+
+    avgGain /= period;
+    avgLoss /= period;
+
+    // Subsequent calculations with Wilder's smoothing
+    for (let i = period + 1; i < prices.length; i++) {
+      const change = prices[i] - prices[i - 1];
+      const gain = Math.max(change, 0);
+      const loss = Math.abs(Math.min(change, 0));
+
+      avgGain = (avgGain * (period - 1) + gain) / period;
+      avgLoss = (avgLoss * (period - 1) + loss) / period;
+    }
+
+    const rs = avgLoss < 0.000001 ? 100 : avgGain / avgLoss; // Safer float comparison
+    const rsi = 100 - 100 / (1 + rs);
+
+    return {
+      value: parseFloat(rsi.toFixed(2)),
+      trend: rsi > 70 ? "overbought" : rsi < 30 ? "oversold" : "neutral",
+      momentum: avgGain - avgLoss,
+    };
+  }
+
+  static analyzeVolume(data) {
+    if (!data || data.length < 5) return "insufficient-data";
+
+    const volumes = data.map((d) => d.volume);
+    const currentVol = volumes.at(-1);
+
+    // Dynamic moving average period (20% of data length, min 3 periods)
+    const period = Math.max(3, Math.floor(data.length * 0.2));
+    const volumeMA = TechnicalAnalysis.simpleMovingAverage(volumes, period).values.at(-1);
+
+    // Self-calibrating thresholds based on recent volatility
+    const recentVolumes = volumes.slice(-period);
+    const avgDeviation = recentVolumes.reduce((sum, vol) => sum + Math.abs(vol - volumeMA), 0) / period;
+
+    // Dynamic thresholds adapt to market conditions
+    const upperThreshold = 1 + avgDeviation / (volumeMA || 1);
+    const lowerThreshold = 1 - (avgDeviation / (volumeMA || 1)) * 0.5;
+
+    if (currentVol > volumeMA * upperThreshold) return "rising";
+    if (currentVol < volumeMA * lowerThreshold) return "falling";
+    return "sideways";
+  }
+
+  // Improved support/resistance detection
+  static findSupportResistance(data, clusterThreshold = 0.005) {
+    if (!data || data.length < 10) return { supports: [], resistances: [] };
+
+    const currentPrice = data[data.length - 1].close;
+    const precision = currentPrice > 100 ? 0 : currentPrice > 10 ? 1 : 3;
+
+    // Helper to round to market-appropriate precision
+    const roundPrice = (price) => parseFloat(price.toFixed(precision));
+
+    // Enhanced clustering with time decay and volume confirmation
+    const clusterLevels = (levels, isSupport) => {
+      const sorted = [...levels].sort((a, b) => a - b);
+      const clusters = [];
+      let cluster = [];
+
+      for (let i = 0; i < sorted.length; i++) {
+        const price = sorted[i];
+        const candle = data.find((d) => (isSupport ? d.low === price : d.high === price));
+        if (!candle) continue;
+
+        const timeWeight = candle.time ? 0.9 + (candle.time / data[data.length - 1].time) * 0.1 : 1;
+
+        if (
+          cluster.length === 0 ||
+          Math.abs(price - cluster[cluster.length - 1].price) <= currentPrice * clusterThreshold
+        ) {
+          cluster.push({
+            price,
+            volume: candle.volume,
+            timeWeight,
+          });
+        } else {
+          clusters.push(cluster);
+          cluster = [{ price, volume: candle.volume, timeWeight }];
+        }
+      }
+      if (cluster.length > 0) clusters.push(cluster);
+
+      return clusters
+        .filter((c) => c.length >= 2)
+        .map((c) => {
+          const avgPrice = c.reduce((sum, x) => sum + x.price, 0) / c.length;
+          const avgVolume = c.reduce((sum, x) => sum + x.volume, 0) / c.length;
+          const timeStrength = c.reduce((sum, x) => sum + x.timeWeight, 0) / c.length;
+
+          // Strength factors: touches, volume, and time
+          const strength =
+            c.length * 0.4 +
+            (avgVolume / data.reduce((sum, d) => sum + d.volume, 0)) * data.length * 0.4 +
+            timeStrength * 0.2;
+
+          return {
+            price: roundPrice(avgPrice),
+            touches: c.length,
+            strength: parseFloat(strength.toFixed(2)),
+            broken: isSupport ? currentPrice < avgPrice * 0.99 : currentPrice > avgPrice * 1.01,
+          };
+        })
+        .filter((level) => !level.broken) // Remove broken levels
+        .sort((a, b) => b.strength - a.strength);
+    };
+
+    return {
+      supports: clusterLevels(
+        data.map((d) => d.low),
+        true
+      ),
+      resistances: clusterLevels(
+        data.map((d) => d.high),
+        false
+      ),
+    };
+  }
+
+  // Enhanced candlestick pattern detection
+  static detectCandlestickPattern(data) {
+    if (!Array.isArray(data) || data.length < 5) return { pattern: "insufficient-data", reliability: 0 };
+
+    const [prev3, prev2, prev, current] = data.slice(-4);
+    const patterns = [];
+
+    // Enhanced helper functions
+    const bodySize = (candle) => Math.abs(candle.close - candle.open);
+    const totalRange = (candle) => candle.high - candle.low;
+    const upperWick = (candle) => candle.high - Math.max(candle.open, candle.close);
+    const lowerWick = (candle) => Math.min(candle.open, candle.close) - candle.low;
+    const isBullish = (candle) => candle.close > candle.open;
+    const isBearish = (candle) => candle.close < candle.open;
+    const isSmallBody = (candle) => bodySize(candle) < totalRange(candle) * 0.25;
+    const isLongWick = (wick, body) => wick > body * 2;
+    const isMarubozu = (candle) => bodySize(candle) > totalRange(candle) * 0.9;
+
+    // 1. Single Candle Patterns
+    if (isSmallBody(current)) {
+      // Doji variants
+      if (bodySize(current) < totalRange(current) * 0.05) {
+        if (upperWick(current) > totalRange(current) * 0.6) {
+          patterns.push({ pattern: "gravestone-doji", reliability: 0.65 });
+        } else if (lowerWick(current) > totalRange(current) * 0.6) {
+          patterns.push({ pattern: "dragonfly-doji", reliability: 0.65 });
+        } else {
+          patterns.push({ pattern: "doji", reliability: 0.6 });
+        }
+      }
+      // Hammer family
+      else if (isLongWick(lowerWick(current), bodySize(current))) {
+        patterns.push({
+          pattern: isBullish(current) ? "hammer" : "hanging-man",
+          reliability: isMarubozu(prev) ? 0.8 : 0.7,
+        });
+      }
+      // Shooting star family
+      else if (isLongWick(upperWick(current), bodySize(current))) {
+        patterns.push({
+          pattern: isBullish(current) ? "inverted-hammer" : "shooting-star",
+          reliability: isMarubozu(prev) ? 0.8 : 0.7,
+        });
+      }
+    }
+
+    // 2. Two-Candle Patterns
+    if (data.length >= 2) {
+      // Engulfing patterns
+      if (isBearish(prev) && isBullish(current) && current.close > prev.open && current.open < prev.close) {
+        const reliability = bodySize(prev) > totalRange(prev) * 0.7 ? 0.85 : 0.75;
+        patterns.push({ pattern: "bullish-engulfing", reliability });
+      }
+
+      if (isBullish(prev) && isBearish(current) && current.open > prev.close && current.close < prev.open) {
+        const reliability = bodySize(prev) > totalRange(prev) * 0.7 ? 0.85 : 0.75;
+        patterns.push({ pattern: "bearish-engulfing", reliability });
+      }
+
+      // Harami patterns
+      if (isBearish(prev) && isBullish(current) && current.close < prev.open && current.open > prev.close) {
+        patterns.push({ pattern: "bullish-harami", reliability: 0.7 });
+      }
+
+      if (isBullish(prev) && isBearish(current) && current.open < prev.close && current.close > prev.open) {
+        patterns.push({ pattern: "bearish-harami", reliability: 0.7 });
+      }
+
+      // Piercing/Dark Cloud
+      if (
+        isBearish(prev) &&
+        isBullish(current) &&
+        current.close > (prev.open + prev.close) / 2 &&
+        current.open < prev.close
+      ) {
+        patterns.push({ pattern: "piercing-line", reliability: 0.75 });
+      }
+
+      if (
+        isBullish(prev) &&
+        isBearish(current) &&
+        current.close < (prev.open + prev.close) / 2 &&
+        current.open > prev.close
+      ) {
+        patterns.push({ pattern: "dark-cloud-cover", reliability: 0.75 });
+      }
+    }
+
+    // 3. Three-Candle Patterns
+    if (data.length >= 3) {
+      // Star patterns
+      if (
+        isBearish(prev2) &&
+        isSmallBody(prev) &&
+        isBullish(current) &&
+        current.close > (prev2.open + prev2.close) / 2 &&
+        prev.low < Math.min(prev2.close, current.open)
+      ) {
+        patterns.push({ pattern: "morning-star", reliability: 0.9 });
+      }
+
+      if (
+        isBullish(prev2) &&
+        isSmallBody(prev) &&
+        isBearish(current) &&
+        current.close < (prev2.open + prev2.close) / 2 &&
+        prev.high > Math.max(prev2.close, current.open)
+      ) {
+        patterns.push({ pattern: "evening-star", reliability: 0.9 });
+      }
+
+      // Three White Soldiers/Black Crows
+      if (
+        [prev2, prev, current].every(isBullish) &&
+        current.close > prev.close &&
+        prev.close > prev2.close &&
+        current.open > prev.open &&
+        prev.open > prev2.open
+      ) {
+        patterns.push({ pattern: "three-white-soldiers", reliability: 0.85 });
+      }
+
+      if (
+        [prev2, prev, current].every(isBearish) &&
+        current.close < prev.close &&
+        prev.close < prev2.close &&
+        current.open < prev.open &&
+        prev.open < prev2.open
+      ) {
+        patterns.push({ pattern: "three-black-crows", reliability: 0.85 });
+      }
+    }
+
+    // 4. Four-Candle Patterns
+    if (data.length >= 4) {
+      // Three Inside Up/Down
+      if (
+        isBearish(prev3) &&
+        isBullish(prev2) &&
+        prev2.close < (prev3.open + prev3.close) / 2 &&
+        isBullish(prev) &&
+        prev.close > prev2.high &&
+        isBullish(current)
+      ) {
+        patterns.push({ pattern: "three-inside-up", reliability: 0.8 });
+      }
+
+      if (
+        isBullish(prev3) &&
+        isBearish(prev2) &&
+        prev2.close > (prev3.open + prev3.close) / 2 &&
+        isBearish(prev) &&
+        prev.close < prev2.low &&
+        isBearish(current)
+      ) {
+        patterns.push({ pattern: "three-inside-down", reliability: 0.8 });
+      }
+    }
+
+    // Return the highest reliability pattern, or none if below threshold
+    return patterns.length >= 0
+      ? patterns.sort((a, b) => b.reliability - a.reliability)[0]
+      : { pattern: "none", reliability: 0 };
+
+    // "gravestone-doji", "dragonfly-doji", "hammer", "hanging-man", "inverted-hammer", "shooting-star", "bullish-engulfing", "bearish-engulfing", "bullish-harami", "bearish-harami", "piercing-line", "dark-cloud-cover", "morning-star", "evening-star", "three-white-soldiers", "three-black-crows", "three-inside-up", "three-inside-down"
+  }
+
+  // Enhanced trend detection with ADX
+  static detectTrend(data, period) {
+    period = period ?? 14;
+
+    // Validation
+    if (!Array.isArray(data)) return "invalid-data";
+    if (data.length < period + 1) return "insufficient-data";
+
+    let plusDM = 0,
+      minusDM = 0,
+      trSum = 0;
+    const dxValues = [];
+
+    for (let i = 1; i <= period; i++) {
+      const prev = data[i - 1];
+      const curr = data[i];
+
+      const upMove = curr.high - prev.high;
+      const downMove = prev.low - curr.low;
+
+      plusDM += upMove > downMove && upMove > 0 ? upMove : 0;
+      minusDM += downMove > upMove && downMove > 0 ? downMove : 0;
+
+      const tr = Math.max(
+        curr.high - curr.low,
+        Math.abs(curr.high - prev.close),
+        Math.abs(curr.low - prev.close)
+      );
+      trSum += tr;
+    }
+
+    const plusDI = trSum > 0 ? (plusDM / trSum) * 100 : 0;
+    const minusDI = trSum > 0 ? (minusDM / trSum) * 100 : 0;
+
+    const dx = plusDI + minusDI > 0 ? (Math.abs(plusDI - minusDI) / (plusDI + minusDI)) * 100 : 0;
+
+    // Approximate ADX by averaging the DX values over the next `period` entries
+    for (let i = period + 1; i < Math.min(data.length, period * 2); i++) {
+      const prev = data[i - 1];
+      const curr = data[i];
+
+      const upMove = curr.high - prev.high;
+      const downMove = prev.low - curr.low;
+
+      const pdm = upMove > downMove && upMove > 0 ? upMove : 0;
+      const mdm = downMove > upMove && downMove > 0 ? downMove : 0;
+
+      const tr = Math.max(
+        curr.high - curr.low,
+        Math.abs(curr.high - prev.close),
+        Math.abs(curr.low - prev.close)
+      );
+
+      const plusDIx = tr > 0 ? (pdm / tr) * 100 : 0;
+      const minusDIx = tr > 0 ? (mdm / tr) * 100 : 0;
+
+      const dxVal = plusDIx + minusDIx > 0 ? (Math.abs(plusDIx - minusDIx) / (plusDIx + minusDIx)) * 100 : 0;
+
+      dxValues.push(dxVal);
+    }
+
+    const adx = dxValues.length > 0 ? (dx + dxValues.reduce((a, b) => a + b, 0)) / (dxValues.length + 1) : dx;
+
+    const crossover = Math.abs(plusDI - minusDI) < 1 ? "neutral" : plusDI > minusDI ? "bullish" : "bearish";
+
+    const trend =
+      adx > 25
+        ? plusDI > minusDI
+          ? "strong-up"
+          : "strong-down"
+        : adx > 20
+        ? plusDI > minusDI
+          ? "moderate-up"
+          : "moderate-down"
+        : "sideways";
+
+    return {
+      trend,
+      adx: parseFloat(adx.toFixed(2)),
+      plusDI: parseFloat(plusDI.toFixed(2)),
+      minusDI: parseFloat(minusDI.toFixed(2)),
+      crossover,
+    };
+  }
+
+  static linearRegression(data) {
+    if (!data || data.length < 2) return { slope: 0, intercept: 0, r2: 0 };
+
+    const xValues = Array.from({ length: data.length }, (_, i) => i);
+
+    const n = xValues.length;
+    let sumX = 0,
+      sumY = 0,
+      sumXY = 0,
+      sumXX = 0;
+
+    for (let i = 0; i < n; i++) {
+      sumX += xValues[i];
+      sumY += data[i];
+      sumXY += xValues[i] * data[i];
+      sumXX += xValues[i] * xValues[i];
+    }
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    // Calculate R-squared
+    let ssTot = 0,
+      ssRes = 0;
+    const meanY = sumY / n;
+
+    for (let i = 0; i < n; i++) {
+      const predicted = slope * xValues[i] + intercept;
+      ssTot += Math.pow(data[i] - meanY, 2);
+      ssRes += Math.pow(data[i] - predicted, 2);
+    }
+
+    const r2 = 1 - ssRes / ssTot;
+
+    return {
+      slope: formatDecimal(slope),
+      intercept: formatDecimal(intercept),
+      r2: formatDecimal(r2),
+      strength: r2 > 0.7 ? "strong" : r2 > 0.4 ? "moderate" : "weak",
+    };
+  }
+
+  static detectTrendlines(data) {
+    if (!data || data.length < 5) return { supports: [], resistances: [] };
+
+    const pivots = { supports: [], resistances: [] };
+
+    // Find swing points with dynamic confirmation
+    for (let i = 2; i < data.length - 2; i++) {
+      const isSupport =
+        data[i].low < data[i - 1].low &&
+        data[i].low < data[i + 1].low &&
+        data.slice(i - 2, i + 3).every((c) => c.low >= data[i].low); // Local minimum check
+
+      const isResistance =
+        data[i].high > data[i - 1].high &&
+        data[i].high > data[i + 1].high &&
+        data.slice(i - 2, i + 3).every((c) => c.high <= data[i].high); // Local maximum check
+
+      if (isSupport)
+        pivots.supports.push({
+          price: data[i].low,
+          index: i,
+          time: data[i].time,
+        });
+
+      if (isResistance)
+        pivots.resistances.push({
+          price: data[i].high,
+          index: i,
+          time: data[i].time,
+        });
+    }
+
+    // Return 3 strongest pivots (by recency and prominence)
+    return {
+      supports: pivots.supports.sort((a, b) => b.index - a.index).slice(0, 3),
+      resistances: pivots.resistances.sort((a, b) => b.index - a.index).slice(0, 3),
+    };
+  }
+
+  static isTrendlineValid(points) {
+    if (points.length < 2) return false;
+    const regression = TechnicalAnalysis.linearRegression(points);
+    return Math.abs(regression.slope) > 0.005 && regression.r2 > 0.4;
+  }
+
+  static detectVolumeDivergence(candles) {
+    if (!candles || candles.length < 10) return "neutral";
+
+    const first = candles[0];
+    const last = candles.at(-1);
+
+    // Price direction
+    const priceChange = last.close - first.close;
+    const priceDirection = priceChange >= 0 ? "up" : "down";
+
+    // Volume direction
+    const volumeMA = TechnicalAnalysis.simpleMovingAverage(
+      candles.map((it) => it.volume),
+      Math.floor(candles.length / 2)
+    ).values.at(-1);
+    const currentVolume = last.volume;
+    const volumeDirection = currentVolume > volumeMA.values ? "up" : "down";
+
+    // Divergence detection
+    if (priceDirection === "up" && volumeDirection === "down") return "weak-uptrend";
+    if (priceDirection === "down" && volumeDirection === "down") return "weak-downtrend";
+    if (priceDirection === "up" && volumeDirection === "up") return "strong-uptrend";
+    if (priceDirection === "down" && volumeDirection === "up") return "strong-downtrend";
+
+    return "neutral";
+  }
+
+  static calculateVolatility(data, period = 14) {
+    if (data.length < period) period = data.length;
+    let sum = 0;
+    for (let i = 1; i < period; i++) {
+      sum += (data[i].high - data[i].low) / data[i - 1].close;
+    }
+    return (sum / (period - 1)) * data[data.length - 1].close;
+  }
+}
