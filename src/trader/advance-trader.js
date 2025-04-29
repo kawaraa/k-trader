@@ -49,10 +49,9 @@ class AdvanceTrader extends Trader {
     const prevRSI = this.rsi.at(-2);
 
     // Calculate market volatility (ATR-like measure)
-    const volatility = TechnicalAnalysis.calculateVolatility(data.slice(-14));
+    const volatility = TechnicalAnalysis.calculateVolatility(data.slice(-24));
     const isHighVolatility = volatility > last.close * 0.015;
 
-    // Technical indicators with adaptive lookback periods
     const { supports, resistances } = TechnicalAnalysis.findSupportResistance(data.slice(-50));
     const support = supports[0]?.price ?? null;
     const resistance = resistances[0]?.price ?? null;
@@ -60,7 +59,7 @@ class AdvanceTrader extends Trader {
     const { pattern, reliability } = TechnicalAnalysis.detectCandlestickPattern(data.slice(-5));
     const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
     const volumeDivergence = TechnicalAnalysis.detectVolumeDivergence(data.slice(-10));
-    const volumeRising = TechnicalAnalysis.analyzeVolume(data.slice(-5)) == "rising";
+    const volumeRising = TechnicalAnalysis.analyzeVolume(data.slice(-6));
     const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-20).map((it) => it.close));
 
     // Enhanced trendline analysis
@@ -125,13 +124,13 @@ class AdvanceTrader extends Trader {
       else score.breakout += isHighVolatility ? 1.5 : 1;
     }
 
-    if (trend === "uptrend") {
+    if (trend === "strong-up") {
       if (volumeDivergence === "strong-uptrend") score.breakout += 1.5;
       else if (volumeDivergence === "weak-uptrend") score.breakout -= 0.5; // Penalize weak volume
     }
 
     // RSI scoring with trend context
-    if (trend === "uptrend" || trend === "sideways") {
+    if (trend === "strong-up" || trend === "sideways") {
       if (currentRSI > 50 && currentRSI - prevRSI > 3) score.breakout += 1;
       if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1.5;
     }
@@ -141,7 +140,14 @@ class AdvanceTrader extends Trader {
     }
 
     // Breakdown scoring
-    if (supportBreakdownConfirmed) score.breakdown += isHighVolatility ? 2 : 1.5;
+    if (supportBreakdownConfirmed) {
+      const breakdownDistance = (support - last.close) / support;
+      let breakdownWeight = isHighVolatility ? 2 : 1.5;
+      if (breakdownDistance > 0.01) breakdownWeight *= 1.5; // 1%+ breakdown
+      if (breakdownDistance > 0.02) breakdownWeight *= 2; // 2%+ breakdown
+      score.breakdown += breakdownWeight;
+    }
+
     if (supportTrendlineBreakdown) score.breakdown += isHighVolatility ? 2.5 : 1.5;
 
     if (["dark-cloud-cover", "bearish-engulfing"].includes(pattern)) {
@@ -165,31 +171,56 @@ class AdvanceTrader extends Trader {
       if (last.close < resistance && last.close < last.open && isHighVolatility) score.breakdown += 2;
       else score.breakdown += isHighVolatility ? 1.5 : 1;
     }
-
-    if (trend === "downtrend") {
-      if (volumeDivergence === "strong-downtrend") score.breakdown += 1.5;
+    if (trend === "strong-down") {
+      if (volumeDivergence === "strong-downtrend") score.breakdown += 2;
       else if (volumeDivergence === "weak-downtrend") score.breakdown -= 0.5;
     }
 
     // RSI scoring with trend context
-    if (trend === "downtrend" || trend === "sideways") {
+    if (trend === "strong-down" || trend === "sideways") {
       if (currentRSI < 50 && prevRSI - currentRSI > 3) score.breakdown += 1;
-      if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1.5;
+      if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 2;
+
+      // After (More responsive to oversold conditions)
+      if (prevRSI < 30) {
+        score.breakdown += 2;
+        if (prevRSI > currentRSI) score.breakdown += 1; // Continuing downward
+      }
     }
 
     if (closeRegression.strength === "strong" && closeRegression.slope < 0) {
       score.breakdown += isHighVolatility ? 1 : 0.5;
     }
 
-    // Volume confirmation (more nuanced)
-    if (volumeRising) {
-      if (score.breakout > score.breakdown) score.breakout += 1;
-      else if (score.breakdown > score.breakout) score.breakdown += 1;
-    } else {
-      // Penalize signals without volume confirmation
-      if (score.breakout > 0) score.breakout -= 0.5;
-      if (score.breakdown > 0) score.breakdown -= 0.5;
+    if (volumeRising === "strong-rise") {
+      // Bullish volume confirmation
+      if (trend === "strong-up") {
+        score.breakout += 2; // Strong trend alignment
+      } else if (trend === "sideways") {
+        score.breakout += 1.5; // Potential breakout
+      } else {
+        score.breakout += 0.5; // Counter-trend warning
+      }
+      // Penalize breakdowns during rising volume
+      score.breakdown = Math.max(0, score.breakdown - 1);
     }
+
+    if (volumeRising === "strong-fall") {
+      // Bearish volume confirmation
+      if (trend === "strong-down") {
+        score.breakdown += 2; // Strong trend alignment
+      } else if (trend === "sideways") {
+        score.breakdown += 1.5; // Potential breakdown
+      } else {
+        score.breakdown += 0.5; // Counter-trend warning
+      }
+      // Penalize breakouts during falling volume
+      score.breakout = Math.max(0, score.breakout - 1);
+    }
+
+    // Moderate volume changes
+    if (volumeRising === "moderate-rise") score.breakout += 0.5;
+    if (volumeRising === "moderate-fall") score.breakdown += 0.5;
 
     // Final decision with dynamic threshold and confirmation
     const breakoutConfirmed =
@@ -197,13 +228,6 @@ class AdvanceTrader extends Trader {
 
     const breakdownConfirmed =
       score.breakdown >= baseScore && (supportBreakdownConfirmed || supportTrendlineBreakdown);
-
-    // Additional filter: Don't trade against strong trend without strong signals
-    // const strongTrendFilter =
-    //   (trend === "uptrend" && score.breakdown - score.breakout < 1.5) ||
-    //   (trend === "downtrend" && score.breakout - score.breakdown < 1.5);
-    // if (breakoutConfirmed && !strongTrendFilter) return "BUY";
-    // if (breakdownConfirmed && !strongTrendFilter) return "SELL";
 
     const decision = breakoutConfirmed ? "BUY" : breakdownConfirmed ? "SELL" : "HOLD";
 
@@ -300,67 +324,74 @@ class TechnicalAnalysis {
     };
   }
 
-  // Improved support/resistance detection
   static findSupportResistance(data, clusterThreshold = 0.005) {
     if (!data || data.length < 10) return { supports: [], resistances: [] };
 
     const currentPrice = data[data.length - 1].close;
-    const precision = currentPrice > 100 ? 0 : currentPrice > 10 ? 1 : 3;
 
-    // Helper to round to market-appropriate precision
-    const roundPrice = (price) => parseFloat(price.toFixed(precision));
+    // Improved precision calculation for different asset classes
+    const precision = currentPrice > 1000 ? 0 : currentPrice > 10 ? 1 : currentPrice > 1 ? 2 : 4;
 
-    // Enhanced clustering with time decay and volume confirmation
+    // More robust rounding function
+    const roundPrice = (price) => {
+      const factor = Math.pow(10, precision);
+      return Math.round(price * factor) / factor;
+    };
+
+    // Enhanced clustering algorithm
     const clusterLevels = (levels, isSupport) => {
+      if (levels.length === 0) return [];
+
       const sorted = [...levels].sort((a, b) => a - b);
       const clusters = [];
-      let cluster = [];
+      let currentCluster = [];
 
-      for (let i = 0; i < sorted.length; i++) {
-        const price = sorted[i];
-        const candle = data.find((d) => (isSupport ? d.low === price : d.high === price));
-        if (!candle) continue;
+      // Dynamic threshold based on average price volatility
+      const priceChanges = data.slice(-14).map((d) => Math.abs(d.close - d.open));
+      const avgVolatility = priceChanges.reduce((a, b) => a + b, 0) / priceChanges.length;
+      const dynamicThreshold = Math.max(avgVolatility * 0.5, currentPrice * clusterThreshold);
 
-        const timeWeight = candle.time ? 0.9 + (candle.time / data[data.length - 1].time) * 0.1 : 1;
+      sorted.forEach((price, i) => {
+        price = roundPrice(price);
 
-        if (
-          cluster.length === 0 ||
-          Math.abs(price - cluster[cluster.length - 1].price) <= currentPrice * clusterThreshold
-        ) {
-          cluster.push({
-            price,
-            volume: candle.volume,
-            timeWeight,
-          });
+        if (currentCluster.length === 0) {
+          currentCluster.push(price);
         } else {
-          clusters.push(cluster);
-          cluster = [{ price, volume: candle.volume, timeWeight }];
+          const lastPrice = currentCluster[currentCluster.length - 1];
+          if (Math.abs(price - lastPrice) <= dynamicThreshold) {
+            currentCluster.push(price);
+          } else {
+            clusters.push(currentCluster);
+            currentCluster = [price];
+          }
         }
-      }
-      if (cluster.length > 0) clusters.push(cluster);
+      });
+
+      if (currentCluster.length > 0) clusters.push(currentCluster);
 
       return clusters
-        .filter((c) => c.length >= 2)
+        .filter((c) => c.length >= 1) // Reduced minimum cluster size
         .map((c) => {
-          const avgPrice = c.reduce((sum, x) => sum + x.price, 0) / c.length;
-          const avgVolume = c.reduce((sum, x) => sum + x.volume, 0) / c.length;
-          const timeStrength = c.reduce((sum, x) => sum + x.timeWeight, 0) / c.length;
+          const avgPrice = c.reduce((a, b) => a + b, 0) / c.length;
+          const touches = data.filter(
+            (d) => Math.abs((isSupport ? d.low : d.high) - avgPrice) <= dynamicThreshold
+          ).length;
 
-          // Strength factors: touches, volume, and time
-          const strength =
-            c.length * 0.4 +
-            (avgVolume / data.reduce((sum, d) => sum + d.volume, 0)) * data.length * 0.4 +
-            timeStrength * 0.2;
+          const recentTouches = data
+            .slice(-24)
+            .filter((d) => Math.abs((isSupport ? d.low : d.high) - avgPrice) <= dynamicThreshold).length;
+
+          const strength = touches * 0.6 + recentTouches * 0.4;
 
           return {
             price: roundPrice(avgPrice),
-            touches: c.length,
             strength: parseFloat(strength.toFixed(2)),
-            broken: isSupport ? currentPrice < avgPrice * 0.99 : currentPrice > avgPrice * 1.01,
+            touches,
+            recentTouches,
           };
         })
-        .filter((level) => !level.broken) // Remove broken levels
-        .sort((a, b) => b.strength - a.strength);
+        .sort((a, b) => b.strength - a.strength)
+        .slice(0, 5); // Return top 5 strongest levels
     };
 
     return {
@@ -717,24 +748,42 @@ class TechnicalAnalysis {
   static analyzeVolume(data) {
     if (!data || data.length < 5) return "insufficient-data";
 
+    // Use both regression slope and MA deviation
     const volumes = data.map((d) => d.volume);
-    const currentVol = volumes.at(-1);
 
-    // Dynamic moving average period (20% of data length, min 3 periods)
+    // 1. Regression Analysis
+    const regression = TechnicalAnalysis.linearRegression(volumes);
+
+    // 2. Moving Average Analysis with Deviation
     const period = Math.max(3, Math.floor(data.length * 0.2));
-    const volumeMA = TechnicalAnalysis.simpleMovingAverage(volumes, period).values.at(-1);
+    const maValues = TechnicalAnalysis.simpleMovingAverage(volumes, period).values;
 
-    // Self-calibrating thresholds based on recent volatility
-    const recentVolumes = volumes.slice(-period);
-    const avgDeviation = recentVolumes.reduce((sum, vol) => sum + Math.abs(vol - volumeMA), 0) / period;
+    // Calculate standard deviation for the same period
+    const deviations = [];
+    for (let i = 0; i <= volumes.length - period; i++) {
+      const slice = volumes.slice(i, i + period);
+      const avg = maValues[i];
+      const variance = slice.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / period;
+      deviations.push(Math.sqrt(variance));
+    }
 
-    // Dynamic thresholds adapt to market conditions
-    const upperThreshold = 1 + avgDeviation / (volumeMA || 1);
-    const lowerThreshold = 1 - (avgDeviation / (volumeMA || 1)) * 0.5;
+    const currentVol = volumes.at(-1);
+    const currentMA = maValues.at(-1);
+    const currentDeviation = deviations.at(-1) || 0;
 
-    if (currentVol > volumeMA * upperThreshold) return "rising";
-    if (currentVol < volumeMA * lowerThreshold) return "falling";
-    return "sideways";
+    // 3. Hybrid Signal Logic
+    const isStrongSlope = Math.abs(regression.slope) > currentMA * 0.03;
+    const isOverMA = currentVol > currentMA + currentDeviation;
+    const isUnderMA = currentVol < currentMA - currentDeviation;
+
+    if (isStrongSlope && regression.slope > 0) {
+      return isOverMA ? "strong-rise" : "moderate-rise";
+    }
+    if (isStrongSlope && regression.slope < 0) {
+      return isUnderMA ? "strong-fall" : "moderate-fall";
+    }
+
+    return "neutral";
   }
 
   static detectVolumeDivergence(candles) {
