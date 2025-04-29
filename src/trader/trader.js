@@ -39,7 +39,7 @@ class Trader {
 
       if (!this.testMode) return this.buy(investingCryptoVolume, price);
       else {
-        let cost = volume * price;
+        let cost = investingCryptoVolume * price;
         cost = cost + calculateFee(cost, 0.3);
         this.position = { price, volume: investingCryptoVolume, cost };
       }
@@ -55,7 +55,7 @@ class Trader {
         let cost = volume * price;
         const profit = cost - calculateFee(cost, 0.3) - position.cost;
         trades.push(profit);
-        this.ex.state.updateProperty(this.pair, { trades });
+        this.ex.state.updateBot(this.pair, { trades });
         this.position = null;
         this.dispatch("LOG", `Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
       }

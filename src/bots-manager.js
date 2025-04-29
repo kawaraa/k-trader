@@ -13,7 +13,7 @@ class BotsManager {
   static state = state;
 
   static loadBots() {
-    const bots = this.state.getBot();
+    const bots = this.state.load();
     Object.keys(bots).forEach((p) => {
       this.#bots[p] = new Bot(bots[p], BotsManager.getTrader(p, bots[p]));
     });
@@ -26,7 +26,7 @@ class BotsManager {
     const pairsFromFirestore = Object.keys(bots);
     if (pairsFromFirestore.length == 0) pairs.forEach((pair) => this.remove(pair));
     else {
-      pairsFromFirestore.forEach((pair) => !this.get(pair) && this.add(pair, bots[pair]));
+      pairsFromFirestore.forEach((pair) => !this.#bots[pair] && this.add(pair, bots[pair]));
       pairs.forEach((pair) => !bots[pair] && this.remove(pair));
     }
     return this.get();
@@ -103,8 +103,8 @@ class BotsManager {
 
       if (!existsSync(filePath)) writeFileSync(filePath, info);
       else {
-        const fileSizeInKB = statSync(filePath).size / 1024; // Convert size from B to KB
         // if file less then 500 KB append logs to file, else, overwrite the old logs
+        const fileSizeInKB = statSync(filePath).size / 1024; // Convert size from B to KB
         fileSizeInKB < 500 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
       }
     }

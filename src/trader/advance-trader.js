@@ -26,7 +26,7 @@ class AdvanceTrader extends Trader {
     if (this.rsi.length > 2) this.rsi.shift();
 
     const decision = this.decideBaseOnScore(ohlc);
-    if (decision !== "HOLD") this.decisions.push();
+    if (decision !== "HOLD") this.decisions.push(decision);
     if (this.decisions.length > 2) this.decisions.shift();
 
     const log = this.testMode ? "TEST:" : "";
