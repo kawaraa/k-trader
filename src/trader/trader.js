@@ -30,6 +30,7 @@ class Trader {
     }
     if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
   }
+
   async run() {} // This is overwritten in derived classes
 
   placeOrder(type, cryptoOrEurBalance, price, position) {
@@ -42,12 +43,12 @@ class Trader {
         let cost = investingCryptoVolume * price;
         cost = cost + calculateFee(cost, 0.3);
         this.position = { price, volume: investingCryptoVolume, cost, createdAt: Date.now() };
+        this.dispatch("LOG", `"TEST: Bought at: ${price}`);
       }
 
       //
     } else if (type == "SELL") {
-      const volume =
-        price * (cryptoOrEurBalance - position.volume) < 5 ? cryptoOrEurBalance : position.volume;
+      const volume = cryptoOrEurBalance - position.volume < 5 ? cryptoOrEurBalance : position.volume;
 
       if (!this.testMode) return this.sell(position, volume, price);
       else {
@@ -58,7 +59,7 @@ class Trader {
         trades.push(profit);
         this.ex.state.updateBot(this.pair, { trades });
         this.position = null;
-        this.dispatch("LOG", `Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
+        this.dispatch("LOG", `"TEST: Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
       }
     }
   }
