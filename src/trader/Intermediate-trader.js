@@ -7,9 +7,9 @@ const fixNum = (n) => +n.toFixed(2);
 class IntermediateTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
-    this.position = null;
     this.rsi = [];
     this.decisions = ["HOLD"];
+    this.position = null;
   }
 
   async run() {

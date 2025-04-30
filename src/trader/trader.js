@@ -41,7 +41,7 @@ class Trader {
       else {
         let cost = investingCryptoVolume * price;
         cost = cost + calculateFee(cost, 0.3);
-        this.position = { price, volume: investingCryptoVolume, cost };
+        this.position = { price, volume: investingCryptoVolume, cost, createdAt: Date.now() };
       }
 
       //
@@ -52,6 +52,7 @@ class Trader {
       if (!this.testMode) return this.sell(position, volume, price);
       else {
         const { trades } = this.ex.state.getBot(this.pair);
+        const orderAge = ((Date.now() - this.position.createdAt) / 60000 / 60).toFixed(1);
         let cost = volume * price;
         const profit = cost - calculateFee(cost, 0.3) - position.cost;
         trades.push(profit);
