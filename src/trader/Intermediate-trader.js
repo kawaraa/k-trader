@@ -50,7 +50,7 @@ class IntermediateTrader extends Trader {
     const last = data.at(-1);
     const prev = data.at(-2);
 
-    const period = parseInt((0.5 * 60) / this.interval);
+    const period = 6;
     const avgVolume = data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period;
     const volumeRising = indicators.isVolumeRising(data.slice(-5));
 

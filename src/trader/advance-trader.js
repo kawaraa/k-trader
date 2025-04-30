@@ -41,8 +41,7 @@ class AdvanceTrader extends Trader {
 
   // ===== breakout breakdown based Strategy
   analyzeMarket(ohlc) {
-    // Data preparation with more context
-    const data = ohlc.slice(0, -1); // Ignore last open candle
+    const data = ohlc.at(-1).volume > 1 ? ohlc : ohlc.slice(0, -1); // Ignore last open candle
     const last = data.at(-1);
     const prev = data.at(-2);
     const currentRSI = this.rsi.at(-1);
@@ -66,7 +65,8 @@ class AdvanceTrader extends Trader {
     const validResistance = TechnicalAnalysis.isTrendlineValid(trendlines.resistances.map((it) => it.price));
     const validSupport = TechnicalAnalysis.isTrendlineValid(trendlines.supports.map((it) => it.price));
 
-    const avgVolume = data.slice(-6).reduce((sum, d) => sum + d.volume, 0) / 6;
+    const period = 5;
+    const avgVolume = data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period;
 
     // Breakout confirmation conditions
     const resistanceBreakoutConfirmed =
@@ -79,33 +79,33 @@ class AdvanceTrader extends Trader {
       validResistance &&
       last.close > Math.max(...trendlines.resistances.map((t) => t.price)) &&
       last.close > last.open &&
-      last.volume > data.slice(-5).reduce((a, b) => a + b.volume, 0) / 5;
+      last.volume > avgVolume;
 
     const supportTrendlineBreakdown =
       validSupport &&
       last.close < Math.min(...trendlines.supports.map((t) => t.price)) &&
       last.close < last.open &&
-      last.volume > data.slice(-5).reduce((a, b) => a + b.volume, 0) / 5;
+      last.volume > avgVolume;
 
     // Calculate scores with volatility adjustment
     const baseScore = isHighVolatility ? 5 : 4; // Require higher confidence in volatile markets
     const score = { breakout: 0, breakdown: 0 };
 
     // Breakout scoring (more conservative in high volatility)
-    if (resistanceBreakoutConfirmed) score.breakout += isHighVolatility ? 1.5 : 2;
-    if (resistanceTrendlineBreakout) score.breakout += isHighVolatility ? 1.5 : 2.5;
+    if (resistanceBreakoutConfirmed) score.breakout += 2;
+    if (resistanceTrendlineBreakout) score.breakout += 1.5;
 
     if (pattern === "bullish-engulfing") {
       const nearSupport = last.close >= support && last.close <= support * 1.01;
-      score.breakout += nearSupport ? (isHighVolatility ? 2 : 1.5) : 1;
+      score.breakout += nearSupport ? 2 : 1;
     }
 
     if (pattern === "hammer" && last.close > last.open && prev.low < support) {
-      score.breakout += isHighVolatility ? 2 : 1;
+      score.breakout += 2;
     }
 
     if (pattern === "morning-star" && prev.close < support && last.close > support) {
-      score.breakout += isHighVolatility ? 3 : 2;
+      score.breakout += 3;
     }
 
     // Bullish patterns
@@ -119,8 +119,8 @@ class AdvanceTrader extends Trader {
         "three-inside-up",
       ].includes(pattern)
     ) {
-      if (last.close > support && last.close > last.open && isHighVolatility) score.breakout += 2;
-      else score.breakout += isHighVolatility ? 2 : 1;
+      if (last.close > support && last.close > last.open) score.breakout += 2;
+      else score.breakout += 1;
     }
 
     if (trend === "strong-up") {
@@ -128,38 +128,27 @@ class AdvanceTrader extends Trader {
       else if (volumeDivergence === "weak-uptrend") score.breakout -= 0.5; // Penalize weak volume
     }
 
-    // RSI scoring with trend context
-    if (trend === "strong-up" || trend === "sideways") {
-      if (currentRSI > 50 && currentRSI - prevRSI > 3) score.breakout += 1;
-      if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1.5;
-    }
+    if (currentRSI > 52 && currentRSI - prevRSI > 2) score.breakout += 1;
+    if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1;
 
     if (closeRegression.strength === "strong" && closeRegression.slope > 0) {
-      score.breakout += isHighVolatility ? 1.5 : 1;
+      score.breakout += 1.5;
     }
 
-    // Breakdown scoring
-    if (supportBreakdownConfirmed) {
-      const breakdownDistance = (support - last.close) / support;
-      let breakdownWeight = isHighVolatility ? 2 : 1.5;
-      if (breakdownDistance > 0.01) breakdownWeight *= 1.5; // 1%+ breakdown
-      if (breakdownDistance > 0.02) breakdownWeight *= 2; // 2%+ breakdown
-      score.breakdown += breakdownWeight;
-    }
-
-    if (supportTrendlineBreakdown) score.breakdown += isHighVolatility ? 2.5 : 1.5;
+    if (supportBreakdownConfirmed) score.breakdown += 2.5;
+    if (supportTrendlineBreakdown) score.breakdown += 1.5;
 
     if (["dark-cloud-cover", "bearish-engulfing"].includes(pattern)) {
       const nearResistance = last.close < resistance && last.close > resistance * 0.99;
-      score.breakdown += nearResistance ? (isHighVolatility ? 1.5 : 2) : 1;
+      score.breakdown += nearResistance ? 2 : 1;
     }
 
     if (pattern === "shooting-star" && last.close < last.open && last.high > resistance) {
-      score.breakdown += isHighVolatility ? 2 : 1;
+      score.breakdown += 2;
     }
 
     if (pattern === "evening-star") {
-      score.breakdown += isHighVolatility ? 3 : 2;
+      score.breakdown += 3;
     }
     // Bearish patterns
     if (
@@ -167,59 +156,39 @@ class AdvanceTrader extends Trader {
         pattern
       )
     ) {
-      if (last.close < resistance && last.close < last.open && isHighVolatility) score.breakdown += 2;
-      else score.breakdown += isHighVolatility ? 2 : 1;
+      if (last.close < resistance && last.close < last.open) score.breakdown += 2;
+      else score.breakdown += 1;
     }
     if (trend === "strong-down") {
       if (volumeDivergence === "strong-downtrend") score.breakdown += 2;
       else if (volumeDivergence === "weak-downtrend") score.breakdown -= 0.5;
     }
 
-    // RSI scoring with trend context
-    if (trend === "strong-down" || trend === "sideways") {
-      if (currentRSI < 50 && prevRSI - currentRSI > 3) score.breakdown += 1;
-      if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 2;
-
-      // After (More responsive to oversold conditions)
-      if (prevRSI < 30) {
-        score.breakdown += 2;
-        if (prevRSI > currentRSI) score.breakdown += 1; // Continuing downward
-      }
-    }
+    if (currentRSI < 48 && prevRSI - currentRSI > 2) score.breakdown += 1;
+    if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1;
 
     if (closeRegression.strength === "strong" && closeRegression.slope < 0) {
-      score.breakdown += isHighVolatility ? 1.5 : 1;
+      score.breakdown += 1.5;
     }
 
-    if (volumeRising === "strong-rise") {
-      // Bullish volume confirmation
-      if (trend === "strong-up") {
-        score.breakout += 2; // Strong trend alignment
-      } else if (trend === "sideways") {
-        score.breakout += 1.5; // Potential breakout
-      } else {
-        score.breakout += 0.5; // Counter-trend warning
-      }
-      // Penalize breakdowns during rising volume
-      score.breakdown = Math.max(0, score.breakdown - 1);
-    }
+    if (volumeRising === "strong-rise" && trend === "strong-up") score.breakout += 2;
+    else if (volumeRising === "strong-rise") score.breakout += 1;
 
-    if (volumeRising === "strong-fall") {
-      // Bearish volume confirmation
-      if (trend === "strong-down") {
-        score.breakdown += 2; // Strong trend alignment
-      } else if (trend === "sideways") {
-        score.breakdown += 1.5; // Potential breakdown
-      } else {
-        score.breakdown += 0.5; // Counter-trend warning
-      }
-      // Penalize breakouts during falling volume
-      score.breakout = Math.max(0, score.breakout - 1);
-    }
+    if (volumeRising === "strong-fall" && trend === "strong-down") score.breakdown += 2;
+    else if (volumeRising === "strong-fall") score.breakdown += 1;
 
     // Moderate volume changes
     if (volumeRising === "moderate-rise") score.breakout += 0.5;
     if (volumeRising === "moderate-fall") score.breakdown += 0.5;
+
+    if (score.breakout >= baseScore && score.breakdown >= baseScore) {
+      if ((score.breakout === score.breakdown && closeRegression.strength) === "strong") {
+        if (closeRegression.slope > 0) score.breakdown -= 1;
+        if (closeRegression.slope < 0) score.breakout -= 1;
+      }
+      if (score.breakout > score.breakdown) score.breakdown -= 1;
+      if (score.breakout < score.breakdown) score.breakdown -= 1;
+    }
 
     // Final decision with dynamic threshold and confirmation
     const breakoutConfirmed =
@@ -241,6 +210,7 @@ class AdvanceTrader extends Trader {
     this.dispatch("LOG", `Pattern: ${pattern} - reliability: ${reliability}`);
     this.dispatch("LOG", `Trend: ${trend} - crossover: ${crossover}`);
     this.dispatch("LOG", `Slope Trend: ${closeRegression.slope} - ${closeRegression.strength}`);
+    this.dispatch("LOG", `Volume Divergence: ${volumeDivergence} - ${volumeRising}`);
     this.dispatch("LOG", `Support: ${support} Resistance: ${resistance}`);
     this.dispatch("LOG", `Valid Support Line: ${validSupport}`);
     this.dispatch("LOG", `Valid Resistance Line: ${validResistance}`);
@@ -321,6 +291,7 @@ class TechnicalAnalysis {
       momentum: avgGain - avgLoss,
     };
   }
+
   static findSupportResistance(data, clusterThreshold = 0.005) {
     if (!data || data.length < 10) return { supports: [], resistances: [] };
 
