@@ -60,7 +60,7 @@ class AdvanceTrader extends Trader {
     const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
     const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-15).map((it) => it.close));
     const trendlines = TechnicalAnalysis.detectTrendlines(data);
-    const volumeDivergence = TechnicalAnalysis.detectVolumeDivergence(data.slice(-10));
+    const volumeDivergence = TechnicalAnalysis.detectVolumeDivergence(data.slice(-8));
     const volumeRising = TechnicalAnalysis.analyzeVolume(data.slice(-6));
 
     const validResistance = TechnicalAnalysis.isTrendlineValid(trendlines.resistances.map((it) => it.price));
@@ -120,7 +120,7 @@ class AdvanceTrader extends Trader {
       ].includes(pattern)
     ) {
       if (last.close > support && last.close > last.open && isHighVolatility) score.breakout += 2;
-      else score.breakout += isHighVolatility ? 1.5 : 1;
+      else score.breakout += isHighVolatility ? 2 : 1;
     }
 
     if (trend === "strong-up") {
@@ -135,7 +135,7 @@ class AdvanceTrader extends Trader {
     }
 
     if (closeRegression.strength === "strong" && closeRegression.slope > 0) {
-      score.breakout += isHighVolatility ? 1 : 0.5;
+      score.breakout += isHighVolatility ? 1.5 : 1;
     }
 
     // Breakdown scoring
@@ -168,7 +168,7 @@ class AdvanceTrader extends Trader {
       )
     ) {
       if (last.close < resistance && last.close < last.open && isHighVolatility) score.breakdown += 2;
-      else score.breakdown += isHighVolatility ? 1.5 : 1;
+      else score.breakdown += isHighVolatility ? 2 : 1;
     }
     if (trend === "strong-down") {
       if (volumeDivergence === "strong-downtrend") score.breakdown += 2;
@@ -188,7 +188,7 @@ class AdvanceTrader extends Trader {
     }
 
     if (closeRegression.strength === "strong" && closeRegression.slope < 0) {
-      score.breakdown += isHighVolatility ? 1 : 0.5;
+      score.breakdown += isHighVolatility ? 1.5 : 1;
     }
 
     if (volumeRising === "strong-rise") {
