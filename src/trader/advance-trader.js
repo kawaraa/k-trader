@@ -56,14 +56,13 @@ class AdvanceTrader extends Trader {
     const support = supports[0]?.price ?? null;
     const resistance = resistances[0]?.price ?? null;
 
-    const { pattern, reliability } = TechnicalAnalysis.detectCandlestickPattern(data.slice(-5));
+    const { pattern, reliability } = TechnicalAnalysis.detectCandlestickPattern(data);
     const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
+    const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-15).map((it) => it.close));
+    const trendlines = TechnicalAnalysis.detectTrendlines(data);
     const volumeDivergence = TechnicalAnalysis.detectVolumeDivergence(data.slice(-10));
     const volumeRising = TechnicalAnalysis.analyzeVolume(data.slice(-6));
-    const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-20).map((it) => it.close));
 
-    // Enhanced trendline analysis
-    const trendlines = TechnicalAnalysis.detectTrendlines(data);
     const validResistance = TechnicalAnalysis.isTrendlineValid(trendlines.resistances.map((it) => it.price));
     const validSupport = TechnicalAnalysis.isTrendlineValid(trendlines.supports.map((it) => it.price));
 
@@ -89,7 +88,7 @@ class AdvanceTrader extends Trader {
       last.volume > data.slice(-5).reduce((a, b) => a + b.volume, 0) / 5;
 
     // Calculate scores with volatility adjustment
-    const baseScore = isHighVolatility ? 6 : 5; // Require higher confidence in volatile markets
+    const baseScore = isHighVolatility ? 5 : 4; // Require higher confidence in volatile markets
     const score = { breakout: 0, breakdown: 0 };
 
     // Breakout scoring (more conservative in high volatility)
@@ -304,8 +303,7 @@ class TechnicalAnalysis {
     avgGain /= period;
     avgLoss /= period;
 
-    // Subsequent calculations with Wilder's smoothing
-    for (let i = period + 1; i < prices.length; i++) {
+    for (let i = period; i < prices.length; i++) {
       const change = prices[i] - prices[i - 1];
       const gain = Math.max(change, 0);
       const loss = Math.abs(Math.min(change, 0));
@@ -314,7 +312,7 @@ class TechnicalAnalysis {
       avgLoss = (avgLoss * (period - 1) + loss) / period;
     }
 
-    const rs = avgLoss < 0.000001 ? 100 : avgGain / avgLoss; // Safer float comparison
+    const rs = avgGain / avgLoss;
     const rsi = 100 - 100 / (1 + rs);
 
     return {
@@ -323,7 +321,6 @@ class TechnicalAnalysis {
       momentum: avgGain - avgLoss,
     };
   }
-
   static findSupportResistance(data, clusterThreshold = 0.005) {
     if (!data || data.length < 10) return { supports: [], resistances: [] };
 

@@ -58,7 +58,7 @@ class IntermediateTrader extends Trader {
     const pattern = indicators.detectCandlestickPattern(data);
     const trend = indicators.detectTrend(data.slice(-30));
 
-    const shortData = data.slice(-15).map((d) => d.close); // Slightly longer for better slope
+    const shortData = data.slice(-15).map((d) => d.close);
     const slopeTrend = indicators.linearRegression(shortData, true);
     const trendlines = indicators.detectTrendlines(data);
 
