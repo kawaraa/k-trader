@@ -51,9 +51,9 @@ class AdvanceTrader extends Trader {
     const volatility = TechnicalAnalysis.calculateVolatility(data.slice(-24));
     const isHighVolatility = volatility > last.close * 0.015;
 
-    const { supports, resistances } = TechnicalAnalysis.findSupportResistance(data.slice(-50));
-    const support = supports[0]?.price ?? null;
-    const resistance = resistances[0]?.price ?? null;
+    const { supports, resistances } = TechnicalAnalysis.findSupportResistance(data.slice(-200));
+    const support = supports[0]?.price;
+    const resistance = resistances[0]?.price;
 
     const { pattern, reliability } = TechnicalAnalysis.detectCandlestickPattern(data);
     const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
@@ -68,11 +68,16 @@ class AdvanceTrader extends Trader {
     const period = 5;
     const avgVolume = data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period;
 
-    // Breakout confirmation conditions
+    // Breakout confirmation conditions (refined for clustered S/R levels)
     const resistanceBreakoutConfirmed =
-      last.close > resistance && last.close > last.open + (last.high - last.low) * 0.7;
+      last.close > resistance &&
+      last.low > resistance * 0.995 && // Confirm full candle above resistance (tight buffer)
+      last.close > last.open + (last.high - last.low) * 0.6;
+
     const supportBreakdownConfirmed =
-      last.close < support && last.close < last.open + (last.high - last.low) * 0.3;
+      last.close < support &&
+      last.high < support * 1.005 && // Confirm full candle below support (tight buffer)
+      last.close < last.open - (last.high - last.low) * 0.6;
 
     // Trendline breakout conditions with confirmation
     const resistanceTrendlineBreakout =
@@ -96,15 +101,15 @@ class AdvanceTrader extends Trader {
     if (resistanceTrendlineBreakout) score.breakout += 1.5;
 
     if (pattern === "bullish-engulfing") {
-      const nearSupport = last.close >= support && last.close <= support * 1.01;
+      const nearSupport = last.close >= support && last.close <= support * 1.005;
       score.breakout += nearSupport ? 2 : 1;
     }
 
-    if (pattern === "hammer" && last.close > last.open && prev.low < support) {
+    if (pattern === "hammer" && last.close > last.open && prev.low <= support * 1.01) {
       score.breakout += 2;
     }
 
-    if (pattern === "morning-star" && prev.close < support && last.close > support) {
+    if (pattern === "morning-star" && prev.close <= support * 1.01 && last.close > support) {
       score.breakout += 3;
     }
 
@@ -119,8 +124,11 @@ class AdvanceTrader extends Trader {
         "three-inside-up",
       ].includes(pattern)
     ) {
-      if (last.close > support && last.close > last.open) score.breakout += 2;
-      else score.breakout += 1;
+      if (last.close > support && last.low >= support * 0.995 && last.close > last.open) {
+        score.breakout += 2;
+      } else {
+        score.breakout += 1;
+      }
     }
 
     if (trend === "strong-up") {
@@ -138,27 +146,32 @@ class AdvanceTrader extends Trader {
     if (supportBreakdownConfirmed) score.breakdown += 2.5;
     if (supportTrendlineBreakdown) score.breakdown += 1.5;
 
+    if (pattern === "evening-star") {
+      score.breakdown += last.close < resistance ? 3 : 2;
+    }
+
     if (["dark-cloud-cover", "bearish-engulfing"].includes(pattern)) {
-      const nearResistance = last.close < resistance && last.close > resistance * 0.99;
+      const nearResistance = last.close <= resistance && last.close >= resistance * 0.995;
       score.breakdown += nearResistance ? 2 : 1;
     }
 
-    if (pattern === "shooting-star" && last.close < last.open && last.high > resistance) {
+    if (pattern === "shooting-star" && last.close < last.open && last.high >= resistance * 0.99) {
       score.breakdown += 2;
     }
 
-    if (pattern === "evening-star") {
-      score.breakdown += 3;
-    }
     // Bearish patterns
     if (
       ["gravestone-doji", "hanging-man", "bearish-harami", "three-black-crows", "three-inside-down"].includes(
         pattern
       )
     ) {
-      if (last.close < resistance && last.close < last.open) score.breakdown += 2;
-      else score.breakdown += 1;
+      if (last.close < resistance && last.high <= resistance * 1.005 && last.close < last.open) {
+        score.breakdown += 2;
+      } else {
+        score.breakdown += 1;
+      }
     }
+
     if (trend === "strong-down") {
       if (volumeDivergence === "strong-downtrend") score.breakdown += 2;
       else if (volumeDivergence === "weak-downtrend") score.breakdown -= 0.5;
@@ -182,7 +195,7 @@ class AdvanceTrader extends Trader {
     if (volumeRising === "moderate-fall") score.breakdown += 0.5;
 
     if (score.breakout >= baseScore && score.breakdown >= baseScore) {
-      if ((score.breakout === score.breakdown && closeRegression.strength) === "strong") {
+      if (score.breakout === score.breakdown && closeRegression.strength === "strong") {
         if (closeRegression.slope > 0) score.breakdown -= 1;
         if (closeRegression.slope < 0) score.breakout -= 1;
       }
@@ -292,8 +305,11 @@ class TechnicalAnalysis {
     };
   }
 
-  static findSupportResistance(data, clusterThreshold = 0.005) {
+  static findSupportResistance(data, clusterThreshold) {
     if (!data || data.length < 10) return { supports: [], resistances: [] };
+
+    const avgPrice = data.reduce((sum, d) => sum + d.close, 0) / data.length;
+    clusterThreshold = clusterThreshold || Math.max(0.005, Math.min(0.02, avgPrice * 0.0005));
 
     const currentPrice = data[data.length - 1].close;
 
