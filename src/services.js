@@ -103,9 +103,13 @@ function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, round = 1
   return prices;
 }
 
-function normalizePrices(prices, averageAskBidSpread = 0.5) {
-  const normalAskBidSpreed = (spreed) => spreed <= Math.min(averageAskBidSpread * 2, 1);
+function normalizePrices(prices, avgAskBidSpread) {
+  if (!avgAskBidSpread) {
+    avgAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice)));
+  }
+  const normalAskBidSpreed = (spreed) => spreed <= Math.min(avgAskBidSpread * 2, 1);
   const normalizedPrices = [];
+
   for (let i = 0; i < prices.length; i++) {
     const askBidSpreedPercent = calcPercentageDifference(prices[i].bidPrice, prices[i].askPrice);
     if (normalAskBidSpreed(askBidSpreedPercent)) {

@@ -2,32 +2,6 @@
 
 const { calcPercentageDifference } = require("./services");
 
-// Simple Moving Average (SMA) method is used to calculate the average of past prices. adjust the period to any desired period that better match your analysis needs, for example:
-// 1. Day Traders: Might use shorter periods like 5 or 10 to capture quick market movements.
-// 2. Swing Traders: Might prefer periods like 20 or 50 to identify intermediate trends.
-// 3. Long-Term Investors: Might use periods like 100 or 200 to focus on long-term trends.
-function simpleMovingAverage(prices, period) {
-  if (period < 1 || period > prices.length) {
-    throw new Error("Invalid period. Must be between 1 and the length of the prices array.");
-  }
-
-  const sma = [];
-  for (let i = 0; i <= prices.length - period; i++) {
-    let sum = 0;
-    for (let j = 0; j < period; j++) {
-      sum += prices[i + j];
-    }
-    sma.push(sum / period);
-  }
-
-  const lastPrice = prices[prices.length - 1];
-  const lastSMA = sma[sma.length - 1]; // the average of recent prices
-  return lastPrice > lastSMA ? "buy" : "sell";
-  // Trend Indicator:
-  // 1. When SMA Above Last Price or the SMA is higher than the current price, means that the price is trending downwards signaling a potential buying opportunity if the trend is expected to reverse.
-  // 2. When SMA Below Last Price, means an upward trend, signaling a potential selling opportunity if the trend is expected to reverse.
-}
-
 function detectPriceDirection(prices, minPercent, percentBetween = 0, mountains = 0) {
   let price = null;
   let currentPrice = null;
@@ -63,67 +37,6 @@ function detectPriceDirection(prices, minPercent, percentBetween = 0, mountains 
   if (changePercent >= minPercent && uptrendCount >= mountains) return "UPTREND";
   else if (changePercent <= -minPercent && downtrendCount >= mountains) return "DOWNTREND";
   else return "UNKNOWN";
-}
-
-function detectBreakoutOrBreakdown(prices, sensitivity = 0.5) {
-  /* Suggested minimums:
-Interval	| Recommended History
-5m        | Last 2–3 hours (24–36 candles)
-15m       | Last 6–8 hours (24–32 candles)
-1h        | Last 2–4 days (48–96 candles)
-1d        | Last 2–4 weeks (15–30 candles)
-*/
-
-  if (prices.length < 20) throw new Error("detectBreakoutOrBreakdown: Not enough data");
-
-  const window = 5; // number of candles to confirm swing highs/lows
-  const highs = [];
-  const lows = [];
-
-  for (let i = window; i < prices.length - window; i++) {
-    const slice = prices.slice(i - window, i + window + 1);
-    const mid = prices[i];
-
-    const isHigh = slice.every((p) => mid >= p);
-    const isLow = slice.every((p) => mid <= p);
-
-    if (isHigh) highs.push({ i, price: mid });
-    if (isLow) lows.push({ i, price: mid });
-  }
-
-  // Early exit if not enough swings
-  if (highs.length < 2 && lows.length < 2) return "No strong pattern detected";
-
-  // Check rising lows
-  let risingLows = 0;
-  for (let i = 1; i < lows.length; i++) {
-    if (lows[i].price > lows[i - 1].price) risingLows++;
-  }
-
-  // Check falling highs
-  let fallingHighs = 0;
-  for (let i = 1; i < highs.length; i++) {
-    if (highs[i].price < highs[i - 1].price) fallingHighs++;
-  }
-
-  const recentHigh = highs[highs.length - 1]?.price || 0;
-  const recentLow = lows[lows.length - 1]?.price || Infinity;
-  const latestPrice = prices[prices.length - 1];
-
-  const breakout = ((latestPrice - recentHigh) / recentHigh) * 100 >= sensitivity;
-  const breakdown = ((recentLow - latestPrice) / recentLow) * 100 >= sensitivity;
-
-  if (risingLows >= 2 && breakout) {
-    return "Likely breakout (rise)";
-  } else if (fallingHighs >= 2 && breakdown) {
-    return "Likely breakdown (drop)";
-  } else if (risingLows >= 2) {
-    return "Potential breakout forming";
-  } else if (fallingHighs >= 2) {
-    return "Potential breakdown forming";
-  } else {
-    return "No strong pattern detected";
-  }
 }
 
 function detectPriceShape(prices, percentage) {
@@ -254,14 +167,14 @@ function adjustPrice(price, percentage) {
 }
 
 module.exports = {
-  simpleMovingAverage,
-  detectPriceDirection,
-  detectBreakoutOrBreakdown,
   isGoodTimeToBuy,
+  detectPriceDirection,
   findHighestLowestPrice,
   // getDynamicTakeProfitPct,
   detectPriceShape,
+
   calcInvestmentProfit,
   calcTransactionProfit,
+
   adjustPrice,
 };

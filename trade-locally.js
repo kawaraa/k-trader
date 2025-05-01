@@ -3,6 +3,8 @@ const LocalState = require("./src/local-state");
 const AdvanceTrader = require("./src/trader/advance-trader");
 const IntermediateTrader = require("./src/trader/Intermediate-trader");
 const { parseNumInLog } = require("./src/utilities");
+const pair = process.argv[2]; //  LTCEUR, SOLEUR, VINEEUR
+const advance = process.argv[3]; //  1, 2
 
 const state = new LocalState("state");
 
@@ -18,8 +20,10 @@ const exProvider = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CRED
 //   })
 //   .catch(console.log);
 
-const trader = new AdvanceTrader(exProvider, "LTCEUR", { interval: 5, capital: 100, mode: "test" });
-// const trader = new IntermediateTrader(exProvider, "LTCEUR", { interval: 5, capital: 100, mode: "test" });
+let trader = new AdvanceTrader(exProvider, pair, { interval: 5, capital: 100, mode: "test" });
+if (!advance) {
+  trader = new IntermediateTrader(exProvider, pair, { interval: 5, capital: 100, mode: "test" });
+}
 
 trader.listener = (pair, event, log) => event == "LOG" && console.log(...parseNumInLog(log));
 trader.start();

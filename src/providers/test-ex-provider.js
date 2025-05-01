@@ -40,9 +40,9 @@ module.exports = class TestExchangeProvider {
     const offset = this.currentPriceIndex - limit;
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
-  async createOrder(tradingType, b, c, volume) {
+  async createOrder(type, b, c, volume, oldOrder, currentPrice) {
     const { tradePrice, askPrice, bidPrice } = this.allPrices[this.currentPriceIndex - 1];
-    const newOrder = { id: randomUUID(), type: tradingType, volume, createdAt: Date.now() };
+    const newOrder = { id: randomUUID(), type, volume, createdAt: Date.now() };
 
     if (newOrder.type == "buy") {
       const cost = volume * askPrice;
@@ -54,6 +54,7 @@ module.exports = class TestExchangeProvider {
       this.currentBalance.eur = remainingBalance;
       this.currentBalance.crypto += volume;
       this.orders.push(newOrder);
+      return newOrder;
     } else {
       const cost = volume * bidPrice;
       newOrder.price = bidPrice;
@@ -62,10 +63,14 @@ module.exports = class TestExchangeProvider {
       if (remainingCrypto < 0) throw new Error("No enough crypto");
       this.currentBalance.eur += newOrder.cost;
       this.currentBalance.crypto = remainingCrypto;
-    }
 
-    return newOrder.id;
+      const profit = +(newOrder.cost - oldOrder.cost).toFixed(2);
+      this.trades.push(profit);
+      this.orders = this.orders.filter((o) => o.id !== oldOrder.id);
+      return { profit };
+    }
   }
+
   async getOrders(pair, ordersIds) {
     if (!ordersIds) return this.orders;
     return this.orders.filter((o) => ordersIds.includes(o.id));

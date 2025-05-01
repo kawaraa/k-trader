@@ -44,10 +44,10 @@ class IntermediateTrader extends Trader {
 
   // ===== breakout breakdown based Strategy
   decideBaseOnScore(data) {
-    const currentRSI = this.rsi.at(-1);
-    const prevRSI = this.rsi.at(-2);
     const last = data.at(-1);
     const prev = data.at(-2);
+    const currentRSI = this.rsi.at(-1);
+    const prevRSI = this.rsi.at(-2);
 
     const period = 6;
     const avgVolume = data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period;

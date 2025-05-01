@@ -36,16 +36,12 @@ class Trader {
   placeOrder(type, cryptoOrEurBalance, price, position) {
     if (type == "BUY") {
       const cost = cryptoOrEurBalance - calculateFee(cryptoOrEurBalance, 0.3);
-      const investingCryptoVolume = +(cost / price).toFixed(8);
-
-      if (!this.testMode) return this.buy(investingCryptoVolume, price);
+      const cryptoVolume = +(cost / price).toFixed(8);
+      if (!this.testMode) return this.buy(cryptoVolume, price);
       else {
-        let cost = investingCryptoVolume * price;
-        cost = cost + calculateFee(cost, 0.3);
-        this.position = { price, volume: investingCryptoVolume, cost, createdAt: Date.now() };
+        this.position = { price, volume: cryptoVolume, cost: cryptoOrEurBalance, createdAt: Date.now() };
         this.dispatch("LOG", `"TEST: Bought at: ${price}`);
       }
-
       //
     } else if (type == "SELL") {
       const volume = cryptoOrEurBalance - position.volume < 5 ? cryptoOrEurBalance : position.volume;
@@ -53,7 +49,7 @@ class Trader {
       if (!this.testMode) return this.sell(position, volume, price);
       else {
         const { trades } = this.ex.state.getBot(this.pair);
-        const orderAge = ((Date.now() - this.position.createdAt) / 60000 / 60).toFixed(1);
+        const orderAge = ((Date.now() - position.createdAt) / 60000 / 60).toFixed(1);
         let cost = volume * price;
         const profit = cost - calculateFee(cost, 0.3) - position.cost;
         trades.push(profit);
@@ -66,25 +62,14 @@ class Trader {
 
   async buy(volume, price) {
     this.dispatch("LOG", `Placing BUY at: ${price}`);
-    const orderId = await this.ex.createOrder("buy", "market", this.pair, volume);
-    const { orders } = this.ex.state.getBot(this.pair);
-    orders.push(orderId);
-    this.ex.state.updateBot(this.pair, { orders });
+    await this.ex.createOrder("buy", "market", this.pair, volume);
   }
 
-  async sell({ id, cost, createdAt }, volume, price) {
+  async sell(oldOrder, volume, price) {
     this.dispatch("LOG", `Placing SELL at ${price}`);
-    const orderId = await this.ex.createOrder("sell", "market", this.pair, volume);
-    const c = price * volume - calculateFee(price * volume, 0.3);
-    const profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - cost).toFixed(2);
-    const orderAge = ((Date.now() - createdAt) / 60000 / 60).toFixed(1);
-
-    const { orders, trades } = this.ex.state.getBot(this.pair, "orders");
-    orders = this.orders.filter((o) => o.id !== id);
-    trades.push(profit);
-    this.ex.state.updateBot(this.pair, { orders, trades });
+    const { profit } = await this.ex.createOrder("sell", "market", this.pair, volume, oldOrder, price);
+    const orderAge = ((Date.now() - oldOrder.createdAt) / 60000 / 60).toFixed(1);
     this.dispatch("SELL");
-
     this.dispatch("LOG", `Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
   }
 
