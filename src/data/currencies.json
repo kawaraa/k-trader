@@ -1185,5 +1185,6 @@
     "note": ""
   },
   "FISEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 1.91, "note": "" },
-  "BNCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.66, "note": "" }
+  "BNCEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 3.66, "note": "" },
+  "VINEEUR": { "becameAvailable": "20xx-xx-01", "askBidSpreadPercentage": 0.25, "note": "" }
 }
