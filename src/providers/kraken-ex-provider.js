@@ -85,7 +85,7 @@ class KrakenExchangeProvider {
     }));
 
     const last = data.at(-1);
-    if (last.volume < 1 || last.open < 0 || last.close < 0) return data;
+    if (last.volume > 1 && last.open > 0 && last.close > 0) return data;
     return data.slice(0, -1); // Ignore/Drop last incomplete candle
   }
 
