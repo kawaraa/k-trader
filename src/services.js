@@ -247,4 +247,5 @@ module.exports = {
   normalizePrices,
   generateRange,
   removeLowsOrHighs,
+  findSupportResistanceUsingClusteringAlg,
 };
