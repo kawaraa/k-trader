@@ -44,7 +44,6 @@ class IntermediateTrader extends Trader {
 
   // ===== breakout breakdown based Strategy
   decideBaseOnScore(data) {
-    data = data.slice(0, -1); /* ignore last open candle */
     const currentRSI = this.rsi.at(-1);
     const prevRSI = this.rsi.at(-2);
     const last = data.at(-1);

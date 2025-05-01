@@ -123,6 +123,92 @@ function generateRange(start, end, length) {
   return Array.from({ length }, (_, i) => start + i * step);
 }
 
+// This functions is too strict
+function findSupportResistanceUsingClusteringAlg(data, clusterThreshold) {
+  if (!data || data.length < 10) return { supports: [], resistances: [] };
+
+  const avgPrice = data.reduce((sum, d) => sum + d.close, 0) / data.length;
+  clusterThreshold = clusterThreshold || Math.max(0.005, Math.min(0.02, avgPrice * 0.0005));
+
+  const currentPrice = data[data.length - 1].close;
+
+  // Improved precision calculation for different asset classes
+  const precision = currentPrice > 1000 ? 0 : currentPrice > 10 ? 1 : currentPrice > 1 ? 2 : 4;
+
+  // More robust rounding function
+  const roundPrice = (price) => {
+    const factor = Math.pow(10, precision);
+    return Math.round(price * factor) / factor;
+  };
+
+  // Enhanced clustering algorithm
+  const clusterLevels = (levels, isSupport) => {
+    if (levels.length === 0) return [];
+
+    const sorted = [...levels].sort((a, b) => a - b);
+    const clusters = [];
+    let currentCluster = [];
+
+    // Dynamic threshold based on average price volatility
+    const priceChanges = data.slice(-14).map((d) => Math.abs(d.close - d.open));
+    const avgVolatility = priceChanges.reduce((a, b) => a + b, 0) / priceChanges.length;
+    const dynamicThreshold = Math.max(avgVolatility * 0.5, currentPrice * clusterThreshold);
+
+    sorted.forEach((price, i) => {
+      price = roundPrice(price);
+
+      if (currentCluster.length === 0) {
+        currentCluster.push(price);
+      } else {
+        const lastPrice = currentCluster[currentCluster.length - 1];
+        if (Math.abs(price - lastPrice) <= dynamicThreshold) {
+          currentCluster.push(price);
+        } else {
+          clusters.push(currentCluster);
+          currentCluster = [price];
+        }
+      }
+    });
+
+    if (currentCluster.length > 0) clusters.push(currentCluster);
+
+    return clusters
+      .filter((c) => c.length >= 1) // Reduced minimum cluster size
+      .map((c) => {
+        const avgPrice = c.reduce((a, b) => a + b, 0) / c.length;
+        const touches = data.filter(
+          (d) => Math.abs((isSupport ? d.low : d.high) - avgPrice) <= dynamicThreshold
+        ).length;
+
+        const recentTouches = data
+          .slice(-24)
+          .filter((d) => Math.abs((isSupport ? d.low : d.high) - avgPrice) <= dynamicThreshold).length;
+
+        const strength = touches * 0.6 + recentTouches * 0.4;
+
+        return {
+          price: roundPrice(avgPrice),
+          strength: parseFloat(strength.toFixed(2)),
+          touches,
+          recentTouches,
+        };
+      })
+      .sort((a, b) => b.strength - a.strength)
+      .slice(0, 5); // Return top 5 strongest levels
+  };
+
+  return {
+    supports: clusterLevels(
+      data.map((d) => d.low),
+      true
+    ),
+    resistances: clusterLevels(
+      data.map((d) => d.high),
+      false
+    ),
+  };
+}
+
 // function analyzePrices(prices) {
 //   const result = { lows: [], highs: [], negativesPercent: 0, positivesPercent: 0, startedWith: "" };
 
