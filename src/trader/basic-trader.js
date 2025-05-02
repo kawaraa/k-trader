@@ -1,8 +1,7 @@
 const Trader = require("./trader.js");
 
-const services = require("../trend-analysis.js");
-const { calculateRSI } = require("../indicators.js");
-const { normalizePrices, calcPercentageDifference } = require("../services.js");
+const { calcPercentageDifference, calcAveragePrice, normalizePrices } = require("../services.js");
+const { linearRegression } = require("../indicators.js");
 const calcPercentage = calcPercentageDifference;
 
 // Smart trader
@@ -10,154 +9,160 @@ class BasicTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.range = (6 * 60) / this.interval;
+    this.percentThreshold = 4;
+    this.profitTarget = 4;
 
-    this.position = null;
-    this.decisions = ["HOLD"];
-    this.rsi = [];
-    this.roc = [];
-    // this.rocHistory = [];
+    this.prevGainPercent = 0;
+    this.losses = [0, 0, 0];
+    // this.trends = "0-x-x-x-x";
+    this.trends = [];
+    this.highestPrice = 0;
+    this.lowestPrice = 0;
+    this.lowestPriceTimestamp = 0;
+    this.lastTradeTimer = 0;
+    this.lastTradePrice = 0;
+    this.breakdown = false;
+    this.shouldSell = false;
+    this.droppedPercent = 0;
   }
 
   async run() {
     // Get data from Kraken
-    const prices = await this.ex.prices(this.pair, this.range);
+    const last24HrsPrices = await this.ex.prices(this.pair, this.range);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
-    const position = this.testMode ? this.position : (await this.ex.getOrders(this.pair))[0];
-    // const currentPrice = await this.ex.currentPrices(this.pair); // { tradePrice, askPrice, bidPrice }
+    const position = (await this.ex.getOrders(this.pair))[0];
     // const { trades } = await this.ex.state.getBot(this.pair);
-    const currentPrice = prices.at(-1);
-    if (prices.length < this.range) return;
+    const currentPrice = last24HrsPrices.at(-1);
+
+    if (last24HrsPrices.length < this.range) return;
 
     const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
     this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${prc}`);
 
-    this.rsi.push(calculateRSI(prices, this.rsiPeriod));
-    if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
-    if (this.rsi.length > 2) this.rsi.shift();
+    const askBidSpreadPercentage = calcPercentage(currentPrice.bidPrice, currentPrice.askPrice);
+    const averageAskBidSpread = calcAveragePrice(
+      last24HrsPrices.map((p) => calcPercentage(p.bidPrice, p.askPrice))
+    );
+    const safeAskBidSpread = askBidSpreadPercentage <= Math.min(averageAskBidSpread * 2, 1); // safeAskBidSpread
+    const normalizedPrices = normalizePrices(last24HrsPrices, averageAskBidSpread);
+    const prices = normalizedPrices.slice(-parseInt(this.range));
+    const averagePrice = calcAveragePrice(normalizedPrices);
 
-    const decision = this.analyzeMarket(normalizedPrices);
-    if (decision !== "HOLD") this.decisions.push(decision);
-    if (this.decisions.length > 1) this.decisions.shift();
+    const sortedBidPrices = normalizedPrices.toSorted((a, b) => a - b);
+    const priceChangePercent = calcPercentage(sortedBidPrices[0], sortedBidPrices.at(-1));
+    if (priceChangePercent > this.percentThreshold) this.percentThreshold = priceChangePercent;
 
-    const log = this.testMode ? "TEST:" : "";
+    // const last24HrsUptrend = linearRegression(last24HrsPrices, true, 0.002) == "uptrend";
+    this.updateTrends(linearRegression(prices, true, 0));
 
-    if (this.decisions.every((d) => d === "BUY")) {
-      this.dispatch("LOG", `${log} [+] Breakout detected.`);
-      const capital = balance.eur < this.capital ? balance.eur : this.capital;
-      if (!position) await this.placeOrder("BUY", capital, currentPrice.askPrice);
-      //
-    } else if (this.decisions.every((d) => d === "SELL")) {
-      this.dispatch("LOG", `${log} [-] Breakdown detected.`);
-      if (position) await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
-    } else {
-      this.dispatch("LOG", `${log} [=] No trade signal. decision: ${this.decisions.join("-")}`);
+    const droppedPercent = calcPercentage(normalizedPrices.at(-1), this.lowestPrice);
+    if (this.lowestPriceTimestamp > (12 * 60) / 5 || droppedPercent >= 10) {
+      this.lowestPrice = normalizedPrices.at(-1);
+      this.lowestPriceTimestamp = 0;
     }
-    this.dispatch("LOG", "");
-  }
 
-  analyzeMarket(prices) {
-    // Now takes prices array instead of OHLC data
-    const lastClose = prices.at(-1);
-    const prevClose = prices.at(-2);
+    const trends = this.trends.slice(0, -1);
+    const downtrend = trends.every((t) => t == "downtrend");
+    let shouldBuy = downtrend && this.trends.at(-1) == "uptrend";
+    if (!shouldBuy) {
+      // shouldBuy =
+      //   trends.filter((t) => t == "downtrend").length / 2 <= trends.filter((t) => t == "uptrend").length;
+      // shouldBuy =
+      //   trends.slice(0, parseInt(trends.length)).every((t) => t == "downtrend") &&
+      //   trends.slice(-parseInt(trends.length)).every((t) => t == "uptrend");
+    }
+    // shouldBuy = shouldBuy && normalizedPrices.at(-1) < averagePrice * 1.2;
 
-    // Simplified Support/Resistance
-    const { support, resistance } = Analyzer.findSupportResistance(prices);
-    const result = Analyzer.detectBreakoutOrBreakdown(prices.slice(-36));
+    if (this.lastTradePrice > 0) {
+      const percent = calcPercentage(this.lastTradePrice, normalizedPrices.at(-1));
+      if (percent < this.droppedPercent) {
+        this.percentThreshold += Math.abs(percent - this.droppedPercent);
+        this.droppedPercent = percent;
+      } else if (
+        Math.abs(this.droppedPercent - percent) > Math.max(Math.min(this.percentThreshold / 4, 4), 2)
+      ) {
+        shouldBuy = true;
+      } else {
+        shouldBuy = false;
+      }
 
-    // Trend detection
-    const trend = Analyzer.detectTrend(prices);
+      console.log("===>", this.droppedPercent, percent, Math.abs(this.droppedPercent - percent));
+    }
 
-    // Simplified volatility
-    const volatility = Analyzer.calculateVolatility(prices);
-    const isHighVolatility = volatility > lastClose * 0.01;
-    const baseScore = isHighVolatility ? 5 : 4; // Require higher confidence in volatile markets
-    const score = { breakout: 0, breakdown: 0 };
-
-    // Linear regression remains unchanged
-    const closeRegression = Analyzer.linearRegression(prices.slice(-15));
-
-    // Calculate ROC
-    const dynamicRocPeriod = volatility > lastClose * 0.02 ? 25 : 14; // Shorter period in high volatility
-    const rocPrices = prices.slice(-dynamicRocPeriod);
-    const roc = Analyzer.calculateROC(rocPrices);
-
-    this.roc.push(roc);
-    if (this.rocHistory.length > 50) this.rocHistory.shift(); // Keep 50 periods
-    // this.roc.push(roc);
-    // if (this.roc.length < 2) this.roc.push(this.roc[0]);
-    // if (this.roc.length > 2) this.roc.shift();
-
-    // Calculate ROC's SMA for smoother signal
-    const rocSMA = Analyzer.simpleMovingAverage(
-      prices
-        .map(
-          (_, i, arr) =>
-            Analyzer.calculateROC(arr.slice(0, i + 1), rocPrices.length).filter((v) => v !== null),
-          5
-        )
-        .values.at(-1)
+    this.profitTarget = Math.min(Math.max(this.percentThreshold / 3, 4), 10);
+    console.log(
+      "===>",
+      this.lowestPrice,
+      this.lowestPriceTimestamp,
+      this.trends.at(-1),
+      this.profitTarget,
+      this.percentThreshold,
+      this.droppedPercent
     );
 
-    // Add ROC-based scoring conditions
-    if (roc > 5) {
-      // Bullish threshold
-      score.breakout += 1.5;
-      if (rocSMA > roc) score.breakout += 0.5; // Confirming trend
+    shouldBuy = shouldBuy && normalizedPrices.at(-1) > this.lowestPrice;
+
+    // Buy
+    if (!position && this.capital > 0 && balance.eur >= 5) {
+      if (shouldBuy && safeAskBidSpread && this.lastTradeTimer <= 0) {
+        const capital = balance.eur < this.capital ? balance.eur : this.capital;
+        await this.placeOrder("BUY", capital, currentPrice.askPrice, position);
+        this.lastTradePrice = 0;
+        this.lowestPrice = normalizedPrices.at(-1);
+        this.lowestPriceTimestamp = 0;
+        this.droppedPercent = 0;
+        this.prevGainPercent = 0;
+      }
+
+      // Sell
+    } else if (position && balance.crypto > 0) {
+      const gainLossPercent = calcPercentage(position.price, normalizedPrices.at(-1));
+      if (gainLossPercent > this.prevGainPercent) this.prevGainPercent = gainLossPercent;
+      const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
+      // const prevDropAgain = this.losses[2];
+
+      if (-gainLossPercent >= this.losses[0]) this.losses[0] = -gainLossPercent;
+      else if (this.losses[0]) {
+        if (gainLossPercent > 0) this.losses[1] = this.losses[0];
+        else {
+          const recoveredPercent = +(this.losses[0] - -gainLossPercent).toFixed(2);
+          if (recoveredPercent > this.losses[1]) this.losses[1] = recoveredPercent;
+        }
+      }
+
+      this.dispatch(
+        "LOG",
+        `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
+      );
+
+      // const trends = this.trends.slice(parseInt(this.trends.length / 2), -1); // parseInt(this.trends.length / 3)
+      // const uptrend = trends.every((t) => t == "uptrend") && this.trends.at(-1) == "downtrend";
+
+      const shouldSell =
+        this.prevGainPercent >= this.profitTarget && loss > Math.max(this.prevGainPercent / 5, 1);
+      const stopLoss = gainLossPercent < -3 && normalizedPrices.at(-1) < this.lowestPrice;
+
+      console.log("shouldSell: ", shouldSell, "stopLoss: ", stopLoss);
+      if ((shouldSell || stopLoss) && safeAskBidSpread) {
+        await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
+
+        if (stopLoss) {
+          this.lastTradePrice = normalizedPrices.at(-1);
+          this.lowestPrice = normalizedPrices.at(-1);
+          this.lowestPriceTimestamp = 0;
+        } else if (gainLossPercent >= this.profitTarget / 1.3) {
+          this.percentThreshold = 4;
+          this.profitTarget = 4;
+        }
+      }
+
+      //
+    } else {
+      //   this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
     }
 
-    if (roc < -5) {
-      // Bearish threshold
-      score.breakdown += 1.5;
-      if (rocSMA < roc) score.breakdown += 0.5;
-    }
-
-    const divergence = TechnicalAnalysis.detectDivergence(prices, this.roc);
-    // Add to scoring logic
-    if (divergence === "bearish-divergence") {
-      score.breakdown += 3; // Strong bearish signal
-      if (lastClose > resistance) score.breakdown += 1; // Extra weight at key levels
-    }
-
-    if (divergence === "bullish-divergence") {
-      score.breakout += 3; // Strong bullish signal
-      if (lastClose < support) score.breakout += 1;
-    }
-
-    // const resistanceBreakoutConfirmed = lastClose > resistance * 1.005 && lastClose > prices.at(-3); // Confirm upward momentum
-    // const supportBreakdownConfirmed = lastClose < support * 0.995 && lastClose < prices.at(-3); // Confirm downward momentum
-
-    // const resistanceBreakoutConfirmed =
-    //   lastClose > resistance * 1.005 &&
-    //   roc > 3 && // Require positive momentum
-    //   rocSMA > 0;
-    // const supportBreakdownConfirmed =
-    //   lastClose < support * 0.995 &&
-    //   roc < -3 && // Require negative momentum
-    //   rocSMA < 0;
-
-    const resistanceBreakoutConfirmed =
-      lastClose > resistance * 1.005 &&
-      divergence !== "bearish-divergence" && // Block entry if divergence present
-      roc > 2;
-    const supportBreakdownConfirmed =
-      lastClose < support * 0.995 && divergence !== "bullish-divergence" && roc < -2;
-
-    //
-
-    // Bearish divergence
-    if (lastClose > resistance && roc < this.roc.at(-2)) {
-      score.breakdown += 2;
-    }
-
-    // Bullish divergence
-    if (lastClose < support && roc > this.roc.at(-2)) {
-      score.breakout += 2;
-    }
-
-    const decision = score.breakout >= baseScore ? "BUY" : score.breakdown >= baseScore ? "SELL" : "HOLD";
-    // ... rest of scoring logic adjusted to use these new values
-
-    this.dispatch("LOG", `ROC (${rocPeriod}): ${fixNum(roc)} | SMA: ${fixNum(rocSMA)}`);
+    this.lowestPriceTimestamp++;
+    this.dispatch("LOG", "");
   }
 
   updateTrends(trend) {
@@ -179,224 +184,13 @@ class BasicTrader extends Trader {
 
 module.exports = BasicTrader;
 
-// Technical Analysis Functions
-class Analyzer {
-  static findSupportResistance(prices) {
-    return {
-      support: Math.min(...prices),
-      resistance: Math.max(...prices),
-    };
-  }
+const conditions = [
+  ["downtrend-downtrend-downtrend-downtrend-downtrend-uptrend", "buy"],
+  ["uptrend-uptrend-uptrend-uptrend-uptrend-downtrend", "buy"],
+  // ["uptrend-uptrend-uptrend-downtrend-downtrend-uptrend", "buy"],
+];
 
-  static detectTrend(prices, period = 30) {
-    const sma = Analyzer.simpleMovingAverage(prices, period);
-    if (sma.slope > 0.05) return "strong-up";
-    if (sma.slope < -0.05) return "strong-down";
-    return "sideways";
-  }
+/**
 
-  static calculateVolatility(prices) {
-    const changes = [];
-    for (let i = 1; i < prices.length; i++) {
-      changes.push(Math.abs(prices[i] - prices[i - 1]));
-    }
-    return changes.reduce((a, b) => a + b, 0) / changes.length;
-  }
 
-  static calculateROC(prices) {
-    if (prices.length < 2) return null;
-    const current = prices.at(0);
-    const past = prices.at(-1);
-    if (past === 0) return 0; // Prevent division by zero
-    return ((current - past) / past) * 100;
-  }
-
-  // Simple Moving Average (SMA) method is used to calculate the average of past prices. adjust the period to any desired period that better match your analysis needs, for example:
-  // 1. Day Traders: Might use shorter periods like 5 or 10 to capture quick market movements.
-  // 2. Swing Traders: Might prefer periods like 20 or 50 to identify intermediate trends.
-  // 3. Long-Term Investors: Might use periods like 100 or 200 to focus on long-term trends.
-  static simpleMovingAverage(data, period) {
-    if (!data || data.length < period) return null;
-
-    const sma = [];
-    for (let i = 0; i <= data.length - period; i++) {
-      const slice = data.slice(i, i + period);
-      const avg = slice.reduce((sum, val) => sum + val, 0) / period;
-      sma.push(avg);
-    }
-
-    const len = sma.length;
-    let slope = 0;
-    let trend = "sideways";
-
-    if (len >= 2) {
-      const delta = sma[len - 1] - sma[len - 2];
-      slope = delta;
-
-      if (slope > 0) trend = "bullish";
-      else if (slope < 0) trend = "bearish";
-    }
-
-    return { values: sma, slope, trend };
-    // Trend Indicator:
-    // 1. When sma Above Last Price or the sma is higher than the current price, means that the price is trending downwards signaling a potential buying opportunity if the trend is expected to reverse.
-    // 2. When sma Below Last Price, means an upward trend, signaling a potential selling opportunity if the trend is expected to reverse.
-  }
-
-  static linearRegression(data) {
-    if (!data || data.length < 2) return { slope: 0, intercept: 0, r2: 0 };
-    const formatDecimal = (n, decimals = 4) => parseFloat(n.toFixed(decimals));
-
-    const xValues = Array.from({ length: data.length }, (_, i) => i);
-
-    const n = xValues.length;
-    let sumX = 0,
-      sumY = 0,
-      sumXY = 0,
-      sumXX = 0;
-
-    for (let i = 0; i < n; i++) {
-      sumX += xValues[i];
-      sumY += data[i];
-      sumXY += xValues[i] * data[i];
-      sumXX += xValues[i] * xValues[i];
-    }
-
-    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-    const intercept = (sumY - slope * sumX) / n;
-
-    // Calculate R-squared
-    let ssTot = 0,
-      ssRes = 0;
-    const meanY = sumY / n;
-
-    for (let i = 0; i < n; i++) {
-      const predicted = slope * xValues[i] + intercept;
-      ssTot += Math.pow(data[i] - meanY, 2);
-      ssRes += Math.pow(data[i] - predicted, 2);
-    }
-
-    const r2 = 1 - ssRes / ssTot;
-
-    return {
-      slope: formatDecimal(slope),
-      intercept: formatDecimal(intercept),
-      r2: formatDecimal(r2),
-      strength: r2 > 0.7 ? "strong" : r2 > 0.4 ? "moderate" : "weak",
-    };
-  }
-
-  static detectBreakoutOrBreakdown(prices, sensitivity = 0.5) {
-    /* Suggested minimums:
-  Interval	| Recommended History
-  5m        | Last 2–3 hours (24–36 candles)
-  15m       | Last 6–8 hours (24–32 candles)
-  1h        | Last 2–4 days (48–96 candles)
-  1d        | Last 2–4 weeks (15–30 candles)
-  */
-
-    if (prices.length < 20) throw new Error("detectBreakoutOrBreakdown: Not enough data");
-
-    const window = 5; // number of candles to confirm swing highs/lows
-    const highs = [];
-    const lows = [];
-
-    for (let i = window; i < prices.length - window; i++) {
-      const slice = prices.slice(i - window, i + window + 1);
-      const mid = prices[i];
-
-      const isHigh = slice.every((p) => mid >= p);
-      const isLow = slice.every((p) => mid <= p);
-
-      if (isHigh) highs.push({ i, price: mid });
-      if (isLow) lows.push({ i, price: mid });
-    }
-
-    // Early exit if not enough swings
-    if (highs.length < 2 && lows.length < 2) return "No strong pattern detected";
-
-    // Check rising lows
-    let risingLows = 0;
-    for (let i = 1; i < lows.length; i++) {
-      if (lows[i].price > lows[i - 1].price) risingLows++;
-    }
-
-    // Check falling highs
-    let fallingHighs = 0;
-    for (let i = 1; i < highs.length; i++) {
-      if (highs[i].price < highs[i - 1].price) fallingHighs++;
-    }
-
-    const recentHigh = highs[highs.length - 1]?.price || 0;
-    const recentLow = lows[lows.length - 1]?.price || Infinity;
-    const latestPrice = prices[prices.length - 1];
-
-    const breakout = ((latestPrice - recentHigh) / recentHigh) * 100 >= sensitivity;
-    const breakdown = ((recentLow - latestPrice) / recentLow) * 100 >= sensitivity;
-
-    if (risingLows >= 2 && breakout) {
-      return "Likely breakout (rise)";
-    } else if (fallingHighs >= 2 && breakdown) {
-      return "Likely breakdown (drop)";
-    } else if (risingLows >= 2) {
-      return "Potential breakout forming";
-    } else if (fallingHighs >= 2) {
-      return "Potential breakdown forming";
-    } else {
-      return "No strong pattern detected";
-    }
-  }
-
-  static detectDivergence(prices, rocValues) {
-    if (prices.length < 2 || rocValues.length < 2) return null;
-
-    const priceSlice = prices;
-    const rocSlice = rocValues;
-
-    // Find peaks/troughs for price and ROC
-    const pricePeaks = [];
-    const priceTroughs = [];
-    const rocPeaks = [];
-    const rocTroughs = [];
-
-    for (let i = 1; i < priceSlice.length - 1; i++) {
-      // Price extremes
-      if (priceSlice[i] > priceSlice[i - 1] && priceSlice[i] > priceSlice[i + 1]) {
-        pricePeaks.push({ value: priceSlice[i], index: i });
-      }
-      if (priceSlice[i] < priceSlice[i - 1] && priceSlice[i] < priceSlice[i + 1]) {
-        priceTroughs.push({ value: priceSlice[i], index: i });
-      }
-
-      // ROC extremes
-      if (rocSlice[i] > rocSlice[i - 1] && rocSlice[i] > rocSlice[i + 1]) {
-        rocPeaks.push({ value: rocSlice[i], index: i });
-      }
-      if (rocSlice[i] < rocSlice[i - 1] && rocSlice[i] < rocSlice[i + 1]) {
-        rocTroughs.push({ value: rocSlice[i], index: i });
-      }
-    }
-
-    // Analyze last 2 peaks/troughs
-    const recentPricePeaks = pricePeaks.slice(-2);
-    const recentRocPeaks = rocPeaks.slice(-2);
-    const recentPriceTroughs = priceTroughs.slice(-2);
-    const recentRocTroughs = rocTroughs.slice(-2);
-
-    // Bearish divergence (price ↗ ROC ↘)
-    if (recentPricePeaks.length >= 2 && recentRocPeaks.length >= 2) {
-      const priceHigher = recentPricePeaks[1].value > recentPricePeaks[0].value;
-      const rocLower = recentRocPeaks[1].value < recentRocPeaks[0].value;
-      if (priceHigher && rocLower) return "bearish-divergence";
-    }
-
-    // Bullish divergence (price ↘ ROC ↗)
-    if (recentPriceTroughs.length >= 2 && recentRocTroughs.length >= 2) {
-      const priceLower = recentPriceTroughs[1].value < recentPriceTroughs[0].value;
-      const rocHigher = recentRocTroughs[1].value > recentRocTroughs[0].value;
-      if (priceLower && rocHigher) return "bullish-divergence";
-    }
-
-    return "no-divergence";
-  }
-}
+ */
