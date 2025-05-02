@@ -1,5 +1,4 @@
 const Trader = require("./trader");
-const services = require("../services");
 const fixNum = (n) => +n.toFixed(2);
 
 class AdvanceTrader extends Trader {
@@ -56,7 +55,7 @@ class AdvanceTrader extends Trader {
     const volatility = TechnicalAnalysis.calculateVolatility(data.slice(-24));
     const isHighVolatility = volatility > last.close * 0.015;
 
-    const { support, resistance } = services.findSupportResistance(data.slice(-20));
+    const { support, resistance } = TechnicalAnalysis.findSupportResistance(data.slice(-20));
     const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
     const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-15).map((it) => it.close));
     const trendlines = TechnicalAnalysis.detectTrendlines(data);
@@ -209,13 +208,7 @@ class AdvanceTrader extends Trader {
     }
 
     // Final decision with dynamic threshold and confirmation
-    const breakoutConfirmed =
-      score.breakout >= baseScore && (resistanceBreakoutConfirmed || resistanceTrendlineBreakout);
-
-    const breakdownConfirmed =
-      score.breakdown >= baseScore && (supportBreakdownConfirmed || supportTrendlineBreakdown);
-
-    const decision = breakoutConfirmed ? "BUY" : breakdownConfirmed ? "SELL" : "HOLD";
+    const decision = score.breakout >= baseScore ? "BUY" : score.breakdown >= baseScore ? "SELL" : "HOLD";
 
     // === Debug Logs ===
     this.dispatch("LOG", `\n=== Decision Debug based on scoring system ===`);
@@ -728,5 +721,16 @@ class TechnicalAnalysis {
       sum += (data[i].high - data[i].low) / data[i - 1].close;
     }
     return (sum / (period - 1)) * data[data.length - 1].close;
+  }
+
+  static findSupportResistance(data) {
+    if (!data || data.length < 3) return { support: null, resistance: null };
+
+    const highs = data.map((d) => d.high);
+    const lows = data.map((d) => d.low);
+    return {
+      support: Math.min(...lows),
+      resistance: Math.max(...highs),
+    };
   }
 }
