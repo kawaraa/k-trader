@@ -210,7 +210,7 @@ class TechnicalAnalysis {
   }
 
   static linearRegression(data) {
-    if (!data || data.length < 2) return { slope: 0, intercept: 0, r2: 0 };
+    if (!data || data.length < 2) return { trend: "none", slope: 0, intercept: 0, r2: 0 };
 
     const xValues = Array.from({ length: data.length }, (_, i) => i);
 
@@ -244,9 +244,10 @@ class TechnicalAnalysis {
     const r2 = 1 - ssRes / ssTot;
 
     return {
-      slope: formatDecimal(slope),
-      intercept: formatDecimal(intercept),
-      r2: formatDecimal(r2),
+      trend: slope > 0 ? "uptrend" : slope < 0 ? "downtrend" : "sideways",
+      slope: slope,
+      intercept: intercept,
+      r2: r2,
       strength: r2 > 0.7 ? "strong" : r2 > 0.4 ? "moderate" : "weak",
     };
   }

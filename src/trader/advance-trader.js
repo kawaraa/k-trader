@@ -8,6 +8,7 @@ class AdvanceTrader extends Trader {
     this.position = null;
     this.decisions = ["HOLD"];
     this.rsi = [];
+    this.patterns = [];
   }
 
   async run() {
@@ -15,11 +16,6 @@ class AdvanceTrader extends Trader {
     const position = this.testMode ? this.position : (await this.ex.getOrders(this.pair))[0];
     const currentPrice = await this.ex.currentPrices(this.pair); // { tradePrice, askPrice, bidPrice }
     const ohlc = await this.ex.pricesData(this.pair, this.interval); // Returns 720 item (720 * 5 / 60 = 60hrs)
-
-    const closes = ohlc.map((d) => d.close);
-    this.rsi.push(TechnicalAnalysis.calculateRSI(closes, this.rsiPeriod).value);
-    if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
-    if (this.rsi.length > 2) this.rsi.shift();
 
     const decision = this.analyzeMarket(ohlc);
     if (decision !== "HOLD") this.decisions.push(decision);
@@ -42,17 +38,25 @@ class AdvanceTrader extends Trader {
 
   // ===== breakout breakdown based Strategy
   analyzeMarket(data) {
+    const closes = data.map((d) => d.close);
+    this.rsi.push(TechnicalAnalysis.calculateRSI(closes, this.rsiPeriod).value);
+    if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
+    if (this.rsi.length > 2) this.rsi.shift();
+
+    this.patterns.push(TechnicalAnalysis.detectCandlestickPattern(data));
+    if (this.patterns.length < 2) this.patterns.push(this.patterns[0]);
+    if (this.patterns.length > 2) this.patterns.shift();
+
     const last = data.at(-1);
     const prev = data.at(-2);
-    const currentRSI = this.rsi.at(-1);
-    const prevRSI = this.rsi.at(-2);
+    const [prevRSI, lastRSI] = this.rsi;
+    const [prevPattern, lastPattern] = this.patterns;
 
     // Calculate market volatility (ATR-like measure)
     const volatility = TechnicalAnalysis.calculateVolatility(data.slice(-24));
     const isHighVolatility = volatility > last.close * 0.015;
 
     const { support, resistance } = services.findSupportResistance(data.slice(-20));
-    const { pattern, reliability } = TechnicalAnalysis.detectCandlestickPattern(data);
     const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
     const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-15).map((it) => it.close));
     const trendlines = TechnicalAnalysis.detectTrendlines(data);
@@ -93,25 +97,40 @@ class AdvanceTrader extends Trader {
     const baseScore = isHighVolatility ? 5 : 4; // Require higher confidence in volatile markets
     const score = { breakout: 0, breakdown: 0 };
 
-    // Breakout scoring (more conservative in high volatility)
+    /*======= Breakout logic =======*/
     if (resistanceBreakoutConfirmed) score.breakout += 2;
     if (resistanceTrendlineBreakout) score.breakout += 1.5;
-    if (pattern === "bullish-engulfing") {
+
+    if (lastRSI > 52 && lastRSI - prevRSI > 2) score.breakout += 1;
+    if (lastRSI > 55 && lastRSI - prevRSI > 5) score.breakout += 1;
+    if (lastRSI > 52 && lastRSI - prevRSI > 7) score.breakout += 2;
+
+    if (!(last.close < support * 0.99)) {
+      if (volumeDivergence === "strong-uptrend") score.breakout += 1;
+      else if (volumeDivergence === "weak-uptrend") score.breakout += 0.5;
+    }
+
+    const risingScr = volumeRising == "strong-rise" ? 1 : volumeRising == "moderate-rise" ? 0.5 : 0;
+    if (trend === "strong-up") score.breakout += risingScr + 1;
+    else if (trend === "moderate-up") score.breakout += risingScr + 0.5;
+    else score.breakout += risingScr; // Moderate volume changes
+
+    if (closeRegression.slope > 0) {
+      if (closeRegression.strength === "strong") score.breakout += 1.5;
+      if (closeRegression.strength === "moderate") score.breakout += 1;
+      if (closeRegression.strength === "week") score.breakout += 0.5;
+    }
+
+    if (lastPattern.pattern === "bullish-engulfing") {
       score.breakout += Math.abs(last.close - support) / support <= 0.01 ? 2 : 1;
     }
-    if (pattern === "hammer") {
-      if (last.close > last.open && prev.low < support * 1.01) {
-        score.breakout += 2; // Hammer pattern at support is strong indication of reversal
-      } else {
-        score.breakout += 1;
-      }
+    if (lastPattern.pattern === "hammer") {
+      // Hammer pattern at support is strong indication of reversal
+      score.breakout += last.close > last.open && prev.low < support * 1.01 ? 2 : 1;
     }
-    if (pattern === "morning-star") {
-      if (prev.close < support * 1.01 && last.close > support) {
-        score.breakout += 3; // The pattern must form after a pullback to support and show a reversal
-      } else {
-        score.breakout += 1;
-      }
+    if (lastPattern.pattern === "morning-star") {
+      // The pattern must form after a pullback to support and show a reversal
+      score.breakout += prev.close < support * 1.01 && last.close > support ? 3 : 1;
     }
     // Bullish patterns
     if (
@@ -122,7 +141,7 @@ class AdvanceTrader extends Trader {
         "piercing-line",
         "three-white-soldiers",
         "three-inside-up",
-      ].includes(pattern)
+      ].includes(lastPattern.pattern)
     ) {
       if (last.close > support && last.low >= support * 0.995 && last.close > last.open) {
         score.breakout += 2;
@@ -130,30 +149,43 @@ class AdvanceTrader extends Trader {
         score.breakout += 1;
       }
     }
-    if (!(last.close < support * 0.99)) {
-      if (volumeDivergence === "strong-uptrend") score.breakout += 1.5;
-      else if (volumeDivergence === "weak-uptrend") score.breakout -= 0.5;
-    }
-    if (currentRSI > 52 && currentRSI - prevRSI > 2) score.breakout += 1;
-    if (currentRSI > 55 && currentRSI - prevRSI > 5) score.breakout += 1;
-    if (closeRegression.strength === "strong" && closeRegression.slope > 0) {
-      score.breakout += 1.5;
-    }
 
+    /*======= Breakdown logic =======*/
     if (supportBreakdownConfirmed) score.breakdown += 2.5;
     if (supportTrendlineBreakdown) score.breakdown += 1.5;
-    if (pattern === "evening-star") score.breakdown += last.close < resistance ? 2 : 1;
-    if (["dark-cloud-cover", "bearish-engulfing"].includes(pattern)) {
+
+    if (lastRSI < 48 && prevRSI - lastRSI > 2) score.breakdown += 1;
+    if (lastRSI < 45 && prevRSI - lastRSI > 5) score.breakdown += 1;
+    if (lastRSI < 52 && prevRSI - lastRSI > 7) score.breakdown += 2;
+
+    if (!(last.close > resistance * 1.01)) {
+      if (volumeDivergence === "strong-downtrend") score.breakdown += 1;
+      else if (volumeDivergence === "weak-downtrend") score.breakdown += 0.5;
+    }
+
+    const fallingScr = volumeRising == "strong-fall" ? 1 : volumeRising == "moderate-fall" ? 0.5 : 0;
+    if (trend === "strong-down") score.breakdown += fallingScr + 1;
+    else if (trend === "moderate-down") score.breakdown += fallingScr + 0.5;
+    else score.breakdown += fallingScr; // Moderate volume changes
+
+    if (closeRegression.slope < 0) {
+      if (closeRegression.strength === "strong") score.breakdown += 1.5;
+      if (closeRegression.strength === "moderate") score.breakdown += 1;
+      if (closeRegression.strength === "week") score.breakdown += 0.5;
+    }
+
+    if (lastPattern.pattern === "evening-star") score.breakdown += last.close < resistance ? 2 : 1;
+    if (["dark-cloud-cover", "bearish-engulfing"].includes(lastPattern.pattern)) {
       const nearResistance = last.close <= resistance && last.close >= resistance * 0.995;
       score.breakdown += nearResistance ? 2 : 1;
     }
-    if (pattern === "shooting-star" && last.close < last.open && last.high >= resistance * 0.99) {
-      score.breakdown += 2;
+    if (lastPattern.pattern === "shooting-star") {
+      score.breakdown += last.close < last.open && last.high >= resistance * 0.99 ? 2 : 1;
     }
     // Bearish patterns
     if (
       ["gravestone-doji", "hanging-man", "bearish-harami", "three-black-crows", "three-inside-down"].includes(
-        pattern
+        lastPattern.pattern
       )
     ) {
       if (last.close < resistance && last.high < resistance * 1.001 && last.close < last.open) {
@@ -163,30 +195,6 @@ class AdvanceTrader extends Trader {
       }
     }
 
-    if (closeRegression.slope <= 0 && !(last.close > resistance * 1.01)) {
-      if (volumeDivergence === "strong-downtrend") score.breakdown += 2;
-      else if (volumeDivergence === "weak-downtrend") score.breakdown -= 0.5;
-      if (volumeRising === "strong-fall") score.breakdown += trend === "strong-down" ? 2 : 1;
-      if (volumeRising === "moderate-fall") score.breakdown += 0.5;
-    }
-
-    if (currentRSI < 48 && prevRSI - currentRSI > 2) score.breakdown += 1;
-    if (currentRSI < 45 && prevRSI - currentRSI > 5) score.breakdown += 1;
-
-    if (closeRegression.strength === "strong" && closeRegression.slope < 0) {
-      score.breakdown += 1.5;
-    }
-
-    if (volumeRising === "strong-rise" && trend === "strong-up") score.breakout += 2;
-    else if (volumeRising === "strong-rise") score.breakout += 1;
-
-    if (volumeRising === "strong-fall" && trend === "strong-down") score.breakdown += 2;
-    else if (volumeRising === "strong-fall") score.breakdown += 1;
-
-    // Moderate volume changes
-    if (volumeRising === "moderate-rise") score.breakout += 0.5;
-    if (volumeRising === "moderate-fall") score.breakdown += 0.5;
-
     if (score.breakout >= baseScore && score.breakdown >= baseScore) {
       if (score.breakout === score.breakdown && closeRegression.strength === "strong") {
         if (closeRegression.slope > 0) score.breakdown -= 1;
@@ -194,8 +202,9 @@ class AdvanceTrader extends Trader {
       }
       if (score.breakout > score.breakdown) score.breakdown -= 1;
       if (score.breakdown > score.breakout) {
-        if (last.close > (resistance ?? 0) * 1.01) score.breakdown = 1.3; // 1.3 to know it's overridden
-        else score.breakdown -= 1;
+        score.breakdown -= 1;
+        // if (last.close > (resistance ?? 0) * 1.01) score.breakdown = 1.3; // 1.3 to know it's overridden
+        // else score.breakdown -= 1;
       }
     }
 
@@ -215,8 +224,8 @@ class AdvanceTrader extends Trader {
       "LOG",
       `Volume (Prev): ${fixNum(prev.volume)} (Last): ${fixNum(last.volume)} (Avg): ${fixNum(avgVolume)}`
     );
-    this.dispatch("LOG", `RSI (Prev): ${prevRSI} (Last): ${currentRSI}`);
-    this.dispatch("LOG", `Pattern: ${pattern} - reliability: ${reliability}`);
+    this.dispatch("LOG", `RSI (Prev): ${prevRSI} (Last): ${lastRSI}`);
+    this.dispatch("LOG", `Pattern: ${lastPattern.pattern} - reliability: ${lastPattern.reliability}`);
     this.dispatch("LOG", `Trend: ${trend} - crossover: ${crossover}`);
     this.dispatch("LOG", `Slope Trend: ${closeRegression.slope} - ${closeRegression.strength}`);
     this.dispatch("LOG", `Volume Divergence: ${volumeDivergence} - ${volumeRising}`);
@@ -227,7 +236,10 @@ class AdvanceTrader extends Trader {
     this.dispatch("LOG", `Support Breakdown Confirmed: ${supportBreakdownConfirmed}`);
     this.dispatch("LOG", `Resistance Trendline Breakout: ${resistanceTrendlineBreakout}`);
     this.dispatch("LOG", `Support Trendline Breakdown: ${supportTrendlineBreakdown}`);
-    this.dispatch("LOG", `Score (breakout): ${score.breakout} (breakdown): ${score.breakdown}  `);
+    this.dispatch(
+      "LOG",
+      `Score Base: ${baseScore} (breakout): ${score.breakout} (breakdown): ${score.breakdown}`
+    );
     this.dispatch("LOG", `Decision: ${decision}`);
     this.dispatch("LOG", `======================`);
 
@@ -553,7 +565,7 @@ class TechnicalAnalysis {
   }
 
   static linearRegression(data) {
-    if (!data || data.length < 2) return { slope: 0, intercept: 0, r2: 0 };
+    if (!data || data.length < 2) return { trend: "none", slope: 0, intercept: 0, r2: 0 };
     const formatDecimal = (n, decimals = 4) => parseFloat(n.toFixed(decimals));
 
     const xValues = Array.from({ length: data.length }, (_, i) => i);
@@ -588,6 +600,7 @@ class TechnicalAnalysis {
     const r2 = 1 - ssRes / ssTot;
 
     return {
+      trend: slope > 0 ? "uptrend" : slope < 0 ? "downtrend" : "sideways",
       slope: formatDecimal(slope),
       intercept: formatDecimal(intercept),
       r2: formatDecimal(r2),

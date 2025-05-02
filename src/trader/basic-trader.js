@@ -1,8 +1,9 @@
 const Trader = require("./trader.js");
 
 const { calcPercentageDifference, calcAveragePrice, normalizePrices } = require("../services.js");
-const { linearRegression } = require("../indicators.js");
+// const { linearRegression } = require("../indicators.js");
 const calcPercentage = calcPercentageDifference;
+const lookback = 12 * 12;
 
 // Smart trader
 class BasicTrader extends Trader {
@@ -53,7 +54,9 @@ class BasicTrader extends Trader {
     if (priceChangePercent > this.percentThreshold) this.percentThreshold = priceChangePercent;
 
     // const last24HrsUptrend = linearRegression(last24HrsPrices, true, 0.002) == "uptrend";
-    this.updateTrends(linearRegression(prices, true, 0));
+    // this.updateTrends(linearRegression(prices, true, 0));
+
+    this.updateTrends(linearRegression(prices));
 
     const droppedPercent = calcPercentage(normalizedPrices.at(-1), this.lowestPrice);
     if (this.lowestPriceTimestamp > (12 * 60) / 5 || droppedPercent >= 10) {
@@ -63,7 +66,7 @@ class BasicTrader extends Trader {
 
     const trends = this.trends.slice(0, -1);
     const downtrend = trends.every((t) => t == "downtrend");
-    let shouldBuy = downtrend && this.trends.at(-1) == "uptrend";
+    let shouldBuy = this.trends.length >= lookback - 1 && downtrend && this.trends.at(-1) == "uptrend";
     if (!shouldBuy) {
       // shouldBuy =
       //   trends.filter((t) => t == "downtrend").length / 2 <= trends.filter((t) => t == "uptrend").length;
@@ -165,10 +168,12 @@ class BasicTrader extends Trader {
     this.dispatch("LOG", "");
   }
 
-  updateTrends(trend) {
+  updateTrends(result) {
+    console.log(result);
+    if (result.trend == "uptrend" && ["week"].includes(result.strength)) return;
     // if (this.trends.at(-1) != trend)
-    this.trends.push(trend);
-    if (this.trends.length > 12 * 6) this.trends.shift(); // 12 = 1hrs
+    this.trends.push(result.trend);
+    if (this.trends.length > lookback) this.trends.shift(); // 12 = 1hrs
 
     // if (!this.trends[0] || this.trends[0] > 15 / this.interval) {
     //   this.trends[0] = 0;
@@ -194,3 +199,47 @@ const conditions = [
 
 
  */
+
+function linearRegression(data) {
+  if (!data || data.length < 2) return { trend: "none", slope: 0, intercept: 0, r2: 0 };
+  const formatDecimal = (n, decimals = 4) => parseFloat(n.toFixed(decimals));
+
+  const xValues = Array.from({ length: data.length }, (_, i) => i);
+
+  const n = xValues.length;
+  let sumX = 0,
+    sumY = 0,
+    sumXY = 0,
+    sumXX = 0;
+
+  for (let i = 0; i < n; i++) {
+    sumX += xValues[i];
+    sumY += data[i];
+    sumXY += xValues[i] * data[i];
+    sumXX += xValues[i] * xValues[i];
+  }
+
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+
+  // Calculate R-squared
+  let ssTot = 0,
+    ssRes = 0;
+  const meanY = sumY / n;
+
+  for (let i = 0; i < n; i++) {
+    const predicted = slope * xValues[i] + intercept;
+    ssTot += Math.pow(data[i] - meanY, 2);
+    ssRes += Math.pow(data[i] - predicted, 2);
+  }
+
+  const r2 = 1 - ssRes / ssTot;
+
+  return {
+    trend: slope > 0 ? "uptrend" : slope < 0 ? "downtrend" : "sideways",
+    slope: formatDecimal(slope),
+    intercept: formatDecimal(intercept),
+    r2: formatDecimal(r2),
+    strength: r2 > 0.7 ? "strong" : r2 > 0.4 ? "moderate" : "weak",
+  };
+}
