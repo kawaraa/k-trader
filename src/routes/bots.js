@@ -7,21 +7,21 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
   router.get("/bots", authRequired, async (request, response) => {
     try {
       const { pair } = request.query;
-      const token = request.cookies?.idToken;
+      // const token = request.cookies?.idToken;
       if (pair) isValidPair(pair, true);
 
-      const firestoreBots = {};
-      (await fireStoreProvider.getDoc(token, "bots", pair)).forEach(({ document }) => {
-        if (document) {
-          const { name, fields, createTime, updateTime } = document;
-          firestoreBots[name.split("/").slice(-1)] = new Bot({ ...fields, createTime, updateTime });
-        }
-      });
+      // const firestoreBots = {};
+      // (await fireStoreProvider.getDoc(token, "bots", pair)).forEach(({ document }) => {
+      //   if (document) {
+      //     const { name, fields, createTime, updateTime } = document;
+      //     firestoreBots[name.split("/").slice(-1)] = new Bot({ ...fields, createTime, updateTime });
+      //   }
+      // });
 
-      if (production) {
-        const bots = BotsManager.syncBots(firestoreBots);
-        Object.keys(bots).map((pair) => fireStoreProvider.updateDoc(token, "bots", pair, bots[pair]));
-      }
+      // if (production) {
+      //   const bots = BotsManager.syncBots(firestoreBots);
+      //   Object.keys(bots).map((pair) => fireStoreProvider.updateDoc(token, "bots", pair, bots[pair]));
+      // }
 
       response.json({ ...BotsManager.get(pair), balance: (await BotsManager.getEurBalance()).ZEUR });
     } catch (error) {
@@ -33,15 +33,16 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
   router.post("/bots", authRequired, async (request, response) => {
     try {
       let { pair, ...data } = request.body;
-      const token = request.cookies?.idToken;
+      // const token = request.cookies?.idToken;
       data = new BotInfo(data);
       data.balance = 0;
       data.trades = [];
       data.orders = [];
 
       isValidPair(pair, true);
-      const { fields, createTime, updateTime } = await fireStoreProvider.addDoc(token, "bots", pair, data);
-      BotsManager.add(pair, new Bot({ ...fields, createTime, updateTime }));
+      // const { fields, createTime, updateTime } = await fireStoreProvider.addDoc(token, "bots", pair, data);
+      // BotsManager.add(pair, new Bot({ ...fields, createTime, updateTime }));
+      BotsManager.add(pair, new Bot(data));
       response.json(BotsManager.get(pair));
     } catch (error) {
       response.status(500).json({ message: parseError(error) });
@@ -52,11 +53,12 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
   router.put("/bots", authRequired, async (request, response) => {
     try {
       const { pair, ...data } = request.body;
-      const token = request.cookies?.idToken;
+      // const token = request.cookies?.idToken;
       isValidPair(pair, true);
       const bot = { ...BotsManager.get(pair)[pair], ...new BotInfo(data) };
-      const { fields, updateTime } = await fireStoreProvider.updateDoc(token, "bots", pair, bot);
-      BotsManager.update(pair, new Bot({ ...fields, updateTime }));
+      // const { fields, updateTime } = await fireStoreProvider.updateDoc(token, "bots", pair, bot);
+      // BotsManager.update(pair, new Bot({ ...fields, updateTime }));
+      BotsManager.update(pair, new Bot(bot));
       response.json(BotsManager.get(pair));
     } catch (error) {
       response.status(500).json({ message: parseError(error) });
@@ -84,7 +86,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     try {
       const { pair } = request.query;
       isValidPair(pair, true);
-      await fireStoreProvider.deleteDoc(request.cookies?.idToken, "bots", pair);
+      // await fireStoreProvider.deleteDoc(request.cookies?.idToken, "bots", pair);
       BotsManager.remove(pair);
       response.json({ success: true });
     } catch (error) {
@@ -104,6 +106,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
+  // Reset Transitions
   router.put("/bots/reset", authRequired, async (request, response) => {
     try {
       BotsManager.resetState(request.query.pair);

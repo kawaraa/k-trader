@@ -73,10 +73,10 @@ class BotsManager {
   static resetState(pair) {
     if (this.#bots[pair]) {
       this.#bots[pair].trades = [];
-      return;
-    }
-    for (const p in this.#bots) {
-      this.#bots[p].trades = [];
+    } else {
+      for (const p in this.#bots) {
+        this.#bots[p].trades = [];
+      }
     }
     this.state.update(this.#bots);
   }
@@ -141,8 +141,8 @@ class Bot {
     this.balance = +this.#parseValue(info.balance) || 0;
     this.trades = this.#parseValue(info.trades) || [];
     this.orders = this.#parseValue(info.orders) || [];
-    this.createTime = this.#parseValue(info.createTime);
-    this.updateTime = this.#parseValue(info.updateTime);
+    this.createTime = this.#parseValue(info.createTime) || new Date().toISOString();
+    this.updateTime = new Date().toISOString();
     this.startedOn = null;
     if (trader) trader.listener = (...arg) => BotsManager.updateBotProgress(...arg);
     this.#trader = trader;
