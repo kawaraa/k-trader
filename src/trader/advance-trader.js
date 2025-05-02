@@ -17,17 +17,19 @@ class AdvanceTrader extends Trader {
     const ohlc = await this.ex.pricesData(this.pair, this.interval); // Returns 720 item (720 * 5 / 60 = 60hrs)
 
     const decision = this.analyzeMarket(ohlc);
-    if (decision !== "HOLD") this.decisions.push(decision);
-    if (this.decisions.length > 1) this.decisions.shift();
+    // if (decision !== "HOLD") this.decisions.push(decision);
+    // if (this.decisions.length > 1) this.decisions.shift();
 
     const log = this.testMode ? "TEST:" : "";
 
-    if (this.decisions.every((d) => d === "BUY")) {
+    // this.decisions.every((d) => d === "BUY")
+    // this.decisions.every((d) => d === "SELL")
+    if (decision == "BUY") {
       this.dispatch("LOG", `${log} [+] Breakout detected.`);
       const capital = balance.eur < this.capital ? balance.eur : this.capital;
       if (!position) await this.placeOrder("BUY", capital, currentPrice.askPrice);
       //
-    } else if (this.decisions.every((d) => d === "SELL")) {
+    } else if (decision === "SELL") {
       this.dispatch("LOG", `${log} [-] Breakdown detected.`);
       if (position) await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
     } else {
