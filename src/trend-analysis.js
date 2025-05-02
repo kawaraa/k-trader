@@ -2,6 +2,32 @@
 
 const { calcPercentageDifference } = require("./services");
 
+function isGoodTimeToBuy(now = new Date(), volatility = "normal") {
+  const utcHour = now.getUTCHours();
+  const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  const date = now.getUTCDate();
+  const month = now.getUTCMonth(); // 0 = January
+  let score = 0;
+
+  // 1. Day-based signals
+  if (day === 1) score += 2; // Monday morning
+  if (day === 0 && utcHour >= 22) score += 1; // Sunday night
+
+  // 2. Time-based signals
+  if (utcHour >= 0 && utcHour <= 1) score += 1; // New York close (daily reset)
+  if (utcHour >= 13 && utcHour <= 16) score += 1; // US market open
+
+  // 3. Monthly/Quarterly re-entry signals
+  if (date === 1) score += 2; // Start of month
+  const quarterlyMonths = [2, 5, 8, 11]; // Mar, Jun, Sep, Dec
+  if (quarterlyMonths.includes(month) && date >= 29) score += 1;
+
+  // 4. Volatility check (optional)
+  if (volatility === "high") score += 1; // if there's a sudden dip, consider rebound
+
+  return { isBuyTime: score >= 3, score };
+}
+
 function detectPriceDirection(prices, minPercent, percentBetween = 0, mountains = 0) {
   let price = null;
   let currentPrice = null;
@@ -84,32 +110,6 @@ function detectPriceShape(prices, percentage) {
   // if (inTheMiddle(prices.indexOf(maxPrice)) && AShape) return result;
 
   // return result; // No clear "V" or "A" shape
-}
-
-function isGoodTimeToBuy({ now = new Date(), volatility = "normal" } = {}) {
-  const utcHour = now.getUTCHours();
-  const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-  const date = now.getUTCDate();
-  const month = now.getUTCMonth(); // 0 = January
-  let score = 0;
-
-  // 1. Day-based signals
-  if (day === 1) score += 2; // Monday morning
-  if (day === 0 && utcHour >= 22) score += 1; // Sunday night
-
-  // 2. Time-based signals
-  if (utcHour >= 0 && utcHour <= 1) score += 1; // New York close (daily reset)
-  if (utcHour >= 13 && utcHour <= 16) score += 1; // US market open
-
-  // 3. Monthly/Quarterly re-entry signals
-  if (date === 1) score += 2; // Start of month
-  const quarterlyMonths = [2, 5, 8, 11]; // Mar, Jun, Sep, Dec
-  if (quarterlyMonths.includes(month) && date >= 29) score += 1;
-
-  // 4. Volatility check (optional)
-  if (volatility === "high") score += 1; // if there's a sudden dip, consider rebound
-
-  return { isBuyTime: score >= 3, score };
 }
 
 function findHighestLowestPrice(prices, currentPrice) {

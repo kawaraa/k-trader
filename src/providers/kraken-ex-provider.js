@@ -1,5 +1,5 @@
 const { createHash, createHmac } = require("node:crypto");
-const { parseNumbers, request } = require("../utilities.js");
+const { parseNumbers, request, toShortDate } = require("../utilities.js");
 const { calculateFee } = require("../services.js");
 
 class KrakenExchangeProvider {
@@ -100,11 +100,16 @@ class KrakenExchangeProvider {
   async createOrder(type, ordertype, pair, volume, oldOrder, currentPrice) {
     volume += "";
     const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
+    console.log("createOrder: ", toShortDate(), orders);
 
     if (type == "buy") {
       const { orders } = this.state.getBot(pair);
+      console.log("BUY 1: ", orders);
       orders.push(orderId);
+      console.log("BUY 2: ", orders);
       this.state.updateBot(pair, { orders });
+      console.log("BUY 3: ", this.state.getBot(pair).orders);
+
       return { id: orderId };
     } else if (type == "sell") {
       let { orders, trades } = this.state.getBot(pair, "orders");

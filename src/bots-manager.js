@@ -22,16 +22,16 @@ class BotsManager {
   static getEurBalance() {
     return ex.balance("all");
   }
-  static syncBots(bots) {
-    const pairs = Object.keys(this.get());
-    const pairsFromFirestore = Object.keys(bots);
-    if (pairsFromFirestore.length == 0) pairs.forEach((pair) => this.remove(pair));
-    else {
-      pairsFromFirestore.forEach((pair) => !this.#bots[pair] && this.add(pair, bots[pair]));
-      pairs.forEach((pair) => !bots[pair] && this.remove(pair));
-    }
-    return this.get();
-  }
+  // static syncBots(bots) {
+  //   const pairs = Object.keys(this.get());
+  //   const pairsFromFirestore = Object.keys(bots);
+  //   if (pairsFromFirestore.length == 0) pairs.forEach((pair) => this.remove(pair));
+  //   else {
+  //     pairsFromFirestore.forEach((pair) => !this.#bots[pair] && this.add(pair, bots[pair]));
+  //     pairs.forEach((pair) => !bots[pair] && this.remove(pair));
+  //   }
+  //   return this.get();
+  // }
 
   static get(pair) {
     if (!pair) return this.#bots;
