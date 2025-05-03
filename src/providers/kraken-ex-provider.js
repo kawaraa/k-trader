@@ -100,21 +100,22 @@ class KrakenExchangeProvider {
   async createOrder(type, ordertype, pair, volume, oldOrder, currentPrice) {
     volume += "";
     const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
-    console.log("createOrder: ", toShortDate());
+    let { orders, trades } = this.state.getBot(pair);
+    console.log("createOrder: ", toShortDate(), trades, orders);
 
     if (type == "buy") {
-      const { orders } = this.state.getBot(pair);
-      console.log("BUY 1: ", orders);
       orders.push(orderId);
-      console.log("BUY 2: ", orders);
+      console.log("BUY 1: ", orders);
       this.state.updateBot(pair, { orders });
-      console.log("BUY 3: ", this.state.getBot(pair).orders);
-
+      console.log("BUY 2: ", this.state.getBot(pair).orders);
       return { id: orderId };
     } else if (type == "sell") {
-      let { orders, trades } = this.state.getBot(pair, "orders");
+      console.log("SELL 1: ", oldOrder);
       const c = currentPrice * volume - calculateFee(currentPrice * volume, 0.3);
+      console.log("SELL 1: ", c);
       const profit = +(((await this.getOrders(null, orderId))[0]?.cost || c) - oldOrder.cost).toFixed(2);
+      console.log("SELL 1: ", profit);
+
       orders = orders.filter((id) => id !== oldOrder.id);
       trades.push(profit);
       this.state.updateBot(pair, { orders, trades });
