@@ -99,9 +99,9 @@ class KrakenExchangeProvider {
 
   async createOrder(type, ordertype, pair, volume, oldOrder, currentPrice) {
     volume += "";
-    const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
     let { orders, trades } = this.state.getBot(pair);
-    console.log("createOrder: ", toShortDate(), trades, orders);
+    console.log("createOrder: ", toShortDate(), volume, trades, orders);
+    const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
 
     if (type == "buy") {
       orders.push(orderId);
