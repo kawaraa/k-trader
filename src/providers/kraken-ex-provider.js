@@ -107,17 +107,18 @@ class KrakenExchangeProvider {
     return orderId;
   }
 
-  async getOrders(pair, orderIds, times = 1) {
-    if (!orderIds) orderIds = this.state.getBot(pair).orders.join(",");
-    if (!orderIds) return [];
-    let orders = await this.#privateApi("QueryOrders", { txid: orderIds });
+  async getOrders(pair, orderId, times = 1) {
+    // if (!orderIds) orderIds = this.state.getBot(pair).orders.join(",");
+    if (!orderId) orderId = this.state.getBot(pair).position;
+    if (!orderId) return null;
+    let orders = await this.#privateApi("QueryOrders", { txid: orderId });
     orders = Object.keys(orders).map((id) => {
       const { price, vol_exec, cost, opentm } = orders[id];
       return { id, price: +price, volume: +vol_exec, cost: +cost, createdAt: +opentm * 1000 };
     });
     if (orders[0]?.cost || times > 1) return orders;
     // await delay(1000);
-    return this.getOrders(pair, orderIds, times + 1);
+    return this.getOrders(pair, orderId, times + 1);
   }
 
   async getOpenClosedOrders(state) {
