@@ -37,7 +37,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
       data = new BotInfo(data);
       data.balance = 0;
       data.trades = [];
-      data.orders = [];
+      data.position = null;
 
       isValidPair(pair, true);
       // const { fields, createTime, updateTime } = await fireStoreProvider.addDoc(token, "bots", pair, data);
@@ -94,12 +94,12 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
-  // Sell all orders
-  router.put("/bots/orders/:pair", authRequired, async (request, response) => {
+  // Sell all assets
+  router.put("/bots/position/:pair", authRequired, async (request, response) => {
     try {
       const { pair } = request.params;
       isValidPair(pair, true);
-      await BotsManager.sellAllOrders(pair);
+      await BotsManager.sellAll(pair);
       response.json({ success: true });
     } catch (error) {
       response.status(500).json({ message: parseError(error) });

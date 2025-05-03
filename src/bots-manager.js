@@ -67,7 +67,7 @@ class BotsManager {
   static stop(pair) {
     this.#bots[pair].stop();
   }
-  static async sellAllOrders(pair) {
+  static async sellAll(pair) {
     await this.#bots[pair].sellAll();
   }
   static resetState(pair) {
@@ -110,15 +110,12 @@ class BotsManager {
       }
     }
 
-    if (event == "BUY") this.#bots[pair].orders.push(info);
+    if (event == "BUY") this.#bots[pair].position = info;
     else if (event == "SELL") {
       this.#bots[pair].trades.push(info.profit);
-      this.#bots[pair].orders = !info.id ? [] : this.#bots[pair].orders.filter((id) => id != info.id);
+      this.#bots[pair].position = null;
     } else if (event == "BALANCE") {
       this.#bots[pair].balance = info;
-    } else if (event == "STRATEGY") {
-      this.#bots[pair].strategy = info.strategy;
-      this.#bots[pair].strategyTimestamp = 0;
     }
 
     this.state.update(this.get());
@@ -140,7 +137,7 @@ class Bot {
     this.mode = this.#parseValue(info.mode);
     this.balance = +this.#parseValue(info.balance) || 0;
     this.trades = this.#parseValue(info.trades) || [];
-    this.orders = this.#parseValue(info.orders) || [];
+    this.position = this.#parseValue(info.position) || null;
     this.createTime = this.#parseValue(info.createTime) || new Date().toISOString();
     this.updateTime = new Date().toISOString();
     this.startedOn = null;

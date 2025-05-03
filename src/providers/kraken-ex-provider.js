@@ -1,6 +1,5 @@
 const { createHash, createHmac } = require("node:crypto");
-const { parseNumbers, request, toShortDate } = require("../utilities.js");
-const { calculateFee } = require("../services.js");
+const { parseNumbers, request } = require("../utilities.js");
 
 class KrakenExchangeProvider {
   #apiUrl;
@@ -97,30 +96,10 @@ class KrakenExchangeProvider {
     return this.state.getLocalPrices(pair, limit);
   }
 
-  async createOrder(type, ordertype, pair, volume, oldOrder, currentPrice) {
+  async createOrder(type, ordertype, pair, volume) {
     volume += "";
-    let { orders, trades } = this.state.getBot(pair);
-    console.log("createOrder: ", toShortDate(), volume, trades, orders);
     const orderId = (await this.#privateApi("AddOrder", { type, ordertype, pair, volume })).txid[0];
-
-    if (type == "buy") {
-      orders.push(orderId);
-      console.log("BUY 1: ", orders);
-      this.state.updateBot(pair, { orders });
-      console.log("BUY 2: ", this.state.getBot(pair).orders);
-      return { id: orderId };
-    } else if (type == "sell") {
-      console.log("SELL 1: ", oldOrder);
-      const c = currentPrice * volume - calculateFee(currentPrice * volume, 0.3);
-      console.log("SELL 1: ", c);
-      const profit = +(((await this.getOrders(null, orderId))[0]?.cost || c) - oldOrder.cost).toFixed(2);
-      console.log("SELL 1: ", profit);
-
-      orders = orders.filter((id) => id !== oldOrder.id);
-      trades.push(profit);
-      this.state.updateBot(pair, { orders, trades });
-      return { profit };
-    }
+    return orderId;
   }
   async editOrder(id, pair, price, volume) {
     volume += "";

@@ -6,13 +6,14 @@ module.exports = class TestExchangeProvider {
     this.currentBalance = balance;
     this.allPrices = prices;
     this.currentPriceIndex = 0;
-    this.orders = [];
-    this.trades = [];
+    this.position = null;
     this.interval = interval;
     // This is custom functions only for running test.
     this.state = {
-      getBot: (pair) => ({ ...this }),
-      updateBot: (pair, data) => Object.keys(data).forEach((k) => (this[k] = data[k])),
+      position: null,
+      trades: [],
+      getBot: (pair) => ({ ...this.state }),
+      updateBot: (pair, data) => Object.keys(data).forEach((k) => (this.state[k] = data[k])),
     };
   }
 
@@ -23,7 +24,7 @@ module.exports = class TestExchangeProvider {
     const price = this.allPrices[this.currentPriceIndex] || this.allPrices[this.allPrices.length - 1];
     this.currentPriceIndex += 1;
     const intervalTime = this.interval * 60000;
-    this.orders.forEach((o) => (o.createdAt -= intervalTime));
+    if (this.position) this.position.createdAt -= intervalTime;
     return price;
   }
   async pricesData(pair, interval = 5, days = 0.5) {
@@ -40,21 +41,20 @@ module.exports = class TestExchangeProvider {
     const offset = this.currentPriceIndex - limit;
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
-  async createOrder(type, b, c, volume, oldOrder, currentPrice) {
+  async createOrder(type, b, c, volume) {
     const { tradePrice, askPrice, bidPrice } = this.allPrices[this.currentPriceIndex - 1];
     const newOrder = { id: randomUUID(), type, volume, createdAt: Date.now() };
 
-    if (newOrder.type == "buy") {
+    if (type == "buy") {
       const cost = volume * askPrice;
       newOrder.price = askPrice;
       newOrder.cost = cost + calculateFee(cost, 0.3);
-
       const remainingBalance = this.currentBalance.eur - newOrder.cost;
       if (remainingBalance < 0) throw new Error("No enough money");
       this.currentBalance.eur = remainingBalance;
       this.currentBalance.crypto += volume;
-      this.orders.push(newOrder);
-      return newOrder;
+      this.position = newOrder;
+      return newOrder.id;
     } else {
       const cost = volume * bidPrice;
       newOrder.price = bidPrice;
@@ -62,18 +62,13 @@ module.exports = class TestExchangeProvider {
       const remainingCrypto = +(this.currentBalance.crypto - volume).toFixed(8);
       if (remainingCrypto < 0) throw new Error("No enough crypto");
       this.currentBalance.eur += newOrder.cost;
-      this.currentBalance.crypto = remainingCrypto;
-
-      const profit = +(newOrder.cost - oldOrder.cost).toFixed(2);
-      this.trades.push(profit);
-      this.orders = this.orders.filter((o) => o.id !== oldOrder.id);
-      return { profit };
+      this.currentBalance.crypto -= remainingCrypto;
+      this.position = null;
     }
   }
 
-  async getOrders(pair, ordersIds) {
-    if (!ordersIds) return this.orders;
-    return this.orders.filter((o) => ordersIds.includes(o.id));
+  getOrders(pair, ordersIds) {
+    return [this.position];
   }
 };
 

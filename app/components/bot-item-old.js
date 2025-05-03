@@ -22,7 +22,7 @@ export default function BotItem({ botInfo, onAction }) {
           </button>
         </div>
         <span className="flex-2 w-2/5 flex justify-between items-center">
-          <span className="flex-auto text-red">{botInfo.orders.length}</span>
+          <span className="flex-auto text-red">{botInfo.position ? 1 : 0}</span>
           <button
             onClick={() => onAction(`turn-${status}`, botInfo.pair)}
             className={`rounded-xl inline-flex aspect-square w-3.5 ml-2 mr-5 ${

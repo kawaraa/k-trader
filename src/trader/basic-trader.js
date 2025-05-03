@@ -89,27 +89,27 @@ class BasicTrader extends Trader {
         shouldBuy = false;
       }
 
-      console.log("===>", this.droppedPercent, percent, Math.abs(this.droppedPercent - percent));
+      // console.log("===>", this.droppedPercent, percent, Math.abs(this.droppedPercent - percent));
     }
 
     this.profitTarget = Math.min(Math.max(this.percentThreshold / 3, 4), 10);
-    console.log(
-      "===>",
-      this.lowestPrice,
-      this.lowestPriceTimestamp,
-      this.trends.at(-1),
-      this.profitTarget,
-      this.percentThreshold,
-      this.droppedPercent
-    );
+    // console.log(
+    //   "===>",
+    //   this.lowestPrice,
+    //   this.lowestPriceTimestamp,
+    //   this.trends.at(-1),
+    //   this.profitTarget,
+    //   this.percentThreshold,
+    //   this.droppedPercent
+    // );
 
     shouldBuy = shouldBuy && normalizedPrices.at(-1) > this.lowestPrice;
 
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 5) {
       if (shouldBuy && safeAskBidSpread && this.lastTradeTimer <= 0) {
-        const capital = balance.eur < this.capital ? balance.eur : this.capital;
-        await this.placeOrder("BUY", capital, currentPrice.askPrice, position);
+        await this.buy(balance, currentPrice.askPrice);
+        this.dispatch("LOG", `Placed BUY at: ${currentPrice.askPrice}`);
         this.lastTradePrice = 0;
         this.lowestPrice = normalizedPrices.at(-1);
         this.lowestPriceTimestamp = 0;
@@ -145,9 +145,10 @@ class BasicTrader extends Trader {
         this.prevGainPercent >= this.profitTarget && loss > Math.max(this.prevGainPercent / 5, 1);
       const stopLoss = gainLossPercent < -3 && normalizedPrices.at(-1) < this.lowestPrice;
 
-      console.log("shouldSell: ", shouldSell, "stopLoss: ", stopLoss);
+      // console.log("shouldSell: ", shouldSell, "stopLoss: ", stopLoss);
       if ((shouldSell || stopLoss) && safeAskBidSpread) {
-        await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
+        const res = await this.sell(position, balance, currentPrice.bidPrice);
+        this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);
 
         if (stopLoss) {
           this.lastTradePrice = normalizedPrices.at(-1);
@@ -169,7 +170,7 @@ class BasicTrader extends Trader {
   }
 
   updateTrends(result) {
-    console.log(result);
+    // console.log(result);
     if (result.trend == "uptrend" && ["week"].includes(result.strength)) return;
     // if (this.trends.at(-1) != trend)
     this.trends.push(result.trend);

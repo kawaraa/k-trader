@@ -49,11 +49,11 @@ export default function Home() {
     setLoading(false);
   };
 
-  const sellAllOrders = async (pair) => {
+  const sellAll = async (pair) => {
     if (!confirm(`Are you sure want to sell all the order for "${pair}" currency?`)) return;
     setLoading(true);
     try {
-      await request(`/api/bots/orders/${pair}`, { method: "PUT" });
+      await request(`/api/bots/position/${pair}`, { method: "PUT" });
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
@@ -77,7 +77,7 @@ export default function Home() {
     if (action == "rest") resetState(pair);
     else if (action == "edit") setBotToUpdate({ pair, info: bots[pair] });
     else if (action == "delete") remove(pair);
-    else if (action == "sell-all") sellAllOrders(pair);
+    else if (action == "sell-all") sellAll(pair);
     else if (["turn-on", "turn-off"].includes(action.replace("-all", ""))) {
       if (!confirm(`Do you want to ${action} "${pair}" Bot?`)) return;
       setLoading(true);
@@ -197,9 +197,9 @@ export default function Home() {
           </p>
           <p className="relative flex-2 w-2/5">
             <span className={`${badgeCls} bg-rose-300`}>
-              {Object.keys(bots).reduce((acc, p) => acc + bots[p].orders.length, 0)}
+              {Object.keys(bots).reduce((acc, p) => acc + (bots[p].position ? 1 : 0), 0)}
             </span>
-            <span className="block font-medium">Orders</span>
+            <span className="block font-medium">positions</span>
           </p>
         </div>
 

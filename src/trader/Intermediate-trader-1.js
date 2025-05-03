@@ -29,18 +29,24 @@ class AdvanceTrader extends Trader {
     if (decision !== "HOLD") this.decisions.push(decision);
     if (this.decisions.length > 2) this.decisions.shift();
 
-    const log = this.testMode ? "TEST:" : "";
+    const testLog = this.testMode ? "TEST:" : "";
+    const positionLog = position ? "YES" : "NO";
 
     if (this.decisions.every((d) => d === "BUY")) {
-      this.dispatch("LOG", `${log} [+] Breakout detected.`);
-      const capital = balance.eur < this.capital ? balance.eur : this.capital;
-      if (!position) await this.placeOrder("BUY", capital, currentPrice.askPrice);
+      this.dispatch("LOG", `${testLog} [+] Breakout detected - Position: ${positionLog}.`);
+      if (!position) {
+        await this.buy(balance, currentPrice.askPrice);
+        this.dispatch("LOG", `${testLog} Placed BUY at: ${currentPrice.askPrice}`);
+      }
       //
     } else if (this.decisions.every((d) => d === "SELL")) {
-      this.dispatch("LOG", `${log} [-] Breakdown detected.`);
-      if (position) await this.placeOrder("SELL", balance.crypto, currentPrice.bidPrice, position);
+      this.dispatch("LOG", `${testLog} [-] Breakdown detected - Position: ${positionLog}.`);
+      if (position) {
+        const res = await this.sell(position, balance, currentPrice.bidPrice);
+        this.dispatch("LOG", `${testLog} Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);
+      }
     } else {
-      this.dispatch("LOG", `${log} [=] No trade signal. decision: ${this.decisions.join("-")}`);
+      this.dispatch("LOG", `${testLog} [=] No trade signal. decision: ${this.decisions.join("-")}`);
     }
   }
 
