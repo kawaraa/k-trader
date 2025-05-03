@@ -33,59 +33,47 @@ class Trader {
 
   async run() {} // This is overwritten in derived classes
 
-  placeOrder(type, cryptoOrEurBalance, price, position) {
-    if (type == "BUY") {
-      const cost = cryptoOrEurBalance - calculateFee(cryptoOrEurBalance, 0.3);
-      const cryptoVolume = +(cost / price).toFixed(8);
-      if (!this.testMode) return this.buy(cryptoVolume, price);
-      else {
-        this.position = { price, volume: cryptoVolume, cost: cryptoOrEurBalance, createdAt: Date.now() };
-        this.dispatch("LOG", `"TEST: Bought at: ${price}`);
-      }
-      //
-    } else if (type == "SELL") {
-      const volume = cryptoOrEurBalance - position.volume < 5 ? cryptoOrEurBalance : position.volume;
+  // await this.buy(this.capital, balance, currentPrice.askPrice);
+  async buy(balance, price) {
+    const capital = balance.eur < this.capital ? balance.eur : this.capital;
+    const cost = capital - calculateFee(capital, 0.3);
+    const cryptoVolume = +(cost / price).toFixed(8);
+    let position = null;
 
-      if (!this.testMode) return this.sell(position, volume, price);
-      else {
-        const { trades } = this.ex.state.getBot(this.pair);
-        const orderAge = ((Date.now() - position.createdAt) / 60000 / 60).toFixed(1);
-        let cost = volume * price;
-        const profit = cost - calculateFee(cost, 0.3) - position.cost;
-        trades.push(profit);
-        this.ex.state.updateBot(this.pair, { trades });
-        this.position = null;
-        this.dispatch("LOG", `"TEST: Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
-      }
-    }
+    if (!this.testMode) position = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
+    else this.position = { price, volume: cryptoVolume, cost, createdAt: Date.now() };
+
+    this.ex.state.updateBot(this.pair, { position: position });
   }
 
-  async buy(volume, price) {
-    this.dispatch("LOG", `Placing BUY at: ${price}`);
-    await this.ex.createOrder("buy", "market", this.pair, volume);
-  }
-
-  async sell(oldOrder, volume, price) {
-    this.dispatch("LOG", `Placing SELL at ${price}`);
-    const { profit } = await this.ex.createOrder("sell", "market", this.pair, volume, oldOrder, price);
+  async sell(oldOrder, balance, price) {
+    const { trades } = this.ex.state.getBot(this.pair);
     const orderAge = ((Date.now() - oldOrder.createdAt) / 60000 / 60).toFixed(1);
+    const volume = balance.crypto - oldOrder.volume < 5 ? balance.crypto : oldOrder.volume;
+    const cost = volume * price;
+    const profit = cost - calculateFee(cost, 0.3) - oldOrder.cost;
+
+    if (!this.testMode) await this.ex.createOrder("sell", "market", this.pair, volume);
+    else this.position = null;
+
+    trades.push(profit);
+    this.ex.state.updateBot(this.pair, { trades, position: null });
     this.dispatch("SELL");
-    this.dispatch("LOG", `Sold with profit/loss: ${profit} - Hold position: ${orderAge}hrs`);
+    return { profit, age: orderAge };
   }
 
   async sellAll() {
     const cryptoBalance = (await this.ex.balance(this.pair)).crypto;
-    let profit = 0;
     if (cryptoBalance > 0) {
-      const orders = await this.ex.getOrders(this.pair);
+      const { trades, position } = this.ex.state.getBot(this.pair);
       const bidPrice = (await this.ex.currentPrices(this.pair)).bidPrice;
-      const orderId = await this.ex.createOrder("sell", "market", this.pair, cryptoBalance);
-      const c = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.3);
-      const ordersCost = orders.reduce((totalCost, { cost }) => totalCost + cost, 0);
-      profit = +(((await this.ex.getOrders(null, orderId))[0]?.cost || c) - ordersCost).toFixed(2);
+      await this.ex.createOrder("sell", "market", this.pair, cryptoBalance);
+      const cost = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.3);
+      const profit = (cost - calculateFee(cost, 0.3) - (position?.cost || cost)).toFixed(2);
+      trades.push(profit);
+      this.ex.state.updateBot(this.pair, { trades });
+      this.dispatch("LOG", `Placed SELL - profit/loss: ${profit} `);
     }
-    this.dispatch("SELL", { profit });
-    this.dispatch("LOG", `Sold all crypto asset with profit: ${profit}`);
   }
 
   stop() {
