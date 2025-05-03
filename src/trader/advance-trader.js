@@ -45,7 +45,7 @@ class AdvanceTrader extends Trader {
 
   // ===== breakout breakdown based Strategy
   analyzeMarket(data) {
-    const closes = data.map((d) => d.close);
+    const closes = data.slice(-20).map((d) => d.close);
     this.rsi.push(TechnicalAnalysis.calculateRSI(closes, this.rsiPeriod).value);
     if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
     if (this.rsi.length > 2) this.rsi.shift();
@@ -60,20 +60,21 @@ class AdvanceTrader extends Trader {
     const [prevPattern, lastPattern] = this.patterns;
 
     // Calculate market volatility (ATR-like measure)
-    const volatility = TechnicalAnalysis.calculateVolatility(data.slice(-24));
+
+    const volatility = TechnicalAnalysis.calculateVolatility(data, this.interval);
     const isHighVolatility = volatility > last.close * 0.015;
 
-    const { support, resistance } = TechnicalAnalysis.findSupportResistance(data.slice(-20));
+    const { support, resistance } = TechnicalAnalysis.findSupportResistance(data, this.interval);
     const { trend, crossover } = TechnicalAnalysis.detectTrend(data.slice(-30));
     const closeRegression = TechnicalAnalysis.linearRegression(data.slice(-15).map((it) => it.close));
-    const trendlines = TechnicalAnalysis.detectTrendlines(data);
-    const volumeDivergence = TechnicalAnalysis.detectVolumeDivergence(data.slice(-8));
-    const volumeRising = TechnicalAnalysis.analyzeVolume(data.slice(-6));
+    const trendlines = TechnicalAnalysis.detectTrendlines(data.slice(-150));
 
     const validResistance = TechnicalAnalysis.isTrendlineValid(trendlines.resistances.map((it) => it.price));
     const validSupport = TechnicalAnalysis.isTrendlineValid(trendlines.supports.map((it) => it.price));
 
-    const period = 5;
+    const period = 6;
+    const volumeDivergence = TechnicalAnalysis.detectVolumeDivergence(data.slice(-8));
+    const volumeRising = TechnicalAnalysis.analyzeVolume(data.slice(-period));
     const avgVolume = data.slice(-period).reduce((sum, d) => sum + d.volume, 0) / period;
 
     // Breakout confirmation conditions (refined for simple S/R method)
@@ -112,7 +113,7 @@ class AdvanceTrader extends Trader {
     if (lastRSI > 55 && lastRSI - prevRSI > 5) score.breakout += 1;
     if (lastRSI > 52 && lastRSI - prevRSI > 7) score.breakout += 2;
 
-    if (!(last.close < support * 0.99)) {
+    if (last.close >= support * 0.99) {
       if (volumeDivergence === "strong-uptrend") score.breakout += 1;
       else if (volumeDivergence === "weak-uptrend") score.breakout += 0.5;
     }
@@ -129,7 +130,8 @@ class AdvanceTrader extends Trader {
     }
 
     if (lastPattern.pattern === "bullish-engulfing") {
-      score.breakout += Math.abs(last.close - support) / support <= 0.01 ? 2 : 1;
+      const nearSupport = last.close >= support && last.close <= support * 1.01;
+      score.breakout += nearSupport ? 2 : 1;
     }
     if (lastPattern.pattern === "hammer") {
       // Hammer pattern at support is strong indication of reversal
@@ -722,17 +724,21 @@ class TechnicalAnalysis {
     return "neutral";
   }
 
-  static calculateVolatility(data, period = 14) {
+  static calculateVolatility(data, period = 14, interval) {
+    const lookBack = { 5: 24, 15: 16, 30: 12, 60: 8 };
+    data = data.slice(-(lookBack[interval] || 24));
     if (data.length < period) period = data.length;
     let sum = 0;
+
     for (let i = 1; i < period; i++) {
       sum += (data[i].high - data[i].low) / data[i - 1].close;
     }
     return (sum / (period - 1)) * data[data.length - 1].close;
   }
 
-  static findSupportResistance(data) {
-    if (!data || data.length < 3) return { support: null, resistance: null };
+  static findSupportResistance(data, interval) {
+    if (!data || data.length < 20) return { support: null, resistance: null };
+    data = data.slice(-(interval >= 15 ? 20 : 30));
 
     const highs = data.map((d) => d.high);
     const lows = data.map((d) => d.low);
@@ -742,3 +748,16 @@ class TechnicalAnalysis {
     };
   }
 }
+
+/*
+Suggested data length for each method Table
+Method	            5m      15m	  30m	    60m
+RSI (14)            15–20	  15–20	15–20	  15–20
+Candlestick Pattern	3–5	    3–5	  3–5	    3–5
+Volatility	        24	    16	  12	    8
+Support/Resistance	20–30	  20	  20	    20
+Trend Detection	    30–50	  30	  25	    25
+Trendline Detection	100–200	120	  100–150	100
+Volume Divergence	  6–10	  6–10	6–10	  6–10
+Volume Rising	      5–6	    5–6	  5–6	    5–6
+*/

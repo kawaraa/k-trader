@@ -18,11 +18,6 @@ class IntermediateTrader extends Trader {
     const currentPrice = await this.ex.currentPrices(this.pair); // { tradePrice, askPrice, bidPrice }
     const ohlc = await this.ex.pricesData(this.pair, this.interval); // Returns 720 item (720 * 5 / 60 = 60hrs)
 
-    const closes = ohlc.map((d) => d.close);
-    this.rsi.push(indicators.calculateRSI(closes, this.rsiPeriod));
-    if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
-    if (this.rsi.length > 2) this.rsi.shift();
-
     const decision = this.decideBaseOnScore(ohlc);
     if (decision !== "HOLD") this.decisions.push(decision);
     if (this.decisions.length > 2) this.decisions.shift();
@@ -50,6 +45,11 @@ class IntermediateTrader extends Trader {
 
   // ===== breakout breakdown based Strategy
   decideBaseOnScore(data) {
+    const closes = data.slice(-20).map((d) => d.close);
+    this.rsi.push(indicators.calculateRSI(closes, this.rsiPeriod));
+    if (this.rsi.length < 2) this.rsi.push(this.rsi[0]);
+    if (this.rsi.length > 2) this.rsi.shift();
+
     const last = data.at(-1);
     const prev = data.at(-2);
     const currentRSI = this.rsi.at(-1);
@@ -65,7 +65,7 @@ class IntermediateTrader extends Trader {
 
     const shortData = data.slice(-15).map((d) => d.close);
     const slopeTrend = indicators.linearRegression(shortData, true);
-    const trendlines = indicators.detectTrendlines(data);
+    const trendlines = indicators.detectTrendlines(data.slice(-150));
 
     const maxPivotAge = 30;
     const lng = data.length;
