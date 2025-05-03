@@ -42,8 +42,9 @@ class Trader {
 
     if (!this.testMode) position = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
     else this.position = { price, volume: cryptoVolume, cost, createdAt: Date.now() };
-
+    console.log("buy 1: ", position);
     this.ex.state.updateBot(this.pair, { position: position });
+    console.log("buy 2: ", this.ex.state.getBot(this.pair));
   }
 
   async sell(oldOrder, balance, price) {
