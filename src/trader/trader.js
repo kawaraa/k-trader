@@ -42,13 +42,10 @@ class Trader {
 
     if (!this.testMode) position = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
     else this.position = { price, volume: cryptoVolume, cost, createdAt: Date.now() };
-    console.log("buy 1: ", position);
-    this.ex.state.updateBot(this.pair, { position: position });
-    console.log("buy 2: ", this.ex.state.getBot(this.pair));
+    this.dispatch("BUY", position);
   }
 
   async sell(oldOrder, balance, price) {
-    const { trades } = this.ex.state.getBot(this.pair);
     const orderAge = ((Date.now() - oldOrder.createdAt) / 60000 / 60).toFixed(1);
     const volume = balance.crypto - oldOrder.volume < 5 ? balance.crypto : oldOrder.volume;
     const cost = volume * price;
@@ -57,9 +54,7 @@ class Trader {
     if (!this.testMode) await this.ex.createOrder("sell", "market", this.pair, volume);
     else this.position = null;
 
-    trades.push(profit);
-    this.ex.state.updateBot(this.pair, { trades, position: null });
-    this.dispatch("SELL");
+    this.dispatch("SELL", profit);
     return { profit, age: orderAge };
   }
 

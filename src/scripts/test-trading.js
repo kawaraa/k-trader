@@ -87,6 +87,13 @@ async function runTest(pair, prices, interval, showLogs) {
     if (showLogs && event == "LOG") {
       console.log((info ? pair + " " : "") + (info || ""));
       // console.log(...parseNumInLog((info ? pair + " " : "") + (info || "")));
+    } else {
+      if (event == "BALANCE") ex.state.balance = info;
+      if (event == "BUY") ex.state.position = info;
+      if (event == "SELL") {
+        ex.state.position = null;
+        ex.state.trades.push(info);
+      }
     }
   };
 

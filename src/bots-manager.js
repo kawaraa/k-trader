@@ -108,17 +108,15 @@ class BotsManager {
         const fileSizeInKB = statSync(filePath).size / 1024; // Convert size from B to KB
         fileSizeInKB < 500 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
       }
+    } else {
+      if (event == "BALANCE") this.#bots[pair].balance = info;
+      if (event == "BUY") this.#bots[pair].position = info;
+      if (event == "SELL") {
+        this.#bots[pair].position = null;
+        this.#bots[pair].trades.push(info);
+      }
+      this.state.update(this.#bots);
     }
-
-    if (event == "BUY") this.#bots[pair].position = info;
-    else if (event == "SELL") {
-      this.#bots[pair].trades.push(info.profit);
-      this.#bots[pair].position = null;
-    } else if (event == "BALANCE") {
-      this.#bots[pair].balance = info;
-    }
-
-    this.state.update(this.get());
   }
 
   static getTrader(pair, info) {

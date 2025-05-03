@@ -34,11 +34,8 @@ module.exports = class LocalState {
 
   updateBot(pair, data) {
     const state = this.load();
-    console.log("updateBot 1: ", state[pair]);
     Object.keys(data).forEach((key) => (state[pair][key] = data[key]));
-    console.log("updateBot 2: ", state[pair]);
     this.update(state);
-    console.log("updateBot 2: ", this.load(pair));
   }
 
   getLocalPrices(pair, limit) {
