@@ -110,8 +110,7 @@ class AdvanceTrader extends Trader {
     if (resistanceTrendlineBreakout) score.breakout += 1.5;
 
     if (lastRSI > 52 && lastRSI - prevRSI > 2) score.breakout += 1;
-    if (lastRSI > 55 && lastRSI - prevRSI > 5) score.breakout += 1;
-    if (lastRSI > 52 && lastRSI - prevRSI > 7) score.breakout += 2;
+    // if (lastRSI > 55 && lastRSI - prevRSI > 5) score.breakout += 1;
 
     if (last.close >= support * 0.99) {
       if (volumeDivergence === "strong-uptrend") score.breakout += 1;
@@ -164,8 +163,7 @@ class AdvanceTrader extends Trader {
     if (supportTrendlineBreakdown) score.breakdown += 1.5;
 
     if (lastRSI < 48 && prevRSI - lastRSI > 2) score.breakdown += 1;
-    if (lastRSI < 45 && prevRSI - lastRSI > 5) score.breakdown += 1;
-    if (lastRSI < 52 && prevRSI - lastRSI > 7) score.breakdown += 2;
+    // if (lastRSI < 45 && prevRSI - lastRSI > 5) score.breakdown += 1;
 
     if (!(last.close > resistance * 1.01)) {
       if (volumeDivergence === "strong-downtrend") score.breakdown += 1;
