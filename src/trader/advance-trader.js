@@ -8,13 +8,14 @@ class AdvanceTrader extends Trader {
     this.decisions = ["HOLD"];
     this.rsi = [];
     this.patterns = [];
+    this.range = (160 * this.interval) / 60 / 24; // 150 used by "detectTrendlines" function
   }
 
   async run() {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = this.testMode ? this.position : (await this.ex.getOrders(this.pair))[0];
     const currentPrice = await this.ex.currentPrices(this.pair); // { tradePrice, askPrice, bidPrice }
-    const ohlc = await this.ex.pricesData(this.pair, this.interval); // Returns 720 item (720 * 5 / 60 = 60hrs)
+    const ohlc = await this.ex.pricesData(this.pair, this.interval, this.range); // Returns max 720 item (720 * 5 / 60 / 24 = 2.5 days)
 
     const decision = this.analyzeMarket(ohlc);
     // if (decision !== "HOLD") this.decisions.push(decision);
