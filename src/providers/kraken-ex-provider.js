@@ -110,6 +110,8 @@ class KrakenExchangeProvider {
   async getOrders(pair, orderId, times = 1) {
     // if (!orderIds) orderIds = this.state.getBot(pair).orders.join(",");
     if (!orderId) orderId = this.state.getBot(pair).position;
+    console.log("getOrders: ", orderId);
+
     if (!orderId) return [];
     let orders = await this.#privateApi("QueryOrders", { txid: orderId });
     orders = Object.keys(orders).map((id) => {
