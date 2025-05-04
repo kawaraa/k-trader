@@ -124,9 +124,18 @@ class AdvanceTrader extends Trader {
     else score.breakout += risingScr; // Moderate volume changes
 
     if (closeRegression.slope > 0) {
-      if (closeRegression.strength === "strong") score.breakout += 1.5;
-      if (closeRegression.strength === "moderate") score.breakout += 1;
-      if (closeRegression.strength === "week") score.breakout += 0.5;
+      if (closeRegression.strength === "strong") {
+        score.breakout += 1.5;
+        score.breakdown -= 1.5;
+      }
+      if (closeRegression.strength === "moderate") {
+        score.breakout += 1;
+        score.breakdown -= 1;
+      }
+      if (closeRegression.strength === "week") {
+        score.breakout += 0.5;
+        score.breakdown -= 0.5;
+      }
     }
 
     if (lastPattern.pattern === "bullish-engulfing") {
@@ -177,9 +186,18 @@ class AdvanceTrader extends Trader {
     else score.breakdown += fallingScr; // Moderate volume changes
 
     if (closeRegression.slope < 0) {
-      if (closeRegression.strength === "strong") score.breakdown += 1.5;
-      if (closeRegression.strength === "moderate") score.breakdown += 1;
-      if (closeRegression.strength === "week") score.breakdown += 0.5;
+      if (closeRegression.strength === "strong") {
+        score.breakdown += 1.5;
+        score.breakout -= 1.5;
+      }
+      if (closeRegression.strength === "moderate") {
+        score.breakdown += 1;
+        score.breakout -= 1;
+      }
+      if (closeRegression.strength === "week") {
+        score.breakdown += 0.5;
+        score.breakout -= 0.5;
+      }
     }
 
     if (lastPattern.pattern === "evening-star") score.breakdown += last.close < resistance ? 2 : 1;
