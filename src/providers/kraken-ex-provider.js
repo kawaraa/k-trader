@@ -53,12 +53,17 @@ class KrakenExchangeProvider {
   }
 
   async balance(pair) {
-    const curMap = { BTC: "XXBT", ETH: "XETH" };
-    const key = pair.replace("EUR", "");
     const balance = parseNumbers(await this.#privateApi("Balance"));
-
     if (pair == "all") return balance;
-    return { eur: +balance.ZEUR, crypto: +(balance[curMap[key]] || balance[key] || 0) };
+    const key = pair.replace("EUR", "");
+
+    return {
+      eur: +balance.ZEUR,
+      crypto:
+        key == "BTC"
+          ? +balance.XXBT
+          : +(balance[key] || balance["X" + key] || balance["Z" + key] || balance[key + ".F"]),
+    };
   }
 
   async currentPrices(pair) {
@@ -110,8 +115,6 @@ class KrakenExchangeProvider {
   async getOrders(pair, orderId, times = 1) {
     // if (!orderIds) orderIds = this.state.getBot(pair).orders.join(",");
     if (!orderId) orderId = this.state.getBot(pair).position;
-    console.log("getOrders: ", orderId);
-
     if (!orderId) return [];
     let orders = await this.#privateApi("QueryOrders", { txid: orderId });
     orders = Object.keys(orders).map((id) => {

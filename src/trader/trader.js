@@ -46,12 +46,10 @@ class Trader {
   }
 
   async sell(oldOrder, balance, price) {
-    this.dispatch("LOG", JSON.stringify({ oldOrder, balance, price }));
     const orderAge = ((Date.now() - oldOrder.createdAt) / 60000 / 60).toFixed(1);
     const volume = balance.crypto - oldOrder.volume < 5 ? balance.crypto : oldOrder.volume;
     const cost = volume * price;
     const profit = cost - calculateFee(cost, 0.3) - oldOrder.cost;
-    this.dispatch("LOG", JSON.stringify({ volume, cost, orderAge, profit }));
 
     if (!this.testMode) await this.ex.createOrder("sell", "market", this.pair, volume);
     else this.position = null;
