@@ -8,7 +8,7 @@ class AdvanceTrader extends Trader {
     this.decisions = ["HOLD"];
     this.rsi = [];
     this.patterns = [];
-    this.range = (160 * this.interval) / 60 / 24; // 150 used by "detectTrendlines" function
+    this.range = (150 * this.interval) / 60 / 24; // 150 used by "detectTrendlines" function
   }
 
   async run() {
