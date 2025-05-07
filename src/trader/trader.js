@@ -62,14 +62,13 @@ class Trader {
   async sellAll() {
     const cryptoBalance = (await this.ex.balance(this.pair)).crypto;
     if (cryptoBalance > 0) {
-      const { trades, position } = this.ex.state.getBot(this.pair);
-      const bidPrice = (await this.ex.currentPrices(this.pair)).bidPrice;
+      this.dispatch("SELL", 0);
+      // const { trades, position } = this.ex.state.getBot(this.pair);
+      // const bidPrice = (await this.ex.currentPrices(this.pair)).bidPrice;
       await this.ex.createOrder("sell", "market", this.pair, cryptoBalance);
-      const cost = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.3);
-      const profit = (cost - calculateFee(cost, 0.3) - (position?.cost || cost)).toFixed(2);
-      trades.push(profit);
-      this.ex.state.updateBot(this.pair, { trades });
-      this.dispatch("LOG", `Placed SELL - profit/loss: ${profit} `);
+      // const cost = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.3);
+      // const profit = (cost - calculateFee(cost, 0.3) - (position?.cost || cost)).toFixed(2);
+      this.dispatch("LOG", `Placed SELL - for all assets`);
     }
   }
 

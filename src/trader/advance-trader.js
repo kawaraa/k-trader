@@ -33,7 +33,7 @@ class AdvanceTrader extends Trader {
         this.dispatch("LOG", `${testLog} Placed BUY at: ${currentPrice.askPrice}`);
       }
       //
-    } else if (decision === "SELL") {
+    } else if (decision === "SELLxxx") {
       this.dispatch("LOG", `${testLog} [-] Breakdown detected - Position: ${positionLog}.`);
       if (position) {
         const res = await this.sell(position, balance, currentPrice.bidPrice);
