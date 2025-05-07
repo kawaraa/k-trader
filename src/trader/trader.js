@@ -61,8 +61,8 @@ class Trader {
 
   async sellAll() {
     const cryptoBalance = (await this.ex.balance(this.pair)).crypto;
+    this.dispatch("SELL", 0);
     if (cryptoBalance > 0) {
-      this.dispatch("SELL", 0);
       // const { trades, position } = this.ex.state.getBot(this.pair);
       // const bidPrice = (await this.ex.currentPrices(this.pair)).bidPrice;
       await this.ex.createOrder("sell", "market", this.pair, cryptoBalance);
