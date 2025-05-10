@@ -18,7 +18,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
         name="interval"
         type="number"
         placeholder="Time Interval in mins"
-        min={5}
+        min={1}
         defaultValue={bot?.info?.interval}
         required
         className={inputCls}
@@ -28,7 +28,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
         name="capital"
         type="number"
         placeholder="Investment Capital amount in EUR"
-        step="5"
+        step="1"
         defaultValue={bot?.info?.capital}
         required
         className={inputCls}

@@ -151,7 +151,7 @@ module.exports = (router, fireStoreProvider, authRequired, production) => {
 
 class BotInfo {
   constructor(info) {
-    this.interval = this.setNumber(info.interval, 5, "interval", true);
+    this.interval = this.setNumber(info.interval, 1, "interval", true);
     this.capital = this.setNumber(info.capital, 0, "capital", true);
     this.trader = info.trader;
     this.mode = info.mode;

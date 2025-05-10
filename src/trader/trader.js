@@ -8,7 +8,7 @@ class Trader {
     this.interval = +interval;
     this.capital = +capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
     // this.strategyTimestamp = info.strategyTimestamp;
-    this.period = 5; // this.period is deleted in only test trading
+    this.period = this.interval < 5 ? this.interval : 5; // this.period is deleted in only test trading
     // this.testMode = info.testMode;
     this.testMode = mode != "live";
     this.rsiPeriod = 14; // Recommended Default is 14
