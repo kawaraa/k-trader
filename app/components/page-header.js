@@ -19,16 +19,7 @@ export default function PageHeader({ pair, children }) {
         </svg>
       </Link>
 
-      <h1 className="mx-auto text-xl sm:text-2xl text-pc font-bold">
-        <Link
-          href={`https://pro.kraken.com/app/trade/${pair?.replace("EUR", "").toLowerCase()}-eur`}
-          target="_blank"
-          referrerPolicy="no-referrer"
-          className="underline decoration-2 underline-offset-8"
-        >
-          {pair?.replace("EUR", "")} / EUR
-        </Link>
-      </h1>
+      <h1 className="mx-auto text-xl sm:text-2xl text-pc font-bold">{pair?.replace("EUR", "")} / EUR</h1>
       <div className="justify-self-end">{children}</div>
     </header>
   );

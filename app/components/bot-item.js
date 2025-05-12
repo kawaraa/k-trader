@@ -67,13 +67,24 @@ export default function BotItem({ botInfo, onAction }) {
           <p className="">
             <strong>Trades</strong>: <span>{botInfo.trades.length}</span>
           </p>
-          <div className="">
-            <Link
-              href={`/chart?pair=${botInfo.pair}`}
-              className="font-bold underline text-pc underline-offset-4 "
-            >
-              Prices chart
-            </Link>
+
+          <div className="flex items-center">
+            <strong>Prices charts</strong>:
+            <p className="ml-2 text-pc font-semi-bold">
+              <Link href={`/chart?pair=${botInfo.pair}`} className="underline underline-offset-4 mr-3">
+                Stored
+              </Link>
+              <Link
+                href={`https://pro.kraken.com/app/trade/${botInfo.pair
+                  ?.replace("EUR", "")
+                  .toLowerCase()}-eur`}
+                target="_blank"
+                referrerPolicy="no-referrer"
+                className="underline underline-offset-4"
+              >
+                Live
+              </Link>
+            </p>
           </div>
         </div>
         <div className="flex items-center justify-between">
