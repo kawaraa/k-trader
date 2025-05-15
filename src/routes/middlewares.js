@@ -1,32 +1,3 @@
-// ===== throttling-technique =====
-const requestCounts = new Map();
-// Define the rate limit parameters
-const WINDOW_SIZE = 60 * 1000; // 1 minute
-const MAX_REQUESTS = 120; // or 60 which mean a request per second
-
-function rateLimiter(request, response, next) {
-  const clientIp = request.ip; // Get client's IP address
-  const newRequestData = { count: 1, timestamp: Date.now() };
-  const requestData = requestCounts.get(clientIp);
-
-  if (!requestData) requestCounts.set(clientIp, newRequestData);
-  else {
-    const exceededTheMaximum = newRequestData.timestamp - requestData.timestamp < WINDOW_SIZE;
-    requestData.count++;
-
-    if (requestData.count > MAX_REQUESTS && exceededTheMaximum) {
-      // If the request count exceeds the maximum, send a 429 response
-      return response.status(429).send("Too many requests, please try again later.");
-    } else {
-      // If the time window has elapsed, reset the request count
-      requestCounts.set(clientIp, requestData);
-    }
-  }
-
-  // Continue to the next middleware or route handler
-  next();
-}
-
 // ===== Parse cookies =====
 function cookiesParser(request, response, next) {
   const cookies = request.headers.cookie
@@ -62,4 +33,4 @@ async function isAuthenticated(request, response, next, firestore, cookieOptions
   }
 }
 
-module.exports = { rateLimiter, cookiesParser, isAuthenticated };
+module.exports = { cookiesParser, isAuthenticated };

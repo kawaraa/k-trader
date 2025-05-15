@@ -1,6 +1,7 @@
 const { mkdirSync } = require("node:fs");
 const express = require("express");
-const { rateLimiter, cookiesParser, isAuthenticated } = require("./src/routes/middlewares.js");
+const { cookiesParser, isAuthenticated } = require("./src/routes/middlewares.js");
+const rateLimiter = require("k-utilities/network.js");
 const fireStoreProvider = require("./src/providers/firebase-provider");
 
 mkdirSync("database/logs", { recursive: true });
