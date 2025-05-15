@@ -1,8 +1,8 @@
-const { statSync, existsSync, readFileSync } = require("node:fs");
-const { Bot, BotsManager } = require("../bots-manager");
-const { parseError, isValidPair, isNumber } = require("../utilities");
+import { statSync, existsSync, readFileSync } from "node:fs";
+import { Bot, BotsManager } from "../bots-manager.js";
+import { parseError, isValidPair, isNumber } from "../utilities.js";
 
-module.exports = (router, fireStoreProvider, authRequired, production) => {
+export default (router, fireStoreProvider, authRequired, production) => {
   // Get bots
   router.get("/bots", authRequired, async (request, response) => {
     try {

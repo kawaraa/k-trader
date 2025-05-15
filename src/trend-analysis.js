@@ -1,8 +1,8 @@
 // Linear Regression Analysis method is used to analyze a series of price data for a cryptocurrency or other asset to determine the trend direction. is generally more suited for long-term trading.
 
-const { calcPercentageDifference } = require("./services");
+import { calcPercentageDifference }from "./services.js";
 
-function isGoodTimeToBuy(now = new Date(), volatility = "normal") {
+export function isGoodTimeToBuy(now = new Date(), volatility = "normal") {
   const utcHour = now.getUTCHours();
   const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
   const date = now.getUTCDate();
@@ -28,7 +28,7 @@ function isGoodTimeToBuy(now = new Date(), volatility = "normal") {
   return { isBuyTime: score >= 3, score };
 }
 
-function detectPriceDirection(prices, minPercent, percentBetween = 0, mountains = 0) {
+export function detectPriceDirection(prices, minPercent, percentBetween = 0, mountains = 0) {
   let price = null;
   let currentPrice = null;
   let up = 0;
@@ -65,7 +65,7 @@ function detectPriceDirection(prices, minPercent, percentBetween = 0, mountains 
   else return "UNKNOWN";
 }
 
-function detectPriceShape(prices, percentage) {
+export function detectPriceShape(prices, percentage) {
   const result = { shape: "unknown", value: null };
   const currentPrice = prices[prices.length - 1];
 
@@ -112,7 +112,7 @@ function detectPriceShape(prices, percentage) {
   // return result; // No clear "V" or "A" shape
 }
 
-function findHighestLowestPrice(prices, currentPrice) {
+export function findHighestLowestPrice(prices, currentPrice) {
   // const sortedPrices = prices.sorted();
   // const lowestChange = calcPercentageDifference( sortedPrices[0], currentPrice);
   // const highestChange = calcPercentageDifference( sortedPrices[sortedPrices.length - 1], currentPrice);
@@ -135,7 +135,7 @@ function findHighestLowestPrice(prices, currentPrice) {
   return priceChanges;
 }
 
-// function getDynamicTakeProfitPct(prices) {
+export // function getDynamicTakeProfitPct(prices) {
 //   const changes = [];
 //   for (let i = 1; i < prices.length; i++) {
 //     const change = Math.abs((prices[i] - prices[i - 1]) / prices[i - 1]);
@@ -147,34 +147,22 @@ function findHighestLowestPrice(prices, currentPrice) {
 // }
 
 // This calculates the earnings from an investment given the current price, previous price, and invested amount.
-function calcInvestmentProfit(previousPrice, currentPrice, investedAmount) {
+export function calcInvestmentProfit(previousPrice, currentPrice, investedAmount) {
   const earningsIncludedProfit = (investedAmount / previousPrice) * currentPrice;
   return +(earningsIncludedProfit - investedAmount).toFixed(8); // Return the Profit;
 }
 
 // This calculates the profit from a transaction given the current price, order price, and volume of cryptoCur.
-function calcTransactionProfit(previousPrice, currentPrice, assetVolume, feePercentage) {
+export function calcTransactionProfit(previousPrice, currentPrice, assetVolume, feePercentage) {
   const cost = previousPrice * assetVolume + calculateFee(previousPrice * assetVolume, feePercentage);
   const revenue = currentPrice * assetVolume - calculateFee(currentPrice * assetVolume, feePercentage);
   return revenue - cost; // profit
 }
 
 // Methods for testing only:
-function adjustPrice(price, percentage) {
+export function adjustPrice(price, percentage) {
   // This increases the tradePrice 0.10% by multiply it by 1.001, And decreases the tradePrice 0.10%, by multiply it by 0.999
   const multiplier = percentage / 100;
   return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
 }
 
-module.exports = {
-  isGoodTimeToBuy,
-  detectPriceDirection,
-  findHighestLowestPrice,
-  // getDynamicTakeProfitPct,
-  detectPriceShape,
-
-  calcInvestmentProfit,
-  calcTransactionProfit,
-
-  adjustPrice,
-};

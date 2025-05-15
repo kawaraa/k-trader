@@ -1,4 +1,5 @@
-const { request } = require("../utilities");
+import { createRequire } from "module";
+import { request } from "../utilities.js";
 
 class FireStoreProvider {
   #apiKey;
@@ -101,4 +102,4 @@ class Doc {
   }
 }
 
-module.exports = new FireStoreProvider(require("../../.env.json").FIRESTORE_CREDENTIALS);
+export default new FireStoreProvider(createRequire(import.meta.url)("../../.env.json").FIRESTORE_CREDENTIALS);

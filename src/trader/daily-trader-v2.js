@@ -1,9 +1,9 @@
-const { calculateFee, calcAveragePrice } = require("./trend-analysis.js");
-const TestExchangeProvider = require("./test-ex-provider.js");
-const { calcPercentageDifference } = require("../services.js");
+import { calculateFee, calcAveragePrice } from "./trend-analysis.js";
+import TestExchangeProvider from "./test-ex-provider.js";
+import { calcPercentageDifference } from "../services.js";
 
 // Smart trader
-class DailyTrader {
+export default class DailyTrader {
   #pair;
   #capital;
   #strategyRange;
@@ -268,5 +268,3 @@ async function testStrategy(pair, prices, interval, strategyRange, pricePercentC
 
   return { profit, crypto, transactions, settings: strategy };
 }
-
-module.exports = DailyTrader;

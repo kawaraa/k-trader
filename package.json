@@ -4,6 +4,7 @@
   "author": "Kawara",
   "description": "k-trader is a Cryptocurrency Trading Bots and bots Manager",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "nodemon",
     "dev2": "npm run build && node main.js",

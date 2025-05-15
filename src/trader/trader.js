@@ -1,7 +1,7 @@
-const { calculateFee } = require("../services");
+import { calculateFee } from "../services.js";
 
 // Smart trader
-class Trader {
+export default class Trader {
   constructor(exProvider, pair, interval, capital, mode) {
     this.ex = exProvider;
     this.pair = pair;
@@ -80,5 +80,3 @@ class Trader {
     if (this.listener) this.listener(this.pair + "", event, info);
   }
 }
-
-module.exports = Trader;

@@ -1,10 +1,10 @@
-const Trader = require("./trader");
-const indicators = require("../indicators");
-const services = require("../services");
-const { isNumberInRangeOf } = require("../utilities");
+import Trader from "./trader.js";
+import indicators from "../indicators.js";
+import services from "../services";
+import { isNumberInRangeOf } from "../utilities.js";
 const fixNum = (n) => +n.toFixed(2);
 
-class AdvanceTrader extends Trader {
+export default class AdvanceTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.position = null;
@@ -239,5 +239,3 @@ class AdvanceTrader extends Trader {
     fs.appendFileSync(logPath, `[${timestamp}]\n${content}\n\n`);
   }
 }
-
-module.exports = AdvanceTrader;

@@ -1,11 +1,11 @@
-const Trader = require("./trader.js");
+import Trader from "./trader.js";
 
 const { calcPercentageDifference, calcAveragePrice, calculateFee } = require("../services.js");
 const { detectPriceDirection, detectBreakoutOrBreakdown } = require("../trend-analysis.js");
 // const TestExchangeProvider = require("./test-ex-provider.js");
 
 // Smart Swing Trader
-class SwingTrader extends Trader {
+export default class SwingTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
     super(exProvider, pair, interval, capital);
     this.listener = null;
@@ -176,5 +176,3 @@ class SwingTrader extends Trader {
     }
   }
 }
-
-module.exports = SwingTrader;

@@ -1,15 +1,17 @@
-const KrakenExchangeProvider = require("./providers/kraken-ex-provider");
-const BasicTrader = require("./trader/basic-trader");
-const IntermediateTrader = require("./trader/Intermediate-trader");
-const AdvanceTrader = require("./trader/advance-trader");
-const { existsSync, writeFileSync, statSync, appendFileSync } = require("node:fs");
-const { dateToString, toShortDate, delay } = require("./utilities");
-const LocalState = require("./local-state");
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+import KrakenExchangeProvider from "./providers/kraken-ex-provider.js";
+import BasicTrader from "./trader/basic-trader.js";
+import IntermediateTrader from "./trader/Intermediate-trader.js";
+import AdvanceTrader from "./trader/advance-trader.js";
+import { existsSync, writeFileSync, statSync, appendFileSync } from "node:fs";
+import { dateToString, toShortDate, delay } from "./utilities.js";
+import LocalState from "./local-state.js";
 
 const state = new LocalState("state");
 const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
 
-class BotsManager {
+export class BotsManager {
   static #bots = {};
   static state = state;
 
@@ -126,7 +128,7 @@ class BotsManager {
   }
 }
 
-class Bot {
+export class Bot {
   #trader;
   constructor(info, trader) {
     this.interval = +this.#parseValue(info.interval);
@@ -165,5 +167,3 @@ class Bot {
 
 BotsManager.loadBots();
 console.log("====> Bots are loaded. <====");
-
-module.exports = { BotsManager, Bot };

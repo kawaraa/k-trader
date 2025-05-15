@@ -1,5 +1,5 @@
 // ===== Parse cookies =====
-function cookiesParser(request, response, next) {
+export function cookiesParser(request, response, next) {
   const cookies = request.headers.cookie
     ? request.headers.cookie.split("; ").reduce((prev, current) => {
         const [name, value] = current.split("=");
@@ -12,7 +12,7 @@ function cookiesParser(request, response, next) {
 }
 
 // ===== Authentication =====
-async function isAuthenticated(request, response, next, firestore, cookieOptions) {
+export async function isAuthenticated(request, response, next, firestore, cookieOptions) {
   try {
     const { idToken, refreshToken } = request.cookies;
     if (!idToken || !refreshToken) throw new Error("Unauthorized");
@@ -32,5 +32,3 @@ async function isAuthenticated(request, response, next, firestore, cookieOptions
     response.status(401).json({ message: "Unauthorized" });
   }
 }
-
-module.exports = { cookiesParser, isAuthenticated };

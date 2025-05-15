@@ -18,16 +18,11 @@
 4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
 */
 
-const { calcPercentageDifference } = require("../services.js");
-const {
-  calculateFee,
-  calcAveragePrice,
-  detectPriceShape,
-  findPriceMovement,
-} = require("../trend-analysis.js");
+import { calcPercentageDifference } from "../services.js";
+import { calculateFee, calcAveragePrice, detectPriceShape, findPriceMovement } from "../trend-analysis.js";
 
 // Smart trader
-module.exports = class DailyTrader {
+export default class DailyTrader {
   #pair;
   #capital;
   #strategyRange;
@@ -180,7 +175,7 @@ module.exports = class DailyTrader {
   dispatch(event, info) {
     if (this.listener) this.listener(this.#pair + "", event, info);
   }
-};
+}
 
 /*
 

@@ -1,8 +1,14 @@
-const { mkdirSync } = require("node:fs");
-const express = require("express");
-const { cookiesParser, isAuthenticated } = require("./src/routes/middlewares.js");
-const rateLimiter = require("k-utilities/network.js");
-const fireStoreProvider = require("./src/providers/firebase-provider");
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+import { mkdirSync } from "node:fs";
+import express from "express";
+import { cookiesParser, isAuthenticated } from "./src/routes/middlewares.js";
+import authRoute from "./src/routes/auth.js";
+import botRoute from "./src/routes/bots.js";
+import { RequestRateLimiter } from "k-utilities/network.js";
+import fireStoreProvider from "./src/providers/firebase-provider.js";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 mkdirSync("database/logs", { recursive: true });
 mkdirSync("database/prices", { recursive: true });
@@ -18,14 +24,14 @@ const authRequired = (...args) => isAuthenticated(...args, fireStoreProvider, co
 
 try {
   // Apply the rate limiting all requests by adding rate limiter middleware to all routes
-  server.use(rateLimiter);
+  server.use(new RequestRateLimiter(1, 100).limitRate);
   server.use(cookiesParser);
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
 
   const apiRouter = express.Router();
-  require("./src/routes/auth")(apiRouter, fireStoreProvider, authRequired, cookieOptions);
-  require("./src/routes/bots")(apiRouter, fireStoreProvider, authRequired, prod);
+  authRoute(apiRouter, fireStoreProvider, authRequired, cookieOptions);
+  botRoute(apiRouter, fireStoreProvider, authRequired, prod);
 
   server.use("/api", apiRouter);
 

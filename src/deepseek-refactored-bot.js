@@ -349,7 +349,7 @@ class TechnicalAnalysis {
 }
 
 // Main Trading Class
-class AdvancedTrader {
+export default class AdvancedTrader {
   constructor() {
     this.rsi = [];
   }
@@ -471,5 +471,3 @@ class AdvancedTrader {
     return "HOLD";
   }
 }
-
-module.exports = AdvancedTrader;

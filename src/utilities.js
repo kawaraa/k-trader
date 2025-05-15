@@ -1,39 +1,40 @@
-const cryptocurrencies = require("./data/currencies.json");
+import { createRequire } from "module";
+const cryptocurrencies = createRequire(import.meta.url)("./data/currencies.json");
 
-function isNumber(num, min, max) {
+export function isNumber(num, min, max) {
   const N = Number.parseFloat(num);
   if (Number.isNaN(N)) return false;
   else if (min && min > N) return false;
   else if (max && max < N) return false;
   return true;
 }
-function parseNumbers(data) {
+export function parseNumbers(data) {
   if (Array.isArray(data)) return data.map((n) => +n);
   for (const key in data) data[key] = +data[key];
   return data;
 }
-function extractNumbers(str) {
+export function extractNumbers(str) {
   return !str ? 0 : parseNumbers(str.match(/\d+(\.\d+)?/gim));
 }
-function getMaxMin(number, min, max) {
+export function getMaxMin(number, min, max) {
   return Math.min(Math.max(number, min), max);
 }
-function isNumberInRangeOf(num, min, max) {
+export function isNumberInRangeOf(num, min, max) {
   const N = Number.parseFloat(num);
   if (Number.isNaN(N)) return false;
   else if (min && min > N) return false;
   else if (max && max < N) return false;
   return true;
 }
-function strIncludes(str = "", text) {
+export function strIncludes(str = "", text) {
   return text.split(",").every((w) => str.toLowerCase().includes(w.toLowerCase()));
 }
 
-function delay(ms) {
+export function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function removeDuplicateElements(array) {
+export function removeDuplicateElements(array) {
   newArray = [];
   for (const item of array) {
     if (newArray.find((it) => JSON.stringify(it) == JSON.stringify(item))) continue;
@@ -42,7 +43,7 @@ function removeDuplicateElements(array) {
   return newArray;
 }
 
-function splitIntoChunks(data) {
+export function splitIntoChunks(data) {
   const chunkSize = Math.ceil(data.length / Math.ceil(data.length / 100)); // Calculate chunk size to get around 100 tasks
   const result = [];
   for (let i = 0; i < data.length; i += chunkSize) {
@@ -50,7 +51,7 @@ function splitIntoChunks(data) {
   }
   return result;
 }
-function roughSizeOfObject(object) {
+export function roughSizeOfObject(object) {
   const seen = new WeakSet();
 
   const sizeOf = (obj) => {
@@ -74,34 +75,34 @@ function roughSizeOfObject(object) {
   return sizeOf(object);
 }
 
-function dateToString(date = new Date(), seconds) {
+export function dateToString(date = new Date(), seconds) {
   const unWantedChar = seconds ? -5 : -8;
   return new Date(date).toISOString().slice(0, unWantedChar).replace("T", " ");
 }
-function toShortDate(date = new Date()) {
+export function toShortDate(date = new Date()) {
   return date
     .toString()
     .replace(date.getFullYear() + " ", "")
     .slice(4, 16);
 }
-function isOlderThan(timestamp, hours) {
+export function isOlderThan(timestamp, hours) {
   return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
 }
 
-function isValidPair(pair, throwError) {
+export function isValidPair(pair, throwError) {
   if (cryptocurrencies[pair]) return pair;
   if (!throwError) return null;
   else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
 }
 
-function parseError(value, msgs = "") {
+export function parseError(value, msgs = "") {
   if (value && typeof value != "object") return msgs + value + " ";
   if (value instanceof Error && value.message) return msgs + value.message + " ";
   else if (Array.isArray(value)) value.forEach((item) => (msgs += parseError(item)));
   else Object.keys(value).forEach((k) => (msgs += parseError(value[k])));
   return msgs?.trim() || "Unknown error";
 }
-function request() {
+export function request() {
   return fetch(...arguments)
     .then(async (res) => {
       let data = await res.text();
@@ -116,26 +117,6 @@ function request() {
     });
 }
 
-function parseNumInLog(str) {
+export function parseNumInLog(str) {
   return str.split(" ").map((p = (item) => parseFloat(item) || item));
 }
-
-module.exports = {
-  request,
-  parseError,
-  delay,
-  splitIntoChunks,
-  roughSizeOfObject,
-  dateToString,
-  toShortDate,
-  isOlderThan,
-  parseNumbers,
-  extractNumbers,
-  getMaxMin,
-  isNumberInRangeOf,
-  isValidPair,
-  isNumber,
-  strIncludes,
-  removeDuplicateElements,
-  parseNumInLog,
-};

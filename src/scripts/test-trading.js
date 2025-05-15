@@ -1,9 +1,9 @@
 // test-trading-script is a price-history-analysis-script
-const { Worker, parentPort, workerData, isMainThread } = require("worker_threads");
-const { readFileSync, existsSync } = require("fs");
-const TestExchangeProvider = require("../providers/test-ex-provider.js");
-const BasicTrader = require("../trader/basic-trader.js");
-const { parseNumInLog } = require("../utilities.js");
+import { Worker, parentPort, workerData, isMainThread } from "worker_threads";
+import { readFileSync, existsSync } from "fs";
+import TestExchangeProvider from "../providers/test-ex-provider.js";
+import BasicTrader from "../trader/basic-trader.js";
+import { parseNumInLog } from "../utilities.js";
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
@@ -76,14 +76,11 @@ async function runTradingTest(pair, interval) {
 
 async function runTest(pair, prices, interval, showLogs) {
   const m = +((prices.length * interval) / 43200).toFixed(1); // 43200 is the number of mins in one month
-  let transactions = 0;
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, interval);
   const trader = new BasicTrader(ex, pair, { interval, capital, mode: "live" });
   delete trader.period;
 
   trader.listener = (p, event, info) => {
-    if (event == "SELL") transactions++;
-
     if (showLogs && event == "LOG") {
       console.log((info ? pair + " " : "") + (info || ""));
       // console.log(...parseNumInLog((info ? pair + " " : "") + (info || "")));
@@ -105,7 +102,7 @@ async function runTest(pair, prices, interval, showLogs) {
   if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
   const balance = +(await ex.balance()).eur.toFixed(2);
 
-  return { balance, crypto, transactions, m };
+  return { balance, crypto, transactions: ex.state.trades.length, m };
 }
 
 function getPrices(pair, skip = 1) {
@@ -140,8 +137,8 @@ if (require.main === module && isMainThread) {
 } else if (!isMainThread && workerData) {
   const [p, prices, interval] = workerData;
   runTest(p, prices, interval).then((r) => parentPort.postMessage(r));
-} else {
-  module.exports = runTradingTest; // Export the runTradingTest function for use as a module
 }
+
+export default runTradingTest; // Export the runTradingTest function for use as a module
 
 // Command example: node test-trading-script.js ETHEUR 100 100 0.25 1.5 near-low > database/logs/all.log 2>&1

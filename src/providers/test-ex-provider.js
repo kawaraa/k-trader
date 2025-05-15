@@ -1,7 +1,7 @@
-const { randomUUID } = require("node:crypto");
-const { calculateFee } = require("../services");
+import { randomUUID } from "node:crypto";
+import { calculateFee } from "../services.js";
 
-module.exports = class TestExchangeProvider {
+export default class TestExchangeProvider {
   constructor(balance, prices, interval) {
     this.currentBalance = balance;
     this.allPrices = prices;
@@ -52,7 +52,7 @@ module.exports = class TestExchangeProvider {
       const remainingBalance = this.currentBalance.eur - newOrder.cost;
       if (remainingBalance < 0) throw new Error("No enough money");
       this.currentBalance.eur = remainingBalance;
-      this.currentBalance.crypto += volume;
+      this.currentBalance.crypto = volume;
       this.position = newOrder;
       return newOrder.id;
     } else {
@@ -61,8 +61,8 @@ module.exports = class TestExchangeProvider {
       newOrder.cost = cost - calculateFee(cost, 0.3);
       const remainingCrypto = +(this.currentBalance.crypto - volume).toFixed(8);
       if (remainingCrypto < 0) throw new Error("No enough crypto");
-      this.currentBalance.eur += newOrder.cost;
-      this.currentBalance.crypto -= remainingCrypto;
+      this.currentBalance.eur = newOrder.cost;
+      this.currentBalance.crypto = remainingCrypto;
       this.position = null;
     }
   }
@@ -70,7 +70,7 @@ module.exports = class TestExchangeProvider {
   getOrders(pair, ordersIds) {
     return [this.position];
   }
-};
+}
 
 // Examples of the pairs format from some popular exchanges:
 // Kraken: Uses the slash separator (e.g., BTC/EUR, ETH/USD).

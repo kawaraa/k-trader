@@ -1,5 +1,5 @@
-const { createHash, createHmac } = require("node:crypto");
-const { parseNumbers, request } = require("../utilities.js");
+import { createHash, createHmac } from "node:crypto";
+import { parseNumbers, request } from "../utilities.js";
 
 class KrakenExchangeProvider {
   #apiUrl;
@@ -131,4 +131,4 @@ class KrakenExchangeProvider {
   }
 }
 
-module.exports = KrakenExchangeProvider;
+export default KrakenExchangeProvider;

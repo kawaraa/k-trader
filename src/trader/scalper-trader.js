@@ -1,9 +1,9 @@
-const Trader = require("./trader");
-const { findPriceMovement } = require("../indicators.js");
-const { calcPercentageDifference, calcAveragePrice, calculateFee } = require("../services.js");
+import Trader from "./trader.js";
+import { findPriceMovement } from "../indicators.js";
+import { calcPercentageDifference, calcAveragePrice, calculateFee } from "../services.js";
 
 // Smart trader
-class ScalpingTrader extends Trader {
+export default class ScalpingTrader extends Trader {
   constructor(exProvider, pair, interval, capital, profitTarget, stopLoss) {
     super(exProvider, pair, interval, capital);
     this.profitTarget = +profitTarget;
@@ -68,5 +68,3 @@ class ScalpingTrader extends Trader {
     }
   }
 }
-
-module.exports = ScalpingTrader;

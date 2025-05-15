@@ -1,12 +1,11 @@
-const Trader = require("./trader.js");
-
-const services = require("../trend-analysis.js");
-const { calculateRSI } = require("../indicators.js");
-const { normalizePrices, calcPercentageDifference } = require("../services.js");
+import Trader from "./trader.js";
+import services from "../trend-analysis.js";
+import { calculateRSI } from "../indicators.js";
+import { normalizePrices, calcPercentageDifference } from "../services.js";
 const calcPercentage = calcPercentageDifference;
 
 // Smart trader
-class BasicTrader extends Trader {
+export default class BasicTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.range = (12 * 60) / this.interval;
@@ -220,8 +219,6 @@ class BasicTrader extends Trader {
     };
   }
 }
-
-module.exports = BasicTrader;
 
 // Technical Analysis Functions
 class Analyzer {

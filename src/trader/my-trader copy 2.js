@@ -1,17 +1,16 @@
-const Trader = require("./trader.js");
-
-const {
+import Trader from "./trader.js";
+import {
   calcPercentageDifference,
   calculateFee,
   calcAveragePrice,
   normalizePrices,
   removeLowsOrHighs,
-} = require("../services.js");
-const { findPriceMovement, linearRegression, analyzeTrend } = require("../indicators.js");
+} from "../services.js";
+import { findPriceMovement, linearRegression, analyzeTrend } from "../indicators.js";
 const calcPercentage = calcPercentageDifference;
 
 // Smart trader
-class MyTrader extends Trader {
+export default class MyTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
     super(exProvider, pair, interval, capital);
     this.strategyTest = { timestamp: 0, percentThreshold: 20 };
@@ -187,8 +186,6 @@ class MyTrader extends Trader {
     return false;
   }
 }
-
-module.exports = MyTrader;
 
 const conditions = [
   // ["DOWNTREND-DOWNTREND-DOWNTREND-UPTREND-DOWNTREND-UPTREND", "BREAKDOWN-BUY"],

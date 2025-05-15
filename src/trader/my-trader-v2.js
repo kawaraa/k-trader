@@ -1,9 +1,9 @@
-const Trader = require("./trader.js");
-const { calcPercentageDifference, calculateFee } = require("../services.js");
+import Trader from "./trader.js";
+import { calcPercentageDifference, calculateFee } from "../services.js";
 const maxPercentThreshold = 20;
 
 // Smart trader
-class MyTrader extends Trader {
+export default class MyTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
     super(exProvider, pair, interval, capital);
     this.strategyTest = { timestamp: 0, percentThreshold: 20 };
@@ -252,5 +252,3 @@ class MyTrader extends Trader {
     return result;
   }
 }
-
-module.exports = MyTrader;

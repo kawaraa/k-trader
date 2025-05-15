@@ -1,9 +1,9 @@
-const { calcPercentageDifference } = require("../services");
-const Trader = require("./trader");
-const { EMA } = require("technicalindicators");
+import { calcPercentageDifference } from "../services.js";
+import Trader from "./trader.js";
+import { EMA } from "technicalindicators";
 
 // Smart trader
-class GPTrader extends Trader {
+export default class GPTrader extends Trader {
   constructor(exProvider, pair, interval, capital, profitTarget, stopLoss) {
     this.supper(exProvider, pair, interval, capital);
     this.profitTarget = +profitTarget;
@@ -81,5 +81,3 @@ class GPTrader extends Trader {
     return "HOLD";
   }
 }
-
-module.exports = GPTrader;

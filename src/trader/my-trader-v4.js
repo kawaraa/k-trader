@@ -1,12 +1,12 @@
-const Trader = require("./trader.js");
-const { isOlderThan, getMaxMin, isNumberInRangeOf } = require("../utilities.js");
-const { calcPercentageDifference, calculateFee, calcAveragePrice } = require("../services.js");
-const { findPriceMovement, linearRegression } = require("../indicators.js");
+import Trader from "./trader.js";
+import { isOlderThan, getMaxMin, isNumberInRangeOf } from "../utilities.js";
+import { calcPercentageDifference, calculateFee, calcAveragePrice } from "../services.js";
+import { findPriceMovement, linearRegression } from "../indicators.js";
 const calcPercentage = calcPercentageDifference;
 const maxPercentThreshold = 25;
 
 // Smart trader
-class MyTrader extends Trader {
+export default class MyTrader extends Trader {
   constructor(exProvider, pair, interval, capital) {
     super(exProvider, pair, interval, capital);
     this.strategyTest = { timestamp: 0, percentThreshold: 20 };
@@ -246,5 +246,3 @@ class MyTrader extends Trader {
     return result;
   }
 }
-
-module.exports = MyTrader;

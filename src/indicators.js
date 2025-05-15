@@ -1,9 +1,9 @@
-const { calcPercentageDifference, calcAveragePrice } = require("./services");
+import { calcPercentageDifference, calcAveragePrice } from "./services.js";
 
 /* ========== trend analysis Indicators ========== */
 
 // const { RSI } = require("technicalindicators");
-// function calculateRSI(closes, period = 14) {
+// export function calculateRSI(closes, period = 14) {
 //   return RSI.calculate({ values: closes, period });
 // }
 
@@ -12,7 +12,7 @@ const { calcPercentageDifference, calcAveragePrice } = require("./services");
 // - When the RSI is very low, suggesting that the asset is likely in oversold conditions, which could indicate a potential buying opportunity if the price stabilizes.
 
 // calcRelativeStrengthIndex
-function calculateRSI(prices, period = 14) {
+export function calculateRSI(prices, period = 14) {
   // The 14-period setting for the RSI was recommended by J. Welles Wilder, the developer of the RSI, in his book "New Concepts in Technical Trading Systems." This default period is widely used because it has been found to provide a good balance between responsiveness and reliability in identifying overbought and oversold conditions across various markets.
 
   if (prices.length < period) throw new Error("Not enough data to calculate RSI.");
@@ -65,7 +65,7 @@ function calculateRSI(prices, period = 14) {
   // 2. RSI below 30: Typically signals that the asset is oversold and might be due for a rebound.
 }
 
-function detectTrend(data, baseFlatThreshold = 0.003) {
+export function detectTrend(data, baseFlatThreshold = 0.003) {
   if (!data || data.length < 2) return "sideways";
 
   const n = data.length - 1;
@@ -87,7 +87,7 @@ function detectTrend(data, baseFlatThreshold = 0.003) {
   return "sideways";
 }
 
-function computeDynamicThreshold(prices) {
+export function computeDynamicThreshold(prices) {
   if (prices.length < 2) return 0.0001;
 
   const deltas = [];
@@ -108,7 +108,7 @@ function computeDynamicThreshold(prices) {
   return stdDev * multiplier;
 }
 
-function linearRegression(prices, returnString, threshold = 0) {
+export function linearRegression(prices, returnString, threshold = 0) {
   if (prices.length < 2) return "sideways";
   threshold = threshold < 1 ? threshold : computeDynamicThreshold(prices); // 0.0001 works best for me
 
@@ -141,7 +141,7 @@ function linearRegression(prices, returnString, threshold = 0) {
   // 2. Negative Slope: Indicates a downward trend, which could be a signal to sell.
 }
 
-function hasStrongSlope(points, type = "high", threshold = 0.05) {
+export function hasStrongSlope(points, type = "high", threshold = 0.05) {
   /* ====> threshold <====
     0.05 (default) → Good for general fast-moving markets
     Higher (e.g. 0.1) → Only consider steep slopes (fewer but stronger signals)
@@ -153,7 +153,7 @@ function hasStrongSlope(points, type = "high", threshold = 0.05) {
   return Math.abs(slope) > threshold;
 }
 
-function detectTrendlines(data) {
+export function detectTrendlines(data) {
   const pivots = { support: [], resistance: [] };
 
   for (let i = 2; i < data.length - 2; i++) {
@@ -176,7 +176,7 @@ function detectTrendlines(data) {
   return pivots;
 }
 
-function isVolumeRising(data) {
+export function isVolumeRising(data) {
   if (!data || data.length < 1) return false;
   const vols = data.map((d) => d.volume);
   for (let i = 1; i < vols.length; i++) {
@@ -187,7 +187,7 @@ function isVolumeRising(data) {
 /*
 ===== My implementations ===== 
 */
-function findPriceMovement(prices, minPercent, dropRisePercent) {
+export function findPriceMovement(prices, minPercent, dropRisePercent) {
   const length = prices.length - 1;
   let price = prices.at(-1);
   let movements = 0;
@@ -216,7 +216,7 @@ function findPriceMovement(prices, minPercent, dropRisePercent) {
 
   return "STABLE";
 }
-function analyzeTrend(prices, weakness = 0.5) {
+export function analyzeTrend(prices, weakness = 0.5) {
   const highs = [0];
   const lows = [0];
   let accumulator = 0;
@@ -259,7 +259,7 @@ function analyzeTrend(prices, weakness = 0.5) {
       increased > dropped + weakness ? "UPTREND" : dropped > increased + weakness ? "DOWNTREND" : "SIDEWAYS",
   };
 }
-// function analyzeTrend(prices) {
+// export function analyzeTrend(prices) {
 //   let isDowntrend = false;
 //   let highCount = 0;
 //   let averageHighsPercentage = 0;
@@ -282,7 +282,7 @@ function analyzeTrend(prices, weakness = 0.5) {
 //   return { isDowntrend, highCount, averageHighsPercentage };
 // }
 
-// function runeTradingTest(prices, range = 18) {
+// export function runeTradingTest(prices, range = 18) {
 //   const calculateLimits = (percent) => ({
 //     dropPercent: percent * 1.2,
 //     buySellOnPercent: percent / 5,
@@ -365,7 +365,7 @@ function analyzeTrend(prices, weakness = 0.5) {
 /*
 ===== Pattern detection Methods ===== 
 */
-function detectCandlestickPattern(data) {
+export function detectCandlestickPattern(data) {
   if (data.length < 3) return "none"; // Ensure there is enough data for complex patterns
 
   const last = data.at(-1);
@@ -449,7 +449,7 @@ function detectCandlestickPattern(data) {
   // Evening Star: 3-candle pattern, Big green, Small-bodied candle (indecision) and Big red candle. Strong reversal down signal.
 }
 
-function detectVolumeDivergence(candles) {
+export function detectVolumeDivergence(candles) {
   if (candles.length < 1) return null;
   const first = candles[0];
   const last = candles.at(-1);
@@ -469,7 +469,7 @@ function detectVolumeDivergence(candles) {
   return "healthy";
 }
 
-function detectVolumeSpike(candles, threshold = 3) {
+export function detectVolumeSpike(candles, threshold = 3) {
   if (candles.length < 2) return false; // Can't detect with less than 2 candles
 
   // Calculate the average volume of the last N candles (let's use 5 as default)
@@ -486,18 +486,3 @@ function detectVolumeSpike(candles, threshold = 3) {
 
   return false; // No significant spike
 }
-
-module.exports = {
-  calculateRSI,
-  detectTrend,
-  linearRegression,
-  hasStrongSlope,
-  detectTrendlines,
-  isVolumeRising,
-  findPriceMovement,
-  // analyzeTrend,
-  analyzeTrend,
-
-  detectCandlestickPattern,
-  detectVolumeDivergence,
-};

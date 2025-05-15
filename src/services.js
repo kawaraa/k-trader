@@ -1,4 +1,4 @@
-function findSupportResistance(data) {
+export function findSupportResistance(data) {
   if (!data || data.length < 3) return { support: null, resistance: null };
 
   const highs = data.map((d) => d.high);
@@ -9,23 +9,23 @@ function findSupportResistance(data) {
   };
 }
 
-function filterRecentTrendlines(pivots, dataLength, maxAge = 30) {
+export function filterRecentTrendlines(pivots, dataLength, maxAge = 30) {
   return pivots.filter((pivot) => pivot.index >= dataLength - maxAge);
 }
 
-function calcAveragePrice(prices) {
+export function calcAveragePrice(prices) {
   if (prices.length === 0) throw new Error("Price list cannot be empty.");
   const total = prices.reduce((sum, price) => sum + price, 0);
   return +(total / prices.length).toFixed(8);
 }
-function calcPercentageDifference(oldPrice, newPrice) {
+export function calcPercentageDifference(oldPrice, newPrice) {
   const difference = newPrice - oldPrice;
   return +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2);
 }
-function calculateFee(amount, feePercentage) {
+export function calculateFee(amount, feePercentage) {
   return !feePercentage ? 0 : (amount * feePercentage) / 100;
 }
-function smoothPricesAndUpdate(prices, range = 3) {
+export function smoothPricesAndUpdate(prices, range = 3) {
   // This remove noises from prices using a moving average
   if (range < 1 || range > prices.length) return prices;
 
@@ -44,7 +44,7 @@ function smoothPricesAndUpdate(prices, range = 3) {
 
   return result;
 }
-function smoothPrices(prices, round = 1) {
+export function smoothPrices(prices, round = 1) {
   for (let i = 0; i < round; i++) {
     prices = prices.map((_, i, arr) => {
       const slice = arr.slice(Math.max(0, i - 2), i + 1);
@@ -62,7 +62,7 @@ function smoothPrices(prices, round = 1) {
 
   return prices;
 }
-function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, round = 1) {
+export function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, round = 1) {
   function smoother(pricesData) {
     let newPrices = [];
 
@@ -103,7 +103,7 @@ function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, round = 1
   return prices;
 }
 
-function normalizePrices(prices, avgAskBidSpread) {
+export function normalizePrices(prices, avgAskBidSpread) {
   if (!avgAskBidSpread) {
     avgAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice)));
   }
@@ -121,14 +121,14 @@ function normalizePrices(prices, avgAskBidSpread) {
   return normalizedPrices;
 }
 
-function generateRange(start, end, length) {
+export function generateRange(start, end, length) {
   if (length < 2) return length === 1 ? [start] : [];
   const step = (end - start) / (length - 1);
   return Array.from({ length }, (_, i) => start + i * step);
 }
 
 // This functions is too strict
-function findSupportResistanceUsingClusteringAlg(data, clusterThreshold) {
+export function findSupportResistanceUsingClusteringAlg(data, clusterThreshold) {
   if (!data || data.length < 10) return { supports: [], resistances: [] };
 
   const avgPrice = data.reduce((sum, d) => sum + d.close, 0) / data.length;
@@ -213,7 +213,7 @@ function findSupportResistanceUsingClusteringAlg(data, clusterThreshold) {
   };
 }
 
-// function analyzePrices(prices) {
+// export function analyzePrices(prices) {
 //   const result = { lows: [], highs: [], negativesPercent: 0, positivesPercent: 0, startedWith: "" };
 
 //   for (let i = 0; i < prices.length - 1; i++) {
@@ -239,17 +239,3 @@ function findSupportResistanceUsingClusteringAlg(data, clusterThreshold) {
 //   result.lossPercent = result.negativesPercent / changes;
 //   return result;
 // }
-
-module.exports = {
-  findSupportResistance,
-  filterRecentTrendlines,
-  calcAveragePrice,
-  calcPercentageDifference,
-  calculateFee,
-  smoothPricesAndUpdate,
-  smoothPrices,
-  normalizePrices,
-  generateRange,
-  removeLowsOrHighs,
-  findSupportResistanceUsingClusteringAlg,
-};

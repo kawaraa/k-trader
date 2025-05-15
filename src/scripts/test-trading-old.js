@@ -1,10 +1,10 @@
 // test-trading-script is a price-history-analysis-script
-const { Worker, parentPort, workerData, isMainThread } = require("worker_threads");
-const { readFileSync, existsSync } = require("fs");
-const { extractNumbers } = require("../utilities.js");
-const { getSupportedModes } = require("../trend-analysis.js");
-const TestExchangeProvider = require("./test-ex-provider.js");
-const DailyTrader = require("./daily-trader.js");
+import { Worker, parentPort, workerData, isMainThread } from "worker_threads";
+import { readFileSync, existsSync } from "fs";
+import { extractNumbers } from "../utilities.js";
+import { getSupportedModes } from "../trend-analysis.js";
+import TestExchangeProvider from "./test-ex-provider.js";
+import DailyTrader from "./daily-trader.js";
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const modes = [process.argv[3] || "all"];
@@ -164,8 +164,8 @@ if (require.main === module && isMainThread) {
   testStrategy(p, prices, minStrategyRange, minPercentPriceChange, mode, interval).then((r) =>
     parentPort.postMessage(r)
   );
-} else {
-  module.exports = runTradingTest; // Export the runTradingTest function for use as a module
 }
+
+export default runTradingTest; // Export the runTradingTest function for use as a module
 
 // Command example: node test-trading-script.js ETHEUR 100 100 0.25 1.5 near-low > database/logs/all.log 2>&1

@@ -1,7 +1,7 @@
-const Trader = require("./trader");
+import Trader from "./trader.js";
 const fixNum = (n) => +n.toFixed(2);
 
-class AdvanceTrader extends Trader {
+export default class AdvanceTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.position = null;
@@ -266,8 +266,6 @@ class AdvanceTrader extends Trader {
     return decision;
   }
 }
-
-module.exports = AdvanceTrader;
 
 // Technical Analysis Functions
 class TechnicalAnalysis {
