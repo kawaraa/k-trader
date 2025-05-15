@@ -1,6 +1,8 @@
 // test-trading-script is a price-history-analysis-script
 import { Worker, parentPort, workerData, isMainThread } from "worker_threads";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import path from "node:url";
 import TestExchangeProvider from "../providers/test-ex-provider.js";
 import BasicTrader from "../trader/basic-trader.js";
 import { parseNumInLog } from "../utilities.js";
@@ -131,8 +133,10 @@ function runWorker(workerData) {
   });
 }
 
+// Check if this is the main module (equivalent to require.main === module)
+const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
 // Run the runTradingTest function if the script is executed directly
-if (require.main === module && isMainThread) {
+if (isMainModule && isMainThread) {
   runTradingTest(pair, interval);
 } else if (!isMainThread && workerData) {
   const [p, prices, interval] = workerData;

@@ -1,29 +1,16 @@
 import Trader from "./trader.js";
 import { calcPercentageDifference, calcAveragePrice, normalizePrices } from "../services.js";
-// import { linearRegression } from "../indicators.js";
-const calcPercentage = calcPercentageDifference;
+const calcPct = calcPercentageDifference;
 
 // Smart trader
 class BasicTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.range = (6 * 60) / this.interval;
-    this.lookBack = 20; // 12 = to 1hrs
-    this.percentThreshold = 4;
-    this.profitTarget = 4;
-
+    this.lookBack = 12; // 12 = to 1hrs
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
-    // this.trends = "0-x-x-x-x";
     this.trends = [];
-    this.highestPrice = 0;
-    this.lowestPrice = 0;
-    this.lowestPriceTimestamp = 0;
-    this.lastTradeTimer = 0;
-    this.lastTradePrice = 0;
-    this.breakdown = false;
-    this.shouldSell = false;
-    this.droppedPercent = 0;
   }
 
   async run() {
@@ -31,7 +18,6 @@ class BasicTrader extends Trader {
     const pricesData = await this.ex.prices(this.pair, this.range);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
-    // const { trades } = await this.ex.state.getBot(this.pair);
     const currentPrice = pricesData.at(-1);
 
     if (pricesData.length < this.range) return;
@@ -39,92 +25,37 @@ class BasicTrader extends Trader {
     const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
     this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${prc}`);
 
-    const askBidSpreadPercentage = calcPercentage(currentPrice.bidPrice, currentPrice.askPrice);
-    const averageAskBidSpread = calcAveragePrice(
-      pricesData.map((p) => calcPercentage(p.bidPrice, p.askPrice))
-    );
+    const askBidSpreadPercentage = calcPct(currentPrice.bidPrice, currentPrice.askPrice);
+    const averageAskBidSpread = calcAveragePrice(pricesData.map((p) => calcPct(p.bidPrice, p.askPrice)));
     const safeAskBidSpread = askBidSpreadPercentage <= Math.min(averageAskBidSpread * 2, 1); // safeAskBidSpread
     const prices = normalizePrices(pricesData, averageAskBidSpread);
-    // const prices = normalizedPrices.slice(-parseInt(this.range));
-    // const averagePrice = calcAveragePrice(normalizedPrices);
 
-    const sortedBidPrices = prices.toSorted((a, b) => a - b);
-    const priceChangePercent = calcPercentage(sortedBidPrices[0], sortedBidPrices.at(-1));
-    if (priceChangePercent > this.percentThreshold) this.percentThreshold = priceChangePercent;
+    const las6hrsTrend = linearRegression(prices, 0);
+    this.updateTrends(linearRegression(prices.slice(-this.lookBack), 0));
 
-    // const last24HrsUptrend = linearRegression(last24HrsPrices, true, 0.002) == "uptrend";
-    // this.updateTrends(linearRegression(prices, true, 0));
+    const downtrend = las6hrsTrend.trend == "downtrend" && las6hrsTrend.strength == "strong";
+    const half = parseInt(this.trends.length / 2);
+    const down = this.trends.slice(0, half).every((t) => t == "downtrend");
+    const increasing = calcPct(prices.slice(-half)[0], prices.at(-1));
+    const up = this.trends.slice(-half).every((t) => t == "uptrend") || increasing > 2;
 
-    this.updateTrends(linearRegression(prices));
-
-    const droppedPercent = calcPercentage(prices.at(-1), this.lowestPrice);
-    if (this.lowestPriceTimestamp > (12 * 60) / 5 || droppedPercent >= 10) {
-      this.lowestPrice = prices.at(-1);
-      this.lowestPriceTimestamp = 0;
-    }
-
-    const trends = this.trends.slice(0, -1);
-
-    const downtrend = trends.every((t) => t == "downtrend") || trends.every((t) => t == "sideways");
-    let shouldBuy = this.trends.length >= this.lookBack - 1 && downtrend && this.trends.at(-1) == "uptrend";
-    if (!shouldBuy) {
-      this.dispatch("LOG", trends.join("-"));
-
-      // shouldBuy =
-      //   trends.filter((t) => t == "downtrend").length / 2 <= trends.filter((t) => t == "uptrend").length;
-      // shouldBuy =
-      //   trends.slice(0, parseInt(trends.length)).every((t) => t == "downtrend") &&
-      //   trends.slice(-parseInt(trends.length)).every((t) => t == "uptrend");
-    }
-    // shouldBuy = shouldBuy && prices.at(-1) < averagePrice * 1.2;
-
-    if (this.lastTradePrice > 0) {
-      const percent = calcPercentage(this.lastTradePrice, prices.at(-1));
-      if (percent < this.droppedPercent) {
-        this.percentThreshold += Math.abs(percent - this.droppedPercent);
-        this.droppedPercent = percent;
-      } else if (
-        Math.abs(this.droppedPercent - percent) > Math.max(Math.min(this.percentThreshold / 4, 4), 2)
-      ) {
-        shouldBuy = true;
-      } else {
-        shouldBuy = false;
-      }
-
-      // console.log("===>", this.droppedPercent, percent, Math.abs(this.droppedPercent - percent));
-    }
-
-    this.profitTarget = Math.min(Math.max(this.percentThreshold / 3, 4), 10);
-    // console.log(
-    //   "===>",
-    //   this.lowestPrice,
-    //   this.lowestPriceTimestamp,
-    //   this.trends.at(-1),
-    //   this.profitTarget,
-    //   this.percentThreshold,
-    //   this.droppedPercent
-    // );
-
-    shouldBuy = shouldBuy && prices.at(-1) > this.lowestPrice;
+    let shouldBuy = this.trends.length >= this.lookBack - 1 && downtrend && down && up;
+    this.dispatch("LOG", `${las6hrsTrend.trend}-${las6hrsTrend.strength} - ${increasing}`);
+    this.dispatch("LOG", this.trends.join("-"));
 
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 5) {
-      if (shouldBuy && safeAskBidSpread && this.lastTradeTimer <= 0) {
+      if (shouldBuy && safeAskBidSpread) {
         await this.buy(balance, currentPrice.askPrice);
         this.dispatch("LOG", `Placed BUY at: ${currentPrice.askPrice}`);
-        this.lastTradePrice = 0;
-        this.lowestPrice = prices.at(-1);
-        this.lowestPriceTimestamp = 0;
-        this.droppedPercent = 0;
         this.prevGainPercent = 0;
       }
 
       // Sell
     } else if (position && balance.crypto > 0) {
-      const gainLossPercent = calcPercentage(position.price, prices.at(-1));
+      const gainLossPercent = calcPct(position.price, prices.at(-1));
       if (gainLossPercent > this.prevGainPercent) this.prevGainPercent = gainLossPercent;
       const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
-      // const prevDropAgain = this.losses[2];
 
       if (-gainLossPercent >= this.losses[0]) this.losses[0] = -gainLossPercent;
       else if (this.losses[0]) {
@@ -140,30 +71,12 @@ class BasicTrader extends Trader {
         `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
       );
 
-      // const trends = this.trends.slice(parseInt(this.trends.length / 2), -1); // parseInt(this.trends.length / 3)
-      // const uptrend = trends.every((t) => t == "uptrend") && this.trends.at(-1) == "downtrend";
-
-      // const shouldSell =
-      //   this.prevGainPercent >= this.profitTarget && loss > Math.max(this.prevGainPercent / 5, 1);
-      // const stopLoss = gainLossPercent < -3 && prices.at(-1) < this.lowestPrice;
-
-      const downtrend = this.trends.slice(-3).every((t) => t == "downtrend");
-
-      // console.log("shouldSell: ", shouldSell, "stopLoss: ", stopLoss);
-      if (downtrend && safeAskBidSpread) {
-        this.dispatch("LOG", trends.join("-"));
-
+      // const shouldSell = gainLossPercent >= 1 && loss > 1;
+      const downtrend = this.trends.every((t) => t == "downtrend");
+      if ((gainLossPercent <= -2 || loss >= 2 || downtrend) && safeAskBidSpread) {
+        this.dispatch("LOG", this.trends.join("-"));
         const res = await this.sell(position, balance, currentPrice.bidPrice);
         this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);
-
-        // if (stopLoss) {
-        //   this.lastTradePrice = prices.at(-1);
-        //   this.lowestPrice = prices.at(-1);
-        //   this.lowestPriceTimestamp = 0;
-        // } else if (gainLossPercent >= this.profitTarget / 1.3) {
-        //   this.percentThreshold = 4;
-        //   this.profitTarget = 4;
-        // }
       }
 
       //
@@ -171,28 +84,17 @@ class BasicTrader extends Trader {
       //   this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
     }
 
-    this.lowestPriceTimestamp++;
     this.dispatch("LOG", "");
   }
 
   updateTrends(result) {
+    // if (result.trend == "sideways") return;
     this.trends.push(result.trend);
     if (this.trends.length > this.lookBack) this.trends.shift();
   }
 }
 
 export default BasicTrader;
-
-const conditions = [
-  ["downtrend-downtrend-downtrend-downtrend-downtrend-uptrend", "buy"],
-  ["uptrend-uptrend-uptrend-uptrend-uptrend-downtrend", "buy"],
-  // ["uptrend-uptrend-uptrend-downtrend-downtrend-uptrend", "buy"],
-];
-
-/**
-
-
- */
 
 function linearRegression(data, threshold = 0.0001) {
   if (!data || data.length < 2) return { trend: "none", slope: 0, intercept: 0, r2: 0 };
