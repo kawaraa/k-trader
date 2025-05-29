@@ -61,7 +61,7 @@ export default class TestExchangeProvider {
       newOrder.cost = cost - calculateFee(cost, 0.3);
       const remainingCrypto = +(this.currentBalance.crypto - volume).toFixed(8);
       if (remainingCrypto < 0) throw new Error("No enough crypto");
-      this.currentBalance.eur = newOrder.cost;
+      this.currentBalance.eur += newOrder.cost;
       this.currentBalance.crypto = remainingCrypto;
       this.position = null;
     }

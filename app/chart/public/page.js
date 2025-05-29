@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { toShortDate } from "../../../src/utilities";
+import { toShortDate } from "../../../src/utilities.js";
 import PageHeader from "../../components/page-header";
 import ChartCanvas from "../../components/chart-canvas";
 

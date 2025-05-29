@@ -4,7 +4,7 @@ import BotItem from "./components/bot-item";
 import { Modal } from "./components/modal";
 import AddBotFrom from "./components/add-bot-form";
 import { useRouter } from "next/navigation";
-import { dateToString, request } from "../src/utilities";
+import { dateToString, request } from "../src/utilities.js";
 import { btnCls } from "./components/tailwind-classes";
 import Loader from "./components/loader";
 import RefreshButton from "./components/refresh-button";

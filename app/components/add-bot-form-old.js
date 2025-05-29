@@ -1,7 +1,8 @@
 "use client";
 import { btnCls, inputCls } from "./tailwind-classes";
-const cryptocurrencies = require("../../src/data/currencies.json");
-const strategyModes = require("../../src/trend-analysis").getSupportedModes();
+import cryptocurrencies from "../../src/data/currencies.json";
+import getSupportedModes from "../../src/trend-analysis";
+const strategyModes = []; //getSupportedModes();
 
 export default function AddBotFrom({ bot, onSubmit }) {
   const mode = bot?.info?.mode || "";

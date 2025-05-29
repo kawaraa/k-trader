@@ -1,6 +1,3 @@
-import { createRequire } from "module";
-const cryptocurrencies = createRequire(import.meta.url)("./data/currencies.json");
-
 export function isNumber(num, min, max) {
   const N = Number.parseFloat(num);
   if (Number.isNaN(N)) return false;
@@ -89,11 +86,11 @@ export function isOlderThan(timestamp, hours) {
   return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
 }
 
-export function isValidPair(pair, throwError) {
-  if (cryptocurrencies[pair]) return pair;
-  if (!throwError) return null;
-  else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
-}
+// export function isValidPair(pair, throwError) {
+//   if (cryptocurrencies[pair]) return pair;
+//   if (!throwError) return null;
+//   else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
+// }
 
 export function parseError(value, msgs = "") {
   if (value && typeof value != "object") return msgs + value + " ";

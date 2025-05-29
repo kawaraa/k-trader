@@ -40,8 +40,8 @@ class BasicTrader extends Trader {
     const up = this.trends.slice(-half).every((t) => t == "uptrend") || increasing > 2;
 
     let shouldBuy = this.trends.length >= this.lookBack - 1 && downtrend && down && up;
-    this.dispatch("LOG", `${las6hrsTrend.trend}-${las6hrsTrend.strength} - ${increasing}`);
-    this.dispatch("LOG", this.trends.join("-"));
+    // this.dispatch("LOG", `${las6hrsTrend.trend}-${las6hrsTrend.strength} - ${increasing}`);
+    // this.dispatch("LOG", this.trends.join("-"));
 
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 5) {
@@ -71,9 +71,9 @@ class BasicTrader extends Trader {
         `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
       );
 
-      // const shouldSell = gainLossPercent >= 1 && loss > 1;
+      const shouldSell = gainLossPercent >= 1 && loss > 1;
       const downtrend = this.trends.every((t) => t == "downtrend");
-      if ((gainLossPercent <= -2 || loss >= 2 || downtrend) && safeAskBidSpread) {
+      if ((shouldSell || gainLossPercent <= -2 || loss >= 2 || downtrend) && safeAskBidSpread) {
         this.dispatch("LOG", this.trends.join("-"));
         const res = await this.sell(position, balance, currentPrice.bidPrice);
         this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);

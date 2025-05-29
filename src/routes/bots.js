@@ -1,8 +1,10 @@
 import { statSync, existsSync, readFileSync } from "node:fs";
 import { Bot, BotsManager } from "../bots-manager.js";
-import { parseError, isValidPair, isNumber } from "../utilities.js";
+import { parseError, isNumber } from "../utilities.js";
+import { createRequire } from "module";
+const cryptocurrencies = createRequire(import.meta.url)("../data/currencies.json");
 
-export default (router, fireStoreProvider, authRequired, production) => {
+const botRoute = (router, fireStoreProvider, authRequired, production) => {
   // Get bots
   router.get("/bots", authRequired, async (request, response) => {
     try {
@@ -117,7 +119,7 @@ export default (router, fireStoreProvider, authRequired, production) => {
   });
 
   // Get bot prices history
-  router.get("/bots/prices/:pair", authRequired, (request, response) => {
+  router.get("/bots/prices/:pair", (request, response) => {
     try {
       const pair = request.params.pair;
       const other = parseInt(request.query.other);
@@ -148,6 +150,14 @@ export default (router, fireStoreProvider, authRequired, production) => {
 
   return router;
 };
+
+export default botRoute;
+
+function isValidPair(pair, throwError) {
+  if (cryptocurrencies[pair]) return pair;
+  if (!throwError) return null;
+  else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
+}
 
 class BotInfo {
   constructor(info) {

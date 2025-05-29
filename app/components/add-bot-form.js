@@ -1,6 +1,6 @@
 "use client";
 import { btnCls, inputCls } from "./tailwind-classes";
-const cryptocurrencies = require("../../src/data/currencies.json");
+import cryptocurrencies from "../../src/data/currencies.json";
 
 export default function AddBotFrom({ bot, onSubmit }) {
   return (

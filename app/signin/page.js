@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { request } from "../../src/utilities";
+import { request } from "../../src/utilities.js";
 import { btnCls, inputCls } from "../components/tailwind-classes";
 import Loader from "../components/loader";
 

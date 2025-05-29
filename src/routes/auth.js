@@ -1,6 +1,6 @@
 import { parseError } from "../utilities.js";
 
-export default (router, fireStoreProvider, authRequired, cookieOptions) => {
+const authRoute = (router, fireStoreProvider, authRequired, cookieOptions) => {
   // Check if signed in
   router.get("/auth", authRequired, async (request, response) => {
     response.status(200).json({ message: "already signed in" });
@@ -34,3 +34,5 @@ export default (router, fireStoreProvider, authRequired, cookieOptions) => {
 
   return router;
 };
+
+export default authRoute;

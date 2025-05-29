@@ -50,10 +50,13 @@ export default class Trader {
     // const volume = balance.crypto - oldOrder.volume < 5 ? balance.crypto : oldOrder.volume;
     const volume = Math.max(balance.crypto, oldOrder.volume);
     const cost = volume * price;
-    const profit = cost - calculateFee(cost, 0.3) - oldOrder.cost;
+    let profit = cost - oldOrder.cost;
 
     if (!this.testMode) await this.ex.createOrder("sell", "market", this.pair, volume);
-    else this.position = null;
+    else {
+      profit -= calculateFee(cost, 0.3);
+      this.position = null;
+    }
 
     this.dispatch("SELL", profit);
     return { profit, age: orderAge };

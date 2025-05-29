@@ -1,6 +1,6 @@
 // Linear Regression Analysis method is used to analyze a series of price data for a cryptocurrency or other asset to determine the trend direction. is generally more suited for long-term trading.
 
-import { calcPercentageDifference }from "./services.js";
+import { calcPercentageDifference } from "./services.js";
 
 export function isGoodTimeToBuy(now = new Date(), volatility = "normal") {
   const utcHour = now.getUTCHours();
@@ -135,7 +135,7 @@ export function findHighestLowestPrice(prices, currentPrice) {
   return priceChanges;
 }
 
-export // function getDynamicTakeProfitPct(prices) {
+// export function getDynamicTakeProfitPct(prices) {
 //   const changes = [];
 //   for (let i = 1; i < prices.length; i++) {
 //     const change = Math.abs((prices[i] - prices[i - 1]) / prices[i - 1]);
@@ -165,4 +165,3 @@ export function adjustPrice(price, percentage) {
   const multiplier = percentage / 100;
   return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
 }
-

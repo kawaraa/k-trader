@@ -102,4 +102,7 @@ class Doc {
   }
 }
 
-export default new FireStoreProvider(createRequire(import.meta.url)("../../.env.json").FIRESTORE_CREDENTIALS);
+const fireStore = new FireStoreProvider(
+  createRequire(import.meta.url)("../../.env.json").FIRESTORE_CREDENTIALS
+);
+export default fireStore;

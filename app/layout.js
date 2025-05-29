@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-const packageJsonFile = require("../package.json");
+import packageJsonFile from "../package.json";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
