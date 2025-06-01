@@ -33,6 +33,10 @@ export default class Trader {
 
   async run() {} // This is overwritten in derived classes
 
+  calculateLength(hours = 6) {
+    return parseInt((60 * hours) / this.interval);
+  }
+
   // await this.buy(this.capital, balance, currentPrice.askPrice);
   async buy(balance, price) {
     const capital = balance.eur < this.capital ? balance.eur : this.capital;
