@@ -2,73 +2,31 @@
 import { Worker, parentPort, workerData, isMainThread } from "worker_threads";
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import path from "node:url";
 import TestExchangeProvider from "../providers/test-ex-provider.js";
 import BasicTrader from "../trader/basic-trader.js";
-import { parseNumInLog } from "../utilities.js";
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 const suffix = +process.argv[4] || "";
 const showLogs = process.argv.includes("log");
-
 const capital = 100; // Amount in EUR which is the total money that can be used for trading
 
 async function runTradingTest(pair, interval) {
   try {
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
-    // const prices = getPrices(pair, interval / 5);
-    // const prices = getPrices(`bots/${pair}`, interval / 5);
     const prices = getPrices(`test/${pair + suffix}`, interval / 5);
+    const result = await runTest(pair, prices, interval, showLogs);
 
-    // workers.push(runWorker([pair, prices, interval, showLogs]));
-    const tests = [await runTest(pair, prices, interval, showLogs)];
-    // if (prices2[0]) {
-    //   tests.push(
-    //     await runTest(pair, prices2, interval, showLogs)
-    //   );
-    // }
-    // if (prices3[0]) {
-    //   tests.push(
-    //     await runTest(pair, prices3, interval, showLogs)
-    //   );
-    // }
+    const profit = result.balance - capital;
+    let monthlyProfit = parseInt(profit / result.m);
+    let monthlyRemain = parseInt(result.crypto / result.m);
 
-    const [result1, result2, result3] = tests;
-    let otherLog = "";
-
-    const profit1 = result1.balance - capital;
-    const remain1 = result1.crypto;
-
-    let totalProfit = profit1;
-    let totalRemain = remain1;
-    let totalLong = result1.m;
-
-    otherLog += ` (${parseInt(profit1)}) =x= [${result1.m}*${result1.transactions}]`;
-    // if (profit1 < 5) return;
-
-    if (result2) {
-      const profit = result2.balance - capital;
-      if ((result2.m <= 0.5 && profit < -5) || (result2.m > 0.5 && profit < 5)) return;
-      totalProfit += profit;
-      totalRemain += result2.crypto;
-      totalLong += result2.m;
-      otherLog += `  +  (${parseInt(profit)}) =x= [${result2.m}*${result2.transactions}]`;
-    }
-    if (result3) {
-      const profit = result3.balance - capital;
-      if ((result2.m <= 0.5 && profit < -5) || (result2.m > 0.5 && profit < 5)) return;
-      totalProfit += profit;
-      totalRemain += result3.crypto;
-      totalLong += result3.m;
-      otherLog += `  +  (${parseInt(profit)}) =x= [${result3.m}*${result3.transactions}]`;
-    }
-
-    totalProfit = parseInt(totalProfit / totalLong);
-    totalRemain = parseInt(totalRemain / totalLong);
-
-    console.log(`${pair} => €${totalProfit} Remain: ${totalRemain} ${otherLog}`);
+    console.log(
+      `${pair} => €${monthlyProfit} Remain: ${monthlyRemain} (${parseInt(profit)}) =x= [${result.m}*${
+        result.transactions
+      }]`
+    );
   } catch (error) {
     console.log("Error with ", pair, "=>", error);
   }
