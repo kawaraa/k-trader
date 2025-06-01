@@ -5,9 +5,10 @@ const calcPct = calcPercentageDifference;
 
 // Smart trader
 class BasicTrader extends Trader {
-  constructor(exProvider, pair, { interval, capital, mode }) {
+  constructor(exProvider, pair, { interval, capital, strategy, mode }) {
     super(exProvider, pair, interval, capital, mode);
     this.range = parseInt((60 * 48) / this.interval);
+    this.strategy = strategy || "short-term";
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
     this.priceBaselineChange = 0;
@@ -16,6 +17,7 @@ class BasicTrader extends Trader {
     this.buyCase1 = false;
     this.buyCase2 = false;
     this.buyCase3 = false;
+    this.buyCase4 = false;
   }
 
   async run() {
@@ -43,7 +45,7 @@ class BasicTrader extends Trader {
 
     const length = this.calculateLength(12);
     // const last48HrsTrend = linearRegression(prices);
-    // const first24HrsTrend = linearRegression(prices.slice(0, length * 2));
+    const first24HrsTrend = linearRegression(prices.slice(0, length * 2));
     const last24HrsTrend = linearRegression(prices.slice(-(length * 2)));
     const first12HrsTrend = linearRegression(prices.slice(length * 2, -length));
     const last12HrsTrend = linearRegression(prices.slice(-length));
@@ -52,6 +54,9 @@ class BasicTrader extends Trader {
     // const priceChangeFromStart = calcPct(last24HrsTrend.intercept, prices.at(0));
     const priceChange = calcPct(last24HrsTrend.intercept, prices.at(-1));
     // const priceChange24 = calcPct(last48HrsTrend.intercept, prices.at(-1));
+
+    // console.log("48 strategy:", this.buyCase4);
+    // // sideways weak sideways downtrend uptrend uptrend downtrend weak
     // console.log(
     //   first24HrsTrend.trend,
     //   first24HrsTrend.strength,
@@ -70,41 +75,56 @@ class BasicTrader extends Trader {
     if (!position && this.capital > 0 && balance.eur >= 5) {
       if (priceChange < this.priceBaselineChange) this.priceBaselineChange = priceChange;
 
-      this.buyCase1 =
-        (first12HrsTrend.trend != "downtrend" &&
+      if (this.strategy == "long-term") {
+        this.buyCase1 = false;
+        this.buyCase2 = false;
+        this.buyCase3 = false;
+        this.buyCase4 =
+          first24HrsTrend.trend == "uptrend" &&
+          first24HrsTrend.strength != "weak" &&
+          last24HrsTrend.trend == "downtrend" &&
           last12HrsTrend.trend == "downtrend" &&
-          last6HrsTrend.trend == "downtrend" &&
-          lastHrTrend.trend == "uptrend" &&
-          lastHrTrend.strength != "weak" &&
-          priceChange <= -2 &&
-          priceChange - this.priceBaselineChange >= 1) ||
-        (last24HrsTrend.trend == "uptrend" &&
-          first12HrsTrend.trend == "uptrend" &&
-          first12HrsTrend.strength == "strong" &&
-          last12HrsTrend.trend == "downtrend" &&
-          last12HrsTrend.strength == "strong" &&
-          last6HrsTrend.trend == "downtrend" &&
-          lastHrTrend.trend == "uptrend");
-
-      this.buyCase2 =
-        priceChange <= -2 &&
-        first12HrsTrend.trend == "downtrend" &&
-        last12HrsTrend.trend == "downtrend" &&
-        ((last6HrsTrend.trend == "uptrend" &&
-          lastHrTrend.trend == "uptrend" &&
-          lastHrTrend.strength == "strong") ||
-          (last6HrsTrend.trend == "uptrend" &&
-            last6HrsTrend.strength == "moderate" &&
+          last6HrsTrend.trend == "uptrend" &&
+          lastHrTrend.trend == "uptrend";
+      } else {
+        this.buyCase1 =
+          (first12HrsTrend.trend != "downtrend" &&
+            last12HrsTrend.trend == "downtrend" &&
+            last6HrsTrend.trend == "downtrend" &&
             lastHrTrend.trend == "uptrend" &&
-            lastHrTrend.strength == "moderate"));
+            lastHrTrend.strength != "weak" &&
+            priceChange <= -2 &&
+            priceChange - this.priceBaselineChange >= 1) ||
+          (last24HrsTrend.trend == "uptrend" &&
+            first12HrsTrend.trend == "uptrend" &&
+            first12HrsTrend.strength == "strong" &&
+            last12HrsTrend.trend == "downtrend" &&
+            last12HrsTrend.strength == "strong" &&
+            last6HrsTrend.trend == "downtrend" &&
+            lastHrTrend.trend == "uptrend");
 
-      this.buyCase3 =
-        priceChange <= -2 &&
-        first12HrsTrend.trend == "downtrend" &&
-        last12HrsTrend.trend == "sideways" &&
-        last6HrsTrend.trend == "sideways" &&
-        lastHrTrend.trend == "uptrend" &&
-        lastHrTrend.strength == "strong";
+        this.buyCase2 =
+          priceChange <= -2 &&
+          first12HrsTrend.trend == "downtrend" &&
+          last12HrsTrend.trend == "downtrend" &&
+          ((last6HrsTrend.trend == "uptrend" &&
+            lastHrTrend.trend == "uptrend" &&
+            lastHrTrend.strength == "strong") ||
+            (last6HrsTrend.trend == "uptrend" &&
+              last6HrsTrend.strength == "moderate" &&
+              lastHrTrend.trend == "uptrend" &&
+              lastHrTrend.strength == "moderate"));
+
+        this.buyCase3 =
+          priceChange <= -2 &&
+          first12HrsTrend.trend == "downtrend" &&
+          last12HrsTrend.trend == "sideways" &&
+          last6HrsTrend.trend == "sideways" &&
+          lastHrTrend.trend == "uptrend" &&
+          lastHrTrend.strength == "strong";
+
+        this.buyCase4 = false;
+      }
 
       // const breakout =
       //   first12HrsTrend.trend == "uptrend" &&
@@ -115,11 +135,20 @@ class BasicTrader extends Trader {
       //   lastHrTrend.trend == "uptrend" &&
       //   lastHrTrend.strength != "weak";
 
-      console.log("buy:", this.buyCase1, this.buyCase2, this.buyCase3);
-      if ((this.buyCase1 || this.buyCase2 || this.buyCase3) && safeAskBidSpread && this.lastTradeTimer <= 0) {
+      console.log("buy:", this.buyCase1, this.buyCase2, this.buyCase3, this.buyCase4);
+      if (
+        (this.buyCase1 || this.buyCase2 || this.buyCase3 || this.buyCase4) &&
+        safeAskBidSpread &&
+        this.lastTradeTimer <= 0
+      ) {
         await this.buy(balance, currentPrice.askPrice);
         this.prevGainPercent = 0;
         this.priceBaselineChange = priceChange;
+        this.stopLoss = false;
+        this.sellCase1 = false;
+        this.sellCase2 = false;
+        this.sellCase3 = false;
+        this.sellCas4 = false;
         this.dispatch("LOG", `Placed BUY at: ${currentPrice.askPrice}`);
       }
 
@@ -140,38 +169,61 @@ class BasicTrader extends Trader {
         }
       }
 
-      const stopLoss = (gainLossPercent > 3 && loss > 1) || loss > 3;
+      if (this.strategy == "long-term") {
+        this.stopLoss = false;
+        this.sellCase1 = false;
+        this.sellCase2 = false;
+        this.sellCase3 = false;
+        this.sellCas4 =
+          (first24HrsTrend.trend != "uptrend" &&
+            last24HrsTrend.trend != "downtrend" &&
+            last12HrsTrend.trend == "uptrend" &&
+            last6HrsTrend.trend == "uptrend" &&
+            lastHrTrend.trend == "downtrend") ||
+          (last24HrsTrend.trend == "downtrend" &&
+            last12HrsTrend.trend == "downtrend" &&
+            last6HrsTrend.trend == "downtrend");
 
-      const sellCase1 =
-        last12HrsTrend.trend == "downtrend" &&
-        last6HrsTrend.trend == "downtrend" &&
-        lastHrTrend.trend == "downtrend";
+        // downtrend downtrend downtrend downtrend downtrend
+      } else {
+        this.stopLoss = (gainLossPercent > 3 && loss > 1) || loss > 3;
 
-      const sellCase2 =
-        first12HrsTrend.trend != "uptrend" &&
-        last12HrsTrend.trend != "downtrend" &&
-        last6HrsTrend.trend == "uptrend" &&
-        lastHrTrend.trend == "downtrend" &&
-        priceChange - this.priceBaselineChange < -1;
+        this.sellCase1 =
+          last12HrsTrend.trend == "downtrend" &&
+          last6HrsTrend.trend == "downtrend" &&
+          lastHrTrend.trend == "downtrend";
 
-      const sellCase3 = this.buyCase2 && this.prevGainPercent > 1 && this.prevGainPercent < 3 && loss > 0.5;
+        this.sellCase2 =
+          first12HrsTrend.trend != "uptrend" &&
+          last12HrsTrend.trend != "downtrend" &&
+          last6HrsTrend.trend == "uptrend" &&
+          lastHrTrend.trend == "downtrend" &&
+          priceChange - this.priceBaselineChange < -1;
+
+        this.sellCase3 = this.buyCase2 && this.prevGainPercent > 1 && this.prevGainPercent < 3 && loss > 0.5;
+      }
 
       this.dispatch(
         "LOG",
         `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
       );
 
-      if ((stopLoss || sellCase1 || sellCase2 || sellCase3) && safeAskBidSpread) {
+      console.log("sell:", this.stopLoss, this.sellCase1, this.sellCase2, this.sellCase3, this.sellCas4);
+      if (
+        (this.stopLoss || this.sellCase1 || this.sellCase2 || this.sellCase3 || this.sellCas4) &&
+        safeAskBidSpread
+      ) {
         const res = await this.sell(position, balance, currentPrice.bidPrice);
         this.losses = [0, 0, 0];
         this.priceBaselineChange = priceChange;
-        if (gainLossPercent > 1 || sellCase3) {
+        if (gainLossPercent > 1 || this.sellCase3) {
           this.lastTradeTimer = (res.age * 60) / this.interval;
           this.pausePeriod = 0;
         }
         this.buyCase1 = false;
         this.buyCase2 = false;
         this.buyCase3 = false;
+        this.buyCase4 = false;
         this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);
       }
 
