@@ -70,7 +70,7 @@ class KrakenExchangeProvider {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
     const { a, b, c } = data[Object.keys(data)[0]];
     const prices = { tradePrice: +c[0], askPrice: +a[0], bidPrice: +b[0] };
-    // this.state.updateLocalPrices(pair, prices);
+    this.state.updateLocalPrices(pair, prices);
     return prices;
   }
 
