@@ -27,6 +27,7 @@ class BasicTrader extends Trader {
     const position = (await this.ex.getOrders(this.pair))[0];
     const { trades } = await this.ex.state.getBot(this.pair);
     const currentPrice = pricesData.at(-1);
+    const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
 
     if (pricesData.length < this.range) return;
     if (this.lastTradeTimer > 0) this.lastTradeTimer -= 1;
@@ -35,7 +36,7 @@ class BasicTrader extends Trader {
       // trades.slice(-10).reduce((ac, t) => ac + t, 0) <= -10
       this.pausePeriod = this.calculateLength(24);
     }
-    const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
+
     this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${prc}`);
 
     const askBidSpreadPercentage = calcPct(currentPrice.bidPrice, currentPrice.askPrice);
@@ -70,7 +71,8 @@ class BasicTrader extends Trader {
     // );
     // console.log(priceChange, this.priceBaselineChange);
 
-    if (this.pausePeriod > 1 && priceChange < 2) return console.log("STOP");
+    if (this.pausePeriod > 1 && priceChange < 2) return this.dispatch("LOG", `STOP`);
+
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 5) {
       if (priceChange < this.priceBaselineChange) this.priceBaselineChange = priceChange;
@@ -229,7 +231,7 @@ class BasicTrader extends Trader {
 
       //
     } else {
-      //   this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
+      this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
     }
 
     if (
