@@ -29,7 +29,7 @@ class BasicTrader extends Trader {
     const currentPrice = pricesData.at(-1);
     const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
 
-    if (pricesData.length < this.range) return;
+    if (pricesData.length < this.range) return this.dispatch("LOG", `No enough prices`);
     if (this.lastTradeTimer > 0) this.lastTradeTimer -= 1;
     if (this.pausePeriod > 1) this.pausePeriod -= 1;
     else if (!this.pausePeriod && trades[2] && trades.slice(-3).every((t) => t < 0)) {
