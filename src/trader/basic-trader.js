@@ -1,5 +1,5 @@
 import Trader from "./trader.js";
-import { calcPercentageDifference, calcAveragePrice, normalizePrices } from "../services.js";
+import { calcPercentageDifference, normalizePrices } from "../services.js";
 import { computeDynamicThreshold } from "../indicators.js";
 const calcPct = calcPercentageDifference;
 
@@ -22,11 +22,12 @@ class BasicTrader extends Trader {
 
   async run() {
     // Get data from Kraken
+    // const closes = (await this.ex.pricesData(this.pair, this.interval, 2)).slice(-20).map((p) => p.close);
     const pricesData = await this.ex.prices(this.pair, this.range);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
     const { trades } = await this.ex.state.getBot(this.pair);
-    const prices = normalizePrices(pricesData, 1.2); // safeAskBidSpread
+    const prices = !pricesData[2] ? [] : normalizePrices(pricesData, 1.2); // safeAskBidSpread
     const currentPrice = pricesData.at(-1);
 
     if (prices.length < this.range) return this.dispatch("LOG", `No enough prices or low liquidity`);

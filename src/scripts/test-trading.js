@@ -15,7 +15,7 @@ async function runTradingTest(pair, interval) {
   try {
     console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
 
-    const prices = getPrices(`test/${pair + suffix}`, interval / 5);
+    const prices = getPrices(`${pair + suffix}`, interval / 5);
     const result = await runTest(pair, prices, interval, showLogs);
 
     const profit = result.balance - capital;
