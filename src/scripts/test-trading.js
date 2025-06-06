@@ -66,7 +66,7 @@ async function runTest(pair, prices, interval, showLogs) {
 }
 
 function getPrices(pair, skip = 1) {
-  const path = `${process.cwd()}/database/prices/${pair}.json`;
+  const path = `${process.cwd()}/database/prices-local/${pair}.json`;
   if (!existsSync(path)) return [];
   return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
 

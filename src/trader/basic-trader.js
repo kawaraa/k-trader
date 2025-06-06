@@ -7,7 +7,7 @@ const calcPct = calcPercentageDifference;
 class BasicTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, strategy, mode }) {
     super(exProvider, pair, interval, capital, mode);
-    this.range = parseInt((60 * 48) / this.interval);
+    this.range = parseInt((60 * (strategy == "long-term" ? 48 : 24)) / this.interval);
     this.strategy = strategy || "short-term";
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
@@ -26,10 +26,10 @@ class BasicTrader extends Trader {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
     const { trades } = await this.ex.state.getBot(this.pair);
+    const prices = normalizePrices(pricesData, 1.2); // safeAskBidSpread
     const currentPrice = pricesData.at(-1);
-    const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
 
-    if (pricesData.length < this.range) return this.dispatch("LOG", `No enough prices`);
+    if (prices.length < this.range) return this.dispatch("LOG", `No enough prices or low liquidity`);
     if (this.lastTradeTimer > 0) this.lastTradeTimer -= 1;
     if (this.pausePeriod > 1) this.pausePeriod -= 1;
     else if (!this.pausePeriod && trades[2] && trades.slice(-3).every((t) => t < 0)) {
@@ -37,41 +37,41 @@ class BasicTrader extends Trader {
       this.pausePeriod = this.calculateLength(24);
     }
 
+    const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
     this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${prc}`);
 
-    const askBidSpreadPercentage = calcPct(currentPrice.bidPrice, currentPrice.askPrice);
-    const averageAskBidSpread = calcAveragePrice(pricesData.map((p) => calcPct(p.bidPrice, p.askPrice)));
-    const safeAskBidSpread = askBidSpreadPercentage <= Math.min(averageAskBidSpread * 2, 1); // safeAskBidSpread
-    const prices = normalizePrices(pricesData, averageAskBidSpread);
-
     const length = this.calculateLength(12);
+    const first24Prices = prices.slice(0, length * 2);
+    const last24Prices = prices.slice(-(length * 2));
+
     // const last48HrsTrend = linearRegression(prices);
-    const first24HrsTrend = linearRegression(prices.slice(0, length * 2));
-    const last24HrsTrend = linearRegression(prices.slice(-(length * 2)));
-    const first12HrsTrend = linearRegression(prices.slice(length * 2, -length));
-    const last12HrsTrend = linearRegression(prices.slice(-length));
-    const last6HrsTrend = linearRegression(prices.slice(-this.calculateLength(6)));
-    const lastHrTrend = linearRegression(prices.slice(-this.calculateLength(2)));
+    const first24HrsTrend = linearRegression(first24Prices);
+    const last24HrsTrend = linearRegression(last24Prices);
+    const first12HrsTrend = linearRegression(last24Prices.slice(0, parseInt(length)));
+    const last12HrsTrend = linearRegression(last24Prices.slice(-parseInt(length)));
+    const last6HrsTrend = linearRegression(last24Prices.slice(-this.calculateLength(6)));
+    const lastHrTrend = linearRegression(last24Prices.slice(-this.calculateLength(2)));
     // const priceChangeFromStart = calcPct(last24HrsTrend.intercept, prices.at(0));
     const priceChange = calcPct(last24HrsTrend.intercept, prices.at(-1));
-    // const priceChange24 = calcPct(last48HrsTrend.intercept, prices.at(-1));
+    // const priceChange48 = calcPct(last48HrsTrend.intercept, prices.at(-1));
 
-    // console.log("48 strategy:", this.buyCase4);
-    // // sideways weak sideways downtrend uptrend uptrend downtrend weak
     // console.log(
     //   first24HrsTrend.trend,
     //   first24HrsTrend.strength,
     //   last24HrsTrend.trend,
+    //   last24HrsTrend.strength,
     //   first12HrsTrend.trend,
+    //   first12HrsTrend.strength,
     //   last12HrsTrend.trend,
+    //   last12HrsTrend.strength,
     //   last6HrsTrend.trend,
+    //   last6HrsTrend.strength,
     //   lastHrTrend.trend,
-    //   lastHrTrend.strength,
-    //   priceChange24
+    //   lastHrTrend.strength
     // );
     // console.log(priceChange, this.priceBaselineChange);
 
-    if (this.pausePeriod > 1 && priceChange < 2) return this.dispatch("LOG", `STOP`);
+    if (this.pausePeriod > 1) return this.dispatch("LOG", `STOP`);
 
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 5) {
@@ -137,12 +137,8 @@ class BasicTrader extends Trader {
       //   lastHrTrend.trend == "uptrend" &&
       //   lastHrTrend.strength != "weak";
 
-      console.log("buy:", this.buyCase1, this.buyCase2, this.buyCase3, this.buyCase4);
-      if (
-        (this.buyCase1 || this.buyCase2 || this.buyCase3 || this.buyCase4) &&
-        safeAskBidSpread &&
-        this.lastTradeTimer <= 0
-      ) {
+      this.dispatch("LOG", `buy: ${this.buyCase1} ${this.buyCase2} ${this.buyCase3} ${this.buyCase4}`);
+      if ((this.buyCase1 || this.buyCase2 || this.buyCase3 || this.buyCase4) && this.lastTradeTimer <= 0) {
         await this.buy(balance, currentPrice.askPrice);
         this.prevGainPercent = 0;
         this.priceBaselineChange = priceChange;
@@ -210,11 +206,12 @@ class BasicTrader extends Trader {
         `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
       );
 
-      console.log("sell:", this.stopLoss, this.sellCase1, this.sellCase2, this.sellCase3, this.sellCas4);
-      if (
-        (this.stopLoss || this.sellCase1 || this.sellCase2 || this.sellCase3 || this.sellCas4) &&
-        safeAskBidSpread
-      ) {
+      this.dispatch(
+        "LOG",
+        `sell: ${this.stopLoss} ${this.sellCase1} ${this.sellCase2} ${this.sellCase3} ${this.sellCas4}`
+      );
+
+      if (this.stopLoss || this.sellCase1 || this.sellCase2 || this.sellCase3 || this.sellCas4) {
         const res = await this.sell(position, balance, currentPrice.bidPrice);
         this.losses = [0, 0, 0];
         this.priceBaselineChange = priceChange;
