@@ -67,25 +67,32 @@ export function detectPriceDirection(prices, minPercent, percentBetween = 0, mou
 
 export function detectPriceShape(prices, percentage) {
   const result = { shape: "unknown", value: null };
-  const currentPrice = prices[prices.length - 1];
+  let direction = "";
 
-  for (let i = prices.length - 1; i >= 0; i--) {
-    const price = prices[i];
-    const down = calcPercentageDifference(price, currentPrice) >= percentage;
-    const up = calcPercentageDifference(price, currentPrice) <= -percentage;
+  const firstPrice = prices[0];
+  for (let i = 0; i < prices.length; i++) {
+    const down = calcPercentageDifference(firstPrice, prices[i]) <= -percentage;
+    const up = calcPercentageDifference(firstPrice, prices[i]) >= percentage;
+    if (down) direction = "down";
+    if (up) direction = "up";
 
-    if (!result.value && (up || down)) result.value = price;
-    else if (result.value) {
-      const changePercent = calcPercentageDifference(price, result.value);
-      if (changePercent <= -percentage) {
-        result.shape = "V";
-        return result;
-      } else if (changePercent >= percentage) {
-        result.shape = "A";
-        return result;
-      }
-    }
+    result.value = prices[i];
+    if (down || up) break;
   }
+
+  const LastPrice = prices[prices.length - 1];
+  for (let i = prices.length - 1; i >= 0; i--) {
+    const down = calcPercentageDifference(LastPrice, prices[i]) >= percentage;
+    const up = calcPercentageDifference(LastPrice, prices[i]) <= -percentage;
+    if (down) direction += ":down";
+    if (up) direction += ":up";
+
+    result.value = (result.value + prices[i]) / 2;
+    if (down || up) break;
+  }
+
+  if (direction == "up:down") result.shape = "A";
+  if (direction == "down:up") result.shape = "V";
   return result;
 
   // const third = parseInt(prices.length / 3);
@@ -164,4 +171,34 @@ export function adjustPrice(price, percentage) {
   // This increases the tradePrice 0.10% by multiply it by 1.001, And decreases the tradePrice 0.10%, by multiply it by 0.999
   const multiplier = percentage / 100;
   return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
+}
+
+// Or Look for "historicalVolatility" function in the code;
+// Or Look for "calculateVolatility" function in the code;
+export function calculatePercentVolatility(prices) {
+  // 2 days of 5-min candles = 576 candles (24hrs*2days*12candles/hr)
+
+  // Calculate percentage changes between consecutive candles
+  const percentChanges = [];
+  for (let i = 1; i < prices.length; i++) {
+    const change = (prices[i] - prices[i - 1]) / prices[i - 1];
+    percentChanges.push(Math.abs(change)); // Use absolute values for volatility
+  }
+
+  // Calculate metrics
+  const sum = percentChanges.reduce((a, b) => a + b, 0);
+  const avgPercentChange = sum / percentChanges.length;
+
+  // Standard deviation of percentage changes
+  const squaredDiffs = percentChanges.map((p) => Math.pow(p - avgPercentChange, 2));
+  const variance = squaredDiffs.reduce((a, b) => a + b, 0) / percentChanges.length;
+  const stdDev = Math.sqrt(variance);
+
+  return {
+    averagePercentVolatility: avgPercentChange,
+    stdDevPercentVolatility: stdDev,
+    totalPercentMovement: sum,
+    // Optional: volatility ratio (stdDev/avg)
+    volatilityRatio: stdDev / avgPercentChange,
+  };
 }

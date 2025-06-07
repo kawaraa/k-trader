@@ -1,19 +1,20 @@
 import Trader from "./trader.js";
 import { calcPercentageDifference, normalizePrices } from "../services.js";
 import { computeDynamicThreshold } from "../indicators.js";
+// import { detectPriceShape } from "../trend-analysis.js";
 const calcPct = calcPercentageDifference;
 
 // Smart trader
 class BasicTrader extends Trader {
-  constructor(exProvider, pair, { interval, capital, strategy, mode }) {
+  constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
-    this.range = parseInt((60 * (strategy == "long-term" ? 48 : 24)) / this.interval);
-    this.strategy = strategy || "short-term";
+    this.range = parseInt((60 * 48) / this.interval);
+    this.longTerm = false;
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
     this.priceBaselineChange = 0;
     this.lastTradeTimer = 0;
-    this.pausePeriod = 0;
+    this.trades = [];
     this.buyCase1 = false;
     this.buyCase2 = false;
     this.buyCase3 = false;
@@ -26,20 +27,25 @@ class BasicTrader extends Trader {
     const pricesData = await this.ex.prices(this.pair, this.range);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
-    const { trades } = await this.ex.state.getBot(this.pair);
-    const prices = !pricesData[2] ? [] : normalizePrices(pricesData, 1.2); // safeAskBidSpread
-    const currentPrice = pricesData.at(-1);
+    // const { trades } = await this.ex.state.getBot(this.pair);
+    let prices = !pricesData[2] ? [] : normalizePrices(pricesData, 1.2); // safeAskBidSpread
+    if (pricesData.length < this.range - 1) {
+      const days = (this.range * this.interval) / 60 / 24;
+      prices = (await this.pricesData(this.pair, this.interval, days)).map((p) => p.close);
+    }
+    const currentPrice = pricesData.at(-1) || prices.at(-1);
 
     if (prices.length < this.range) return this.dispatch("LOG", `No enough prices or low liquidity`);
     if (this.lastTradeTimer > 0) this.lastTradeTimer -= 1;
-    if (this.pausePeriod > 1) this.pausePeriod -= 1;
-    else if (!this.pausePeriod && trades[2] && trades.slice(-3).every((t) => t < 0)) {
-      // trades.slice(-10).reduce((ac, t) => ac + t, 0) <= -10
-      this.pausePeriod = this.calculateLength(24);
+    if (this.trades[2] && this.trades.slice(-3).every((t) => t < 0)) {
+      this.longTerm = !this.longTerm;
+      this.trades = [];
     }
 
+    // console.log("volatility", calculatePercentVolatility(prices));
+    const mode = this.longTerm ? "long-term" : "short-term";
     const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
-    this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${prc}`);
+    this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${mode} - ${prc}`);
 
     const length = this.calculateLength(12);
     const first24Prices = prices.slice(0, length * 2);
@@ -51,7 +57,8 @@ class BasicTrader extends Trader {
     const first12HrsTrend = linearRegression(last24Prices.slice(0, parseInt(length)));
     const last12HrsTrend = linearRegression(last24Prices.slice(-parseInt(length)));
     const last6HrsTrend = linearRegression(last24Prices.slice(-this.calculateLength(6)));
-    const lastHrTrend = linearRegression(last24Prices.slice(-this.calculateLength(2)));
+    const last2HrTrend = linearRegression(last24Prices.slice(-this.calculateLength(2)));
+    // const { shape } = detectPriceShape(last24Prices.slice(-this.calculateLength(1)), 1.5);
     // const priceChangeFromStart = calcPct(last24HrsTrend.intercept, prices.at(0));
     const priceChange = calcPct(last24HrsTrend.intercept, prices.at(-1));
     // const priceChange48 = calcPct(last48HrsTrend.intercept, prices.at(-1));
@@ -67,35 +74,36 @@ class BasicTrader extends Trader {
     //   last12HrsTrend.strength,
     //   last6HrsTrend.trend,
     //   last6HrsTrend.strength,
-    //   lastHrTrend.trend,
-    //   lastHrTrend.strength
+    //   last2HrTrend.trend,
+    //   last2HrTrend.strength
     // );
     // console.log(priceChange, this.priceBaselineChange);
 
     if (this.pausePeriod > 1) return this.dispatch("LOG", `STOP`);
 
     // Buy
-    if (!position && this.capital > 0 && balance.eur >= 5) {
+    if (!position && this.capital > 0) {
       if (priceChange < this.priceBaselineChange) this.priceBaselineChange = priceChange;
 
-      if (this.strategy == "long-term") {
+      if (this.longTerm) {
         this.buyCase1 = false;
         this.buyCase2 = false;
         this.buyCase3 = false;
-        this.buyCase4 =
+        this.buyCase4 = false;
+        this.buyCase5 =
           first24HrsTrend.trend == "uptrend" &&
           first24HrsTrend.strength != "weak" &&
           last24HrsTrend.trend == "downtrend" &&
           last12HrsTrend.trend == "downtrend" &&
           last6HrsTrend.trend == "uptrend" &&
-          lastHrTrend.trend == "uptrend";
+          last2HrTrend.trend == "uptrend";
       } else {
         this.buyCase1 =
           (first12HrsTrend.trend != "downtrend" &&
             last12HrsTrend.trend == "downtrend" &&
             last6HrsTrend.trend == "downtrend" &&
-            lastHrTrend.trend == "uptrend" &&
-            lastHrTrend.strength != "weak" &&
+            last2HrTrend.trend == "uptrend" &&
+            last2HrTrend.strength != "weak" &&
             priceChange <= -2 &&
             priceChange - this.priceBaselineChange >= 1) ||
           (last24HrsTrend.trend == "uptrend" &&
@@ -104,29 +112,30 @@ class BasicTrader extends Trader {
             last12HrsTrend.trend == "downtrend" &&
             last12HrsTrend.strength == "strong" &&
             last6HrsTrend.trend == "downtrend" &&
-            lastHrTrend.trend == "uptrend");
+            last2HrTrend.trend == "uptrend");
 
         this.buyCase2 =
           priceChange <= -2 &&
           first12HrsTrend.trend == "downtrend" &&
           last12HrsTrend.trend == "downtrend" &&
           ((last6HrsTrend.trend == "uptrend" &&
-            lastHrTrend.trend == "uptrend" &&
-            lastHrTrend.strength == "strong") ||
+            last2HrTrend.trend == "uptrend" &&
+            last2HrTrend.strength == "strong") ||
             (last6HrsTrend.trend == "uptrend" &&
               last6HrsTrend.strength == "moderate" &&
-              lastHrTrend.trend == "uptrend" &&
-              lastHrTrend.strength == "moderate"));
+              last2HrTrend.trend == "uptrend" &&
+              last2HrTrend.strength == "moderate"));
 
         this.buyCase3 =
           priceChange <= -2 &&
           first12HrsTrend.trend == "downtrend" &&
           last12HrsTrend.trend == "sideways" &&
           last6HrsTrend.trend == "sideways" &&
-          lastHrTrend.trend == "uptrend" &&
-          lastHrTrend.strength == "strong";
+          last2HrTrend.trend == "uptrend" &&
+          last2HrTrend.strength == "strong";
 
-        this.buyCase4 = false;
+        // this.buyCase4 = last12HrsTrend.trend == "downtrend" && shape == "V";
+        this.buyCase5 = false;
       }
 
       // const breakout =
@@ -135,11 +144,17 @@ class BasicTrader extends Trader {
       //   last12HrsTrend.strength != "weak" &&
       //   last6HrsTrend.trend == "uptrend" &&
       //   last6HrsTrend.strength != "weak" &&
-      //   lastHrTrend.trend == "uptrend" &&
-      //   lastHrTrend.strength != "weak";
+      //   last2HrTrend.trend == "uptrend" &&
+      //   last2HrTrend.strength != "weak";
 
-      this.dispatch("LOG", `buy: ${this.buyCase1} ${this.buyCase2} ${this.buyCase3} ${this.buyCase4}`);
-      if ((this.buyCase1 || this.buyCase2 || this.buyCase3 || this.buyCase4) && this.lastTradeTimer <= 0) {
+      this.dispatch(
+        "LOG",
+        `buy: ${this.buyCase1} ${this.buyCase2} ${this.buyCase3} ${this.buyCase4} ${this.buyCase5}`
+      );
+      if (
+        (this.buyCase1 || this.buyCase2 || this.buyCase3 || this.buyCase4 || this.buyCase5) &&
+        this.lastTradeTimer <= 0
+      ) {
         await this.buy(balance, currentPrice.askPrice);
         this.prevGainPercent = 0;
         this.priceBaselineChange = priceChange;
@@ -168,7 +183,7 @@ class BasicTrader extends Trader {
         }
       }
 
-      if (this.strategy == "long-term") {
+      if (this.longTerm) {
         this.stopLoss = false;
         this.sellCase1 = false;
         this.sellCase2 = false;
@@ -178,7 +193,7 @@ class BasicTrader extends Trader {
             last24HrsTrend.trend != "downtrend" &&
             last12HrsTrend.trend == "uptrend" &&
             last6HrsTrend.trend == "uptrend" &&
-            lastHrTrend.trend == "downtrend") ||
+            last2HrTrend.trend == "downtrend") ||
           (last24HrsTrend.trend == "downtrend" &&
             last12HrsTrend.trend == "downtrend" &&
             last6HrsTrend.trend == "downtrend");
@@ -188,18 +203,23 @@ class BasicTrader extends Trader {
         this.stopLoss = (gainLossPercent > 3 && loss > 1) || loss > 3;
 
         this.sellCase1 =
+          !this.buyCase4 &&
           last12HrsTrend.trend == "downtrend" &&
           last6HrsTrend.trend == "downtrend" &&
-          lastHrTrend.trend == "downtrend";
+          last2HrTrend.trend == "downtrend";
 
         this.sellCase2 =
           first12HrsTrend.trend != "uptrend" &&
           last12HrsTrend.trend != "downtrend" &&
           last6HrsTrend.trend == "uptrend" &&
-          lastHrTrend.trend == "downtrend" &&
+          last2HrTrend.trend == "downtrend" &&
           priceChange - this.priceBaselineChange < -1;
 
-        this.sellCase3 = this.buyCase2 && this.prevGainPercent > 1 && this.prevGainPercent < 3 && loss > 0.5;
+        this.sellCase3 =
+          (this.buyCase2 || this.buyCase4) &&
+          this.prevGainPercent > 1 &&
+          this.prevGainPercent < 3 &&
+          loss > 0.5;
       }
 
       this.dispatch(
@@ -224,6 +244,9 @@ class BasicTrader extends Trader {
         this.buyCase2 = false;
         this.buyCase3 = false;
         this.buyCase4 = false;
+        this.buyCase5 = false;
+
+        this.trades.push(gainLossPercent);
         this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);
       }
 
@@ -236,7 +259,7 @@ class BasicTrader extends Trader {
       !position &&
       last12HrsTrend.trend == "uptrend" &&
       last6HrsTrend.trend == "uptrend" &&
-      lastHrTrend.trend == "uptrend"
+      last2HrTrend.trend == "uptrend"
     ) {
       this.priceBaselineChange = priceChange;
     }

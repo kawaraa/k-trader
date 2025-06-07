@@ -39,6 +39,7 @@ async function runTest(pair, prices, interval, showLogs) {
   const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, interval);
   const trader = new BasicTrader(ex, pair, { interval, capital, mode: "live" });
   delete trader.period;
+  ex.currentPriceIndex = trader.range;
 
   trader.listener = (p, event, info) => {
     if (showLogs && event == "LOG") {
@@ -54,7 +55,7 @@ async function runTest(pair, prices, interval, showLogs) {
     }
   };
 
-  for (const i in prices) {
+  for (let i = trader.range; i < prices.length; i++) {
     await trader.start();
   }
 
