@@ -35,7 +35,7 @@ class BasicTrader extends Trader {
     }
     const currentPrice = storedPrices.at(-1) || prices.at(-1);
 
-    if (prices.length < this.range) return this.dispatch("LOG", `No enough prices or low liquidity`);
+    if (prices.length < this.range - 1) return this.dispatch("LOG", `No enough prices or low liquidity`);
     if (this.lastTradeTimer > 0) this.lastTradeTimer -= 1;
     if (this.trades[2] && this.trades.slice(-3).every((t) => t < 0)) {
       this.longTerm = !this.longTerm;
