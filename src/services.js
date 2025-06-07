@@ -106,13 +106,11 @@ export function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, ro
 export function normalizePrices(prices, maxAskBidSpread = 1.2) {
   let avgAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice)));
   avgAskBidSpread = Math.min(avgAskBidSpread * 2, maxAskBidSpread); // safeAskBidSpread
-
-  const normalAskBidSpreed = (spreed) => spreed <= Math.min(avgAskBidSpread * 2, 1);
   const normalizedPrices = [];
 
   for (let i = 0; i < prices.length; i++) {
     const askBidSpreedPercent = calcPercentageDifference(prices[i].bidPrice, prices[i].askPrice);
-    if (normalAskBidSpreed(askBidSpreedPercent)) {
+    if (askBidSpreedPercent <= avgAskBidSpread) {
       normalizedPrices.push(calcAveragePrice([prices[i].askPrice, prices[i].bidPrice]));
     } else if (normalizedPrices.at(-1)) {
       normalizedPrices.push(normalizedPrices.at(-1));
