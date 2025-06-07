@@ -24,16 +24,16 @@ class BasicTrader extends Trader {
   async run() {
     // Get data from Kraken
     // const closes = (await this.ex.pricesData(this.pair, this.interval, 2)).slice(-20).map((p) => p.close);
-    const pricesData = await this.ex.prices(this.pair, this.range);
+    const storedPrices = await this.ex.prices(this.pair, this.range);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
     // const { trades } = await this.ex.state.getBot(this.pair);
-    let prices = !pricesData[2] ? [] : normalizePrices(pricesData, 1.2); // safeAskBidSpread
-    if (pricesData.length < this.range - 1) {
+    let prices = !storedPrices[2] ? [] : normalizePrices(storedPrices, 1.2); // safeAskBidSpread
+    if (storedPrices.length < this.range - 1) {
       const days = (this.range * this.interval) / 60 / 24;
-      prices = (await this.pricesData(this.pair, this.interval, days)).map((p) => p.close);
+      prices = (await this.ex.pricesData(this.pair, this.interval, days)).map((p) => p.close);
     }
-    const currentPrice = pricesData.at(-1) || prices.at(-1);
+    const currentPrice = storedPrices.at(-1) || prices.at(-1);
 
     if (prices.length < this.range) return this.dispatch("LOG", `No enough prices or low liquidity`);
     if (this.lastTradeTimer > 0) this.lastTradeTimer -= 1;
