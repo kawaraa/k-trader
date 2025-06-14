@@ -4,6 +4,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import TestExchangeProvider from "../providers/test-ex-provider.js";
 import BasicTrader from "../trader/basic-trader.js";
+// import BasicTrader from "../trader/basic-trader-1.js";
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
