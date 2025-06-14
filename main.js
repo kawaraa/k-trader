@@ -35,10 +35,9 @@ try {
 
   server.use("/api", apiRouter);
 
-  server.use(express.static(`${__dirname}/public/`));
-  // Serve static files from the "out" directory
-  server.use(express.static(`${__dirname}/out/`));
-  // Serve the index.html file for any unknown routes (SPA behavior)
+  server.use(express.static(`${__dirname}/public/`)); // Serve static files from the "out" directory
+  server.use(express.static(`${__dirname}/out/`)); // SPA behavior: (Serve the index.html for any unknown routes)
+
   server.get("*", (req, res) => {
     res.sendFile(`${__dirname}/out/index.html`);
   });
