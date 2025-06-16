@@ -1,6 +1,7 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 import KrakenExchangeProvider from "./providers/kraken-ex-provider.js";
+import notificationProvider from "./providers/notification-provider.js";
 import BasicTrader from "./trader/basic-trader.js";
 import IntermediateTrader from "./trader/Intermediate-trader.js";
 import AdvanceTrader from "./trader/advance-trader.js";
@@ -9,6 +10,7 @@ import { dateToString, toShortDate, delay } from "./utilities.js";
 import LocalState from "./local-state.js";
 
 const state = new LocalState("state");
+
 const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
 
 export class BotsManager {
@@ -112,10 +114,16 @@ export class BotsManager {
       }
     } else {
       if (event == "BALANCE") this.#bots[pair].balance = info;
-      if (event == "BUY") this.#bots[pair].position = info;
-      if (event == "SELL") {
+      else if (event == "BUY") {
+        this.#bots[pair].position = info;
+        notificationProvider.push({ title: `Bought ${pair}`, body: `Placed buy position` });
+      } else if (event == "SELL") {
         this.#bots[pair].position = null;
         this.#bots[pair].trades.push(info);
+        notificationProvider.push({
+          title: `Sold ${pair}`,
+          body: `Placed sell position with profit/loss ${info}`,
+        });
       }
       this.state.update(this.#bots);
     }

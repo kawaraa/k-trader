@@ -8,6 +8,11 @@ import { dateToString, request } from "../src/utilities.js";
 import { btnCls } from "./components/tailwind-classes";
 import Loader from "./components/loader";
 import RefreshButton from "./components/refresh-button";
+import { ToggleSwitch } from "./components/toggle-switch.js";
+import { urlBase64ToUint8Array } from "./services/encodin-helper.js";
+import config from "../.env.json";
+const key = config.NEXT_PUBLIC_VAPID_KEY;
+
 const badgeCls =
   "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
 const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
@@ -20,6 +25,7 @@ export default function Home() {
   const [botToUpdate, setBotToUpdate] = useState(null);
   const [showAddBotForm, setShowAddBotForm] = useState(false);
   const [orderbyTime, setOrderbyTime] = useState(false);
+  const [notificationOn, setNotificationOn] = useState(false);
   const close = () => setShowAddBotForm(false) + setBotToUpdate(null);
   const catchErr = (er) => alert(er.message || er.error || er);
   const botsPairs = Object.keys(bots);
@@ -119,8 +125,9 @@ export default function Home() {
     setLoading(false);
   };
 
-  const fetchBots = async () => {
+  const fetchData = async () => {
     setLoading(true);
+
     await request("/api/bots")
       .then((data) => {
         setBalance(data.balance + 0);
@@ -128,13 +135,72 @@ export default function Home() {
         setBots(data);
       })
       .catch(console.log);
+
+    await request("/api/notification")
+      .then((data) => {
+        setNotificationOn(data.length > 0);
+      })
+      .catch(console.log);
+
     setLoading(false);
   };
 
+  const handleNotificationSettings = async (e) => {
+    try {
+      await Notification.requestPermission();
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(key), // From `web-push generate-vapid-keys`
+      });
+
+      if (!e.target.checked) {
+        // console.log("Push subscription:", subscription);
+        // Send subscription to your backend (for testing, log it)
+        await fetch("/api/notification", {
+          method: "POST",
+          body: JSON.stringify(subscription),
+          headers: { "Content-Type": "application/json" },
+        }).then((res) => res.json());
+        setNotificationOn(true);
+      } else {
+        await fetch(`/api/notification?endpoint=${subscription.endpoint}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }).then((res) => res.json());
+        setNotificationOn(false);
+      }
+    } catch (error) {
+      console.log("requestPushNotification: ", error);
+    }
+  };
+
+  const registerServiceWorker = async () => {
+    if ("serviceWorker" in navigator) {
+      return navigator.serviceWorker.getRegistrations().then(async (registrations) => {
+        for (const registration of registrations) {
+          if (
+            registration.active.state == "activated" &&
+            registration.active?.scriptURL?.includes("service-worker.js")
+          ) {
+            continue;
+          }
+          await new Promise((res, rej) => registration.unregister().then(res).catch(rej));
+        }
+
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then((registration) => console.log("Registration scope: ", registration.scope))
+          .catch((error) => console.log("Web Worker Registration Error: ", error));
+      });
+    }
+  };
   useEffect(() => {
     request("/api/auth")
-      .then(fetchBots)
+      .then(fetchData)
       .catch(() => router.replace("/signin"));
+
+    registerServiceWorker();
   }, []);
 
   return (
@@ -171,7 +237,10 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <ToggleSwitch onChange={handleNotificationSettings} checked={notificationOn}>
+          <span className="mx-3">Notify me</span>
+        </ToggleSwitch>
         <label for="orderby" className="flex items-center m-2 cursor-pointer">
           <input
             id="orderby"
@@ -229,7 +298,7 @@ export default function Home() {
         </svg>
       </button>
 
-      <RefreshButton onClick={fetchBots} />
+      <RefreshButton onClick={fetchData} />
 
       <Loader loading={loading} />
     </>

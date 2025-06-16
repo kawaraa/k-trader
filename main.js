@@ -5,6 +5,7 @@ import express from "express";
 import { cookiesParser, isAuthenticated } from "./src/routes/middlewares.js";
 import authRoute from "./src/routes/auth.js";
 import botRoute from "./src/routes/bots.js";
+import notificationRoute from "./src/routes/notification.js";
 import { RequestRateLimiter } from "k-utilities/network.js";
 import fireStoreProvider from "./src/providers/firebase-provider.js";
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +33,7 @@ try {
   const apiRouter = express.Router();
   authRoute(apiRouter, fireStoreProvider, authRequired, cookieOptions);
   botRoute(apiRouter, fireStoreProvider, authRequired, prod);
+  notificationRoute(apiRouter, authRequired, prod);
 
   server.use("/api", apiRouter);
 

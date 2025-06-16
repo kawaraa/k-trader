@@ -1,8 +1,10 @@
 {
-  "name": "K Trader",
-  "short_name": "Ktrader",
+  "id": "k-trader-site-id",
+  "name": "K-Trader",
+  "short_name": "KT",
   "start_url": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay"],
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "description": "K Trader is a Cryptocurrency Trading Bots and Bots Manager.",
@@ -44,6 +46,23 @@
       "type": "image/png",
       "sizes": "1286x1286",
       "purpose": "any"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "/desktop-screenshot.png",
+      "sizes": "2544x1308",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop screenshot"
+    },
+    {
+      "src": "/mobile-screenshot.png",
+      "sizes": "990x1308",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile screenshot"
     }
   ]
 }
