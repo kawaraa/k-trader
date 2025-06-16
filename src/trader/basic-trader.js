@@ -27,7 +27,7 @@ class BasicTrader extends Trader {
     const prices = !storedPrices[2] ? [] : normalizePrices(storedPrices, 1.2); // safeAskBidSpread
     if (storedPrices.length < this.range - 1) {
       const days = (this.range * this.interval) / 60 / 24;
-      // prices = (await this.ex.pricesData(this.pair, this.interval, days)).map((p) => p.close);
+      prices = (await this.ex.pricesData(this.pair, this.interval, days)).map((p) => p.close);
     }
     const currentPrice = storedPrices.at(-1) || prices.at(-1);
 
