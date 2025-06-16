@@ -60,63 +60,40 @@ export function detectPriceDirection(prices, minPercent, percentBetween = 0, mou
     currentPrice = prices[i];
   }
   const changePercent = up - down;
-  if (changePercent >= minPercent && uptrendCount >= mountains) return "UPTREND";
-  else if (changePercent <= -minPercent && downtrendCount >= mountains) return "DOWNTREND";
-  else return "UNKNOWN";
+  if (changePercent >= minPercent && uptrendCount >= mountains) return "uptrend";
+  else if (changePercent <= -minPercent && downtrendCount >= mountains) return "downtrend";
+  else return "unknown";
 }
 
 export function detectPriceShape(prices, percentage) {
-  const result = { shape: "unknown", value: null };
+  const result = { shape: "unknown", value: null, index: null };
   let direction = "";
 
-  const firstPrice = prices[0];
-  for (let i = 0; i < prices.length; i++) {
-    const down = calcPercentageDifference(firstPrice, prices[i]) <= -percentage;
-    const up = calcPercentageDifference(firstPrice, prices[i]) >= percentage;
-    if (down) direction = "down";
-    if (up) direction = "up";
-
-    result.value = prices[i];
-    if (down || up) break;
-  }
-
-  const LastPrice = prices[prices.length - 1];
+  let current = prices[prices.length - 1];
   for (let i = prices.length - 1; i >= 0; i--) {
-    const down = calcPercentageDifference(LastPrice, prices[i]) >= percentage;
-    const up = calcPercentageDifference(LastPrice, prices[i]) <= -percentage;
-    if (down) direction += ":down";
-    if (up) direction += ":up";
+    const change = calcPercentageDifference(prices[i], current);
+    if (change > 0) {
+      if (change >= percentage && !direction.includes("down")) direction += !direction ? "down:" : "down";
+      else if (direction.includes("down")) {
+        current = prices[i];
+        result.value = current;
+        result.index = i;
+      }
+    } else if (change < 0) {
+      if (change <= -percentage && !direction.includes("up")) direction += !direction ? "up:" : "up";
+      else if (direction.includes("up")) {
+        current = prices[i];
+        result.value = current;
+        result.index = i;
+      }
+    }
 
-    result.value = (result.value + prices[i]) / 2;
-    if (down || up) break;
+    if (direction == "up:down") result.shape = "A";
+    if (direction == "down:up") result.shape = "V";
+    if (result.shape != "unknown") return result;
   }
 
-  if (direction == "up:down") result.shape = "A";
-  if (direction == "down:up") result.shape = "V";
-  return result;
-
-  // const third = parseInt(prices.length / 3);
-
-  // if (prices.length < 3) return null; // Not enough points for a shape
-
-  // const inTheMiddle = (index) => index >= third - 1 && index <= third * 2 - 1;
-
-  // const minPrice = (result.value = Math.min(...prices));
-  // const VShape =
-  //   calcPercentageDifference(prices[0], minPrice) <= -percentage &&
-  //   calcPercentageDifference(minPrice, lastPrices) >= percentage;
-  // result.shape = "V"; // Check for "V" shape
-
-  // if (inTheMiddle(prices.indexOf(minPrice)) && VShape) return result;
-
-  // const maxPrice = (result.value = Math.max(...prices));
-  // const AShape =
-  //   calcPercentageDifference(prices[0], maxPrice) >= percentage &&
-  //   calcPercentageDifference(maxPrice, lastPrices) <= -percentage;
-  // result.shape = "A"; // Check for "A" shape
-  // if (inTheMiddle(prices.indexOf(maxPrice)) && AShape) return result;
-
-  // return result; // No clear "V" or "A" shape
+  if (result.shape) return result;
 }
 
 export function findHighestLowestPrice(prices, currentPrice) {
