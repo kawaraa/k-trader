@@ -114,16 +114,18 @@ export class BotsManager {
       }
     } else {
       if (event == "BALANCE") this.#bots[pair].balance = info;
-      else if (event == "BUY") {
+      else if (event == "BUY_SIGNAL") {
+        const title = `BUY Signal for ${pair}`;
+        const body = `Price: ${info} Time: ${toShortDate()}`;
+        notificationProvider.push({ title, body });
+      } else if (event == "BUY") {
         this.#bots[pair].position = info;
         notificationProvider.push({ title: `Bought ${pair}`, body: `Placed buy position` });
       } else if (event == "SELL") {
         this.#bots[pair].position = null;
         this.#bots[pair].trades.push(info);
-        notificationProvider.push({
-          title: `Sold ${pair}`,
-          body: `Placed sell position with profit/loss ${info}`,
-        });
+        const body = `Placed sell position with profit/loss ${info}`;
+        notificationProvider.push({ title: `Sold ${pair}`, body });
       }
       this.state.update(this.#bots);
     }

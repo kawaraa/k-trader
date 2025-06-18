@@ -12,7 +12,6 @@ class BasicTrader extends Trader {
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
     this.lastSellOrderPrice = null;
-    this.pausePeriod = 0;
     this.profitTarget = 5;
     this.buyCases = [];
     this.sellCases = [];
@@ -27,17 +26,13 @@ class BasicTrader extends Trader {
     const prices = !storedPrices[2] ? [] : normalizePrices(storedPrices, 1.2); // safeAskBidSpread
     if (storedPrices.length < this.range - 1) {
       const days = (this.range * this.interval) / 60 / 24;
-      prices = (await this.ex.pricesData(this.pair, this.interval, days)).map((p) => p.close);
+      // prices = (await this.ex.pricesData(this.pair, this.interval, days)).map((p) => p.close);
     }
     const currentPrice = storedPrices.at(-1) || prices.at(-1);
 
     if (!position && prices.length < this.range - 1) {
       return this.dispatch("LOG", `No enough prices or low liquidity`);
     }
-    if (this.pausePeriod > 0) this.pausePeriod -= 1;
-
-    const prc = JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", ");
-    this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${prc}`);
 
     const sortedPrices = prices.toSorted((a, b) => a - b);
     // const start = prices.at(-1);
@@ -73,22 +68,18 @@ class BasicTrader extends Trader {
     const dropped = percentFromHighestToCurrent < -10;
     const priceTooHigh = this.lastSellOrderPrice && calcPct(this.lastSellOrderPrice, current) > 5;
 
-    // console.log(
-    //   percentFromHighestToCurrent,
-    //   this.profitTarget,
-    //   // last24HrsTrend.trend,
-    //   // first12HrsTrend.trend,
-    //   last12HrsTrend.trend,
-    //   last6HrsTrend.trend,
-    //   prev3HrTrend.trend,
-    //   last3HrTrend.trend,
-    //   lastHrTrend,
-    //   pattern1.shape,
-    //   pattern2.shape,
-    //   pattern3.shape,
-    //   increaseLimit,
-    //   vLimit
-    // );
+    // console.log(last24HrsTrend.trend, first12HrsTrend.trend, lastHrTrend, increaseLimit, vLimit);
+
+    const log = `Drops: ${percentFromHighestToCurrent} - Profit target: ${this.profitTarget}`;
+    this.dispatch("LOG", `€${balance.eur.toFixed(2)} - ${log}`);
+    // this.dispatch("LOG", JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
+    // this.dispatch("LOG", `24 trend: ${JSON.stringify(last12HrsTrend)}`);
+    // this.dispatch("LOG", `6 trend: ${JSON.stringify(last6HrsTrend)}`);
+    // this.dispatch("LOG", `3 prev trend: ${JSON.stringify(prev3HrTrend)}`);
+    // this.dispatch("LOG", `3 trend: ${JSON.stringify(last3HrTrend)}`);
+    // this.dispatch("LOG", `pattern1: ${JSON.stringify(pattern1)}`);
+    // this.dispatch("LOG", `pattern2: ${JSON.stringify(pattern2)}`);
+    // this.dispatch("LOG", `pattern3: ${JSON.stringify(pattern3)}`);
 
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 5) {
@@ -99,7 +90,6 @@ class BasicTrader extends Trader {
       this.buyCases[0] =
         dropped &&
         [last12HrsTrend.trend, last6HrsTrend.trend, prev3HrTrend.trend].every((t) => t == "downtrend") &&
-        [last3HrTrend.trend, lastHrTrend].some((t) => t != "downtrend") &&
         (v || uptrend);
 
       this.buyCases[1] =
@@ -121,12 +111,20 @@ class BasicTrader extends Trader {
 
       if (this.buyCases[3]) this.lastSellOrderPrice = current;
 
-      if (this.buyCases.some((c) => c) && up && this.pausePeriod <= 0) {
-        this.profitTarget = +Math.max(Math.min(-percentFromHighestToCurrent / 3, 8), 4).toFixed(2);
-        await this.buy(balance, currentPrice.askPrice);
-        this.dispatch("LOG", `Placed BUY at: ${currentPrice.askPrice}`);
-        this.prevGainPercent = 0;
-        this.losses = [0, 0, 0];
+      if (this.buyCases.some((c) => c)) {
+        if (this.notifiedTimer <= 0) {
+          this.dispatch("LOG", `BUY Signal case: ${this.buyCases.findIndex((c) => c)}`);
+          this.dispatch("BUY_SIGNAL", currentPrice.askPrice);
+          this.notifiedTimer = (1 * 60) / this.interval;
+        }
+
+        if (up && this.pauseTimer <= 0) {
+          this.profitTarget = +Math.max(Math.min(-percentFromHighestToCurrent / 3, 8), 4).toFixed(2);
+          await this.buy(balance, currentPrice.askPrice);
+          this.dispatch("LOG", `Placed BUY at: ${currentPrice.askPrice}`);
+          this.prevGainPercent = 0;
+          this.losses = [0, 0, 0];
+        }
       }
 
       // Sell
@@ -153,9 +151,9 @@ class BasicTrader extends Trader {
 
       if (shouldSell) {
         const res = await this.sell(position, balance, currentPrice.bidPrice);
-        if (gainLossPercent > 3) this.pausePeriod = 60 / this.interval;
+        if (gainLossPercent > 3) this.pauseTimer = 60 / this.interval;
         if (this.buyCases[3] || (trades[1] && trades.slice(-2).every((t) => t < -3))) {
-          this.pausePeriod = (24 * 60) / this.interval;
+          this.pauseTimer = (24 * 60) / this.interval;
         }
         this.buyCases.forEach((c) => (c = false));
         this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);

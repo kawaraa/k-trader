@@ -14,6 +14,8 @@ export default class Trader {
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
     this.timeoutID = 0;
+    this.pauseTimer = 0;
+    this.notifiedTimer = 0;
 
     // this.strategyRange = +range; // Range in hours "0.5 = have an hour"
     // this.pricePercentChange = +pricePercent; // Percentage Change is the price Percentage Threshold
@@ -24,6 +26,8 @@ export default class Trader {
 
   async start() {
     try {
+      if (this.pauseTimer > 0) this.pauseTimer -= 1;
+      if (this.notifiedTimer > 0) this.notifiedTimer -= 1;
       if (this.run) await this.run();
     } catch (error) {
       this.dispatch("LOG", `Error running bot: ${error}`);
