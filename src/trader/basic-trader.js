@@ -82,7 +82,7 @@ class BasicTrader extends Trader {
     // this.dispatch("LOG", `pattern3: ${JSON.stringify(pattern3)}`);
 
     // Buy
-    if (!position && this.capital > 0 && balance.eur >= 5) {
+    if (!position && this.capital > 0 && balance.eur >= 1) {
       const uptrend = lastHrTrend == "uptrend";
       const v = pattern3.shape == "V";
       const up = prices.at(-2) < prices.at(-1);
