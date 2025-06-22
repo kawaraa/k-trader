@@ -8,7 +8,7 @@ export default class Trader {
     this.interval = +interval;
     this.capital = +capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
     // this.strategyTimestamp = info.strategyTimestamp;
-    this.period = this.interval < 5 ? this.interval : 5; // this.period is deleted in only test trading
+    this.period = this.interval || 5; // this.period is deleted in only test trading
     // this.testMode = info.testMode;
     this.testMode = mode != "live";
     this.rsiPeriod = 14; // Recommended Default is 14
@@ -32,7 +32,7 @@ export default class Trader {
     } catch (error) {
       this.dispatch("LOG", `Error running bot: ${error}`);
     }
-    if (this.period) this.timeoutID = setTimeout(() => this.start(), 60000 * this.period);
+    if (this.period) this.timeoutID = setTimeout(() => this.start(), this.period * 1000);
   }
 
   async run() {} // This is overwritten in derived classes

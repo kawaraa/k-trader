@@ -11,7 +11,7 @@ export default function CryptoChart() {
   const since = Date.now() - prices.length * interval;
 
   const labels = prices.map((p, i) => `${toShortDate(new Date(since + interval * i))}`);
-  console.log(prices);
+
   return (
     <>
       <main className="flex flex-col h-screen m-0 p-0">

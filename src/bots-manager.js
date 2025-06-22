@@ -10,7 +10,6 @@ import LocalState from "./local-state.js";
 import ScalpTrader from "./trader/scalp-trader.js";
 
 const state = new LocalState("state");
-
 const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
 
 export class BotsManager {
@@ -19,9 +18,12 @@ export class BotsManager {
 
   static loadBots() {
     const bots = this.state.load();
-    Object.keys(bots).forEach((p) => {
+    const pairs = Object.keys(bots);
+    pairs.forEach((p) => {
       this.#bots[p] = new Bot(bots[p], BotsManager.getTrader(p, bots[p]));
     });
+
+    console.log(`========> ${pairs.length} Bots are loaded`);
   }
   static getEurBalance() {
     return ex.balance("all");
@@ -176,4 +178,3 @@ export class Bot {
 }
 
 BotsManager.loadBots();
-console.log("====> Bots are loaded. <====");

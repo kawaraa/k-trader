@@ -4,6 +4,7 @@ const fixNum = (n) => +n.toFixed(2);
 export default class AdvanceTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
+    this.period = this.interval * 60;
     this.position = null;
     this.decisions = ["HOLD"];
     this.rsi = [];

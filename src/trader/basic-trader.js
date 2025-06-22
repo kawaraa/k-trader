@@ -8,6 +8,7 @@ const calcPct = calcPercentageDifference;
 class BasicTrader extends Trader {
   constructor(exProvider, pair, { interval, capital, mode }) {
     super(exProvider, pair, interval, capital, mode);
+    this.period = this.interval * 60;
     this.range = parseInt((24 * 60) / this.interval);
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
