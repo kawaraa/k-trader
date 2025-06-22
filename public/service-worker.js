@@ -31,6 +31,8 @@ self.addEventListener("push", (event) => {
       data: { url: `${self.location.origin}/${payload.url || customPayload.url}` }, // Optional: URL to open when clicked
     })
   );
+  // new Audio("/bell-notification-sound.mp3").play().catch((e) => console.log(e));
+  // Todo: cache "-sound.mp3" and Keep the sound file small (<100 KB) to avoid performance issues
 });
 
 self.addEventListener("notificationclick", (event) => {
