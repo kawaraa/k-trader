@@ -115,5 +115,5 @@ export function request() {
 }
 
 export function parseNumInLog(str) {
-  return str.split(" ").map((p = (item) => parseFloat(item) || item));
+  return str.split(" ").map((item) => parseFloat(item) || item);
 }

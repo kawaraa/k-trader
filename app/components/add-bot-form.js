@@ -17,7 +17,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
       <input
         name="interval"
         type="number"
-        placeholder="Time Interval in mins"
+        placeholder="Time Interval in mins (seconds for Scalp Trader)"
         min={1}
         defaultValue={bot?.info?.interval}
         required
@@ -39,8 +39,8 @@ export default function AddBotFrom({ bot, onSubmit }) {
         <option value="basic" key="basic">
           Basic
         </option>
-        <option value="intermediate" key="intermediate">
-          Intermediate
+        <option value="scalp" key="scalp">
+          scalp
         </option>
         <option value="advance" key="advance">
           Advance

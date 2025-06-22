@@ -1,13 +1,14 @@
-const KrakenExchangeProvider = require("./src/providers/kraken-ex-provider");
-const LocalState = require("./src/local-state");
-const AdvanceTrader = require("./src/trader/advance-trader");
-const IntermediateTrader = require("./src/trader/Intermediate-trader");
-const { parseNumInLog } = require("./src/utilities");
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+import KrakenExchangeProvider from "./src/providers/kraken-ex-provider.js";
+import LocalState from "./src/local-state.js";
+import AdvanceTrader from "./src/trader/advance-trader.js";
+import { parseNumInLog } from "./src/utilities.js";
+import ScalpTrader from "./src/trader/scalp-trader.js";
 const pair = process.argv[2]; //  LTCEUR, SOLEUR, VINEEUR
-const advance = process.argv[3]; //  1, 2
+const scalp = process.argv.includes("scalp"); //  1, 2
 
 const state = new LocalState("state");
-
 const exProvider = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CREDENTIALS, state);
 
 // ex.getOpenClosedOrders("open")
@@ -21,8 +22,8 @@ const exProvider = new KrakenExchangeProvider(require("./.env.json").KRAKEN_CRED
 //   .catch(console.log);
 
 let trader = new AdvanceTrader(exProvider, pair, { interval: 5, capital: 100, mode: "test" });
-if (!advance) {
-  trader = new IntermediateTrader(exProvider, pair, { interval: 5, capital: 100, mode: "test" });
+if (scalp) {
+  trader = new ScalpTrader(exProvider, pair, { interval: 5, capital: 100, mode: "test" });
 }
 
 trader.listener = (pair, event, log) => event == "LOG" && console.log(...parseNumInLog(log));

@@ -3,11 +3,11 @@ const require = createRequire(import.meta.url);
 import KrakenExchangeProvider from "./providers/kraken-ex-provider.js";
 import notificationProvider from "./providers/notification-provider.js";
 import BasicTrader from "./trader/basic-trader.js";
-import IntermediateTrader from "./trader/Intermediate-trader.js";
 import AdvanceTrader from "./trader/advance-trader.js";
 import { existsSync, writeFileSync, statSync, appendFileSync } from "node:fs";
 import { dateToString, toShortDate, delay } from "./utilities.js";
 import LocalState from "./local-state.js";
+import ScalpTrader from "./trader/scalp-trader.js";
 
 const state = new LocalState("state");
 
@@ -132,7 +132,7 @@ export class BotsManager {
   }
 
   static getTrader(pair, info) {
-    const traders = { basic: BasicTrader, intermediate: IntermediateTrader, advance: AdvanceTrader };
+    const traders = { basic: BasicTrader, scalp: ScalpTrader, advance: AdvanceTrader };
     const Trader = traders[info.trader] || BasicTrader;
     return new Trader(ex, pair, info);
   }
