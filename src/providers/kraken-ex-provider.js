@@ -1,5 +1,6 @@
 import { createHash, createHmac } from "node:crypto";
 import { parseNumbers, request } from "../utilities.js";
+import eventEmitter from "../event-emitter.js";
 
 class KrakenExchangeProvider {
   #apiUrl;
@@ -71,6 +72,7 @@ class KrakenExchangeProvider {
     const { a, b, c } = data[Object.keys(data)[0]];
     const prices = [+c[0], +a[0], +b[0]];
     this.state.updateLocalPrices(pair, prices);
+    eventEmitter.emit(`${pair}-price`, { prices });
     return prices;
   }
 

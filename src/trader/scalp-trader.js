@@ -79,7 +79,8 @@ class ScalpTrader extends Trader {
     // this.buyCases[1] = volatility > 1.5 && volatility < 2 && dropped < -(volatility / 1.1);
     // if (this.buyCases[1]) console.log("BUY");
     // if (this.buyCases[1] && gainLoss >= 1.5) console.log("SELL");
-
+    // Todo: Test this
+    // this.buyCases[2] = allPricesTrend.trend != uptrend && halfPricesTrend.trend == uptrend && lastMinTrend == "uptrend" && dropped == 0;
     const safeAskBidSpread = calcPct(currentPrice[2], currentPrice[1]) <= 1;
     if (!safeAskBidSpread) return this.dispatch("LOG", `Low liquidity`);
 

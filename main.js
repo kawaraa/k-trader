@@ -15,7 +15,9 @@ mkdirSync("database/logs", { recursive: true });
 mkdirSync("database/prices", { recursive: true });
 
 const prod = process.env.NODE_ENV === "production";
-const port = 3000;
+const port = process.env.PORT || 3000;
+// const methods = process.env.ALLOWED_METHODS || "GET,PUT,POST,DELETE";
+// const origin = process.env.CORS_ORIGIN || "*";
 const server = express();
 
 // const maxAge = 60 * 60 * 24 * 7; // 1 week (weekSec)
@@ -25,6 +27,7 @@ const authRequired = (...args) => isAuthenticated(...args, fireStoreProvider, co
 
 try {
   // Apply the rate limiting all requests by adding rate limiter middleware to all routes
+  // app.use(cors({ origin, methods, credentials: false }));
   server.use(new RequestRateLimiter(1, 100).limitRate);
   server.use(cookiesParser);
   server.use(express.json());

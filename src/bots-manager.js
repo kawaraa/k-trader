@@ -8,6 +8,7 @@ import { existsSync, writeFileSync, statSync, appendFileSync } from "node:fs";
 import { dateToString, toShortDate, delay } from "./utilities.js";
 import LocalState from "./local-state.js";
 import ScalpTrader from "./trader/scalp-trader.js";
+import eventEmitter from "./event-emitter.js";
 
 const state = new LocalState("state");
 const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
@@ -114,6 +115,7 @@ export class BotsManager {
         const fileSizeInKB = statSync(filePath).size / 1024; // Convert size from B to KB
         fileSizeInKB < 500 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
       }
+      eventEmitter.emit(`${pair}-log`, { log: info });
     } else {
       if (event == "BALANCE") this.#bots[pair].balance = info;
       else if (event == "BUY_SIGNAL") {

@@ -15,6 +15,8 @@ export default function CryptoChart() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [prices, setPrices] = useState([]);
+  const pricesRef = useRef([]);
+  pricesRef.current = prices;
 
   const labels = [];
   const askPrices = [];
@@ -45,10 +47,20 @@ export default function CryptoChart() {
   };
 
   useEffect(() => {
-    const updatePrices = () => fetchPrices(`${pair}?other=${searchParams.get("other")}`);
-    updatePrices();
-    const intervalId = setInterval(updatePrices, 30000); // every 30 sec
-    return () => clearInterval(intervalId);
+    fetchPrices(`${pair}?other=${searchParams.get("other")}`);
+
+    const eventSource = new EventSource("/api/bots/sse/PEPEEUR", { withCredentials: true });
+    eventSource.onopen = () => console.log("SSE connection opened");
+    eventSource.onerror = (e) => {
+      console.error("Server error:", JSON.parse(e?.data || e?.error || e));
+      eventSource.close(); // Close client-side connection
+    };
+    eventSource.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.prices) setPrices(pricesRef.current.concat(data.prices));
+    };
+
+    return () => eventSource.close(); // This terminates the connection
   }, [pair]);
 
   useEffect(() => {

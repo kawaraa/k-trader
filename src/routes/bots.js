@@ -2,7 +2,9 @@ import { statSync, existsSync, readFileSync } from "node:fs";
 import { Bot, BotsManager } from "../bots-manager.js";
 import { parseError, isNumber } from "../utilities.js";
 import { createRequire } from "module";
+import eventEmitter from "../event-emitter.js";
 const cryptocurrencies = createRequire(import.meta.url)("../data/currencies.json");
+const origin = process.env.CORS_ORIGIN || "*";
 
 const botRoute = (router, fireStoreProvider, authRequired, production) => {
   // Get bots
@@ -148,6 +150,50 @@ const botRoute = (router, fireStoreProvider, authRequired, production) => {
     }
   });
 
+  router.get("/bots/sse/:pair", (request, response) => {
+    try {
+      const pair = request.params.pair;
+      isValidPair(pair, true);
+
+      response.writeHead(200, {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+        "Access-Control-Allow-Origin": request.headers.origin || origin, // Required for CORS
+        "Access-Control-Allow-Credentials": "true", // Needed for withCredentials
+      });
+
+      const sendEvent = (data) => {
+        response.write(`data: ${JSON.stringify(data)}\n\n`); //data and \n\n are REQUIRED
+      };
+
+      const priceEventHandler = (data) => {
+        console.log("price Event received with data:", data);
+        sendEvent(data);
+      };
+      const logEventHandler = (data) => {
+        console.log("log Event received with data:", data);
+        sendEvent(data);
+      };
+
+      eventEmitter.off(`${pair}-price`, priceEventHandler);
+      eventEmitter.off(`${pair}-log`, logEventHandler);
+      eventEmitter.on(`${pair}-price`, priceEventHandler);
+      eventEmitter.on(`${pair}-log`, logEventHandler);
+
+      request.on("error", (error) => {
+        console.log("SSE request error", error);
+        if (!response.writableEnded) response.end();
+      });
+      request.on("close", () => {
+        console.log("client disconnect");
+        if (!response.writableEnded) response.end();
+      });
+    } catch (error) {
+      console.log(error);
+      response.status(500).json({ message: parseError(error) });
+    }
+  });
   return router;
 };
 

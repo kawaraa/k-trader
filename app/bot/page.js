@@ -25,6 +25,22 @@ export default function Bot() {
     request("/api/auth")
       .catch(() => router.replace("/signin"))
       .then(fetchLogContent);
+
+    const eventSource = new EventSource("/api/bots/sse/PEPEEUR", { withCredentials: true });
+    eventSource.onopen = () => console.log("SSE connection opened");
+    eventSource.onerror = (e) => {
+      console.error("Server error:", JSON.parse(e?.data || e?.error || e));
+      eventSource.close(); // Close client-side connection
+    };
+    eventSource.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.log) {
+        logsRef.current.innerText += data.log;
+        logsRef.current?.scroll({ top: logsRef.current?.scrollHeight, behavior: "smooth" });
+      }
+    };
+
+    return () => eventSource.close(); // This terminates the connection
   }, []);
 
   return (
