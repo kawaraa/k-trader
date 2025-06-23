@@ -45,18 +45,19 @@ class ScalpTrader extends Trader {
 
     const allPricesTrend = linearRegression(prices);
     const halfPricesTrend = linearRegression(prices);
-    const lastMinTrend = detectPriceDirection(prices.slice(-12), 1);
+    const lastMinTrend = detectPriceDirection(prices.slice(-12), 0.5);
     // const pattern3 = detectPriceShape(prices.slice(-this.calculateLength(0.75)), vLimit);
     // const pattern2 = detectPriceShape(prices, 5);
     // const pattern1 = detectPriceShape(prices.slice(0, pattern2.index), 3);
     const dropped = droppedPercent < -3;
     const up = prices.at(-2) < prices.at(-1);
 
-    const log = `Drops: ${droppedPercent} - Profit target: ${this.profitTarget}`;
+    const log = `Drops: ${droppedPercent} - Profit target: ${this.profitTarget} - Price: ${prices.at(-1)}`;
     this.dispatch("LOG", `€${balance.eur.toFixed(2)} - volatility: ${volatility} - ${log}`);
-    this.dispatch("LOG", `allPricesTrend: ${JSON.stringify(allPricesTrend)}`);
-    this.dispatch("LOG", `lastMinTrend: ${lastMinTrend} - up: ${up}`);
     // this.dispatch("LOG", JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
+    this.dispatch("LOG", `allPricesTrend: ${JSON.stringify(allPricesTrend)}`);
+    this.dispatch("LOG", `halfPricesTrend: ${JSON.stringify(halfPricesTrend)}`);
+    this.dispatch("LOG", `lastMinTrend: ${lastMinTrend} - up: ${up}`);
     // this.dispatch("LOG", `pattern1: ${JSON.stringify(pattern1)}`);
     // this.dispatch("LOG", `pattern2: ${JSON.stringify(pattern2)}`);
     // this.dispatch("LOG", `pattern3: ${JSON.stringify(pattern3)}`);

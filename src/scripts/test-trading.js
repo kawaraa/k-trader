@@ -3,7 +3,8 @@ import { Worker, parentPort, workerData, isMainThread } from "worker_threads";
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import TestExchangeProvider from "../providers/test-ex-provider.js";
-import BasicTrader from "../trader/basic-trader.js";
+// import BasicTrader from "../trader/basic-trader.js";
+import BasicTrader from "../trader/scalp-trader.js";
 // import BasicTrader from "../trader/basic-trader-1.js";
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
