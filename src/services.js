@@ -32,13 +32,13 @@ export function smoothPricesAndUpdate(prices, range = 3) {
   const result = [];
   for (let i = 0; i < prices.length; i += range) {
     const slice = prices.slice(i, Math.max(i, i + range));
-    if (!slice[0].tradePrice) result.push(slice.reduce((a, b) => a + b, 0) / slice.length);
+    if (!slice[0][0]) result.push(slice.reduce((a, b) => a + b, 0) / slice.length);
     else {
-      result.push({
-        tradePrice: slice.reduce((a, b) => a + b.tradePrice, 0) / slice.length,
-        askPrice: slice.reduce((a, b) => a + b.askPrice, 0) / slice.length,
-        bidPrice: slice.reduce((a, b) => a + b.bidPrice, 0) / slice.length,
-      });
+      result.push([
+        slice.reduce((a, b) => a[0] + b[0], 0) / slice.length,
+        slice.reduce((a, b) => a[1] + b[1], 0) / slice.length,
+        slice.reduce((a, b) => a[2] + b[2], 0) / slice.length,
+      ]);
     }
   }
 
@@ -49,13 +49,13 @@ export function smoothPrices(prices, round = 1) {
     prices = prices.map((_, i, arr) => {
       const slice = arr.slice(Math.max(0, i - 2), i + 1);
 
-      if (!slice[0].tradePrice) return slice.reduce((a, b) => a + b, 0) / slice.length;
+      if (!slice[0][0]) return slice.reduce((a, b) => a + b, 0) / slice.length;
       else {
-        return {
-          tradePrice: slice.reduce((a, b) => a + b.tradePrice, 0) / slice.length,
-          askPrice: slice.reduce((a, b) => a + b.askPrice, 0) / slice.length,
-          bidPrice: slice.reduce((a, b) => a + b.bidPrice, 0) / slice.length,
-        };
+        return [
+          slice.reduce((a, b) => a[0] + b[0], 0) / slice.length,
+          slice.reduce((a, b) => a[1] + b[1], 0) / slice.length,
+          slice.reduce((a, b) => a[2] + b[2], 0) / slice.length,
+        ];
       }
     });
   }
@@ -104,22 +104,26 @@ export function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, ro
 }
 
 export function normalizePrices(prices) {
-  return prices.map((p) => calcAveragePrice([p.askPrice, p.bidPrice]));
+  return prices.map((p) => calcAveragePrice([p[1], p[2]]));
 
   // if (prices.length < 1) return [];
-  // let avgAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice)));
+  // let avgAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentageDifference(p[2], p[1])));
   // avgAskBidSpread = Math.min(avgAskBidSpread * 2, maxAskBidSpread); // safeAskBidSpread
   // const normalizedPrices = [];
 
   // for (let i = 0; i < prices.length; i++) {
   //   normalizedPrices.push();
-  //   const askBidSpreedPercent = calcPercentageDifference(prices[i].bidPrice, prices[i].askPrice);
+  //   const askBidSpreedPercent = calcPercentageDifference(prices[i][2], prices[i][1]);
   //   if (askBidSpreedPercent <= avgAskBidSpread) {
   //   } else if (normalizedPrices.at(-1)) {
   //     normalizedPrices.push(normalizedPrices.at(-1));
   //   }
   // }
   // return normalizedPrices;
+}
+export function makePricesArray(prices) {
+  if (!prices[0]?.askPrice) return prices;
+  return prices.map((p) => [p.tradePrice, p.askPrice, p.bidPrice]);
 }
 
 export function generateRange(start, end, length) {

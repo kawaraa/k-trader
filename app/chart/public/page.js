@@ -63,13 +63,13 @@ function smoothPrices2(prices, range = 2) {
   return prices.map((_, i, arr) => {
     const slice = arr.slice(Math.max(0, i - 2), i + 1);
 
-    if (!slice[0].tradePrice) return slice.reduce((a, b) => a + b, 0) / slice.length;
+    if (!slice[0][0]) return slice.reduce((a, b) => a + b, 0) / slice.length;
     else {
-      return {
-        tradePrice: slice.reduce((a, b) => a + b.tradePrice, 0) / slice.length,
-        askPrice: slice.reduce((a, b) => a + b.askPrice, 0) / slice.length,
-        bidPrice: slice.reduce((a, b) => a + b.bidPrice, 0) / slice.length,
-      };
+      return [
+        slice.reduce((a, b) => a[0] + b[0], 0) / slice.length,
+        slice.reduce((a, b) => a[1] + b[1], 0) / slice.length,
+        slice.reduce((a, b) => a[2] + b[2], 0) / slice.length,
+      ];
     }
   });
 

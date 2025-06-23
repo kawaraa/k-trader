@@ -32,7 +32,7 @@ export default class TestExchangeProvider {
     const skip = interval / 5;
     const length = -((days * 24 * 60) / 5);
     return this.allPrices
-      .map((p) => p.tradePrice)
+      .map((p) => p[0])
       .slice(length)
       .filter((p, index) => index % skip === 0);
   }
@@ -42,7 +42,7 @@ export default class TestExchangeProvider {
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
   async createOrder(type, b, c, volume) {
-    const { tradePrice, askPrice, bidPrice } = this.allPrices[this.currentPriceIndex - 1];
+    const [tradePrice, askPrice, bidPrice] = this.allPrices[this.currentPriceIndex - 1];
     const newOrder = { id: randomUUID(), type, volume, createdAt: Date.now() };
 
     if (type == "buy") {

@@ -41,7 +41,7 @@ export default class Trader {
     return parseInt((60 * hours) / this.interval);
   }
 
-  // await this.buy(this.capital, balance, currentPrice.askPrice);
+  // await this.buy(this.capital, balance, currentPrice[1]);
   async buy(balance, price) {
     const capital = balance.eur < this.capital ? balance.eur : this.capital;
     const cost = capital - calculateFee(capital, 0.3);
@@ -75,7 +75,7 @@ export default class Trader {
     this.dispatch("SELL", 0);
     if (cryptoBalance > 0) {
       // const { trades, position } = this.ex.state.getBot(this.pair);
-      // const bidPrice = (await this.ex.currentPrices(this.pair)).bidPrice;
+      // const bidPrice = (await this.ex.currentPrices(this.pair))[2];
       await this.ex.createOrder("sell", "market", this.pair, cryptoBalance);
       // const cost = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.3);
       // const profit = (cost - calculateFee(cost, 0.3) - (position?.cost || cost)).toFixed(2);

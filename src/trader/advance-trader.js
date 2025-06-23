@@ -15,7 +15,7 @@ export default class AdvanceTrader extends Trader {
   async run() {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = this.testMode ? this.position : (await this.ex.getOrders(this.pair))[0];
-    const currentPrice = await this.ex.currentPrices(this.pair); // { tradePrice, askPrice, bidPrice }
+    const currentPrice = await this.ex.currentPrices(this.pair); // [ tradePrice, askPrice, bidPrice ]
     const ohlc = await this.ex.pricesData(this.pair, this.interval, this.range); // Returns max 720 item (720 * 5 / 60 / 24 = 2.5 days)
 
     const decision = this.analyzeMarket(ohlc);
@@ -30,14 +30,14 @@ export default class AdvanceTrader extends Trader {
     if (decision == "BUY") {
       this.dispatch("LOG", `${testLog} [+] Breakout detected - Position: ${positionLog}.`);
       if (!position) {
-        await this.buy(balance, currentPrice.askPrice);
-        this.dispatch("LOG", `${testLog} Placed BUY at: ${currentPrice.askPrice}`);
+        await this.buy(balance, currentPrice[1]);
+        this.dispatch("LOG", `${testLog} Placed BUY at: ${currentPrice[1]}`);
       }
       //
     } else if (decision === "SELL") {
       this.dispatch("LOG", `${testLog} [-] Breakdown detected - Position: ${positionLog}.`);
       if (position) {
-        const res = await this.sell(position, balance, currentPrice.bidPrice);
+        const res = await this.sell(position, balance, currentPrice[2]);
         this.dispatch("LOG", `${testLog} Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);
       }
     } else {

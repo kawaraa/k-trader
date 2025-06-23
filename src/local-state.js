@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync, statSync } from "node:fs";
+import { makePricesArray } from "./services.js";
 
 // In prod limit Storing prices to 30 days (8640) and in local to 60 days (17280)
 // dataLimit * 5 is the number of mins in 60 days.
@@ -43,7 +44,7 @@ export default class LocalState {
     try {
       const data = JSON.parse(readFileSync(filePath, "utf8"));
       if (statSync(filePath).size / (1024 * 1024) >= 2) data.shift();
-      return data && data[0]?.askPrice ? data.slice(-limit) : [];
+      return makePricesArray(data && data[0] ? data.slice(-limit) : []);
     } catch (error) {
       return [];
     }

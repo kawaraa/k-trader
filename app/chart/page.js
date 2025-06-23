@@ -25,9 +25,9 @@ export default function CryptoChart() {
   const since = Date.now() - prices.length * interval;
 
   prices.forEach((p, i) => {
-    tradePrices.push(p.tradePrice);
-    askPrices.push(p.askPrice);
-    bidPrices.push(p.bidPrice);
+    tradePrices.push(p[0]);
+    askPrices.push(p[1]);
+    bidPrices.push(p[2]);
     labels.push(`${toShortDate(new Date(since + interval * i))}`);
   });
 
@@ -37,7 +37,7 @@ export default function CryptoChart() {
     setLoading(true);
     try {
       const prices = await request(`/api/bots/prices/${pair}`);
-      setPrices(prices);
+      setPrices(makePricesArray(prices));
     } catch (error) {
       setError(error.message);
     }
@@ -47,7 +47,7 @@ export default function CryptoChart() {
   useEffect(() => {
     const updatePrices = () => fetchPrices(`${pair}?other=${searchParams.get("other")}`);
     updatePrices();
-    const intervalId = setInterval(updatePrices, 10000); // every 10 sec
+    const intervalId = setInterval(updatePrices, 30000); // every 30 sec
     return () => clearInterval(intervalId);
   }, [pair]);
 
@@ -146,17 +146,22 @@ export default function CryptoChart() {
   );
 }
 
+function makePricesArray(prices) {
+  if (!prices[0]?.askPrice) return prices;
+  return prices.map((p) => [p.tradePrice, p.askPrice, p.bidPrice]);
+}
+
 function smoothPrices2(prices, range = 2) {
   return prices.map((_, i, arr) => {
     const slice = arr.slice(Math.max(0, i - 2), i + 1);
 
-    if (!slice[0].tradePrice) return slice.reduce((a, b) => a + b, 0) / slice.length;
+    if (!slice[0][0]) return slice.reduce((a, b) => a + b, 0) / slice.length;
     else {
-      return {
-        tradePrice: slice.reduce((a, b) => a + b.tradePrice, 0) / slice.length,
-        askPrice: slice.reduce((a, b) => a + b.askPrice, 0) / slice.length,
-        bidPrice: slice.reduce((a, b) => a + b.bidPrice, 0) / slice.length,
-      };
+      return [
+        slice.reduce((a, b) => a[0] + b[0], 0) / slice.length,
+        slice.reduce((a, b) => a[1] + b[1], 0) / slice.length,
+        slice.reduce((a, b) => a[2] + b[2], 0) / slice.length,
+      ];
     }
   });
 

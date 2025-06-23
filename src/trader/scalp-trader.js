@@ -59,14 +59,13 @@ class ScalpTrader extends Trader {
     // this.dispatch("LOG", `pattern2: ${JSON.stringify(pattern2)}`);
     // this.dispatch("LOG", `pattern3: ${JSON.stringify(pattern3)}`);
 
-    // Todo: Test this
-    // if (volatility > 1.5 && dropped < -(volatility / 1.1)) console.log("BUY");
-    // if (gainLoss >= 1.5) console.log("SELL");
+    this.buyCases[0] = false;
     if (!this.lastSellOrderPrice && dropped && lastMinTrend == "uptrend") {
       this.dispatch("LOG", `Place BUY`);
-      this.dispatch("BUY_SIGNAL", currentPrice.askPrice);
+      this.dispatch("BUY_SIGNAL", currentPrice[1]);
       this.lastSellOrderPrice = current;
     } else if (this.lastSellOrderPrice) {
+      this.sellCases[0] = false;
       const gainLoss = calcPct(this.lastSellOrderPrice, current);
       if (increasedPercent > 2 && lastMinTrend == "downtrend") {
         this.dispatch("LOG", `Place SELL ${gainLoss}`);
@@ -76,28 +75,28 @@ class ScalpTrader extends Trader {
         this.lastSellOrderPrice = null;
       }
     }
+    // Todo: Test this
+    // this.buyCases[1] = volatility > 1.5 && volatility < 2 && dropped < -(volatility / 1.1);
+    // if (this.buyCases[1]) console.log("BUY");
+    // if (this.buyCases[1] && gainLoss >= 1.5) console.log("SELL");
 
-    const safeAskBidSpread = calcPct(currentPrice.bidPrice, currentPrice.askPrice) <= 1;
+    const safeAskBidSpread = calcPct(currentPrice[2], currentPrice[1]) <= 1;
     if (!safeAskBidSpread) return this.dispatch("LOG", `Low liquidity`);
-
-    this.buyCases[0] = false;
 
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 1) {
       if (this.buyCases.some((c) => c)) {
-        if (this.notifiedTimer <= 0) {
-          this.dispatch("LOG", `BUY Signal case: ${this.buyCases.findIndex((c) => c)}`);
-          this.dispatch("BUY_SIGNAL", currentPrice.askPrice);
-          this.notifiedTimer = (1 * 60) / this.interval;
-        }
+        // if (this.notifiedTimer <= 0) {
+        //   this.dispatch("LOG", `BUY Signal case: ${this.buyCases.findIndex((c) => c)}`);
+        //   this.dispatch("BUY_SIGNAL", currentPrice[1]);
+        //   this.notifiedTimer = (1 * 60) / this.interval;
+        // }
 
-        if (this.pauseTimer <= 0) {
-          this.profitTarget = +Math.max(Math.min(-droppedPercent / 3, 8), 4).toFixed(2);
-          await this.buy(balance, currentPrice.askPrice);
-          this.dispatch("LOG", `Placed BUY at: ${currentPrice.askPrice}`);
-          this.prevGainPercent = 0;
-          this.losses = [0, 0, 0];
-        }
+        await this.buy(balance, currentPrice[1]);
+        this.dispatch("LOG", `Placed BUY at: ${currentPrice[1]}`);
+        this.prevGainPercent = 0;
+        this.losses = [0, 0, 0];
+        this.sellCases.forEach((c) => (c = false));
       }
 
       // Sell
@@ -120,18 +119,8 @@ class ScalpTrader extends Trader {
         `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
       );
 
-      const shouldSell =
-        (volatility < 6 && gainLossPercent >= Math.max(2, volatility / 2.5) && loss > 0.5) ||
-        (this.prevGainPercent >= this.profitTarget && loss > 0.5) ||
-        (volatility > 3 && gainLossPercent <= -2) ||
-        (this.prevGainPercent > 2 && gainLossPercent <= -1);
-
-      if (shouldSell) {
-        const res = await this.sell(position, balance, currentPrice.bidPrice);
-        if (gainLossPercent > 3) this.pauseTimer = 60 / this.interval;
-        if (this.buyCases[4] || (trades[1] && trades.slice(-2).every((t) => t < -3))) {
-          this.pauseTimer = (24 * 60) / this.interval;
-        }
+      if (this.sellCases.some((c) => c)) {
+        const res = await this.sell(position, balance, currentPrice[2]);
         this.buyCases.forEach((c) => (c = false));
         this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);
       }

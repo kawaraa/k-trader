@@ -32,7 +32,7 @@ class BasicTrader extends Trader {
     const currentPrice = storedPrices.at(-1) || prices.at(-1);
 
     if (!position && prices.length < this.range) return this.dispatch("LOG", `No enough prices`);
-    const safeAskBidSpread = calcPct(currentPrice.bidPrice, currentPrice.askPrice) <= 1;
+    const safeAskBidSpread = calcPct(currentPrice[2], currentPrice[1]) <= 1;
     if (!safeAskBidSpread) return this.dispatch("LOG", `Low liquidity`);
 
     const sortedPrices = prices.toSorted((a, b) => a - b);
@@ -119,14 +119,14 @@ class BasicTrader extends Trader {
       if (this.buyCases.some((c) => c)) {
         if (this.notifiedTimer <= 0) {
           this.dispatch("LOG", `BUY Signal case: ${this.buyCases.findIndex((c) => c)}`);
-          this.dispatch("BUY_SIGNAL", currentPrice.askPrice);
+          this.dispatch("BUY_SIGNAL", currentPrice[1]);
           this.notifiedTimer = (1 * 60) / this.interval;
         }
 
         if (up && this.pauseTimer <= 0) {
           this.profitTarget = +Math.max(Math.min(-droppedPercent / 3, 8), 4).toFixed(2);
-          await this.buy(balance, currentPrice.askPrice);
-          this.dispatch("LOG", `Placed BUY at: ${currentPrice.askPrice}`);
+          await this.buy(balance, currentPrice[1]);
+          this.dispatch("LOG", `Placed BUY at: ${currentPrice[1]}`);
           this.prevGainPercent = 0;
           this.losses = [0, 0, 0];
         }
@@ -159,7 +159,7 @@ class BasicTrader extends Trader {
         (this.prevGainPercent > 2 && gainLossPercent <= -1);
 
       if (shouldSell) {
-        const res = await this.sell(position, balance, currentPrice.bidPrice);
+        const res = await this.sell(position, balance, currentPrice[2]);
         if (gainLossPercent > 3) this.pauseTimer = 60 / this.interval;
         if (this.buyCases[4] || (trades[1] && trades.slice(-2).every((t) => t < -3))) {
           this.pauseTimer = (24 * 60) / this.interval;

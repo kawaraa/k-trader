@@ -147,7 +147,7 @@ export function calcTransactionProfit(previousPrice, currentPrice, assetVolume, 
 export function adjustPrice(price, percentage) {
   // This increases the tradePrice 0.10% by multiply it by 1.001, And decreases the tradePrice 0.10%, by multiply it by 0.999
   const multiplier = percentage / 100;
-  return { tradePrice: price, askPrice: price * (1 + multiplier), bidPrice: price * (1 - multiplier) };
+  return [price, price * (1 + multiplier), price * (1 - multiplier)];
 }
 
 // Or Look for "historicalVolatility" function in the code;
