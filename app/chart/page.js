@@ -15,8 +15,6 @@ export default function CryptoChart() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [prices, setPrices] = useState([]);
-  const pricesRef = useRef([]);
-  pricesRef.current = prices;
 
   const labels = [];
   const askPrices = [];
@@ -57,7 +55,7 @@ export default function CryptoChart() {
     };
     eventSource.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      if (data.prices) setPrices(pricesRef.current.concat(data.prices));
+      if (data.prices) setPrices((prev) => [...prev, data.prices]);
     };
 
     return () => eventSource.close(); // This terminates the connection
@@ -116,6 +114,7 @@ export default function CryptoChart() {
 
         <ChartCanvas
           type="line"
+          defaultLeftZoom={parseInt(prices.length / 2)}
           labels={labels}
           datasets={[
             {
@@ -149,7 +148,7 @@ export default function CryptoChart() {
               // borderDash: [3, 2],
             },
           ]}
-          options={{ responsive: true, maintainAspectRatio: false }}
+          options={{ responsive: true, maintainAspectRatio: false, animation: false }}
         />
       </main>
 

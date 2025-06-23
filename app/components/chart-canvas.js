@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 
-export default function ChartCanvas({ type = "line", labels, datasets, options }) {
+export default function ChartCanvas({ type = "line", defaultLeftZoom, labels, datasets, options }) {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
   const [maxLevel, setMaxLevel] = useState(0);
-  const [leftZoomLevel, setLeftZoomLevel] = useState(0);
+  const [leftZoomLevel, setLeftZoomLevel] = useState(defaultLeftZoom);
   const [rightZoomLevel, setRightZoomLevel] = useState(0);
 
   const data = {
