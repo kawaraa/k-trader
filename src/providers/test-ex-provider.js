@@ -38,7 +38,7 @@ export default class TestExchangeProvider {
   }
   async prices(pair, limit) {
     await this.currentPrices();
-    const offset = this.currentPriceIndex - limit;
+    const offset = Math.max(this.currentPriceIndex - limit, 0);
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
   async createOrder(type, b, c, volume) {

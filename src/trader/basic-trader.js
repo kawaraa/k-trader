@@ -24,16 +24,16 @@ class BasicTrader extends Trader {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
     const { trades } = await this.ex.state.getBot(this.pair);
-    const prices = normalizePrices(storedPrices, 1); // safeAskBidSpread
-    if (storedPrices.length < this.range - 1) {
+    const prices = normalizePrices(storedPrices);
+    if (storedPrices.length < this.range) {
       const days = (this.range * this.interval) / 60 / 24;
-      // prices = (await this.ex.pricesData(this.pair, this.interval, days)).map((p) => p.close);
+      prices = (await this.ex.pricesData(this.pair, this.interval, days)).map((p) => p.close);
     }
     const currentPrice = storedPrices.at(-1) || prices.at(-1);
 
-    if (!position && prices.length < this.range - 1) {
-      return this.dispatch("LOG", `No enough prices or low liquidity`);
-    }
+    if (!position && prices.length < this.range) return this.dispatch("LOG", `No enough prices`);
+    const safeAskBidSpread = calcPct(currentPrice.bidPrice, currentPrice.askPrice) <= 1;
+    if (!safeAskBidSpread) return this.dispatch("LOG", `Low liquidity`);
 
     const sortedPrices = prices.toSorted((a, b) => a - b);
     // const start = prices.at(-1);

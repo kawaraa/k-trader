@@ -103,21 +103,23 @@ export function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, ro
   return prices;
 }
 
-export function normalizePrices(prices, maxAskBidSpread = 1.2) {
-  if (prices.length < 1) return [];
-  let avgAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice)));
-  avgAskBidSpread = Math.min(avgAskBidSpread * 2, maxAskBidSpread); // safeAskBidSpread
-  const normalizedPrices = [];
+export function normalizePrices(prices) {
+  return prices.map((p) => calcAveragePrice([p.askPrice, p.bidPrice]));
 
-  for (let i = 0; i < prices.length; i++) {
-    const askBidSpreedPercent = calcPercentageDifference(prices[i].bidPrice, prices[i].askPrice);
-    if (askBidSpreedPercent <= avgAskBidSpread) {
-      normalizedPrices.push(calcAveragePrice([prices[i].askPrice, prices[i].bidPrice]));
-    } else if (normalizedPrices.at(-1)) {
-      normalizedPrices.push(normalizedPrices.at(-1));
-    }
-  }
-  return normalizedPrices;
+  // if (prices.length < 1) return [];
+  // let avgAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentageDifference(p.bidPrice, p.askPrice)));
+  // avgAskBidSpread = Math.min(avgAskBidSpread * 2, maxAskBidSpread); // safeAskBidSpread
+  // const normalizedPrices = [];
+
+  // for (let i = 0; i < prices.length; i++) {
+  //   normalizedPrices.push();
+  //   const askBidSpreedPercent = calcPercentageDifference(prices[i].bidPrice, prices[i].askPrice);
+  //   if (askBidSpreedPercent <= avgAskBidSpread) {
+  //   } else if (normalizedPrices.at(-1)) {
+  //     normalizedPrices.push(normalizedPrices.at(-1));
+  //   }
+  // }
+  // return normalizedPrices;
 }
 
 export function generateRange(start, end, length) {

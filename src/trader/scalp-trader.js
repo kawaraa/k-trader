@@ -23,14 +23,11 @@ class ScalpTrader extends Trader {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
     const { trades } = await this.ex.state.getBot(this.pair);
-    const prices = normalizePrices(storedPrices, 1); // safeAskBidSpread
+    const prices = normalizePrices(storedPrices); // safeAskBidSpread
     const currentPrice = storedPrices.at(-1);
-
-    if (!position && prices.length < this.range - 5) {
-      return this.dispatch("LOG", `No enough prices or low liquidity`);
-    }
-
     const sortedPrices = prices.toSorted((a, b) => a - b);
+
+    // const sortedPrices = prices.toSorted((a, b) => a - b);
     // const start = prices.at(-1);
     const lowest = sortedPrices[0];
     const highest = sortedPrices.at(-1);
@@ -40,27 +37,45 @@ class ScalpTrader extends Trader {
     // const percentFromLowestToCurrent = calcPct(lowest, current);
     const volatility = calcPct(lowest, highest);
     const droppedPercent = calcPct(highest, current);
+    const increasedPercent = calcPct(lowest, current);
     // const vLimit = Math.max(Math.min(-droppedPercent / 5, 3), 2);
     // const increaseLimit = Math.max(Math.min(-droppedPercent / 4, 2), 3);
 
     const allPricesTrend = linearRegression(prices);
-    const halfPricesTrend = linearRegression(prices);
-    const lastMinTrend = detectPriceDirection(prices.slice(-12), 0.5);
+    const halfPricesTrend = linearRegression(prices.slice(-parseInt(prices.length / 2)));
+    const lastMinTrend = detectPriceDirection(prices.slice(-24), 1);
     // const pattern3 = detectPriceShape(prices.slice(-this.calculateLength(0.75)), vLimit);
     // const pattern2 = detectPriceShape(prices, 5);
     // const pattern1 = detectPriceShape(prices.slice(0, pattern2.index), 3);
     const dropped = droppedPercent < -3;
-    const up = prices.at(-2) < prices.at(-1);
+    // const up = prices.at(-2) < prices.at(-1);
 
-    const log = `Drops: ${droppedPercent} - Profit target: ${this.profitTarget} - Price: ${prices.at(-1)}`;
+    const log = `Drops: ${droppedPercent} - Trend: ${lastMinTrend} - Price: ${prices.at(-1)}`;
     this.dispatch("LOG", `€${balance.eur.toFixed(2)} - volatility: ${volatility} - ${log}`);
-    // this.dispatch("LOG", JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
+    this.dispatch("LOG", JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
     this.dispatch("LOG", `allPricesTrend: ${JSON.stringify(allPricesTrend)}`);
     this.dispatch("LOG", `halfPricesTrend: ${JSON.stringify(halfPricesTrend)}`);
-    this.dispatch("LOG", `lastMinTrend: ${lastMinTrend} - up: ${up}`);
     // this.dispatch("LOG", `pattern1: ${JSON.stringify(pattern1)}`);
     // this.dispatch("LOG", `pattern2: ${JSON.stringify(pattern2)}`);
     // this.dispatch("LOG", `pattern3: ${JSON.stringify(pattern3)}`);
+
+    if (!this.lastSellOrderPrice && dropped && lastMinTrend == "uptrend") {
+      this.dispatch("LOG", `Place BUY`);
+      this.dispatch("BUY_SIGNAL", currentPrice.askPrice);
+      this.lastSellOrderPrice = current;
+    } else if (this.lastSellOrderPrice) {
+      const gainLoss = calcPct(this.lastSellOrderPrice, current);
+      if (increasedPercent > 2 && lastMinTrend == "downtrend") {
+        this.dispatch("LOG", `Place SELL ${gainLoss}`);
+        this.lastSellOrderPrice = null;
+      } else if (gainLoss < -1 && lastMinTrend == "downtrend") {
+        this.dispatch("LOG", `Place STOP_LOSS`);
+        this.lastSellOrderPrice = null;
+      }
+    }
+
+    const safeAskBidSpread = calcPct(currentPrice.bidPrice, currentPrice.askPrice) <= 1;
+    if (!safeAskBidSpread) return this.dispatch("LOG", `Low liquidity`);
 
     this.buyCases[0] = false;
 
@@ -73,7 +88,7 @@ class ScalpTrader extends Trader {
           this.notifiedTimer = (1 * 60) / this.interval;
         }
 
-        if (up && this.pauseTimer <= 0) {
+        if (this.pauseTimer <= 0) {
           this.profitTarget = +Math.max(Math.min(-droppedPercent / 3, 8), 4).toFixed(2);
           await this.buy(balance, currentPrice.askPrice);
           this.dispatch("LOG", `Placed BUY at: ${currentPrice.askPrice}`);
@@ -167,7 +182,7 @@ function linearRegression(data, threshold) {
 
   return {
     trend: slope > threshold ? "uptrend" : slope < -threshold ? "downtrend" : "sideways",
-    slope: formatDecimal(slope),
+    slope: formatDecimal(slope, 6),
     intercept: formatDecimal(intercept),
     r2: formatDecimal(r2),
     strength: r2 > 0.7 ? "strong" : r2 > 0.4 ? "moderate" : "weak",
