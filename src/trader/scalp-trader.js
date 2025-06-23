@@ -59,6 +59,9 @@ class ScalpTrader extends Trader {
     // this.dispatch("LOG", `pattern2: ${JSON.stringify(pattern2)}`);
     // this.dispatch("LOG", `pattern3: ${JSON.stringify(pattern3)}`);
 
+    // Todo: Test this
+    // if (volatility > 1.5 && dropped < -(volatility / 1.1)) console.log("BUY");
+    // if (gainLoss >= 1.5) console.log("SELL");
     if (!this.lastSellOrderPrice && dropped && lastMinTrend == "uptrend") {
       this.dispatch("LOG", `Place BUY`);
       this.dispatch("BUY_SIGNAL", currentPrice.askPrice);

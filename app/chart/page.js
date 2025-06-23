@@ -45,7 +45,10 @@ export default function CryptoChart() {
   };
 
   useEffect(() => {
-    fetchPrices(`${pair}?other=${searchParams.get("other")}`);
+    const updatePrices = () => fetchPrices(`${pair}?other=${searchParams.get("other")}`);
+    updatePrices();
+    const intervalId = setInterval(updatePrices, 10000); // every 10 sec
+    return () => clearInterval(intervalId);
   }, [pair]);
 
   useEffect(() => {
