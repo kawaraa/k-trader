@@ -21,13 +21,15 @@ async function runTradingTest(pair, interval) {
     const result = await runTest(pair, prices, interval, showLogs);
 
     const profit = result.balance - capital;
-    let monthlyProfit = parseInt(profit / result.m);
-    let monthlyRemain = parseInt(result.crypto / result.m);
-
+    // let monthlyProfit = parseInt(profit / result.m);
+    // let monthlyRemain = parseInt(result.crypto / result.m);
+    // console.log(
+    //   `${pair} => €${monthlyProfit} Remain: ${monthlyRemain} (${parseInt(profit)}) =x= [${result.m}*${
+    //     result.transactions
+    //   }]`
+    // );
     console.log(
-      `${pair} => €${monthlyProfit} Remain: ${monthlyRemain} (${parseInt(profit)}) =x= [${result.m}*${
-        result.transactions
-      }]`
+      `${pair} => €${parseInt(profit)} Remain: ${result.crypto} Transactions: ${result.transactions}`
     );
   } catch (error) {
     console.log("Error with ", pair, "=>", error);
@@ -69,7 +71,7 @@ async function runTest(pair, prices, interval, showLogs) {
 }
 
 function getPrices(pair, skip = 1) {
-  const path = `${process.cwd()}/database/prices-local/${pair}.json`;
+  const path = `${process.cwd()}/database/prices/${pair}.json`;
   if (!existsSync(path)) return [];
   return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
 

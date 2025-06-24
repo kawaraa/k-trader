@@ -13,8 +13,9 @@ class ScalpTrader extends Trader {
     this.losses = [0, 0, 0];
     this.lastSellOrderPrice = null;
     this.profitTarget = 4;
-    this.buyCases = [];
-    this.sellCases = [];
+    this.buyCases = [false];
+    this.sellCases = [false];
+    this.AShape = false;
   }
 
   async run() {
@@ -22,7 +23,7 @@ class ScalpTrader extends Trader {
     const storedPrices = await this.ex.prices(this.pair, this.range);
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
-    const { trades } = await this.ex.state.getBot(this.pair);
+    // const { trades } = await this.ex.state.getBot(this.pair);
     const prices = normalizePrices(storedPrices); // safeAskBidSpread
     const currentPrice = storedPrices.at(-1);
     const sortedPrices = prices.toSorted((a, b) => a - b);
@@ -45,34 +46,36 @@ class ScalpTrader extends Trader {
     const halfPricesTrend = linearRegression(prices.slice(-parseInt(prices.length / 2)));
     const lastMinTrend = detectPriceDirection(prices.slice(-24), 1);
     // const pattern3 = detectPriceShape(prices.slice(-this.calculateLength(0.75)), vLimit);
-    // const pattern2 = detectPriceShape(prices, 5);
+    const pattern2 = detectPriceShape(prices, 1.5);
     // const pattern1 = detectPriceShape(prices.slice(0, pattern2.index), 3);
-    const dropped = droppedPercent < -3;
+    const dropped = droppedPercent <= -3;
     // const up = prices.at(-2) < prices.at(-1);
 
     const log = `Drops: ${droppedPercent} - Trend: ${lastMinTrend} - Price: ${prices.at(-1)}`;
     this.dispatch("LOG", `€${balance.eur.toFixed(2)} - volatility: ${volatility} - ${log}`);
     this.dispatch("LOG", JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
-    this.dispatch("LOG", `allPricesTrend: ${JSON.stringify(allPricesTrend)}`);
-    this.dispatch("LOG", `halfPricesTrend: ${JSON.stringify(halfPricesTrend)}`);
+    // this.dispatch("LOG", `allPricesTrend: ${JSON.stringify(allPricesTrend)}`);
+    // this.dispatch("LOG", `halfPricesTrend: ${JSON.stringify(halfPricesTrend)}`);
     // this.dispatch("LOG", `pattern1: ${JSON.stringify(pattern1)}`);
     // this.dispatch("LOG", `pattern2: ${JSON.stringify(pattern2)}`);
     // this.dispatch("LOG", `pattern3: ${JSON.stringify(pattern3)}`);
 
-    this.buyCases[0] = false;
-    if (!this.lastSellOrderPrice && dropped && lastMinTrend == "uptrend") {
-      this.dispatch("LOG", `Place BUY`);
-      this.dispatch("BUY_SIGNAL", currentPrice[1]);
-      this.lastSellOrderPrice = current;
-    } else if (this.lastSellOrderPrice) {
-      this.sellCases[0] = false;
-      const gainLoss = calcPct(this.lastSellOrderPrice, current);
-      if (increasedPercent > 2 && lastMinTrend == "downtrend") {
-        this.dispatch("LOG", `Place SELL ${gainLoss}`);
-        this.lastSellOrderPrice = null;
-      } else if (gainLoss < -1 && lastMinTrend == "downtrend") {
-        this.dispatch("LOG", `Place STOP_LOSS`);
-        this.lastSellOrderPrice = null;
+    if (!this.AShape && pattern2.shape == "A") this.AShape = true;
+    this.buyCases[0] = dropped && lastMinTrend == "uptrend";
+    this.buyCases[1] = this.AShape && droppedPercent <= -1.5 && lastMinTrend == "uptrend";
+
+    const breakout1 = dropped == 0 && lastMinTrend == "uptrend";
+    const breakout2 =
+      dropped == 0 &&
+      allPricesTrend.trend != "uptrend" &&
+      halfPricesTrend.trend == "uptrend" &&
+      lastMinTrend == "uptrend";
+    if (breakout1 || breakout2) {
+      this.dispatch("LOG", `breakout: ${breakout1}-${breakout2}`);
+
+      if (this.notifiedTimer <= 0) {
+        this.dispatch("BUY_SIGNAL", currentPrice[1]);
+        this.notifiedTimer = (1 * 60 * 60) / this.interval;
       }
     }
     // Todo: Test this
@@ -87,14 +90,10 @@ class ScalpTrader extends Trader {
     // Buy
     if (!position && this.capital > 0 && balance.eur >= 1) {
       if (this.buyCases.some((c) => c)) {
-        // if (this.notifiedTimer <= 0) {
-        //   this.dispatch("LOG", `BUY Signal case: ${this.buyCases.findIndex((c) => c)}`);
-        //   this.dispatch("BUY_SIGNAL", currentPrice[1]);
-        //   this.notifiedTimer = (1 * 60) / this.interval;
-        // }
+        //
 
         await this.buy(balance, currentPrice[1]);
-        this.dispatch("LOG", `Placed BUY at: ${currentPrice[1]}`);
+        this.dispatch("LOG", `Placed BUY at: ${currentPrice[1]} ${this.buyCases.join("-")}`);
         this.prevGainPercent = 0;
         this.losses = [0, 0, 0];
         this.sellCases.forEach((c) => (c = false));
@@ -120,10 +119,15 @@ class ScalpTrader extends Trader {
         `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
       );
 
+      this.sellCases[0] = increasedPercent > 2 && lastMinTrend == "downtrend";
+      this.sellCases[1] = gainLossPercent < -1 && lastMinTrend == "downtrend";
+
       if (this.sellCases.some((c) => c)) {
         const res = await this.sell(position, balance, currentPrice[2]);
         this.buyCases.forEach((c) => (c = false));
-        this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs`);
+        this.AShape = false;
+        const l = this.sellCases.join("-");
+        this.dispatch("LOG", `Placed SELL - profit/loss: ${res.profit} - Held for: ${res.age}hrs - ${l}`);
       }
 
       //
