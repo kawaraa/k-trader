@@ -55,7 +55,7 @@ export default function CryptoChart() {
     };
     eventSource.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      if (data.prices) setPrices((prev) => [...prev, data.prices]);
+      if (data.prices) setPrices((prev) => [...prev, data.prices].slice(-5000));
     };
 
     return () => eventSource.close(); // This terminates the connection
