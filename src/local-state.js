@@ -43,7 +43,7 @@ export default class LocalState {
     const filePath = this.#getPricesFilePath(pair);
     try {
       const data = JSON.parse(readFileSync(filePath, "utf8"));
-      if (statSync(filePath).size / (1024 * 1024) >= 2) data.shift();
+      if (statSync(filePath).size / (1024 * 1024) >= 5) data.shift();
       return makePricesArray(data && data[0] ? data.slice(-limit) : []);
     } catch (error) {
       return [];

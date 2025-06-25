@@ -65,8 +65,9 @@ class KrakenExchangeProvider {
       const prices = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
       currencies[pair] = prices;
       this.state.updateLocalPrices(pair, prices);
+      // eventEmitter.emit(`update-prices`, currencies); // Todo:
+      eventEmitter.emit(`${pair}-price`, { prices });
     });
-    // eventEmitter.emit(`update--prices`, currencies); // Todo:
     return currencies;
   }
 
@@ -84,14 +85,10 @@ class KrakenExchangeProvider {
     };
   }
 
-  async currentPrices(pair, cache) {
+  async currentPrices(pair) {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
     const { a, b, c, v } = data[Object.keys(data)[0]];
     const prices = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
-    if (cache) {
-      this.state.updateLocalPrices(pair, prices);
-      eventEmitter.emit(`${pair}-price`, { prices });
-    }
     return prices;
   }
 
