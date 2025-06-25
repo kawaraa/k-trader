@@ -29,7 +29,7 @@ class BasicTrader extends Trader {
       const days = (this.range * this.interval) / 60 / 24;
       prices = (await this.ex.pricesData(this.pair, this.interval, days)).map((p) => p.close);
     }
-    const currentPrice = storedPrices.at(-1) || prices.at(-1);
+    const currentPrice = storedPrices.at(-1);
 
     if (!position && prices.length < this.range) return this.dispatch("LOG", `No enough prices`);
     const safeAskBidSpread = calcPct(currentPrice[2], currentPrice[1]) <= 1;

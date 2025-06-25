@@ -52,6 +52,23 @@ class KrakenExchangeProvider {
   publicApi(path, options) {
     return request(`${this.#apiUrl}/0/public${path}`, options).then(this.#checkError);
   }
+  async getTradableAssetPrices(currency = "EUR") {
+    const pairs = [];
+    const assets = await this.publicApi(`/AssetPairs`);
+    for (const key in assets) {
+      if (assets[key].quote.toUpperCase().includes(currency)) pairs.push(assets[key].altname);
+    }
+
+    const currencies = await this.publicApi(`/Ticker?pair=${pairs.join(",")}`);
+    Object.keys(currencies).map((pair) => {
+      const { a, b, c, v } = currencies[pair];
+      const prices = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
+      currencies[pair] = prices;
+      this.state.updateLocalPrices(pair, prices);
+    });
+    // eventEmitter.emit(`update--prices`, currencies); // Todo:
+    return currencies;
+  }
 
   async balance(pair) {
     const balance = parseNumbers(await this.#privateApi("Balance"));
@@ -67,12 +84,14 @@ class KrakenExchangeProvider {
     };
   }
 
-  async currentPrices(pair) {
+  async currentPrices(pair, cache) {
     const data = await this.publicApi(`/Ticker?pair=${pair}`);
-    const { a, b, c } = data[Object.keys(data)[0]];
-    const prices = [+c[0], +a[0], +b[0]];
-    this.state.updateLocalPrices(pair, prices);
-    eventEmitter.emit(`${pair}-price`, { prices });
+    const { a, b, c, v } = data[Object.keys(data)[0]];
+    const prices = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
+    if (cache) {
+      this.state.updateLocalPrices(pair, prices);
+      eventEmitter.emit(`${pair}-price`, { prices });
+    }
     return prices;
   }
 
@@ -98,7 +117,6 @@ class KrakenExchangeProvider {
   async prices(pair, limit) {
     // const prices = await this.pricesData(pair, interval);
     // return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
-    await this.currentPrices(pair);
     return this.state.getLocalPrices(pair, limit);
   }
 
@@ -134,3 +152,13 @@ class KrakenExchangeProvider {
 }
 
 export default KrakenExchangeProvider;
+
+/* Endpoint use cases */
+// // Latest price (most recent price, vol, etc)
+// https://api.kraken.com/0/public/Ticker?pair=btceur,etheur,pepeeur
+// // Tradable assets
+// https://api.kraken.com/0/public/AssetPairs
+// // Historical price trends
+// https://api.kraken.com/0/public/OHLC?pair=etheur&interval=5
+// // Bid/Ask spread only
+// https://api.kraken.com/0/public/Spread?pair=etheur

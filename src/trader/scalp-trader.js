@@ -24,8 +24,8 @@ class ScalpTrader extends Trader {
     const balance = await this.ex.balance(this.pair); // Get current balance in EUR and the "pair"
     const position = (await this.ex.getOrders(this.pair))[0];
     // const { trades } = await this.ex.state.getBot(this.pair);
-    const prices = normalizePrices(storedPrices); // safeAskBidSpread
     const currentPrice = storedPrices.at(-1);
+    const prices = normalizePrices(storedPrices); // safeAskBidSpread
     const sortedPrices = prices.toSorted((a, b) => a - b);
 
     // const sortedPrices = prices.toSorted((a, b) => a - b);
