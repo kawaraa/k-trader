@@ -1,13 +1,7 @@
 import webPush from "web-push"; // npm i web-push
-import { createRequire } from "module";
+const { NEXT_PUBLIC_HOST, NEXT_PUBLIC_VAPID_KEY, PRIV_VAPID_KEY, PUSH_NOTIFICATION_CONTACT_IDENTIFIER } =
+  jsonRequire(".env.json");
 import LocalState from "../local-state.js";
-const require = createRequire(import.meta.url);
-const {
-  NEXT_PUBLIC_HOST,
-  NEXT_PUBLIC_VAPID_KEY,
-  PRIV_VAPID_KEY,
-  PUSH_NOTIFICATION_CONTACT_IDENTIFIER,
-} = require("../../.env.json");
 
 class NotificationProvider {
   constructor(state, webPush) {

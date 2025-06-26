@@ -1,5 +1,4 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+const env = jsonRequire("src/.env.json");
 import KrakenExchangeProvider from "./providers/kraken-ex-provider.js";
 import notificationProvider from "./providers/notification-provider.js";
 import BasicTrader from "./trader/basic-trader.js";
@@ -11,7 +10,7 @@ import ScalpTrader from "./trader/scalp-trader.js";
 import eventEmitter from "./event-emitter.js";
 
 const state = new LocalState("state");
-const ex = new KrakenExchangeProvider(require("../.env.json").KRAKEN_CREDENTIALS, state);
+const ex = new KrakenExchangeProvider(env.KRAKEN_CREDENTIALS, state);
 
 export class BotsManager {
   static #bots = {};

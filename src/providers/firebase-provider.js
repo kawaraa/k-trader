@@ -1,6 +1,6 @@
-import { createRequire } from "module";
+const env = jsonRequire(".env.json");
 import { request } from "../utilities.js";
-
+console.log("Firebase:", env);
 class FireStoreProvider {
   #apiKey;
   constructor(credentials) {
@@ -102,7 +102,5 @@ class Doc {
   }
 }
 
-const fireStore = new FireStoreProvider(
-  createRequire(import.meta.url)("../../.env.json").FIRESTORE_CREDENTIALS
-);
+const fireStore = new FireStoreProvider(env.FIRESTORE_CREDENTIALS);
 export default fireStore;

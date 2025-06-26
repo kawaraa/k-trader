@@ -8,7 +8,7 @@ import botRoute from "./src/routes/bots.js";
 import notificationRoute from "./src/routes/notification.js";
 import { RequestRateLimiter } from "k-utilities/network.js";
 import fireStoreProvider from "./src/providers/firebase-provider.js";
-import BotsManager from "./src/a-bots-manager.js";
+import TradersManager from "./src/traders-manager.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -53,8 +53,8 @@ try {
     console.log(`Server is running on http://localhost:${port}`);
   });
 
-  const botsManager = new BotsManager();
-  botsManager.start();
+  const tradersManager = new TradersManager();
+  tradersManager.start();
 } catch (error) {
   console.log("App error: ", error);
 }

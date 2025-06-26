@@ -11,6 +11,7 @@ export default class LocalState {
   constructor(filename) {
     this.#databaseFolder = `${process.cwd()}/database/`;
     this.#filePath = `${this.#databaseFolder}${filename}.json`;
+    this.data = this.load();
   }
 
   #getPricesFilePath(pair) {
@@ -29,7 +30,7 @@ export default class LocalState {
     writeFileSync(this.#filePath, JSON.stringify(state, null, 2));
   }
 
-  getBot(pair) {
+  getBotConfiguration(pair) {
     return this.load()[pair] || {};
   }
 
@@ -52,6 +53,7 @@ export default class LocalState {
   updateLocalPrices(pair, prices) {
     let data = this.getLocalPrices(pair);
     data.push(prices);
-    return writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
+    writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
+    return data;
   }
 }

@@ -1,9 +1,10 @@
 import { statSync, existsSync, readFileSync } from "node:fs";
 import { Bot, BotsManager } from "../bots-manager.js";
 import { parseError, isNumber } from "../utilities.js";
-import { createRequire } from "module";
 import eventEmitter from "../event-emitter.js";
-const cryptocurrencies = createRequire(import.meta.url)("../data/currencies.json");
+const cryptocurrencies = jsonRequire("src/data/currencies.json");
+console.log("cryptocurrencies:", cryptocurrencies);
+
 const origin = process.env.CORS_ORIGIN || "*";
 
 const botRoute = (router, fireStoreProvider, authRequired, production) => {

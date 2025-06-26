@@ -64,25 +64,14 @@ class KrakenExchangeProvider {
       const { a, b, c, v } = currencies[pair];
       const prices = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
       currencies[pair] = prices;
-      this.state.updateLocalPrices(pair, prices);
-      // eventEmitter.emit(`update-prices`, currencies); // Todo:
-      eventEmitter.emit(`${pair}-price`, { prices });
     });
     return currencies;
   }
 
-  async balance(pair) {
+  async balance() {
     const balance = parseNumbers(await this.#privateApi("Balance"));
-    if (pair == "all") return balance;
-    const key = pair.replace("EUR", "");
-
-    return {
-      eur: +balance.ZEUR,
-      crypto:
-        key == "BTC"
-          ? +balance.XXBT
-          : +(balance[key] || balance["X" + key] || balance["Z" + key] || balance[key + ".F"]),
-    };
+    Object.keys(balance).forEach((k) => (balance[k != "ZEUR" ? k : "eur"] = +balance[k]));
+    return balance;
   }
 
   async currentPrices(pair) {

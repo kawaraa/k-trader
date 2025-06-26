@@ -2,14 +2,11 @@ import { calculateFee } from "../services.js";
 
 // Smart trader
 export default class Trader {
-  constructor(exProvider, pair, interval, capital, mode) {
+  constructor(exProvider, pair, interval, mode) {
     this.ex = exProvider;
     this.pair = pair;
     this.interval = +interval;
-    this.capital = +capital; // Investment cptl investing Amount in ERU that will be used every time to by crypto
-    // this.strategyTimestamp = info.strategyTimestamp;
     this.period = this.interval || 5; // this.period is deleted in only test trading
-    // this.testMode = info.testMode;
     this.testMode = mode != "live";
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
@@ -42,18 +39,18 @@ export default class Trader {
   }
 
   // await this.buy(this.capital, balance, currentPrice[1]);
-  async buy(balance, price) {
-    const capital = balance.eur < this.capital ? balance.eur : this.capital;
+  async buy(investmentCapital, eurBalance, price, buyCase) {
+    const capital = eurBalance < investmentCapital ? eurBalance : investmentCapital;
     const cost = capital - calculateFee(capital, 0.3);
     const cryptoVolume = +(cost / price).toFixed(8);
     let position = null;
 
     if (!this.testMode) position = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
     else this.position = { price, volume: cryptoVolume, cost, createdAt: Date.now() };
-    this.dispatch("BUY", position);
+    this.dispatch("BUY", position, buyCase);
   }
 
-  async sell(oldOrder, balance, price) {
+  async sell(oldOrder, balance, price, sellCase) {
     const orderAge = ((Date.now() - oldOrder.createdAt) / 60000 / 60).toFixed(1);
     // const volume = balance.crypto - oldOrder.volume < 5 ? balance.crypto : oldOrder.volume;
     const volume = Math.max(balance.crypto, oldOrder.volume);
@@ -66,21 +63,16 @@ export default class Trader {
       this.position = null;
     }
 
-    this.dispatch("SELL", profit);
+    this.dispatch("SELL", { price, return: profit }, sellCase);
     return { profit, age: orderAge };
   }
 
-  async sellAll() {
-    const cryptoBalance = (await this.ex.balance(this.pair)).crypto;
-    this.dispatch("SELL", 0);
+  async sellAll(cryptoBalance) {
     if (cryptoBalance > 0) {
-      // const { trades, position } = this.ex.state.getBot(this.pair);
-      // const bidPrice = (await this.ex.currentPrices(this.pair))[2];
       await this.ex.createOrder("sell", "market", this.pair, cryptoBalance);
-      // const cost = bidPrice * cryptoBalance - calculateFee(bidPrice * cryptoBalance, 0.3);
-      // const profit = (cost - calculateFee(cost, 0.3) - (position?.cost || cost)).toFixed(2);
       this.dispatch("LOG", `Placed SELL - for all assets`);
     }
+    this.dispatch("SELL", 0, "manually");
   }
 
   stop() {
@@ -88,6 +80,6 @@ export default class Trader {
   }
 
   dispatch(event, info) {
-    if (this.listener) this.listener(this.pair + "", event, info);
+    if (this.listener) this.listener(this.pair, event, info);
   }
 }
