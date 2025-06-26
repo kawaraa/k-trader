@@ -1,5 +1,5 @@
 import Trader from "./trader.js";
-import { calcPercentageDifference, normalizePrices } from "../services.js";
+import { calcAveragePrice, calcPercentageDifference, normalizePrices } from "../services.js";
 import { detectPriceDirection, detectPriceShape } from "../trend-analysis.js";
 const calcPct = calcPercentageDifference;
 
@@ -18,12 +18,12 @@ class SmartTrader extends Trader {
     const currentPrice = storedPrices.at(-1);
     const avgAskBidSpread = calcAveragePrice(storedPrices.map((p) => calcPct(p[2], p[1])));
     // safeAskBidSpread
-    if (calcAveragePrice(currentPrice[2], currentPrice[1]) > Math.min(avgAskBidSpread * 2, 1)) {
+    if (calcAveragePrice([currentPrice[2], currentPrice[1]]) > Math.min(avgAskBidSpread * 2, 1)) {
       return this.dispatch("LOG", `Pause trading due to the low liquidity`);
     }
 
     const lastTrade = trades.at(-1);
-    const prices = normalizePrices(prices);
+    const prices = normalizePrices(storedPrices);
     const sortedPrices = prices.toSorted((a, b) => a - b);
     const start = prices[0];
     const lowest = sortedPrices[0];
@@ -35,7 +35,7 @@ class SmartTrader extends Trader {
     const volatility = calcPct(lowest, highest);
     const droppedPercent = calcPct(highest, current);
     const increasedPercent = calcPct(lowest, current);
-    const droppedFromLastTrade = calcPct(lastTrade.price, currentPrice[1]);
+    const droppedFromLastTrade = calcPct(lastTrade?.price || currentPrice[1], currentPrice[1]);
 
     // const allPricesTrend = linearRegression(prices);
     // const halfPricesTrend = linearRegression(prices.slice(-parseInt(prices.length / 2)));

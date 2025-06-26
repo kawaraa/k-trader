@@ -54,24 +54,36 @@ class KrakenExchangeProvider {
   }
   async getTradableAssetPrices(currency = "EUR") {
     const pairs = [];
+    const balances = {};
     const assets = await this.publicApi(`/AssetPairs`);
-    for (const key in assets) {
-      if (assets[key].quote.toUpperCase().includes(currency)) pairs.push(assets[key].altname);
+    const assetsBlc = await this.balance();
+    balances.eur = +assetsBlc.ZEUR;
+
+    for (const pair in assets) {
+      if (assets[pair].quote.includes(currency) && assets[pair].altname.endsWith(currency)) {
+        pairs.push(assets[pair].altname);
+        const case1 = assets[pair].base;
+        const case2 = pair.replace("ZEUR", "");
+        const case3 = pair.replace("EUR", "");
+        if (!isNaN(+assetsBlc[case1])) balances[pair] = +assetsBlc[case1];
+        else if (!isNaN(+assetsBlc[case2])) balances[pair] = +assetsBlc[case2];
+        else if (!isNaN(+assetsBlc[case3])) balances[pair] = +assetsBlc[case3];
+      }
     }
 
     const currencies = await this.publicApi(`/Ticker?pair=${pairs.join(",")}`);
-    Object.keys(currencies).map((pair) => {
+    Object.keys(currencies).forEach((pair) => {
       const { a, b, c, v } = currencies[pair];
       const prices = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
       currencies[pair] = prices;
     });
-    return currencies;
+
+    return { currencies, balances };
   }
 
   async balance() {
-    const balance = parseNumbers(await this.#privateApi("Balance"));
-    Object.keys(balance).forEach((k) => (balance[k != "ZEUR" ? k : "eur"] = +balance[k]));
-    return balance;
+    return await this.#privateApi("Balance");
+    // Object.keys(balance).forEach((k) => (balance[k != "ZEUR" ? k : "eur"] = +balance[k]));
   }
 
   async currentPrices(pair) {

@@ -1,4 +1,4 @@
-const env = jsonRequire("src/.env.json");
+const env = jsonRequire(".env.json");
 import KrakenExchangeProvider from "./providers/kraken-ex-provider.js";
 import notificationProvider from "./providers/notification-provider.js";
 import BasicTrader from "./trader/basic-trader.js";

@@ -1,6 +1,6 @@
 const env = jsonRequire(".env.json");
 import { request } from "../utilities.js";
-console.log("Firebase:", env);
+
 class FireStoreProvider {
   #apiKey;
   constructor(credentials) {

@@ -79,7 +79,7 @@ export default class Trader {
     clearTimeout(this.timeoutID);
   }
 
-  dispatch(event, info) {
-    if (this.listener) this.listener(this.pair, event, info);
+  dispatch(event, info, ...args) {
+    if (this.listener) this.listener(this.pair, event, info, ...args);
   }
 }

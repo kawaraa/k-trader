@@ -1,3 +1,4 @@
+import "./bootstrap.js";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 import { mkdirSync } from "node:fs";

@@ -3,7 +3,6 @@ import { Bot, BotsManager } from "../bots-manager.js";
 import { parseError, isNumber } from "../utilities.js";
 import eventEmitter from "../event-emitter.js";
 const cryptocurrencies = jsonRequire("src/data/currencies.json");
-console.log("cryptocurrencies:", cryptocurrencies);
 
 const origin = process.env.CORS_ORIGIN || "*";
 
