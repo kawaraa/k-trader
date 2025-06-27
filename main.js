@@ -1,61 +1,62 @@
 import "./bootstrap.js";
+import "./src/config/load-env.js";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 import { mkdirSync } from "node:fs";
 import express from "express";
-import { cookiesParser, isAuthenticated } from "./src/routes/middlewares.js";
-import authRoute from "./src/routes/auth.js";
-import botRoute from "./src/routes/bots.js";
-import notificationRoute from "./src/routes/notification.js";
+import cors from "cors";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import mongoSanitize from "express-mongo-sanitize";
+import xss from "xss-clean";
+import authRoute from "./src/controllers/auth.js";
+import apiRoutes from "./src/routes/api.js";
+import errorHandlerMiddleware from "./src/middlewares/error.js";
+import authMiddleware from "./src/middlewares/auth.js";
 import { RequestRateLimiter } from "k-utilities/network.js";
-import fireStoreProvider from "./src/providers/firebase-provider.js";
-import TradersManager from "./src/traders-manager.js";
+import tradersManager from "./src/traders/traders-manager.js";
+
+const port = process.env.PORT || 3000;
+const methods = process.env.ALLOWED_METHODS || "GET,PUT,POST,DELETE";
+const origin = process.env.CORS_ORIGIN || "*";
+// const prod = process.env.NODE_ENV === "production";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const app = express();
 
 mkdirSync("database/logs", { recursive: true });
 mkdirSync("database/prices", { recursive: true });
 
-const prod = process.env.NODE_ENV === "production";
-const port = process.env.PORT || 3000;
-// const methods = process.env.ALLOWED_METHODS || "GET,PUT,POST,DELETE";
-// const origin = process.env.CORS_ORIGIN || "*";
-const server = express();
+app.set("trust proxy", true);
+// Apply the rate limiter middleware to all routes for Prevent brute-force attacks
+app.use(new RequestRateLimiter(1, 100).limitRate);
 
-// const maxAge = 60 * 60 * 24 * 7; // 1 week (weekSec)
-const maxAge = 30 * 24 * 3600 * 1000; // 30 days
-const cookieOptions = { httpOnly: true, secure: prod, maxAge, path: "/", sameSite: "lax" }; // strict
-const authRequired = (...args) => isAuthenticated(...args, fireStoreProvider, cookieOptions);
+// Security middleware
+app.use(helmet());
+app.use(cors({ origin, methods, credentials: false }));
 
-try {
-  // Apply the rate limiting all requests by adding rate limiter middleware to all routes
-  // app.use(cors({ origin, methods, credentials: false }));
-  server.use(new RequestRateLimiter(1, 100).limitRate);
-  server.use(cookiesParser);
-  server.use(express.json());
-  server.use(express.urlencoded({ extended: true }));
+// Request parsing
+app.use(express.json({ limit: "1200kb" }));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-  const apiRouter = express.Router();
-  authRoute(apiRouter, fireStoreProvider, authRequired, cookieOptions);
-  botRoute(apiRouter, fireStoreProvider, authRequired, prod);
-  notificationRoute(apiRouter, authRequired, prod);
+// Data sanitization
+app.use(mongoSanitize());
+app.use(xss());
 
-  server.use("/api", apiRouter);
+// Routes
+app.use("/api/auth", authRoute());
+app.use("/api", authMiddleware, apiRoutes);
+app.use(express.static(`${__dirname}/public/`)); // Serve static files from the "out" directory
+app.use(express.static(`${__dirname}/out/`)); // SPA behavior: (Serve the index.html for any unknown routes)
+// app.get("*", (req, res) => res.sendFile(`${__dirname}/out/index.html`));
+app.use("/*", (req, res, next) => next("NOT_FOUND"));
+app.use(errorHandlerMiddleware);
 
-  server.use(express.static(`${__dirname}/public/`)); // Serve static files from the "out" directory
-  server.use(express.static(`${__dirname}/out/`)); // SPA behavior: (Serve the index.html for any unknown routes)
+app.listen(port, (error) => {
+  if (!error) return console.log(`Server running on http://localhost:${port}`);
+  console.log("Failed to start server:", error);
+  process.exit(1);
+});
 
-  server.get("*", (req, res) => {
-    res.sendFile(`${__dirname}/out/index.html`);
-  });
-
-  server.listen(port, (err) => {
-    if (err) throw err;
-    console.log(`Server is running on http://localhost:${port}`);
-  });
-
-  const tradersManager = new TradersManager();
-  tradersManager.start();
-} catch (error) {
-  console.log("App error: ", error);
-}
+// tradersManager.start();

@@ -1,7 +1,7 @@
 import webPush from "web-push"; // npm i web-push
 const { NEXT_PUBLIC_HOST, NEXT_PUBLIC_VAPID_KEY, PRIV_VAPID_KEY, PUSH_NOTIFICATION_CONTACT_IDENTIFIER } =
   jsonRequire(".env.json");
-import LocalState from "../local-state.js";
+import LocalState from "../services/local-state.js";
 
 class NotificationProvider {
   constructor(state, webPush) {
@@ -17,7 +17,7 @@ class NotificationProvider {
 
   async push(payload) {
     const subscriptions = this.notificationState.load();
-    payload.url = NEXT_PUBLIC_HOST;
+    payload.url = NEXT_PUBLIC_HOST + (payload.url || "");
     const data = JSON.stringify(payload);
 
     const responses = await Promise.all(subscriptions.map((sub, i) => this.send(sub, i, data)));

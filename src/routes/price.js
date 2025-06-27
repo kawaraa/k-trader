@@ -3,9 +3,5 @@ import express from "express";
 export default (controller) => {
   const router = express.Router();
   router.get("/:pair", controller.get);
-  router.post("/:pair", controller.subscribe);
-  router.delete("/:pair", controller.unsubscribe);
-  router.get("/test/:pair", controller.test);
-
   return router;
 };

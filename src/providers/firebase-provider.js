@@ -1,5 +1,5 @@
 const env = jsonRequire(".env.json");
-import { request } from "../utilities.js";
+import { request } from "../services/utilities.js";
 
 class FireStoreProvider {
   #apiKey;

@@ -1,6 +1,6 @@
 import { createHash, createHmac } from "node:crypto";
-import { parseNumbers, request } from "../utilities.js";
-import eventEmitter from "../event-emitter.js";
+import { parseNumbers, request } from "../services/utilities.js";
+import eventEmitter from "../services/event-emitter.js";
 
 class KrakenExchangeProvider {
   #apiUrl;
