@@ -24,6 +24,7 @@ class SmartTrader extends Trader {
 
     const lastTrade = trades.at(-1);
     const prices = normalizePrices(storedPrices);
+    const volumes = storedPrices.slice(-18).map((p) => p[3]);
     const sortedPrices = prices.toSorted((a, b) => a - b);
     const start = prices[0];
     const lowest = sortedPrices[0];
@@ -41,14 +42,16 @@ class SmartTrader extends Trader {
     // const halfPricesTrend = linearRegression(prices.slice(-parseInt(prices.length / 2)));
     const lastMinTrend = detectPriceDirection(prices.slice(-18), 1);
     const increaseMore = detectPriceDirection(prices.slice(-18), 1.5);
+    const volumeTrend = detectPriceDirection(volumes, 1);
     // const pattern3 = detectPriceShape(prices.slice(-this.calculateLength(0.75)), vLimit);
     const pattern2 = detectPriceShape(prices, 1.5);
     const dropped = droppedPercent <= -3;
     // const up = prices.at(-2) < prices.at(-1);
     let buyCase = null;
 
-    const log = `Drops: ${droppedPercent} - Trend: ${lastMinTrend} - Price: ${prices.at(-1)}`;
-    this.dispatch("LOG", `€${eurBalance.toFixed(2)} - volatility: ${volatility} - ${log}`);
+    const log1 = `€${eurBalance.toFixed(2)} - volatility: ${volatility} - Drops: ${droppedPercent}`;
+    const log2 = `Trend: ${lastMinTrend} - Price: ${prices.at(-1)} - volume: ${volumeTrend}`;
+    this.dispatch("LOG", `${log1} - ${log2}`);
     // this.dispatch("LOG", JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
 
     /*

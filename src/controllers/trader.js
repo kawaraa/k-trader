@@ -12,6 +12,7 @@ export default class TraderController extends Controller {
         const { state, balances } = this.tradersManager;
         data[pair] = { ...state.data[pair], balance: balances[pair] };
       });
+      data.eur = balances.eur;
       res.json(data);
     } catch (error) {
       next(error);

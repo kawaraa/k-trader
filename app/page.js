@@ -205,6 +205,7 @@ export default function Home() {
 
   return (
     <>
+      {/*  <PageHeader pair={pair} /> */}
       <header className="no-select flex px-3 sm:px-5 py-6 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
         <strong className="text-3xl font-bold text-emerald-500">€{parseInt(balance)}</strong>
         <div className="flex text-white">
