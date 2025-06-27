@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { toShortDate } from "../../../src/utilities.js";
 import PageHeader from "../../components/page-header";
 import ChartCanvas from "../../components/chart-canvas";
+import { toShortDate } from "../../utilities";
 
 export default function CryptoChart() {
   const [prices, setPrices] = useState([]);

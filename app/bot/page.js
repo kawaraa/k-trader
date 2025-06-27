@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { request } from "../../src/utilities.js";
+import { request } from "../utilities";
 import { useRouter, useSearchParams } from "next/navigation";
 import RefreshButton from "../components/refresh-button";
 import Loader from "../components/loader";

@@ -1,7 +1,8 @@
 import express from "express";
 
-export default (controller) => {
+const getSubRoute = (controller) => {
   const router = express.Router();
   router.get("/:pair", controller.get);
   return router;
 };
+export default getSubRoute;

@@ -1,6 +1,5 @@
 "use client";
 import { btnCls, inputCls } from "./tailwind-classes";
-import cryptocurrencies from "../../src/data/currencies.json";
 import getSupportedModes from "../../src/trend-analysis";
 const strategyModes = []; //getSupportedModes();
 
@@ -11,7 +10,7 @@ export default function AddBotFrom({ bot, onSubmit }) {
     <form onSubmit={onSubmit} className="w-full max-w-md mx-auto space-y-2 flex flex-col">
       <select name="pair" defaultValue={bot?.pair} required className={inputCls}>
         <option value="">Pair</option>
-        {Object.keys(cryptocurrencies).map((pair) => (
+        {[].map((pair) => (
           <option value={pair} key={pair}>
             {pair.replace("EUR", "")}
           </option>

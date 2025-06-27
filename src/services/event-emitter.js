@@ -7,4 +7,5 @@ import EventEmitter from "events";
 // const eventEmitter = new MyEmitter();
 
 // Export the emitter instance
-export default new EventEmitter();
+const eventEmitter = new EventEmitter();
+export default eventEmitter;

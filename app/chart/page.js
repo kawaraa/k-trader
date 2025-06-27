@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { toShortDate, request } from "../../src/utilities.js";
+import { request, toShortDate } from "../utilities";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageHeader from "../components/page-header";
 import Loader from "../components/loader";
 import ChartCanvas from "../components/chart-canvas";
-import currencies from "../../src/data/currencies.json";
-const pairs = Object.keys(currencies);
+// import currencies from "../";
+// const pairs = Object.keys(currencies);
+const pairs = [];
 
 export default function CryptoChart() {
   const router = useRouter();

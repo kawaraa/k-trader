@@ -22,7 +22,7 @@ const catchFailingAttempts = async (err, { user }, res, next) => {
   next(err);
 };
 
-export default (entity) => {
+const getSubRoute = (entity) => {
   const router = express.Router();
   const controller = new AuthController(entity);
   router.use(validateIncomingRequest);
@@ -34,3 +34,4 @@ export default (entity) => {
 
   return router;
 };
+export default getSubRoute;

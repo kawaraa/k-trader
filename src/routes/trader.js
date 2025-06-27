@@ -6,7 +6,7 @@ import express from "express";
 //   next();
 // };
 
-export default (controller) => {
+const getSubRoute = (controller) => {
   const router = express.Router();
   router.get("/", controller.get);
   // router.post("/", controller.create);
@@ -15,3 +15,4 @@ export default (controller) => {
   router.delete("/sell/:pair", controller.sell);
   return router;
 };
+export default getSubRoute;

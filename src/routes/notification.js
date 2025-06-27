@@ -1,6 +1,6 @@
 import express from "express";
 
-export default (controller) => {
+const getSubRoute = (controller) => {
   const router = express.Router();
   router.get("/:pair", controller.get);
   router.post("/:pair", controller.subscribe);
@@ -9,3 +9,4 @@ export default (controller) => {
 
   return router;
 };
+export default getSubRoute;

@@ -4,14 +4,14 @@ import BotItem from "./components/bot-item";
 import { Modal } from "./components/modal";
 import AddBotFrom from "./components/add-bot-form";
 import { useRouter } from "next/navigation";
-import { dateToString, request } from "../src/utilities.js";
 import { btnCls } from "./components/tailwind-classes";
 import Loader from "./components/loader";
 import RefreshButton from "./components/refresh-button";
 import { ToggleSwitch } from "./components/toggle-switch.js";
 import { urlBase64ToUint8Array } from "./services/encodin-helper.js";
-import config from "../.env.json";
-const key = config.NEXT_PUBLIC_VAPID_KEY;
+import { request, dateToString } from "./utilities.js";
+console.log(process.env.NEXT_PUBLIC_VAPID_KEY);
+// const key = config.NEXT_PUBLIC_VAPID_KEY;
 
 const badgeCls =
   "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";

@@ -6,7 +6,7 @@ import express from "express";
 //   next();
 // };
 
-export default (controller) => {
+const getSubRoute = (controller) => {
   const router = express.Router();
   // router.get("/", paginationParser, controller.get);
   // router.post("/", fileParser.single("file"), controller.create);
@@ -16,3 +16,4 @@ export default (controller) => {
 
   return router;
 };
+export default getSubRoute;

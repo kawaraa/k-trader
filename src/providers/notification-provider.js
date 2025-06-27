@@ -41,4 +41,6 @@ class NotificationProvider {
   };
 }
 
-export default new NotificationProvider(new LocalState("notification-subscriptions"), webPush);
+const notificationProvider = new NotificationProvider(new LocalState("notification-subscriptions"), webPush);
+
+export default notificationProvider;

@@ -100,4 +100,5 @@ class TradersManager {
   }
 }
 
-export default new TradersManager();
+const tradersManager = new TradersManager();
+export default tradersManager;
