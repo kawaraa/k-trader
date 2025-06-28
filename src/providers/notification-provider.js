@@ -1,6 +1,6 @@
 import webPush from "web-push"; // npm i web-push
 const { NEXT_PUBLIC_HOST, NEXT_PUBLIC_VAPID_KEY, PRIV_VAPID_KEY, PUSH_NOTIFICATION_CONTACT_IDENTIFIER } =
-  jsonRequire(".env.json");
+  process.env;
 import LocalState from "../services/local-state.js";
 
 class NotificationProvider {

@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { request, toShortDate } from "../utilities";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageHeader from "../components/page-header";
 import Loader from "../components/loader";
 import ChartCanvas from "../components/chart-canvas";
+import { request, toShortDate } from "../../shared-code/utilities.js";
 // import currencies from "../";
 // const pairs = Object.keys(currencies);
 const pairs = [];

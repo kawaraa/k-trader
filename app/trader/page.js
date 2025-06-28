@@ -1,14 +1,18 @@
 "use client";
-// import { useEffect, useRef, useState } from "react";
-// import { request } from "../../src/utilities.js";
+import { useEffect, useRef, useState } from "react";
 // import { useRouter, useSearchParams } from "next/navigation";
 // import RefreshButton from "../components/refresh-button";
 import Loader from "../components/loader";
-// import PageHeader from "../components/page-header";
+import { request } from "../../shared-code/utilities.js";
 
 export default function Assets() {
   const watchedAssets = [{}];
+  const loading = false;
 
+  useEffect(() => {
+    // request()
+    // balance = 0;
+  }, []);
   return (
     <>
       <div className="flex flex-col h-screen"></div>

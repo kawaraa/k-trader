@@ -1,14 +1,18 @@
 "use client";
-import { Suspense, useState } from "react";
-import { btnCls } from "../components/tailwind-classes";
+import { Suspense, useEffect, useState } from "react";
+import { btnCls, inputCls } from "../components/tailwind-classes";
 import PageHeader from "../components/page-header";
 
 export default function RootLayout({ children }) {
   const [selectedAsset, setSelectedAsset] = useState("ALL");
   const balance = 0;
+
+  useEffect(() => {
+    balance = 0;
+  }, []);
   return (
     <>
-      <PageHeader pair={pair} />
+      <PageHeader pair={"pair"} />
 
       <header className="no-select flex px-3 sm:px-5 py-6 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
         <strong className="text-3xl font-bold text-emerald-500">€{parseInt(balance)}</strong>
@@ -47,9 +51,9 @@ export default function RootLayout({ children }) {
           <span className="mx-3">Notify me</span>
         </ToggleSwitch> */}
 
-        <select name="pair" defaultValue={bot?.pair} required className={inputCls}>
+        <select name="pair" defaultValue={"bot?.pair"} required className={inputCls}>
           <option value="ALL">ALL</option>
-          {Object.keys(cryptocurrencies).map((pair) => (
+          {[].map((pair) => (
             <option value={pair} key={pair}>
               {pair.replace("EUR", "")}
             </option>

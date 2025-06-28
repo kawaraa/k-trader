@@ -1,12 +1,26 @@
 import { Suspense } from "react";
 import packageJsonFile from "../package.json";
+import { StateProvider } from "./state";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth group">
-      <body className="relative min-h-screen bg-bg antialiased font-base">
-        <Suspense>{children}</Suspense>
+    <html dir="auto" translate="no" lang="en" className="scroll-smooth group">
+      <body
+        // className="relative min-h-screen bg-bg antialiased font-base"
+        className="antialiased bg-neutral-50 text-slate-700 selection:bg-teal-300 dark:bg-black dark:text-gray-300 dark:selection:bg-pink-500 dark:selection:text-white"
+      >
+        <Suspense>
+          <StateProvider>
+            {/* <Navigation /> */}
+
+            <main className="min-h-screen pt-10 pb-24 px-1 sm:px-2 md:px-4 print:min-h-fit" dir="auto">
+              {children}
+            </main>
+
+            {/* <Footer /> */}
+          </StateProvider>
+        </Suspense>
       </body>
     </html>
   );

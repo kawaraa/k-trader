@@ -1,16 +1,15 @@
 import { createHash, createHmac } from "node:crypto";
-import { parseNumbers, request } from "../services/utilities.js";
-import eventEmitter from "../services/event-emitter.js";
+import { request } from "../../shared-code/utilities.js";
 
 class KrakenExchangeProvider {
   #apiUrl;
   #apiKey;
   #apiSecret;
 
-  constructor(credentials, state) {
+  constructor(state) {
     this.#apiUrl = "https://api.kraken.com";
-    this.#apiKey = credentials.apiKey;
-    this.#apiSecret = credentials.privateKey;
+    this.#apiKey = process.env.KRAKEN_APIKEY;
+    this.#apiSecret = process.env.KRAKEN_PRIVATEKEY;
     this.state = state;
   }
 

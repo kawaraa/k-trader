@@ -1,14 +1,13 @@
-const env = jsonRequire(".env.json");
 import KrakenExchangeProvider from "./src/providers/kraken-ex-provider.js";
 import LocalState from "./src/local-state.js";
 import AdvanceTrader from "./src/trader/advance-trader.js";
-import { parseNumInLog } from "./src/utilities.js";
+import { parseNumInLog } from "./shared-code/utilities.js";
 import ScalpTrader from "./src/trader/scalp-trader.js";
 const pair = process.argv[2]; //  LTCEUR, SOLEUR, VINEEUR
 const scalp = process.argv.includes("scalp"); //  1, 2
 
 const state = new LocalState("state");
-const exProvider = new KrakenExchangeProvider(env.KRAKEN_CREDENTIALS, state);
+const exProvider = new KrakenExchangeProvider(process.env.KRAKEN_CREDENTIALS, state);
 
 // ex.getOpenClosedOrders("open")
 //   .then(async (order) => {

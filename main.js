@@ -9,7 +9,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import mongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
-import authRoute from "./src/controllers/auth.js";
+import authRoute from "./src/routes/auth.js";
 import apiRoutes from "./src/routes/api.js";
 import errorHandlerMiddleware from "./src/middlewares/error.js";
 import authMiddleware from "./src/middlewares/auth.js";
@@ -31,14 +31,22 @@ app.set("trust proxy", true);
 // Apply the rate limiter middleware to all routes for Prevent brute-force attacks
 app.use(new RequestRateLimiter(1, 100).limitRate);
 
+app.use(cookieParser());
+
 // Security middleware
-app.use(helmet());
+app.use(
+  helmet({
+    // Allow inline scripts for next.js app
+    contentSecurityPolicy: { directives: { scriptSrc: ["'self'", "'unsafe-inline'", origin] } },
+  })
+);
 app.use(cors({ origin, methods, credentials: false }));
 
 // Request parsing
 app.use(express.json({ limit: "1200kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+// app.use(cookieParser(process.env.JWT_SECRET)); // when set the cooke: {signed: true}
 
 // Data sanitization
 app.use(mongoSanitize());

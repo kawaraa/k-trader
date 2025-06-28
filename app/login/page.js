@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { request } from "../utilities";
+import { request } from "../../shared-code/utilities.js";
 import { btnCls, inputCls } from "../components/tailwind-classes";
-import Loader from "../components/loader";
+import { State } from "../state";
 
 export default function Signin() {
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { user, setLoading, addMessage } = State();
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
@@ -17,7 +17,7 @@ export default function Signin() {
       await request("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value }),
+        body: JSON.stringify({ username: e.target.username.value, password: e.target.password.value }),
       });
       router.replace("/");
     } catch (error) {
@@ -27,10 +27,9 @@ export default function Signin() {
   };
 
   useEffect(() => {
-    request("/api/bots")
-      .then(() => router.replace("/"))
-      .catch(() => null);
-  }, []);
+    console.log(user);
+    // if (!user?.loading && user?.id) router.replace("/");
+  }, [user]);
 
   return (
     <>
@@ -38,7 +37,15 @@ export default function Signin() {
         <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-6 mt-[15vh]">
           <h1 className="text-center text-2xl font-bold">Sign in</h1>
 
-          <input name="email" type="email" placeholder="Email" required className={`${inputCls} `} />
+          <input
+            name="username"
+            type="text"
+            placeholder="Username, Email or phone number"
+            min="5"
+            max="50"
+            required
+            className={`${inputCls} `}
+          />
           <input name="password" type="password" placeholder="Password" required className={`${inputCls} `} />
           <button type="submit" className={`${btnCls} !mt-5`}>
             Sign In
@@ -47,7 +54,6 @@ export default function Signin() {
           {error && <p className="mt-5 text-red">{error}</p>}
         </form>
       </main>
-      <Loader loading={loading} />
     </>
   );
 }

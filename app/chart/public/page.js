@@ -2,7 +2,7 @@
 import { useState } from "react";
 import PageHeader from "../../components/page-header";
 import ChartCanvas from "../../components/chart-canvas";
-import { toShortDate } from "../../utilities";
+import { toShortDate } from "../../../shared-code/utilities.js";
 
 export default function CryptoChart() {
   const [prices, setPrices] = useState([]);

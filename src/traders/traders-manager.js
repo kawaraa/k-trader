@@ -4,15 +4,14 @@ import notificationProvider from "../providers/notification-provider.js";
 import LocalState from "../services/local-state.js";
 import KrakenExchangeProvider from "../providers/kraken-ex-provider.js";
 import SmartTrader from "./smart-trader.js";
-import { toShortDate } from "../services/utilities.js";
-const env = jsonRequire(".env.json");
+import { toShortDate } from "../../shared-code/utilities.js";
 
 class TradersManager {
   currencies;
   #traders;
   constructor() {
     this.state = new LocalState("state");
-    this.ex = new KrakenExchangeProvider(env.KRAKEN_CREDENTIALS, this.state);
+    this.ex = new KrakenExchangeProvider(process.env.KRAKEN_CREDENTIALS, this.state);
     this.defaultCapital = 0;
     this.interval = 10;
     this.range = parseInt((3 * 60 * 60) / this.interval);

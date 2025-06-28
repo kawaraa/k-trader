@@ -1,9 +1,9 @@
-const env = jsonRequire(".env.json");
-import { request } from "../services/utilities.js";
+import { request } from "../../shared-code/utilities.js";
 
 class FireStoreProvider {
   #apiKey;
-  constructor(credentials) {
+  constructor() {
+    const credentials = JSON.parse(process.env.FIRESTORE_CREDENTIALS);
     this.#apiKey = credentials.apiKey;
     this.projectId = credentials.projectId;
     this.baseUrl = "https://firestore.googleapis.com/v1/projects";
@@ -102,5 +102,5 @@ class Doc {
   }
 }
 
-const fireStore = new FireStoreProvider(env.FIRESTORE_CREDENTIALS);
+const fireStore = new FireStoreProvider(process.env.FIRESTORE_CREDENTIALS);
 export default fireStore;

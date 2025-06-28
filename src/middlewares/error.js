@@ -1,8 +1,8 @@
-import { parseError } from "../services/utilities";
+import { parseError } from "../../shared-code/utilities.js";
 
 // Express identifies an error-handling middleware by the presence of all four arguments. Without next, it won't be treated as a middleware.
 const errorHandlerMiddleware = (error, req, res, next) => {
-  console.log("errorHandlerMiddleware: ", error);
+  console.log("errorHandlerMiddleware: ", req.url, error);
 
   let statusCode = 500;
   let message = "Internal Server Error";

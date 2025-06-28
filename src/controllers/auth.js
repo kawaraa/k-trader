@@ -26,8 +26,8 @@ export default class AuthController extends Controller {
   login = async (req, res, next) => {
     try {
       const { username, password } = req.body;
-      const state = this.mainState.load();
-      const user = state[username];
+      const state = this.mainState.data.users;
+      const user = { ...state[username], ...req.user };
       if (!user || !(await bcrypt.compare(password, user.passwordHash))) return next("UNAUTHORIZED");
       delete user.passwordHash;
       const token = jwt.sign(user, secret, { expiresIn: maxAge });
@@ -38,13 +38,20 @@ export default class AuthController extends Controller {
     }
   };
 
+  get = async (req, res, next) => {
+    try {
+      res.json(req.user);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   logout = async (req, res) => {
-    res.cookie("accessToken", null, { httpOnly: true, secure, sameSite: "strict", path: "/", maxAge });
-    res.clearCookie("idToken");
+    res.clearCookie("accessToken");
     res.json({ success: true });
   };
 
   hash = async (req, res) => {
-    res.json({ hash: await bcrypt.hash(req.params.password, 10) });
+    res.json({ hash: await bcrypt.hash(req.body.password, 10) });
   };
 }

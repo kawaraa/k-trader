@@ -12,10 +12,17 @@
     "start": "NODE_ENV=production node main.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "express": "^4.19.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
     "k-utilities": "^1.4.9",
     "technicalindicators": "^3.1.0",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "xss-clean": "^0.1.4"
   },
   "devDependencies": {
     "chart.js": "^4.4.4",

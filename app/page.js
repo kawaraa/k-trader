@@ -9,7 +9,7 @@ import Loader from "./components/loader";
 import RefreshButton from "./components/refresh-button";
 import { ToggleSwitch } from "./components/toggle-switch.js";
 import { urlBase64ToUint8Array } from "./services/encodin-helper.js";
-import { request, dateToString } from "./utilities.js";
+import { request, dateToString } from "../shared-code/utilities.js";
 console.log(process.env.NEXT_PUBLIC_VAPID_KEY);
 // const key = config.NEXT_PUBLIC_VAPID_KEY;
 
@@ -196,9 +196,9 @@ export default function Home() {
     }
   };
   useEffect(() => {
-    request("/api/auth")
+    request("/api/auth/user")
       .then(fetchData)
-      .catch(() => router.replace("/signin"));
+      .catch(() => router.replace("/login"));
 
     registerServiceWorker();
   }, []);

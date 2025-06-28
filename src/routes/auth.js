@@ -1,5 +1,6 @@
-import AuthController from "../controllers/auth-old.js";
+import AuthController from "../controllers/auth.js";
 import express from "express";
+import authMiddleware from "../middlewares/auth.js";
 
 const failureAttempts = new Map();
 const lockedInPeriod = 1 * 60 * 60 * 1000;
@@ -27,9 +28,10 @@ const getSubRoute = (entity) => {
   const controller = new AuthController(entity);
   router.use(validateIncomingRequest);
   // router.post("/register", controller.register);
-  router.post("/login", controller.login);
-  router.post("/logout", controller.logout);
-  // router.put("/hash/:password", controller.hash);
+  router.post("/", controller.login);
+  router.get("/user", authMiddleware, controller.get);
+  router.get("/", controller.logout);
+  router.patch("/", controller.hash);
   router.use(catchFailingAttempts);
 
   return router;
