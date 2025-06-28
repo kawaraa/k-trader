@@ -27,8 +27,7 @@ export default function Signin() {
   };
 
   useEffect(() => {
-    console.log(user);
-    // if (!user?.loading && user?.id) router.replace("/");
+    if (!user?.loading && user?.name) router.replace("/");
   }, [user]);
 
   return (

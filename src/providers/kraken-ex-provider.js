@@ -6,11 +6,11 @@ class KrakenExchangeProvider {
   #apiKey;
   #apiSecret;
 
-  constructor(state) {
+  constructor(tradersState) {
     this.#apiUrl = "https://api.kraken.com";
     this.#apiKey = process.env.KRAKEN_APIKEY;
     this.#apiSecret = process.env.KRAKEN_PRIVATEKEY;
-    this.state = state;
+    this.tradersState = tradersState;
   }
 
   // Helper function to generate API signature
@@ -77,6 +77,7 @@ class KrakenExchangeProvider {
       currencies[pair] = prices;
     });
 
+    delete currencies.TEUR;
     return { currencies, balances };
   }
 
@@ -114,7 +115,7 @@ class KrakenExchangeProvider {
   async prices(pair, limit) {
     // const prices = await this.pricesData(pair, interval);
     // return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
-    return this.state.getLocalPrices(pair, limit);
+    return this.tradersState.getLocalPrices(pair, limit);
   }
 
   async createOrder(type, ordertype, pair, volume) {
@@ -129,8 +130,8 @@ class KrakenExchangeProvider {
   }
 
   async getOrders(pair, orderId, times = 1) {
-    // if (!orderIds) orderIds = this.state.getBot(pair).orders.join(",");
-    if (!orderId) orderId = this.state.getBot(pair).position;
+    // if (!orderIds) orderIds = this.tradersState.getBot(pair).orders.join(",");
+    if (!orderId) orderId = this.tradersState.getBot(pair).position;
     if (!orderId) return [];
     let orders = await this.#privateApi("QueryOrders", { txid: orderId });
     orders = Object.keys(orders).map((id) => {

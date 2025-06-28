@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import packageJsonFile from "../package.json";
 import { StateProvider } from "./state";
+import Navigation from "./components/navigation";
+import Footer from "./components/footer";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
@@ -12,13 +14,13 @@ export default function RootLayout({ children }) {
       >
         <Suspense>
           <StateProvider>
-            {/* <Navigation /> */}
+            <Navigation />
 
             <main className="min-h-screen pt-10 pb-24 px-1 sm:px-2 md:px-4 print:min-h-fit" dir="auto">
               {children}
             </main>
 
-            {/* <Footer /> */}
+            <Footer />
           </StateProvider>
         </Suspense>
       </body>

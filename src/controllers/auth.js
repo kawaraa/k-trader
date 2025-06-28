@@ -26,7 +26,7 @@ export default class AuthController extends Controller {
   login = async (req, res, next) => {
     try {
       const { username, password } = req.body;
-      const state = this.mainState.data.users;
+      const state = this.state.data.users;
       const user = { ...state[username], ...req.user };
       if (!user || !(await bcrypt.compare(password, user.passwordHash))) return next("UNAUTHORIZED");
       delete user.passwordHash;

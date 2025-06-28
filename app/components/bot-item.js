@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { borderCls } from "./tailwind-classes";
-const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
+// const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function BotItem({ botInfo, onAction }) {
   const [open, setOpen] = useState(false);
@@ -13,12 +13,29 @@ export default function BotItem({ botInfo, onAction }) {
 
   return (
     <li className={`mb-3 p-2 overflow-y-auto no-srl-bar card rounded-md ${borderCls}`}>
+      {/* <div className="flex no-srl-bar">
+                <span className="flex-1 w-1/5 font-medium">Crypto</span>
+                <span className="flex-1 w-1/5 font-medium">Capital</span>
+                <p className="relative flex-1 w-1/5">
+                  <button onClick={() => resetState()} className={`${badgeCls} bg-emerald-400`}>
+                    {parseInt(Object.keys(bots).reduce((acc, p) => acc + sum(bots[p].trades), 0))}
+                  </button>
+                  <span className="block font-medium">Earings</span>
+                </p>
+                <p className="relative flex-2 w-2/5">
+                  <span className={`${badgeCls} bg-rose-300`}>
+                    {Object.keys(bots).reduce((acc, p) => acc + (bots[p].position ? 1 : 0), 0)}
+                  </span>
+                  <span className="block font-medium">positions</span>
+                </p>
+              </div> */}
+
       <div className="flex">
         <span className="flex-1 w-1/5">{botInfo.pair.replace("EUR", "")}</span>
         <span className="flex-1 w-1/5 text-orange">€{botInfo.capital}</span>
         <div className="flex-1 w-1/5">
           <button onClick={() => onAction("rest", botInfo.pair)} className="text-green">
-            €{parseInt(sum(botInfo.trades))}
+            {/* €{parseInt(sum(botInfo.trades))} */}
           </button>
         </div>
         <span className="flex-2 w-2/5 flex justify-between items-center">

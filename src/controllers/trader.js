@@ -7,12 +7,13 @@ export default class TraderController extends Controller {
 
   get = async (req, res, next) => {
     try {
-      const data = {};
+      const data = { traders: {} };
       Object.keys(this.tradersManager.state.data).forEach((pair) => {
         const { state, balances } = this.tradersManager;
-        data[pair] = { ...state.data[pair], balance: balances[pair] };
+        data.traders[pair] = { ...state.data[pair], balance: balances[pair] };
+        if (isNaN(data.eurBalance)) data.eurBalance = balances.eur;
       });
-      data.eur = balances.eur;
+
       res.json(data);
     } catch (error) {
       next(error);

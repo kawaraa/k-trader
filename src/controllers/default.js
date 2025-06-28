@@ -5,7 +5,7 @@ import notificationProvider from "../providers/notification-provider.js";
 
 export default class DefaultController {
   constructor() {
-    this.mainState = new LocalState("main-state");
+    this.state = new LocalState("state");
     this.eventEmitter = eventEmitter;
     this.tradersManager = tradersManager;
     this.notificationProvider = notificationProvider;

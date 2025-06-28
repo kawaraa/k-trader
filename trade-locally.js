@@ -6,7 +6,7 @@ import ScalpTrader from "./src/trader/scalp-trader.js";
 const pair = process.argv[2]; //  LTCEUR, SOLEUR, VINEEUR
 const scalp = process.argv.includes("scalp"); //  1, 2
 
-const state = new LocalState("state");
+const state = new LocalState("traders");
 const exProvider = new KrakenExchangeProvider(process.env.KRAKEN_CREDENTIALS, state);
 
 // ex.getOpenClosedOrders("open")

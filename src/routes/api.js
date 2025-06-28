@@ -2,7 +2,7 @@ import express from "express";
 import defaultRoute from "./default.js";
 import DefaultController from "../controllers/default.js";
 
-const routePaths = ["/trader"];
+const routePaths = ["/trader", "/prices", "/log", "/notification"];
 
 async function addRoutes(router) {
   const route = { default: defaultRoute };

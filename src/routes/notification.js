@@ -2,10 +2,10 @@ import express from "express";
 
 const getSubRoute = (controller) => {
   const router = express.Router();
-  router.get("/:pair", controller.get);
-  router.post("/:pair", controller.subscribe);
-  router.delete("/:pair", controller.unsubscribe);
-  router.get("/test/:pair", controller.test);
+  router.get("/", controller.get);
+  router.post("/", controller.subscribe);
+  router.delete("/", controller.unsubscribe);
+  router.get("/test/", controller.test);
 
   return router;
 };

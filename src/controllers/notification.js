@@ -7,7 +7,7 @@ export default class NotificationController extends Controller {
 
   get = async (req, res, next) => {
     try {
-      res.json(this.mainState.data.notificationSubscriptions.map((sub) => sub.endpoint));
+      res.json(this.state.data.notificationSubscriptions.map((sub) => sub.endpoint));
     } catch (error) {
       next(error);
     }
@@ -16,10 +16,10 @@ export default class NotificationController extends Controller {
   subscribe = async (req, res, next) => {
     try {
       const data = request.body;
-      const not = this.mainState.data.notificationSubscriptions.find((sub) => sub.endpoint == data.endpoint);
+      const not = this.state.data.notificationSubscriptions.find((sub) => sub.endpoint == data.endpoint);
       if (!not) {
-        this.mainState.data.notificationSubscriptions.push(data);
-        this.mainState.update(this.mainState.data);
+        this.state.data.notificationSubscriptions.push(data);
+        this.state.update(this.state.data);
       }
 
       response.json({ success: true });
@@ -32,9 +32,9 @@ export default class NotificationController extends Controller {
   unsubscribe = async ({ query }, res, next) => {
     try {
       const { endpoint } = query;
-      const notSub = this.mainState.data.notificationSubscriptions.filter((sub) => sub.endpoint != endpoint);
-      this.mainState.data.notificationSubscriptions = notSub;
-      this.mainState.update(this.mainState.data);
+      const notSub = this.state.data.notificationSubscriptions.filter((sub) => sub.endpoint != endpoint);
+      this.state.data.notificationSubscriptions = notSub;
+      this.state.update(this.state.data);
       response.json({ success: true });
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ export default class NotificationController extends Controller {
 
   test = async (req, res, next) => {
     try {
-      const subscriptions = this.mainState.data.notificationSubscriptions;
+      const subscriptions = this.state.data.notificationSubscriptions;
       if (subscriptions.length === 0) return next("400-No subscriptions found");
       const result = await this.notificationProvider.push({
         title: "Test Notification from K-trader!",

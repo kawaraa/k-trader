@@ -10,7 +10,7 @@ class TradersManager {
   currencies;
   #traders;
   constructor() {
-    this.state = new LocalState("state");
+    this.state = new LocalState("traders-state");
     this.ex = new KrakenExchangeProvider(process.env.KRAKEN_CREDENTIALS, this.state);
     this.defaultCapital = 0;
     this.interval = 10;
