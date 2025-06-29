@@ -31,7 +31,7 @@ export default function AssetItem({ prices }) {
 
   return (
     <li className={`mb-3 p-2 overflow-y-auto no-srl-bar card rounded-md ${borderCls}`}>
-      pair - balance - earnings - buy - sell - on/off - Logs
+      pair - balance - capital - earnings - Logs - buy - sell
       <ChartCanvas
         type="line"
         labels={labels}

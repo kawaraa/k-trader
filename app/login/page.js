@@ -19,11 +19,11 @@ export default function Signin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: e.target.username.value, password: e.target.password.value }),
       });
-      router.replace("/");
+      window.location.reload();
     } catch (error) {
       setError(error.message);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {

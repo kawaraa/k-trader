@@ -7,11 +7,11 @@ module.exports = {
         pc: "#aea1ea", // Primary Color
         // bf: "#9aa0a6", // Border focus color
 
-        red: "#ff6446",
-        green: "#14d263",
-        blue: "#4696ff",
-        orange: "#ffa500",
-        blur: "#00000066",
+        // red: "#ff6446",
+        // green: "#14d263",
+        // blue: "#4696ff",
+        // orange: "#ffa500",
+        // blur: "#00000066",
       },
       zIndex: {
         auto: "auto",

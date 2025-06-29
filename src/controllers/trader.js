@@ -7,7 +7,7 @@ export default class TraderController extends Controller {
 
   get = async (req, res, next) => {
     try {
-      const data = { traders: {} };
+      const data = { traders: {}, defaultCapital: this.tradersManager.defaultCapital };
       Object.keys(this.tradersManager.state.data).forEach((pair) => {
         const { state, balances } = this.tradersManager;
         data.traders[pair] = { ...state.data[pair], balance: balances[pair] };

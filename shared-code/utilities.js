@@ -1,3 +1,30 @@
+export function request() {
+  return fetch(...arguments)
+    .then(async (res) => {
+      let data = await res.text();
+      try {
+        data = JSON.parse(data);
+      } catch (err) {}
+      if (!res.ok) throw data;
+      return data;
+    })
+    .catch((error) => {
+      throw new Error(parseError(error));
+    });
+}
+
+export function parseError(value, msgs = "") {
+  if (value && typeof value != "object") return msgs + value + " ";
+  if (value instanceof Error && value.message) return msgs + value.message + " ";
+  else if (Array.isArray(value)) value.forEach((item) => (msgs += parseError(item)));
+  else Object.keys(value).forEach((k) => (msgs += parseError(value[k])));
+  return msgs?.trim() || "Unknown error";
+}
+
+export function parseNumInLog(str) {
+  return str.split(" ").map((item) => parseFloat(item) || item);
+}
+
 export function isNumber(num, min, max) {
   const N = Number.parseFloat(num);
   if (Number.isNaN(N)) return false;
@@ -91,30 +118,3 @@ export function isOlderThan(timestamp, hours) {
 //   if (!throwError) return null;
 //   else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
 // }
-
-export function parseError(value, msgs = "") {
-  if (value && typeof value != "object") return msgs + value + " ";
-  if (value instanceof Error && value.message) return msgs + value.message + " ";
-  else if (Array.isArray(value)) value.forEach((item) => (msgs += parseError(item)));
-  else Object.keys(value).forEach((k) => (msgs += parseError(value[k])));
-  return msgs?.trim() || "Unknown error";
-}
-
-export function request() {
-  return fetch(...arguments)
-    .then(async (res) => {
-      let data = await res.text();
-      try {
-        data = JSON.parse(data);
-      } catch (err) {}
-      if (!res.ok) throw data;
-      return data;
-    })
-    .catch((error) => {
-      throw new Error(parseError(error));
-    });
-}
-
-export function parseNumInLog(str) {
-  return str.split(" ").map((item) => parseFloat(item) || item);
-}

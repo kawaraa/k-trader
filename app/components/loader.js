@@ -1,10 +1,11 @@
 "use client";
 
-export default function Loader({ loading }) {
+export default function Loader({ loading, full }) {
+  const cls = full ? "fixed" : "absolute";
   return (
     loading && (
       <div
-        className="no-select h-screen z-9 fixed inset-0 m-0 bg-blur flex justify-center items-center"
+        className={`no-select h-screen z-9 ${cls} inset-0 m-0 bg-blur flex justify-center items-center`}
         role="img"
         aria-label="loading"
       >

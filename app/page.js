@@ -1,11 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import BotItem from "./components/bot-item";
+import Trader from "./components/trader.js";
 import { useRouter } from "next/navigation";
 import { request, dateToString } from "../shared-code/utilities.js";
 import { State } from "./state.js";
-console.log(process.env.NEXT_PUBLIC_VAPID_KEY);
-// const key = config.NEXT_PUBLIC_VAPID_KEY;
 
 const badgeCls =
   "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
@@ -13,7 +11,7 @@ const badgeCls =
 
 export default function Home() {
   const router = useRouter();
-  const { loading, setLoading, user, traders } = State();
+  const { loading, setLoading, user, traders, defaultCapital } = State();
   const [bots, setBots] = useState({});
   const [orderbyTime, setOrderbyTime] = useState(false);
   const catchErr = (er) => alert(er.message || er.error || er);
@@ -78,14 +76,16 @@ export default function Home() {
   }, [user]);
 
   return (
-    <>
-      <main className="no-select px-3 sm:px-5 py-6 mb-8 max-w-2xl mx-auto">
-        <ul className="pt-4">
-          {/* {pairs.map((pair) => (
-            <BotItem botInfo={{ pair, ...bots[pair] }} onAction={handleActions} key={pair} />
-          ))} */}
-        </ul>
-      </main>
-    </>
+    <ul className="flex flex-wrap no-select mb-8 justify-center">
+      {pairs.map((pair) => (
+        <Trader
+          pair={pair}
+          info={traders[pair]}
+          defaultCapital={defaultCapital}
+          onAction={handleActions}
+          key={pair}
+        />
+      ))}
+    </ul>
   );
 }

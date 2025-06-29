@@ -1,14 +1,9 @@
 "use client";
-import Image from "next/image";
-// import { title } from "../content";
 import { State } from "../state";
-// import SvgIcon from "./svg-icon";
-import Link from "next/link";
-import { ToggleSwitch } from "./toggle-switch";
+import { ToggleSwitch } from "./inputs";
 import { btnCls } from "./tailwind-classes";
-import { urlBase64ToUint8Array } from "../services/encodin-helper";
-const liCls = "";
-const linkCls = "block px-2 py-1 underline underline-offset-8";
+import { urlBase64ToUint8Array } from "../services/encoding-helper";
+const key = process.env.NEXT_PUBLIC_VAPID_KEY;
 
 export default function Navigation(props) {
   const { balance, traders, notificationOn, setNotificationOn } = State();

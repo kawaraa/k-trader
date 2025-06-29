@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 // import Messages from "./components/messages";
 import Loader from "./components/loader";
 import { request } from "../shared-code/utilities.js";
-
+const defaultLoadedTraders = ["XXBTZEUR", "XETHZEUR", "SOLEUR", "PEPEEUR", "XDGEUR", "SUIEUR"];
 const StateContext = createContext();
 
 export function StateProvider({ children }) {
@@ -11,9 +11,14 @@ export function StateProvider({ children }) {
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({ loading: true });
   const [eurBalance, setEurBalance] = useState(0);
+  const [defaultCapital, setDefaultCapital] = useState(0);
   const [notificationOn, setNotificationOn] = useState(false);
   const [traders, setTraders] = useState({});
+  const [loadedTradersPairs, setLoadedTradersPairs] = useState(defaultLoadedTraders);
   const addMessage = (msg) => setMessages([...messages, msg]);
+
+  const loadedTraders = {};
+  loadedTradersPairs.forEach((pair) => traders[pair] && (loadedTraders[pair] = traders[pair]));
 
   const fetchData = async () => {
     try {
@@ -25,6 +30,7 @@ export function StateProvider({ children }) {
       const data = await request("/api/trader");
       setTraders(data.traders);
       setEurBalance(data.eurBalance);
+      setDefaultCapital(data.defaultCapital);
 
       const subscriptions = await request("/api/notification");
       setNotificationOn(subscriptions.length > 0);
@@ -34,6 +40,15 @@ export function StateProvider({ children }) {
       console.log("State:", error);
       setUser(null);
     }
+  };
+
+  const loadTraders = (limit = 6) => {
+    const pairs = [];
+    for (const pair in traders) {
+      if (!loadedTraders[pair]) pairs.push(pair);
+      if (pairs.length >= limit) break;
+    }
+    setLoadedTradersPairs(loadedTradersPairs.concat(pairs));
   };
 
   useEffect(() => {
@@ -50,8 +65,9 @@ export function StateProvider({ children }) {
         addMessage,
         eurBalance,
         setEurBalance,
-        traders,
-        setTraders,
+        defaultCapital,
+        traders: loadedTraders,
+        loadTraders,
         notificationOn,
         setNotificationOn,
       }}

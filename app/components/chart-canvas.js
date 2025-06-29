@@ -1,11 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import Chart from "chart.js/auto";
+import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale } from "chart.js";
 
-export default function ChartCanvas({ type = "line", defaultLeftZoom = 0, labels, datasets, options }) {
+// Register required components (minimal setup for line chart)
+Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale);
+
+const opn = { animation: { duration: 0 }, hover: { animationDuration: 0 }, responsiveAnimationDuration: 0 };
+
+export default function ChartCanvas({ labels, datasets, options, showZoom }) {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
   const [maxLevel, setMaxLevel] = useState(0);
-  const [leftZoomLevel, setLeftZoomLevel] = useState(defaultLeftZoom);
+  const [leftZoomLevel, setLeftZoomLevel] = useState(0);
   const [rightZoomLevel, setRightZoomLevel] = useState(0);
 
   const data = {
@@ -16,7 +21,7 @@ export default function ChartCanvas({ type = "line", defaultLeftZoom = 0, labels
   useEffect(() => {
     if (chartInstanceRef.current) {
       chartInstanceRef.current.data = data;
-      chartInstanceRef.current.options = options;
+      chartInstanceRef.current.options = options || opn;
       chartInstanceRef.current.update();
     }
 
@@ -30,7 +35,7 @@ export default function ChartCanvas({ type = "line", defaultLeftZoom = 0, labels
   useEffect(() => {
     const ctx = chartRef.current?.getContext("2d");
     if (ctx) {
-      chartInstanceRef.current = new Chart(ctx, { type, data, options });
+      chartInstanceRef.current = new Chart(ctx, { type: "line", data, options });
       // Cleanup on unmount
       return () => chartInstanceRef.current && chartInstanceRef.current.destroy();
     }
@@ -40,37 +45,39 @@ export default function ChartCanvas({ type = "line", defaultLeftZoom = 0, labels
     <div className="relative h-[inherit]">
       <canvas ref={chartRef}></canvas>
 
-      <div className="absolute top-8 right-4 left-4 flex items-center">
-        <label className="flex flex-auto items-center">
-          <strong>+</strong>
-          <input
-            id="zoom"
-            type="range"
-            min="0"
-            max={maxLevel - 144}
-            step="5"
-            value={leftZoomLevel}
-            onChange={(e) => setLeftZoomLevel(Number(e.target.value))}
-            className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
-          />
-          <strong>-</strong>
-        </label>
-        <div className="w-4"></div>
-        <label className="flex flex-auto items-center">
-          <strong>+</strong>
-          <input
-            id="zoom"
-            type="range"
-            min="144"
-            max={maxLevel}
-            step="5"
-            value={rightZoomLevel}
-            onChange={(e) => setRightZoomLevel(Number(e.target.value) + 1)}
-            className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
-          />
-          <strong>-</strong>
-        </label>
-      </div>
+      {showZoom && (
+        <div className="absolute top-8 right-4 left-4 flex items-center">
+          <label className="flex flex-auto items-center">
+            <strong>+</strong>
+            <input
+              id="zoom"
+              type="range"
+              min="0"
+              max={maxLevel - 144}
+              step="5"
+              value={leftZoomLevel}
+              onChange={(e) => setLeftZoomLevel(Number(e.target.value))}
+              className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
+            />
+            <strong>-</strong>
+          </label>
+          <div className="w-4"></div>
+          <label className="flex flex-auto items-center">
+            <strong>+</strong>
+            <input
+              id="zoom"
+              type="range"
+              min="144"
+              max={maxLevel}
+              step="5"
+              value={rightZoomLevel}
+              onChange={(e) => setRightZoomLevel(Number(e.target.value) + 1)}
+              className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
+            />
+            <strong>-</strong>
+          </label>
+        </div>
+      )}
     </div>
   );
 }
