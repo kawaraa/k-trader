@@ -52,11 +52,17 @@ jobs:
 
       - name: Add the environment variables
         run: |
-          cat <<EOF> .env.json
-          {
-          "KRAKEN_CREDENTIALS":${{ secrets.KRAKEN_CREDENTIALS }},
-          "FIRESTORE_CREDENTIALS":${{ secrets.FIRESTORE_CREDENTIALS }}
-          }
+          cat <<EOF> .env
+          PORT=3000
+          CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}
+          ALLOWED_METHODS=GET,PUT,POST,DELETE
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          KRAKEN_APIKEY=${{ secrets.KRAKEN_APIKEY }}
+          KRAKEN_PRIVATEKEY=${{ secrets.KRAKEN_PRIVATEKEY }}
+          FIRESTORE_CREDENTIALS=${{ secrets.FIRESTORE_CREDENTIALS }}
+          PRIV_VAPID_KEY=${{ secrets.PRIV_VAPID_KEY }}
+          NEXT_PUBLIC_VAPID_KEY=${{ secrets.NEXT_PUBLIC_VAPID_KEY }}
+          NEXT_PUBLIC_HOST=${{ secrets.NEXT_PUBLIC_HOST }}
           EOF
 
       - name: Prepare SSL certificate files
@@ -107,4 +113,4 @@ jobs:
 
       - name: Cleanup
         if: always()
-        run: rm -f .env.json app.tar.gz id_rsa id_rsa.pub iac/terraform.tfstate cloudflare.crt cloudflare.key
+        run: rm -f .env app.tar.gz id_rsa id_rsa.pub iac/terraform.tfstate cloudflare.crt cloudflare.key

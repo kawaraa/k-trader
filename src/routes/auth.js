@@ -1,38 +1,39 @@
-import { parseError } from "../utilities.js";
+import AuthController from "../controllers/auth.js";
+import express from "express";
+import authMiddleware from "../middlewares/auth.js";
 
-const authRoute = (router, fireStoreProvider, authRequired, cookieOptions) => {
-  // Check if signed in
-  router.get("/auth", authRequired, async (request, response) => {
-    response.status(200).json({ message: "already signed in" });
-  });
+const failureAttempts = new Map();
+const lockedInPeriod = 1 * 60 * 60 * 1000;
 
-  // Sign in
-  router.post("/auth", async (request, response) => {
-    try {
-      const { email, password } = request.body;
-      const { idToken, refreshToken } = await fireStoreProvider.signin(email, password);
-      response.cookie("idToken", idToken, cookieOptions);
-      response.cookie("refreshToken", refreshToken, cookieOptions);
-      response.status(200).json({ message: "Successfully signed in" });
-    } catch (error) {
-      response.status(401).json({ message: `Authentication failed: ${parseError(error)}` });
-    }
-  });
+const validateIncomingRequest = async (req, res, next) => {
+  const user = { ipAddress: req.ip || req.connection.remoteAddress, agent: req.get("User-Agent") };
+  const request = failureAttempts.get(user.ipAddress);
+  req.user = user;
+  if (request && request.attempts > 3 && Date.now() - request.lockedUntil < 0) {
+    return next("TOO_MANY_REQUESTS-Too many attempts, please try again later.");
+  }
+  next();
+};
 
-  // Sign out
-  router.delete("/auth", async (request, response) => {
-    // delete the token cookie, by setting the Set-Cookie header with the same cookie name and maxAge set to 0 or an expiration date in the past. This tells the browser to remove the cookie.
-    try {
-      await fireStoreProvider.signOut(request.cookies?.idToken);
-      response.clearCookie("idToken");
-      response.clearCookie("refreshToken");
-      response.status(200).json({ message: "Successfully signed out" });
-    } catch (error) {
-      response.status(401).json({ message: `Authentication failed: ${parseError(error)}` });
-    }
-  });
+const catchFailingAttempts = async (err, { user }, res, next) => {
+  const request = failureAttempts.get(user.ipAddress);
+  if (!request) failureAttempts.set(user.ipAddress, { attempts: 1 });
+  else if (request.attempts > 3) request.lockedUntil = Date.now() + lockedInPeriod;
+  else request.attempts++;
+  next(err);
+};
+
+const getSubRoute = (entity) => {
+  const router = express.Router();
+  const controller = new AuthController(entity);
+  router.use(validateIncomingRequest);
+  // router.post("/register", controller.register);
+  router.post("/", controller.login);
+  router.get("/user", authMiddleware, controller.get);
+  router.get("/", controller.logout);
+  router.patch("/", controller.hash);
+  router.use(catchFailingAttempts);
 
   return router;
 };
-
-export default authRoute;
+export default getSubRoute;

@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { calculateFee } from "../services.js";
+import { calculateFee } from "../services/calc-methods.js";
 
 export default class TestExchangeProvider {
   constructor(balance, prices, interval) {

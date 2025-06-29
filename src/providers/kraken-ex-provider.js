@@ -1,17 +1,16 @@
 import { createHash, createHmac } from "node:crypto";
-import { parseNumbers, request } from "../utilities.js";
-import eventEmitter from "../event-emitter.js";
+import { request } from "../../shared-code/utilities.js";
 
 class KrakenExchangeProvider {
   #apiUrl;
   #apiKey;
   #apiSecret;
 
-  constructor(credentials, state) {
+  constructor(tradersState) {
     this.#apiUrl = "https://api.kraken.com";
-    this.#apiKey = credentials.apiKey;
-    this.#apiSecret = credentials.privateKey;
-    this.state = state;
+    this.#apiKey = process.env.KRAKEN_APIKEY;
+    this.#apiSecret = process.env.KRAKEN_PRIVATEKEY;
+    this.tradersState = tradersState;
   }
 
   // Helper function to generate API signature
@@ -54,35 +53,38 @@ class KrakenExchangeProvider {
   }
   async getTradableAssetPrices(currency = "EUR") {
     const pairs = [];
+    const balances = {};
     const assets = await this.publicApi(`/AssetPairs`);
-    for (const key in assets) {
-      if (assets[key].quote.toUpperCase().includes(currency)) pairs.push(assets[key].altname);
+    const assetsBlc = await this.balance();
+    balances.eur = +assetsBlc.ZEUR;
+
+    for (const pair in assets) {
+      const skip = assets[pair].altname.startsWith(currency) || assets[pair].altname.endsWith(currency);
+      if (assets[pair].quote.includes(currency) && skip) {
+        pairs.push(assets[pair].altname);
+        const case1 = assets[pair].base;
+        const case2 = pair.replace("ZEUR", "");
+        const case3 = pair.replace("EUR", "");
+        if (!isNaN(+assetsBlc[case1])) balances[pair] = +assetsBlc[case1];
+        else if (!isNaN(+assetsBlc[case2])) balances[pair] = +assetsBlc[case2];
+        else if (!isNaN(+assetsBlc[case3])) balances[pair] = +assetsBlc[case3];
+      }
     }
 
     const currencies = await this.publicApi(`/Ticker?pair=${pairs.join(",")}`);
-    Object.keys(currencies).map((pair) => {
+    Object.keys(currencies).forEach((pair) => {
       const { a, b, c, v } = currencies[pair];
       const prices = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
       currencies[pair] = prices;
-      this.state.updateLocalPrices(pair, prices);
-      // eventEmitter.emit(`update-prices`, currencies); // Todo:
-      eventEmitter.emit(`${pair}-price`, { prices });
     });
-    return currencies;
+
+    delete currencies.TEUR;
+    return { currencies, balances };
   }
 
-  async balance(pair) {
-    const balance = parseNumbers(await this.#privateApi("Balance"));
-    if (pair == "all") return balance;
-    const key = pair.replace("EUR", "");
-
-    return {
-      eur: +balance.ZEUR,
-      crypto:
-        key == "BTC"
-          ? +balance.XXBT
-          : +(balance[key] || balance["X" + key] || balance["Z" + key] || balance[key + ".F"]),
-    };
+  async balance() {
+    return await this.#privateApi("Balance");
+    // Object.keys(balance).forEach((k) => (balance[k != "ZEUR" ? k : "eur"] = +balance[k]));
   }
 
   async currentPrices(pair) {
@@ -114,7 +116,7 @@ class KrakenExchangeProvider {
   async prices(pair, limit) {
     // const prices = await this.pricesData(pair, interval);
     // return prices.map((candle) => parseFloat(candle[4])); // candle[4] is the Closing prices
-    return this.state.getLocalPrices(pair, limit);
+    return this.tradersState.getLocalPrices(pair, limit);
   }
 
   async createOrder(type, ordertype, pair, volume) {
@@ -129,8 +131,8 @@ class KrakenExchangeProvider {
   }
 
   async getOrders(pair, orderId, times = 1) {
-    // if (!orderIds) orderIds = this.state.getBot(pair).orders.join(",");
-    if (!orderId) orderId = this.state.getBot(pair).position;
+    // if (!orderIds) orderIds = this.tradersState.getBot(pair).orders.join(",");
+    if (!orderId) orderId = this.tradersState.getBot(pair).position;
     if (!orderId) return [];
     let orders = await this.#privateApi("QueryOrders", { txid: orderId });
     orders = Object.keys(orders).map((id) => {
