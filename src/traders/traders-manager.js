@@ -18,9 +18,11 @@ class TradersManager {
     this.balances = {};
     this.currencies = {};
     this.#traders = {};
+    this.notifyTimer = 0;
   }
 
   start() {
+    if (this.notifyTimer > 0) this.notifyTimer -= 1;
     this.run().finally(() => (this.timeoutID = setTimeout(() => this.start(), this.interval * 1000)));
   }
   stop() {
@@ -46,7 +48,7 @@ class TradersManager {
       const { balances, currencies } = await this.ex.getTradableAssetPrices("EUR");
       this.balances = balances;
       this.currencies = currencies;
-      const pairs = Object.keys(this.currencies);
+      const pairs = Object.keys(currencies);
 
       await Promise.all(pairs.map((pair) => this.runTrader(pair, this.balances.eur, this.balances[pair])));
       this.state.update(this.state.data);
@@ -87,20 +89,30 @@ class TradersManager {
       }
       if (info != "\n") eventEmitter.emit(`${pair}-log`, { [pair]: info });
     } else {
+      const notify = this.notifyTimer <= 0;
       const time = ` Time: ${toShortDate()}`;
       const body = `${tradeCase} at price: ${info?.price || info}`;
       const url = `/trader?pair=${pair}`;
       if (event == "BUY_SIGNAL") {
         const title = `BUY Signal for ${pair}`;
-        notificationProvider.push({ title, body: body + time, url });
+        if (notify) {
+          notificationProvider.push({ title, body: body + time, url });
+          this.notifyTimer = (60 * 60) / 10;
+        }
       } else if (event == "BUY") {
         this.state.data[pair].position = info;
-        notificationProvider.push({ title: `Bought ${pair}`, body: body + time, url });
+        if (notify) {
+          notificationProvider.push({ title: `Bought ${pair}`, body: body + time, url });
+          this.notifyTimer = (60 * 60) / 10;
+        }
       } else if (event == "SELL") {
         this.state.data[pair].position = null;
         this.state.data[pair].trades.push(info);
         const payload = { title: `Sold ${pair}`, body: `${body} Return: ${info.return} ${time}`, url };
-        notificationProvider.push(payload);
+        if (notify) {
+          notificationProvider.push(payload);
+          this.notifyTimer = (60 * 60) / 10;
+        }
       }
       this.state.update(this.state.data);
     }
