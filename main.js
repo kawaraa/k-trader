@@ -68,4 +68,4 @@ app.listen(port, (error) => {
   process.exit(1);
 });
 
-// tradersManager.start();
+tradersManager.start();

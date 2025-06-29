@@ -89,7 +89,7 @@ class TradersManager {
     } else {
       const time = ` Time: ${toShortDate()}`;
       const body = `${tradeCase} at price: ${info?.price || info}`;
-      const url = `/${pair}`;
+      const url = `/trader?pair=${pair}`;
       if (event == "BUY_SIGNAL") {
         const title = `BUY Signal for ${pair}`;
         notificationProvider.push({ title, body: body + time, url });
