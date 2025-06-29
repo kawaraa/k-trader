@@ -14,11 +14,8 @@ export default class SSEController extends Controller {
       if (!this.tradersManager.state.data[pair] || !existsSync(filePath)) return next("404-not found");
       // No prices data for ${pair} pair
       if (!(+query.since && +query.interval)) return res.sendFile(filePath);
-      res.json(
-        JSON.parse(readFileSync(filePath, "utf8")).slice(
-          -parseInt((+query.since * 60 * 60) / +query.interval)
-        )
-      );
+      const length = parseInt((+query.since * 60 * 60) / query.interval);
+      res.json(JSON.parse(readFileSync(filePath, "utf8")).slice(-length));
     } catch (error) {
       next(error);
     }

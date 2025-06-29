@@ -16,7 +16,7 @@ class NotificationProvider {
   }
 
   async push(payload) {
-    const subscriptions = this.state.load().notificationSubscriptions;
+    const subscriptions = this.state.data.notificationSubscriptions;
     payload.url = NEXT_PUBLIC_HOST + (payload.url || "");
     const data = JSON.stringify(payload);
 

@@ -10,7 +10,6 @@ export default class SSEController extends Controller {
     try {
       const clientIP = request.ip || request.connection.remoteAddress;
       let event = request.params.filename;
-      console.log(request.params);
 
       if (event == "log") event = `${request.params.pair}-${event}`;
       this.#addConnection(clientIP, event);
@@ -28,7 +27,7 @@ export default class SSEController extends Controller {
       };
 
       const eventHandler = (data) => {
-        console.log("New Event received with data:", data);
+        // console.log("New Event received with data:", data);
         sendEvent(data);
       };
 

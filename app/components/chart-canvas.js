@@ -60,7 +60,7 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
               type="range"
               min="0"
               max={maxLevel}
-              step="5"
+              step="12"
               value={leftZoomLevel}
               onChange={(e) => setLeftZoomLevel(Number(e.target.value))}
               className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
@@ -75,7 +75,7 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
               type="range"
               min="0"
               max={maxLevel}
-              step="5"
+              step="12"
               value={rightZoomLevel}
               onChange={(e) => setRightZoomLevel(Number(e.target.value) + 1)}
               className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"

@@ -36,8 +36,8 @@ export default function TraderPage({}) {
       logsEventSource.onmessage = (e) => {
         const data = JSON.parse(e.data);
         const pair = Object.keys(data)[0];
-        console.log("Log", data[pair], data);
-        logsRef.current.innerText = data[pair];
+        logsRef.current.innerText += "\n" + data[pair];
+        logsRef.current?.scroll({ top: logsRef.current?.scrollHeight, behavior: "smooth" });
       };
 
       const handler = () => window.logsEventSource.close();

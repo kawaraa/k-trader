@@ -85,7 +85,7 @@ class TradersManager {
         const fileSizeInKB = statSync(filePath).size / 1024 / 1024; // Convert size from B to KB to MB
         fileSizeInKB < 1 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
       }
-      eventEmitter.emit("log", { [pair]: info });
+      if (info != "\n") eventEmitter.emit(`${pair}-log`, { [pair]: info });
     } else {
       const time = ` Time: ${toShortDate()}`;
       const body = `${tradeCase} at price: ${info?.price || info}`;
