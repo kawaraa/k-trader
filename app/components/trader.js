@@ -3,32 +3,58 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { borderCls } from "./tailwind-classes";
 import { EditableInput } from "./inputs";
-// import MultiLineChart from "./c";
 import ChartCanvas from "./chart-canvas";
 import Loader from "./loader";
-import { request, toShortDate } from "../../shared-code/utilities";
+import { calcPercentageDifference, request } from "../../shared-code/utilities.js";
+
+const getTime = (d) => d.toTimeString().split(" ")[0].substring(0, 5);
+const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
+const interval = 5 * 60000;
+const subtract = 6;
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
-export default function Trader({ pair, info, onAction, defaultCapital }) {
-  const [loading, setLoading] = useState(false);
+export default function Trader({ pair, info, defaultCapital, cls, showZoom }) {
+  // const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [capital, setCapital] = useState(info.capital || defaultCapital);
   const [tradePrices, setTradePrices] = useState([]);
   const [askPrices, setAskPrices] = useState([]);
   const [bidPrices, setBidPrices] = useState([]);
   const [volumes, setVolumes] = useState([]);
   const [labels, setLabels] = useState([]);
-  const totalReturn = info.trades.reduce((acc, t) => acc + t, 0);
-  const interval = 5 * 60000;
+  const totalReturn = info.trades?.reduce((acc, t) => acc + t, 0) || 0;
 
-  const handleSeCapital = (e) => {
-    console.log(e.target.value);
+  const volatility = calcPercentageDifference(Math.min(...tradePrices) || 0, Math.max(...tradePrices) || 0);
+
+  const handleSeCapital = async (e) => {
+    const newCapital = +e.target.value || 0;
+    if (newCapital > 0 && !confirm(`Are you sure want increase investment capital for ${pair}`)) return;
+    // setLoading(true);
+    try {
+      await request(`/api/trader/update/${pair}/${newCapital}`, { method: "PUT" });
+      setCapital(newCapital);
+    } catch (error) {
+      alert(JSON.stringify(error.message || error.error || error));
+    }
+    // setLoading(false);
+  };
+
+  const placePosition = async (type = "sell") => {
+    // setLoading(true);
+    if (!confirm(`Are you sure want to ${type} "${pair}" currency?`)) return;
+    try {
+      await request(`/api/trader/${type}/${pair}`, { method: "PATCH" });
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
+    console.log(type);
+    // setLoading(true);
   };
 
   const fetchPrices = async (pair) => {
-    // setLoading(true);
     try {
-      const prices = await request(`/api/prices/${pair}`);
-      console.log(prices.length);
+      const prices = await request(`/api/prices/${pair}?since=12&interval=10`);
 
       const since = Date.now() - prices.length * interval;
       const tradePrices = [];
@@ -38,11 +64,11 @@ export default function Trader({ pair, info, onAction, defaultCapital }) {
       const labels = [];
 
       prices.forEach((p, i) => {
-        tradePrices.push(p[0]);
-        askPrices.push(p[1]);
-        bidPrices.push(p[2]);
-        volumes.push(p[3]);
-        labels.push(`${toShortDate(new Date(since + interval * i))}`);
+        tradePrices.push(normalizeNum(p[0]));
+        askPrices.push(normalizeNum(p[1]));
+        bidPrices.push(normalizeNum(p[2]));
+        volumes.push(parseInt(normalizeNum(p[3]) / 1000));
+        labels.push(`${getTime(new Date(since + interval * i))}`);
       });
 
       setTradePrices(tradePrices);
@@ -53,103 +79,104 @@ export default function Trader({ pair, info, onAction, defaultCapital }) {
     } catch (error) {
       setError(error.message);
     }
-    // setLoading(false);
   };
 
-  // console.log(tradePrices);
+  useEffect(() => {
+    if (!capital) setCapital(defaultCapital);
+  }, [defaultCapital]);
 
   useEffect(() => {
     fetchPrices(pair);
-    // const eventSource = new EventSource("/api/bots/sse/PEPEEUR", { withCredentials: true });
-    // eventSource.onopen = () => console.log("SSE connection opened");
-    // eventSource.onerror = (e) => {
-    //   console.error("Server error:", JSON.parse(e?.data || e?.error || e));
-    //   eventSource.close(); // Close client-side connection
-    // };
-    // eventSource.onmessage = (e) => {
-    //   const data = JSON.parse(e.data);
-    //   if (data.prices) setPrices((prev) => [...prev, data.prices].slice(-5000));
-    // };
 
-    // return () => eventSource.close(); // This terminates the connection
+    // const handler = () => {};
+    // document.addEventListener(pair, handler);
+    // return () => document.removeEventListener(pair, handler); // This terminates the connection
+
+    const eventSource = new EventSource("/api/sse/PEPEEUR/price", { withCredentials: true });
+    eventSource.onopen = () => console.log("SSE connection opened");
+    eventSource.onerror = (e) => {
+      console.error("Server error:", JSON.parse(e?.data || e?.error || e));
+      eventSource.close(); // Close client-side connection
+    };
+    eventSource.onmessage = (e) => {
+      const { price } = JSON.parse(e.data);
+      const newTradePrices = tradePrices.slice(-(tradePrices.length - subtract));
+      const newAskPrices = askPrices.slice(-(askPrices.length - subtract));
+      const newBidPrices = bidPrices.slice(-(bidPrices.length - subtract));
+      const newVolumes = volumes.slice(-(volumes.length - subtract));
+      const newLabels = labels.slice(-(labels.length - subtract));
+
+      newTradePrices.push(normalizeNum(price[0]));
+      newAskPrices.push(normalizeNum(price[1]));
+      newBidPrices.push(normalizeNum(price[2]));
+      newVolumes.push(parseInt(normalizeNum(price[3]) / 1000));
+      newLabels.push(`${getTime(new Date())}`);
+
+      setTradePrices(newTradePrices);
+      setAskPrices(newAskPrices);
+      setBidPrices(newBidPrices);
+      setVolumes(newVolumes);
+      setLabels(newLabels);
+    };
+
+    return () => eventSource.close(); // This terminates the connection
   }, [pair]);
 
   return (
-    <li className={`w-full lg:w-1/2 xl:w-1/3 overflow-y-auto rounded-md`}>
-      <div className={`mb-1 lg:mr-1 xl:mx-1 no-srl-bar card rounded-md ${borderCls}`}>
-        <div className="flex items-center justify-between py-1 px-2 border-t-[1px] border-slate-200">
-          <strong className="w-18">
-            {pair.replace("EUR", "")} ({info.balance || 0})
-          </strong>
+    <div className={`aspect-video no-srl-bar card rounded-md ${borderCls} ${cls}`}>
+      <div className="flex items-center justify-between py-1 px-2 border-t-[1px] border-slate-200">
+        <p className="flex gap-1">
+          <span className="">{pair.replace("EUR", "")}</span>
+          <strong>({info.balance || 0})</strong>
+        </p>
 
-          <span className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</span>
+        <EditableInput
+          id={pair}
+          onBlur={handleSeCapital}
+          defaultValue={capital || 0}
+          cls="text-orange flex-shrink-0 font-bold"
+        >
+          €
+        </EditableInput>
 
-          <EditableInput
-            id={pair}
-            onBlur={handleSeCapital}
-            defaultValue={info.capital || defaultCapital}
-            cls="text-orange"
-          >
-            €
-          </EditableInput>
-          {/* <div className="flex items-center">
-            <strong>Prices charts</strong>:
-            <p className="ml-2 text-pc font-semi-bold">
-              <Link href={`/chart?pair=${pair}`} className="underline underline-offset-4 mr-3">
-                Stored
-              </Link>
-              <Link
-                href={`https://pro.kraken.com/app/trade/${pair?.replace("EUR", "").toLowerCase()}-eur`}
-                target="_blank"
-                referrerPolicy="no-referrer"
-                className="underline underline-offset-4"
-              >
-                Live
-              </Link>
-            </p>
-          </div> */}
+        <strong className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</strong>
 
-          <Link href={`/bot?pair=${pair}`} className="w-6 h-6 flex text-pc">
-            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <g fill="currentColor">
-                <path d="M5.314 1.256a.75.75 0 01-.07 1.058L3.889 3.5l1.355 1.186a.75.75 0 11-.988 1.128l-2-1.75a.75.75 0 010-1.128l2-1.75a.75.75 0 011.058.07zM7.186 1.256a.75.75 0 00.07 1.058L8.611 3.5 7.256 4.686a.75.75 0 10.988 1.128l2-1.75a.75.75 0 000-1.128l-2-1.75a.75.75 0 00-1.058.07zM2.75 7.5a.75.75 0 000 1.5h10.5a.75.75 0 000-1.5H2.75zM2 11.25a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75zM2.75 13.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"></path>
-              </g>
-            </svg>
-          </Link>
+        <strong className="text-red">{volatility}%</strong>
 
-          <button
-            onClick={() => onAction("buy", pair)}
-            className="text-white rounded-md py-1 px-2 bg-red-400"
-          >
-            Buy
-          </button>
+        <button onClick={() => placePosition("buy")} className="text-white rounded-md py-1 px-2 bg-red">
+          Buy
+        </button>
 
-          <button
-            onClick={() => onAction("sell", pair)}
-            className="text-white rounded-md py-1 px-2 bg-amber-500"
-          >
-            Sell
-          </button>
-        </div>
+        <button
+          onClick={() => placePosition("sell")}
+          className="text-white rounded-md py-1 px-2 bg-amber-500"
+        >
+          Sell
+        </button>
+      </div>
 
-        <div className={`flex flex-col overflow-hidden h-60`}>
+      <Link href={`/trader?pair=${pair}`} className={`h-full flex flex-col overflow-hidden`}>
+        {error ? (
+          <p>{error}</p>
+        ) : (
           <ChartCanvas
+            showZoom={showZoom}
             labels={labels}
             datasets={[
               {
                 label: "Trade Price",
+                data: tradePrices,
                 borderColor: "#008080",
                 fill: false,
-                data: tradePrices,
                 hidden: true,
                 pointStyle: false,
                 borderWidth: 1,
               },
               {
                 label: "Ask Price",
+                data: askPrices,
                 borderColor: "#FFA500",
                 fill: false,
-                data: askPrices,
                 pointStyle: false,
                 borderWidth: 1, // Adjust the line thickness
                 // pointRadius: 0, // Adjust the size of the points on the line
@@ -158,28 +185,37 @@ export default function Trader({ pair, info, onAction, defaultCapital }) {
               },
               {
                 label: "Bid Price",
+                data: bidPrices,
                 borderColor: "#800080",
                 fill: false,
-                data: bidPrices,
                 pointStyle: false,
                 borderWidth: 1,
               },
-              // {
-              //   label: "volumes",
-              //   borderColor: "#3cba9f",
-              //   fill: false,
-              //   data: volumes,
-              //   pointStyle: false,
-              //   borderWidth: 1,
-              // },
+              {
+                label: "Volumes",
+                data: volumes,
+                yAxisID: "y1",
+                borderColor: "#3cba9f",
+                fill: false,
+                pointStyle: false,
+                borderWidth: 1,
+              },
             ]}
-            options={{ responsive: true, maintainAspectRatio: false, animation: false }}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              animation: false,
+              scales: {
+                y: { position: "right", grid: { drawOnChartArea: true } },
+                y1: { position: "left", grid: { drawOnChartArea: false } },
+                // drawOnChartArea: false => Avoid double grid lines
+              },
+            }}
           />
+        )}
 
-          <Loader loading={loading} />
-          {error && <p>{error}</p>}
-        </div>
-      </div>
-    </li>
+        {/* <Loader loading={loading} /> */}
+      </Link>
+    </div>
   );
 }

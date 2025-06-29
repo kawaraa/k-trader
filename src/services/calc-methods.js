@@ -1,3 +1,5 @@
+import { calcAveragePrice, calcPercentageDifference } from "../../shared-code/utilities.js";
+
 export function findSupportResistance(data) {
   if (!data || data.length < 3) return { support: null, resistance: null };
 
@@ -13,15 +15,6 @@ export function filterRecentTrendlines(pivots, dataLength, maxAge = 30) {
   return pivots.filter((pivot) => pivot.index >= dataLength - maxAge);
 }
 
-export function calcAveragePrice(prices) {
-  if (prices.length === 0) throw new Error("Price list cannot be empty.");
-  const total = prices.reduce((sum, price) => sum + price, 0);
-  return +(total / prices.length).toFixed(8);
-}
-export function calcPercentageDifference(oldPrice, newPrice) {
-  const difference = newPrice - oldPrice;
-  return +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2);
-}
 export function calculateFee(amount, feePercentage) {
   return !feePercentage ? 0 : (amount * feePercentage) / 100;
 }

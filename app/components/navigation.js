@@ -1,17 +1,13 @@
 "use client";
 import { State } from "../state";
 import { ToggleSwitch } from "./inputs";
-import { btnCls } from "./tailwind-classes";
 import { urlBase64ToUint8Array } from "../services/encoding-helper";
 const key = process.env.NEXT_PUBLIC_VAPID_KEY;
 
 export default function Navigation(props) {
-  const { balance, traders, notificationOn, setNotificationOn } = State();
+  const { eurBalance, traders, loadedTraders, notificationOn, setNotificationOn } = State();
   const pairs = Object.keys(traders);
-
-  const setDefaultCapital = (e) => {
-    console.log(e.target.value);
-  };
+  const loadedPairs = Object.keys(loadedTraders);
 
   const handleNotificationSettings = async (e) => {
     try {
@@ -44,49 +40,41 @@ export default function Navigation(props) {
   };
 
   return (
-    // <header className="relative min-h-14">
-    //   <nav className="z-[7] fixed w-full flex h-14 px-1 sm:px-2 md:px-4 top-0 card border no-select">
-    //  <PageHeader pair={pair} />
-
-    <header className="no-select flex px-3 sm:px-5 py-6 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
+    <header className="no-select flex px-1 sm:px-3 py-3 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
+      {/* <header className="relative min-h-14"> */}
+      {/* <nav className="z-[7] fixed w-full flex h-14 px-1 sm:px-2 md:px-4 top-0 card border no-select"> */}
+      {/* <PageHeader pair={pair} /> */}
       {/* <nav className="z-[7] fixed w-full flex h-14 px-1 sm:px-2 md:px-4 top-0 card border no-select"></nav> */}
-      <strong className="text-3xl font-bold text-emerald-500">€{parseInt(balance)}</strong>
-
-      <div className="flex text-white">
-        <div>
-          <label htmlFor="default-capital-input-id">Default Capital</label>
-          <input type="number" onBlur={setDefaultCapital} id="default-capital-input-id" />
-        </div>
-
-        <div className="flex justify-between">
-          <ToggleSwitch onChange={handleNotificationSettings} checked={notificationOn}>
-            <span className="mx-3">Notify me</span>
-          </ToggleSwitch>
-          <label for="orderby" className="flex items-center m-2 cursor-pointer">
-            <input
-              id="orderby"
-              type="checkbox"
-              value="orderby"
-              name="orderby"
-              className="w-4 h-4"
-              onChange={(e) => setOrderbyTime(e.target.checked)}
-            />
-            <span className="ml-1">Orderby time</span>
-          </label>
-        </div>
+      <div className="flex-auto">
+        <strong className="text-2xl font-bold text-emerald-500">€{parseInt(eurBalance)}</strong>
       </div>
+      <ToggleSwitch onChange={handleNotificationSettings} checked={notificationOn} cls="mr-3">
+        <span className="mx-3">Notify me</span>
+      </ToggleSwitch>
 
-      <div className="flex items-end">
+      <div className="flex items-center items-end">
         <strong>
-          <span className="text-green">{pairs.length}</span>
+          {loadedPairs.length}/<span className="text-green">{pairs.length}</span>
         </strong>
-        <button
-          onClick={() => setShowAddBotForm(true)}
-          className={`${btnCls} !w-8 !h-8 ml-3 p-1 flex items-center justify-center rounded-3xl`}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/add-bot-icon.png" alt="Add bot icon" priority className="w-full" />
-        </button>
+        <span className={`w-6 ml-1 flex rounded-3xl`}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M6 6h8a3 3 0 0 1 0 6a3 3 0 0 1 0 6h-8" />
+            <path d="M8 6l0 12" />
+            <path d="M8 12l6 0" />
+            <path d="M9 3l0 3" />
+            <path d="M13 3l0 3" />
+            <path d="M9 18l0 3" />
+            <path d="M13 18l0 3" />
+          </svg>
+        </span>
       </div>
     </header>
   );

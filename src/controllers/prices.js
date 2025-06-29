@@ -1,5 +1,5 @@
 import Controller from "./default.js";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 export default class SSEController extends Controller {
   constructor() {
@@ -7,13 +7,18 @@ export default class SSEController extends Controller {
   }
 
   // Get bot prices history
-  get = async ({ params }, res, next) => {
+  get = async ({ params, query }, res, next) => {
     try {
       const pair = params.pair;
       const filePath = `${process.cwd()}/database/prices/${pair}.json`;
-      if (!this.tradersManager.state.data[pair] || !existsSync(filePath)) next("404-not found");
+      if (!this.tradersManager.state.data[pair] || !existsSync(filePath)) return next("404-not found");
       // No prices data for ${pair} pair
-      res.sendFile(filePath);
+      if (!(+query.since && +query.interval)) return res.sendFile(filePath);
+      res.json(
+        JSON.parse(readFileSync(filePath, "utf8")).slice(
+          -parseInt((+query.since * 60 * 60) / +query.interval)
+        )
+      );
     } catch (error) {
       next(error);
     }

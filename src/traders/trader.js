@@ -38,7 +38,6 @@ export default class Trader {
     return parseInt((60 * hours) / this.interval);
   }
 
-  // await this.buy(this.capital, balance, currentPrice[1]);
   async buy(investmentCapital, eurBalance, price, buyCase) {
     const capital = eurBalance < investmentCapital ? eurBalance : investmentCapital;
     const cost = capital - calculateFee(capital, 0.3);
@@ -67,7 +66,7 @@ export default class Trader {
     return { profit, age: orderAge };
   }
 
-  async sellAll(cryptoBalance) {
+  async sellManually(cryptoBalance) {
     if (cryptoBalance > 0) {
       await this.ex.createOrder("sell", "market", this.pair, cryptoBalance);
       this.dispatch("LOG", `Placed SELL - for all assets`);

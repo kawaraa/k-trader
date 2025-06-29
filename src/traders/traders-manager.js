@@ -26,11 +26,19 @@ class TradersManager {
   stop() {
     clearTimeout(this.timeoutID);
   }
-  buy(pair, amount) {
-    return this.#traders[pair].buy(amount, this.balances.eur, this.currencies[pair][1], "manually");
+  buy(pair) {
+    return (
+      this.#traders[pair] &&
+      this.#traders[pair].buy(
+        !isNaN(this.state.data[pair].capital) ? this.state.data[pair].capital : this.defaultCapital,
+        this.balances.eur,
+        this.currencies[pair][1],
+        "manually"
+      )
+    );
   }
   sell(pair) {
-    return this.#traders[pair].sellAll(this.balances[pair]);
+    return this.#traders[pair] && this.#traders[pair].sellManually(this.balances[pair]);
   }
 
   async run() {
@@ -51,7 +59,7 @@ class TradersManager {
 
   async runTrader(pair, eurBalance, cryptoBalance) {
     const prices = this.state.updateLocalPrices(pair, this.currencies[pair]).slice(-this.range);
-    eventEmitter.emit(`${pair}-price`, { prices: this.currencies[pair] });
+    eventEmitter.emit(`${pair}-price`, { price: this.currencies[pair] });
     if (!this.state.data[pair]) this.state.data[pair] = { position: null, trades: [] };
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
@@ -59,7 +67,7 @@ class TradersManager {
     }
     if (prices.length >= this.range / 1.1) {
       const { capital, position, trades } = this.state.data[pair];
-      const cpl = !isNaN(capital) ? capital : this.capital;
+      const cpl = !isNaN(capital) ? capital : this.defaultCapital;
       await this.#traders[pair].trade(cpl, prices, eurBalance, cryptoBalance, trades, position);
     }
   }

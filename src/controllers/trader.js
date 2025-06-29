@@ -7,9 +7,9 @@ export default class TraderController extends Controller {
 
   get = async (req, res, next) => {
     try {
+      const { state, balances } = this.tradersManager;
       const data = { traders: {}, defaultCapital: this.tradersManager.defaultCapital };
       Object.keys(this.tradersManager.state.data).forEach((pair) => {
-        const { state, balances } = this.tradersManager;
         data.traders[pair] = { ...state.data[pair], balance: balances[pair] };
         if (isNaN(data.eurBalance)) data.eurBalance = balances.eur;
       });
@@ -22,10 +22,17 @@ export default class TraderController extends Controller {
 
   update = async ({ params }, res, next) => {
     try {
-      if (pair == "ALL") {
+      if (params.pair == "ALL") {
         this.tradersManager.defaultCapital = +params.capital;
+        if (!+params.capital && !+params.capital <= 0) {
+          for (const pair in this.tradersManager.state.data) {
+            this.tradersManager.state.data[pair].capital = 0;
+          }
+          this.tradersManager.state.update(this.tradersManager.state.data);
+        }
       } else if (this.tradersManager.state.data[params.pair]) {
-        this.tradersManager.state.data[params.pair] = +params.capital;
+        this.tradersManager.state.data[params.pair].capital = +params.capital || 0;
+        this.tradersManager.state.update(this.tradersManager.state.data);
       } else {
         throw new Error(`Unsupported cryptocurrency pair: ${params.pair}`);
       }
@@ -35,18 +42,10 @@ export default class TraderController extends Controller {
     }
   };
 
-  buy = async ({ params }, res, next) => {
+  execute = async ({ params }, res, next) => {
     try {
-      await tradersManager.buy(params.pair, params.eur);
-      res.json({ success: true });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  sell = async ({ params }, res, next) => {
-    try {
-      await tradersManager.sellAll(params.pair);
+      if (params.action == "buy") await this.tradersManager.buy(params.pair);
+      else await this.tradersManager.sell(params.pair);
       res.json({ success: true });
     } catch (error) {
       next(error);

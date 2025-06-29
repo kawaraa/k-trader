@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale } from "chart.js";
-
 // Register required components (minimal setup for line chart)
 Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale);
 
-const opn = { animation: { duration: 0 }, hover: { animationDuration: 0 }, responsiveAnimationDuration: 0 };
-
+// const opn = { animation: { duration: 0 }, hover: { animationDuration: 0 }, responsiveAnimationDuration: 0 };
 export default function ChartCanvas({ labels, datasets, options, showZoom }) {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
@@ -21,7 +19,7 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
   useEffect(() => {
     if (chartInstanceRef.current) {
       chartInstanceRef.current.data = data;
-      chartInstanceRef.current.options = options || opn;
+      chartInstanceRef.current.options = options;
       chartInstanceRef.current.update();
     }
 
@@ -46,14 +44,14 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
       <canvas ref={chartRef}></canvas>
 
       {showZoom && (
-        <div className="absolute top-8 right-4 left-4 flex items-center">
+        <div className="absolute top-0 right-8 left-8 flex items-center">
           <label className="flex flex-auto items-center">
             <strong>+</strong>
             <input
               id="zoom"
               type="range"
               min="0"
-              max={maxLevel - 144}
+              max={maxLevel}
               step="5"
               value={leftZoomLevel}
               onChange={(e) => setLeftZoomLevel(Number(e.target.value))}
@@ -63,18 +61,18 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
           </label>
           <div className="w-4"></div>
           <label className="flex flex-auto items-center">
-            <strong>+</strong>
+            <strong>-</strong>
             <input
               id="zoom"
               type="range"
-              min="144"
+              min="0"
               max={maxLevel}
               step="5"
               value={rightZoomLevel}
               onChange={(e) => setRightZoomLevel(Number(e.target.value) + 1)}
               className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
             />
-            <strong>-</strong>
+            <strong>+</strong>
           </label>
         </div>
       )}

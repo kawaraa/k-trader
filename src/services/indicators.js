@@ -1,6 +1,6 @@
-import { calcPercentageDifference, calcAveragePrice } from "./services.js";
-
 /* ========== trend analysis Indicators ========== */
+
+import { calcPercentageDifference } from "../../shared-code/utilities.js";
 
 // const { RSI } = require("technicalindicators");
 // export function calculateRSI(closes, period = 14) {

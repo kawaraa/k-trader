@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 
 const secure = process.env.NODE_ENV === "production";
 const secret = process.env.JWT_SECRET;
-const maxAge = 8 * 60 * 60 * 1000; // expires in 8hrs
-// const maxAge = 60 * 60 * 24 * 7; // 1 week (weekSec)
+// const maxAge = 8 * 60 * 60 * 1000; // expires in 8hrs
+const maxAge = 7 * 24 * 60 * 60 * 1000; // 1 week (weekSec)
 // const maxAge = 30 * 24 * 3600 * 1000; // 30 days
 
 export default class AuthController extends Controller {

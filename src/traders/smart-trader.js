@@ -1,5 +1,6 @@
 import Trader from "./trader.js";
-import { calcAveragePrice, calcPercentageDifference, normalizePrices } from "../services/calc-methods.js";
+import { calcAveragePrice, calcPercentageDifference } from "../../shared-code/utilities.js";
+import { normalizePrices } from "../services/calc-methods.js";
 import { detectPriceDirection, detectPriceShape } from "../services/trend-analysis.js";
 const calcPct = calcPercentageDifference;
 

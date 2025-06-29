@@ -13,7 +13,7 @@ const errorHandlerMiddleware = (error, req, res, next) => {
     message = "Insufficient permission";
   } else {
     if (+type) {
-      statusCode = type;
+      if (+type) statusCode = +type;
       message = msg;
     } else {
       message = parseError(error);

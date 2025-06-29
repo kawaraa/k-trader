@@ -29,7 +29,7 @@ mkdirSync("database/prices", { recursive: true });
 
 app.set("trust proxy", true);
 // Apply the rate limiter middleware to all routes for Prevent brute-force attacks
-app.use(new RequestRateLimiter(1, 100).limitRate);
+app.use(new RequestRateLimiter(1, 150).limitRate);
 
 app.use(cookieParser());
 

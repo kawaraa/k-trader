@@ -1,98 +1,108 @@
 import React, { useRef, useEffect } from "react";
 import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale } from "chart.js";
 
-// Register only what we need
 Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale);
 
-const MultiLineChart = ({ width = "100%", height = "400px" }) => {
+const DualAxisChart = () => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
 
   useEffect(() => {
     if (!chartRef.current) return;
 
-    // Destroy old chart if exists
     if (chartInstance.current) {
       chartInstance.current.destroy();
     }
 
     const ctx = chartRef.current.getContext("2d");
 
-    // Chart data
     const data = {
       labels: ["Jan", "Feb", "Mar", "Apr", "May"],
       datasets: [
+        // First dataset - Left axis (related to second dataset)
         {
-          label: "Website Visits",
-          data: [12000, 19000, 15000, 18000, 21000],
-          borderColor: "#3e95cd",
-          backgroundColor: "rgba(62, 149, 205, 0.1)",
-          tension: 0.3,
+          label: "Temperature (°C)",
+          data: [15, 18, 22, 17, 25],
+          borderColor: "#FF6B6B",
+          backgroundColor: "rgba(255, 107, 107, 0.1)",
+          yAxisID: "y",
           borderWidth: 2,
-          fill: true,
+          tension: 0.3,
         },
+        // Second dataset - Left axis (same scale as first)
         {
-          label: "Mobile App Users",
-          data: [8000, 11000, 9000, 12000, 15000],
-          borderColor: "#8e5ea2",
-          backgroundColor: "rgba(142, 94, 162, 0.1)",
-          tension: 0.3,
+          label: "Humidity (%)",
+          data: [45, 60, 55, 50, 65],
+          borderColor: "#4ECDC4",
+          backgroundColor: "rgba(78, 205, 196, 0.1)",
+          yAxisID: "y",
           borderWidth: 2,
-          fill: true,
+          tension: 0.3,
         },
+        // Third dataset - Right axis (independent scale)
         {
-          label: "API Requests",
-          data: [3500, 6000, 4500, 7000, 9000],
-          borderColor: "#3cba9f",
-          backgroundColor: "rgba(60, 186, 159, 0.1)",
-          tension: 0.3,
+          label: "Sales ($1000)",
+          data: [120, 190, 150, 180, 210],
+          borderColor: "#FFA500",
+          backgroundColor: "rgba(255, 165, 0, 0.1)",
+          yAxisID: "y1",
           borderWidth: 2,
-          fill: true,
+          tension: 0.3,
         },
       ],
     };
 
-    // Chart options
     const options = {
       responsive: true,
-      // maintainAspectRatio: false,
-      // animation: { duration: 0 },
-      // hover: { animationDuration: 0 },
-      // responsiveAnimationDuration: 0,
-      // plugins: {
-      //   legend: {
-      //     position: "top",
-      //   },
-      //   tooltip: {
-      //     mode: "index",
-      //     intersect: false,
-      //   },
-      // },
-      // scales: {
-      //   y: {
-      //     beginAtZero: false,
-      //     ticks: {
-      //       callback: function (value) {
-      //         return value.toLocaleString();
-      //       },
-      //     },
-      //   },
-      //   x: {
-      //     grid: {
-      //       display: false,
-      //     },
-      //   },
-      // },
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      scales: {
+        y: {
+          type: "linear",
+          display: true,
+          position: "left",
+          title: {
+            display: true,
+            text: "Temperature/Humidity",
+            color: "#666",
+          },
+          grid: {
+            drawOnChartArea: true,
+          },
+        },
+        y1: {
+          type: "linear",
+          display: true,
+          position: "right",
+          title: {
+            display: true,
+            text: "Sales ($1000)",
+            color: "#666",
+          },
+          grid: {
+            drawOnChartArea: false, // Avoid double grid lines
+          },
+          // Optional: Adjust scale to fit your data
+          min: 100,
+          max: 250,
+        },
+        x: {
+          grid: {
+            display: false,
+          },
+        },
+      },
     };
 
-    // Create chart
     chartInstance.current = new Chart(ctx, {
       type: "line",
       data,
       options,
     });
 
-    // Cleanup
     return () => {
       if (chartInstance.current) {
         chartInstance.current.destroy();
@@ -103,4 +113,4 @@ const MultiLineChart = ({ width = "100%", height = "400px" }) => {
   return <canvas ref={chartRef} />;
 };
 
-export default MultiLineChart;
+export default DualAxisChart;

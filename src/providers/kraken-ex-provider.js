@@ -59,7 +59,8 @@ class KrakenExchangeProvider {
     balances.eur = +assetsBlc.ZEUR;
 
     for (const pair in assets) {
-      if (assets[pair].quote.includes(currency) && assets[pair].altname.endsWith(currency)) {
+      const skip = assets[pair].altname.startsWith(currency) || assets[pair].altname.endsWith(currency);
+      if (assets[pair].quote.includes(currency) && skip) {
         pairs.push(assets[pair].altname);
         const case1 = assets[pair].base;
         const case2 = pair.replace("ZEUR", "");

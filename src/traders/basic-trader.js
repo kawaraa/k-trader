@@ -1,5 +1,6 @@
 import Trader from "./trader.js";
-import { calcPercentageDifference, normalizePrices } from "../services.js";
+import { calcPercentageDifference } from "../../shared-code/utilities.js";
+import { normalizePrices } from "../services.js";
 import { computeDynamicThreshold } from "../indicators.js";
 import { detectPriceDirection, detectPriceShape } from "../trend-analysis.js";
 const calcPct = calcPercentageDifference;

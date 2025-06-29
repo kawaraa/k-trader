@@ -29,8 +29,8 @@ export function StateProvider({ children }) {
 
       const data = await request("/api/trader");
       setTraders(data.traders);
-      setEurBalance(data.eurBalance);
-      setDefaultCapital(data.defaultCapital);
+      if (data.eurBalance) setEurBalance(data.eurBalance);
+      if (data.defaultCapital) setDefaultCapital(data.defaultCapital);
 
       const subscriptions = await request("/api/notification");
       setNotificationOn(subscriptions.length > 0);
@@ -54,6 +54,22 @@ export function StateProvider({ children }) {
   useEffect(() => {
     // registerServiceWorker();
     fetchData();
+    // if (user && !user.loading) {
+    //   const eventSource = new EventSource("/api/sse", { withCredentials: true });
+    //   eventSource.onopen = () => console.log("SSE connection opened");
+    //   eventSource.onerror = (e) => {
+    //     console.error("Server error:", JSON.parse(e?.data || e?.error || e));
+    //     eventSource.close(); // Close client-side connection
+    //   };
+    //   eventSource.onmessage = (e) => {
+    //     const data = JSON.parse(e.data);
+    //     for (const pair in data) {
+    //       const event = new CustomEvent(pair, { detail: data[pair] });
+    //       document.dispatchEvent(event);
+    //     }
+    //   };
+    //   return () => eventSource.close(); // This terminates the connection
+    // }
   }, []);
 
   return (
@@ -66,7 +82,9 @@ export function StateProvider({ children }) {
         eurBalance,
         setEurBalance,
         defaultCapital,
-        traders: loadedTraders,
+        setDefaultCapital,
+        traders,
+        loadedTraders,
         loadTraders,
         notificationOn,
         setNotificationOn,

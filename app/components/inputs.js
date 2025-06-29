@@ -1,16 +1,18 @@
 "use client";
 
 export function EditableInput({ children, id, cls, ...p }) {
-  // <div dir="auto" className={"relative flex " + (cls || "flex-col")}>
   return (
-    <label htmlFor={id} className={`inline-flex items-center ${cls}`}>
+    <label htmlFor={id} className={`flex items-center overflow-hidden ${cls}`}>
       {children}
-      <input id={id} className="w-12 bg-cbg appearance-none rounded-md" {...p} />
+      <span className="relative">
+        {p.defaultValue}
+        <input id={id} className="w-full absolute inset-0 appearance-none rounded-md" {...p} />
+      </span>
     </label>
   );
 }
 
-export function ToggleSwitch({ children, label, size = 50, cls, ...p }) {
+export function ToggleSwitch({ children, label, size = 40, cls, ...p }) {
   const h = Math.round(+size / 2);
 
   return (

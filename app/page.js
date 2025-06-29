@@ -4,6 +4,8 @@ import Trader from "./components/trader.js";
 import { useRouter } from "next/navigation";
 import { request, dateToString } from "../shared-code/utilities.js";
 import { State } from "./state.js";
+import { EditableInput } from "./components/inputs.js";
+import { btnCls } from "./components/tailwind-classes.js";
 
 const badgeCls =
   "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
@@ -11,81 +13,86 @@ const badgeCls =
 
 export default function Home() {
   const router = useRouter();
-  const { loading, setLoading, user, traders, defaultCapital } = State();
-  const [bots, setBots] = useState({});
+  const { loading, setLoading, user, loadedTraders, loadTraders, defaultCapital, setDefaultCapital } =
+    State();
   const [orderbyTime, setOrderbyTime] = useState(false);
-  const catchErr = (er) => alert(er.message || er.error || er);
-  const botsPairs = Object.keys(bots);
-  const pairs = Object.keys(traders);
+  const pairs = Object.keys(loadedTraders);
 
   // const sortedBots = orderbyTime
   //   ? botsPairs.toSorted((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
   //   : botsPairs.toSorted((p1, p2) => sum(bots[p2].trades) - sum(bots[p1].trades));
 
-  const sellAll = async (pair) => {
-    if (!confirm(`Are you sure want to sell all the order for "${pair}" currency?`)) return;
-    setLoading(true);
+  const catchErr = (er) => alert(er.message || er.error || er);
+
+  const changeDefaultCapital = async (e) => {
+    const newCapital = +e.target.value || 0;
+
+    if (newCapital > 0 && !confirm(`Are you sure want increase the default investment capital`)) return;
+    // setLoading(true);
     try {
-      await request(`/api/bots/position/${pair}`, { method: "PUT" });
+      await request(`/api/trader/update/ALL/${newCapital}`, { method: "PUT" });
+      setDefaultCapital(newCapital);
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
-    setLoading(false);
-  };
-
-  const handleActions = async (action, pair) => {
-    if (action == "rest") resetState(pair);
-    else if (action == "sell-all") sellAll(pair);
-    else if (["turn-on", "turn-off"].includes(action.replace("-all", ""))) {
-      if (!confirm(`Do you want to ${action} "${pair}" Bot?`)) return;
-      setLoading(true);
-      const url = `/api/bots?pair=${pair}&status=${action.replace("turn-", "")}`;
-      await request(url, { method: "PATCH" }).catch(catchErr);
-      if (!["turn-on-all", "turn-off-all"].includes(action)) {
-        const startedOn = action == "turn-off" ? null : dateToString();
-        const copy = { ...bots };
-        copy[pair].startedOn = startedOn;
-        setBots(copy);
-      }
-      setLoading(false);
-    }
-  };
-
-  const resetState = async (pair) => {
-    if (!confirm(`Are you sure want to rest the state of "${pair || "all"}" pair?`)) return;
-    setLoading(true);
-    try {
-      await request(`/api/bots/reset?pair=${pair}`, { method: "PUT" });
-      const copy = { ...bots };
-      if (copy[pair]) {
-        copy[pair].trades = [];
-      } else {
-        for (const p in copy) {
-          copy[p].trades = [];
-        }
-      }
-      setBots(copy);
-    } catch (error) {
-      alert(JSON.stringify(error.message || error.error || error));
-    }
-    setLoading(false);
+    // setLoading(false);
   };
 
   useEffect(() => {
     if (!user?.loading && !user?.name) router.replace("/login");
   }, [user]);
 
+  if (!user && !user.loading) return;
   return (
-    <ul className="flex flex-wrap no-select mb-8 justify-center">
-      {pairs.map((pair) => (
-        <Trader
-          pair={pair}
-          info={traders[pair]}
-          defaultCapital={defaultCapital}
-          onAction={handleActions}
-          key={pair}
-        />
-      ))}
-    </ul>
+    <>
+      <div className="mb-5 flex justify-between items-center">
+        <div className="flex items-center">
+          <span className="mr-2">Default Capital: </span>
+          <EditableInput
+            id="default-capital-input-id"
+            onBlur={changeDefaultCapital}
+            defaultValue={defaultCapital}
+            cls="text-orange font-bold text-xl"
+          >
+            €
+          </EditableInput>
+        </div>
+
+        <div className="flex justify-between">
+          <label for="orderby" className="flex items-center m-2 cursor-pointer">
+            <input
+              id="orderby"
+              type="checkbox"
+              value="orderby"
+              name="orderby"
+              className="w-4 h-4"
+              onChange={(e) => setOrderbyTime(e.target.checked)}
+            />
+            <span className="ml-1">Orderby time</span>
+          </label>
+        </div>
+      </div>
+
+      <ul className="flex flex-wrap no-select mb-8 justify-center">
+        {user &&
+          !user.loading &&
+          pairs.map((pair) => (
+            <li className={`w-full lg:w-1/2 2xl:w-1/3 overflow-y-auto rounded-md`} key={pair}>
+              <Trader
+                pair={pair}
+                info={loadedTraders[pair]}
+                defaultCapital={defaultCapital}
+                cls="mb-1 lg:mr-1 xl:mx-1"
+              />
+            </li>
+          ))}
+      </ul>
+
+      <div className="relative text-center">
+        <button onClick={() => loadTraders(6)} className={`${btnCls} mb-5`}>
+          Load more
+        </button>
+      </div>
+    </>
   );
 }
