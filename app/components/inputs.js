@@ -1,12 +1,17 @@
 "use client";
 
+import { useRef } from "react";
+
 export function EditableInput({ children, id, cls, ...p }) {
+  const elRef = useRef();
+  if (elRef.current) elRef.current.value = p.defaultValue;
+
   return (
     <label htmlFor={id} className={`flex items-center overflow-hidden ${cls}`}>
       {children}
       <span className="relative">
         {p.defaultValue}
-        <input id={id} className="w-full absolute inset-0 appearance-none rounded-md" {...p} />
+        <input ref={elRef} id={id} className="w-full absolute inset-0 appearance-none rounded-md" {...p} />
       </span>
     </label>
   );

@@ -9,6 +9,7 @@ export default function TraderPage({}) {
   const params = useSearchParams();
   const { user, setLoading, traders, defaultCapital } = State();
   const logsRef = useRef(null);
+
   const pair = params.get("pair");
 
   const fetchLogContent = async (pair) => {
@@ -23,34 +24,45 @@ export default function TraderPage({}) {
   };
 
   useEffect(() => {
-    fetchLogContent(pair);
-
     if (user && !user.loading) {
-      const eventSource = new EventSource("/api/sse/PEPEEUR/log", { withCredentials: true });
-      eventSource.onopen = () => console.log("SSE connection opened");
-      eventSource.onerror = (e) => {
+      fetchLogContent(pair);
+      if (window?.logsEventSource) window.logsEventSource.close();
+      window.logsEventSource = new EventSource(`/api/sse/${pair}/log`, { withCredentials: true });
+      logsEventSource.onopen = () => console.log("SSE connection opened");
+      logsEventSource.onerror = (e) => {
         console.error("Server error:", JSON.parse(e?.data || e?.error || e));
-        eventSource.close(); // Close client-side connection
+        logsEventSource.close(); // Close client-side connection
       };
-      eventSource.onmessage = (e) => {
-        const { log } = JSON.parse(e.data);
-        logsRef.current.innerText = log;
+      logsEventSource.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        const pair = Object.keys(data)[0];
+        console.log("Log", data[pair], data);
+        logsRef.current.innerText = data[pair];
       };
 
-      return () => eventSource.close(); // This terminates the connection
+      const handler = () => window.logsEventSource.close();
+      window.addEventListener("beforeunload", handler);
+
+      // This terminates the connection
+      return () => {
+        handler();
+        window.addEventListener("beforeunload", handler);
+      };
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className="lg:max-w-[90%] mx-auto">
       <div className={`w-full overflow-y-auto rounded-md`}>
-        <Trader
-          pair={pair}
-          info={traders[pair] || {}}
-          defaultCapital={defaultCapital}
-          showZoom={true}
-          cls=""
-        />
+        {user && !user?.loading && (
+          <Trader
+            pair={pair}
+            info={traders[pair] || {}}
+            defaultCapital={defaultCapital}
+            showZoom={true}
+            cls=""
+          />
+        )}
       </div>
 
       <div className="aspect-video pt-5 pb-10 flex justify-center overflow-y-auto">

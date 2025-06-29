@@ -1,7 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale } from "chart.js";
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+} from "chart.js";
 // Register required components (minimal setup for line chart)
-Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale);
+Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip);
 
 // const opn = { animation: { duration: 0 }, hover: { animationDuration: 0 }, responsiveAnimationDuration: 0 };
 export default function ChartCanvas({ labels, datasets, options, showZoom }) {

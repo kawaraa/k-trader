@@ -4,8 +4,8 @@ const { NEXT_PUBLIC_HOST, NEXT_PUBLIC_VAPID_KEY, PRIV_VAPID_KEY, PUSH_NOTIFICATI
 import LocalState from "../services/local-state.js";
 
 class NotificationProvider {
-  constructor(state, webPush) {
-    this.notificationState = state;
+  constructor() {
+    this.state = new LocalState("state");
     this.webPush = webPush;
     // VAPID keys (generate with `web-push generate-vapid-keys`)
     this.webPush.setVapidDetails(
@@ -16,7 +16,7 @@ class NotificationProvider {
   }
 
   async push(payload) {
-    const subscriptions = this.notificationState.load();
+    const subscriptions = this.state.load().notificationSubscriptions;
     payload.url = NEXT_PUBLIC_HOST + (payload.url || "");
     const data = JSON.stringify(payload);
 
@@ -41,6 +41,6 @@ class NotificationProvider {
   };
 }
 
-const notificationProvider = new NotificationProvider(new LocalState("notification-subscriptions"), webPush);
+const notificationProvider = new NotificationProvider();
 
 export default notificationProvider;

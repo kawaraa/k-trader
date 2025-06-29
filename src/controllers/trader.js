@@ -24,7 +24,7 @@ export default class TraderController extends Controller {
     try {
       if (params.pair == "ALL") {
         this.tradersManager.defaultCapital = +params.capital;
-        if (!+params.capital && !+params.capital <= 0) {
+        if (!+params.capital || +params.capital <= 0) {
           for (const pair in this.tradersManager.state.data) {
             this.tradersManager.state.data[pair].capital = 0;
           }

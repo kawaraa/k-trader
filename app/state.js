@@ -15,6 +15,7 @@ export function StateProvider({ children }) {
   const [notificationOn, setNotificationOn] = useState(false);
   const [traders, setTraders] = useState({});
   const [loadedTradersPairs, setLoadedTradersPairs] = useState(defaultLoadedTraders);
+  const [pricesTimeRange, setPricesTimeRange] = useState(6);
   const addMessage = (msg) => setMessages([...messages, msg]);
 
   const loadedTraders = {};
@@ -54,23 +55,31 @@ export function StateProvider({ children }) {
   useEffect(() => {
     // registerServiceWorker();
     fetchData();
-    // if (user && !user.loading) {
-    //   const eventSource = new EventSource("/api/sse", { withCredentials: true });
-    //   eventSource.onopen = () => console.log("SSE connection opened");
-    //   eventSource.onerror = (e) => {
-    //     console.error("Server error:", JSON.parse(e?.data || e?.error || e));
-    //     eventSource.close(); // Close client-side connection
-    //   };
-    //   eventSource.onmessage = (e) => {
-    //     const data = JSON.parse(e.data);
-    //     for (const pair in data) {
-    //       const event = new CustomEvent(pair, { detail: data[pair] });
-    //       document.dispatchEvent(event);
-    //     }
-    //   };
-    //   return () => eventSource.close(); // This terminates the connection
-    // }
   }, []);
+
+  useEffect(() => {
+    if (user && !user.loading) {
+      if (window?.priceEventSource) window.priceEventSource.close();
+      window.priceEventSource = new EventSource("/api/sse/all/price", { withCredentials: true });
+      window.priceEventSource.onopen = () => console.log("SSE connection opened");
+      window.priceEventSource.onerror = (e) => {
+        console.error("Server error:", JSON.parse(e?.data || e?.error || e));
+        window.priceEventSource.close(); // Close client-side connection
+      };
+      window.priceEventSource.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        const pair = Object.keys(data)[0];
+        window.dispatchEvent(new CustomEvent(pair, { detail: data[pair] }));
+      };
+      const handler = () => window.priceEventSource.close();
+      window.addEventListener("beforeunload", handler);
+      // This terminates the connection
+      return () => {
+        handler();
+        window.addEventListener("beforeunload", handler);
+      };
+    }
+  }, [user]);
 
   return (
     <StateContext.Provider
@@ -88,6 +97,8 @@ export function StateProvider({ children }) {
         loadTraders,
         notificationOn,
         setNotificationOn,
+        pricesTimeRange,
+        setPricesTimeRange,
       }}
     >
       {messages && <p onClick={() => setMessages([])}>{messages}</p>}

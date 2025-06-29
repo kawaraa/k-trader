@@ -4,16 +4,16 @@ import Link from "next/link";
 import { borderCls } from "./tailwind-classes";
 import { EditableInput } from "./inputs";
 import ChartCanvas from "./chart-canvas";
-import Loader from "./loader";
+// import Loader from "./loader";
 import { calcPercentageDifference, request } from "../../shared-code/utilities.js";
+import TimeRangeSelect from "./time-range-select.js";
 
 const getTime = (d) => d.toTimeString().split(" ")[0].substring(0, 5);
 const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
-const interval = 5 * 60000;
-const subtract = 6;
+
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
-export default function Trader({ pair, info, defaultCapital, cls, showZoom }) {
+export default function Trader({ pair, info, defaultCapital, cls, timeRange, showZoom }) {
   // const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [capital, setCapital] = useState(info.capital || defaultCapital);
@@ -22,13 +22,16 @@ export default function Trader({ pair, info, defaultCapital, cls, showZoom }) {
   const [bidPrices, setBidPrices] = useState([]);
   const [volumes, setVolumes] = useState([]);
   const [labels, setLabels] = useState([]);
+  const [pricesTimeRange, setPricesTimeRange] = useState(12);
   const totalReturn = info.trades?.reduce((acc, t) => acc + t, 0) || 0;
 
   const volatility = calcPercentageDifference(Math.min(...tradePrices) || 0, Math.max(...tradePrices) || 0);
 
+  const lengthLimit = ((timeRange || pricesTimeRange) * 60 * 60) / 10;
+
   const handleSeCapital = async (e) => {
     const newCapital = +e.target.value || 0;
-    if (newCapital > 0 && !confirm(`Are you sure want increase investment capital for ${pair}`)) return;
+    if (!confirm(`Are you sure want increase investment capital for ${pair}`)) return;
     // setLoading(true);
     try {
       await request(`/api/trader/update/${pair}/${newCapital}`, { method: "PUT" });
@@ -54,7 +57,8 @@ export default function Trader({ pair, info, defaultCapital, cls, showZoom }) {
 
   const fetchPrices = async (pair) => {
     try {
-      const prices = await request(`/api/prices/${pair}?since=12&interval=10`);
+      const interval = 5 * 60000;
+      const prices = await request(`/api/prices/${pair}?since=${timeRange || pricesTimeRange}&interval=10`);
 
       const since = Date.now() - prices.length * interval;
       const tradePrices = [];
@@ -82,29 +86,24 @@ export default function Trader({ pair, info, defaultCapital, cls, showZoom }) {
   };
 
   useEffect(() => {
-    if (!capital) setCapital(defaultCapital);
+    if (!capital || defaultCapital == 0) setCapital(defaultCapital);
   }, [defaultCapital]);
 
   useEffect(() => {
     fetchPrices(pair);
+  }, [timeRange, pricesTimeRange]);
 
-    // const handler = () => {};
-    // document.addEventListener(pair, handler);
-    // return () => document.removeEventListener(pair, handler); // This terminates the connection
+  useEffect(() => {
+    fetchPrices(pair);
 
-    const eventSource = new EventSource("/api/sse/PEPEEUR/price", { withCredentials: true });
-    eventSource.onopen = () => console.log("SSE connection opened");
-    eventSource.onerror = (e) => {
-      console.error("Server error:", JSON.parse(e?.data || e?.error || e));
-      eventSource.close(); // Close client-side connection
-    };
-    eventSource.onmessage = (e) => {
-      const { price } = JSON.parse(e.data);
-      const newTradePrices = tradePrices.slice(-(tradePrices.length - subtract));
-      const newAskPrices = askPrices.slice(-(askPrices.length - subtract));
-      const newBidPrices = bidPrices.slice(-(bidPrices.length - subtract));
-      const newVolumes = volumes.slice(-(volumes.length - subtract));
-      const newLabels = labels.slice(-(labels.length - subtract));
+    const handler = (event) => {
+      const price = event.detail;
+      console.log("price:", price);
+      const newTradePrices = tradePrices.slice(-lengthLimit);
+      const newAskPrices = askPrices.slice(-lengthLimit);
+      const newBidPrices = bidPrices.slice(-lengthLimit);
+      const newVolumes = volumes.slice(-lengthLimit);
+      const newLabels = labels.slice(-lengthLimit);
 
       newTradePrices.push(normalizeNum(price[0]));
       newAskPrices.push(normalizeNum(price[1]));
@@ -119,8 +118,13 @@ export default function Trader({ pair, info, defaultCapital, cls, showZoom }) {
       setLabels(newLabels);
     };
 
-    return () => eventSource.close(); // This terminates the connection
-  }, [pair]);
+    window.addEventListener(pair, handler);
+
+    // This terminates the connection
+    return () => {
+      window.removeEventListener(pair, handler);
+    };
+  }, []);
 
   return (
     <div className={`aspect-video no-srl-bar card rounded-md ${borderCls} ${cls}`}>
@@ -142,6 +146,19 @@ export default function Trader({ pair, info, defaultCapital, cls, showZoom }) {
         <strong className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</strong>
 
         <strong className="text-red">{volatility}%</strong>
+
+        {showZoom && !timeRange && (
+          <div className="flex items-center">
+            <TimeRangeSelect
+              name="timeRange"
+              id="prices-time-range"
+              onChange={(e) => setPricesTimeRange(+e.target.value)}
+              defaultValue={pricesTimeRange}
+            >
+              <option value="720">720 hours</option>
+            </TimeRangeSelect>
+          </div>
+        )}
 
         <button onClick={() => placePosition("buy")} className="text-white rounded-md py-1 px-2 bg-red">
           Buy

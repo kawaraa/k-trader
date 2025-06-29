@@ -59,7 +59,7 @@ class TradersManager {
 
   async runTrader(pair, eurBalance, cryptoBalance) {
     const prices = this.state.updateLocalPrices(pair, this.currencies[pair]).slice(-this.range);
-    eventEmitter.emit(`${pair}-price`, { price: this.currencies[pair] });
+    eventEmitter.emit("price", { [pair]: this.currencies[pair] });
     if (!this.state.data[pair]) this.state.data[pair] = { position: null, trades: [] };
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
@@ -85,7 +85,7 @@ class TradersManager {
         const fileSizeInKB = statSync(filePath).size / 1024 / 1024; // Convert size from B to KB to MB
         fileSizeInKB < 1 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
       }
-      eventEmitter.emit(`${pair}-log`, { log: info });
+      eventEmitter.emit("log", { [pair]: info });
     } else {
       const time = ` Time: ${toShortDate()}`;
       const body = `${tradeCase} at price: ${info?.price || info}`;
