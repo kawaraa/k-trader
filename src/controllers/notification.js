@@ -51,8 +51,8 @@ export default class NotificationController extends Controller {
         url: "/",
       });
 
-      if (result) response.json({ success: true });
-      else response.status(500).json({ message: "Failed to send push: " + err.message });
+      if (result) res.json({ success: true });
+      else res.status(500).json({ message: "Failed to send push: " + err.message });
     } catch (error) {
       next(error);
     }

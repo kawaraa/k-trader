@@ -17,17 +17,18 @@ class NotificationProvider {
 
   async push(payload) {
     const subscriptions = this.state.data.notificationSubscriptions;
-    payload.url = NEXT_PUBLIC_HOST + (payload.url || "");
+    // payload.url = NEXT_PUBLIC_HOST + (payload.url || "");
+    payload.url = payload.url || "/";
     const data = JSON.stringify(payload);
-
+    console.log(NEXT_PUBLIC_HOST, payload);
     const responses = await Promise.all(subscriptions.map((sub, i) => this.send(sub, i, data)));
     const errors = responses.filter((response) => response != "success");
-    if (!errors[0]) return true;
+    if (!errors[0]) return null;
+
     // Clean up expired/failed subscriptions:
     errors.forEach((err) => err.statusCode === 410 && subscriptions.splice(err.subscriptionIndex, 1));
-
-    console.error("Error sending push:", errors);
-    return false;
+    // console.error("Error sending push:", errors);
+    return errors;
   }
 
   send = async (sub, i, payload) => {
