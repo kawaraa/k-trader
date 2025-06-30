@@ -29,14 +29,14 @@ export default function TraderPage({}) {
       if (window?.logsEventSource) window.logsEventSource.close();
       window.logsEventSource = new EventSource(`/api/sse/${pair}/log`, { withCredentials: true });
       logsEventSource.onopen = () => console.log("SSE connection opened");
-      logsEventSource.onerror = (e) => {
-        console.error("Server error:", JSON.parse(e?.data || e?.error || e));
+      logsEventSource.onerror = (error) => {
+        console.error("Log: SSE connection error:");
         logsEventSource.close(); // Close client-side connection
       };
       logsEventSource.onmessage = (e) => {
-        const data = JSON.parse(e.data);
-        const pair = Object.keys(data)[0];
-        logsRef.current.innerText += "\n" + data[pair];
+        const { log } = JSON.parse(e.data);
+        // const pair = Object.keys(data)[0];
+        logsRef.current.innerText += "\n" + log;
         logsRef.current?.scroll({ top: logsRef.current?.scrollHeight, behavior: "smooth" });
       };
 
@@ -52,8 +52,8 @@ export default function TraderPage({}) {
   }, [user]);
 
   return (
-    <div className="lg:max-w-[90%] mx-auto">
-      <div className={`w-full overflow-y-auto rounded-md`}>
+    <div className="h-[80vh] sm:h-auto lg:max-w-[90%] mx-auto flex flex-col">
+      <div className={`w-full rounded-md`}>
         {user && !user?.loading && (
           <Trader
             pair={pair}
@@ -65,7 +65,7 @@ export default function TraderPage({}) {
         )}
       </div>
 
-      <div className="aspect-video pt-5 pb-10 flex justify-center overflow-y-auto">
+      <div className="max-h-[80vh] py-5 flex justify-center overflow-y-auto">
         <pre
           ref={logsRef}
           className="text-xs min-w-full min-h-full max-w-5xl p-3 text-wrap leading-7 rounded-md card overflow-x-auto"

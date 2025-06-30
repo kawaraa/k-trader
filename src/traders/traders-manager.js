@@ -67,7 +67,7 @@ class TradersManager {
       this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
-    if (prices.length >= this.range / 1.1) {
+    if (prices.length >= this.range / 1.1 && this.state.data[pair].askBidSpread < 1) {
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
       await this.#traders[pair].trade(cpl, prices, eurBalance, cryptoBalance, trades, position);
@@ -87,7 +87,7 @@ class TradersManager {
         const fileSizeInKB = statSync(filePath).size / 1024 / 1024; // Convert size from B to KB to MB
         fileSizeInKB < 1 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
       }
-      if (info != "\n") eventEmitter.emit(`${pair}-log`, { [pair]: info });
+      if (info != "\n") eventEmitter.emit(`${pair}-log`, { log: info });
     } else {
       const notify = this.notifyTimer <= 0;
       const time = ` Time: ${toShortDate()}`;

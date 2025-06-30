@@ -1,6 +1,6 @@
 "use client";
 import { State } from "../state";
-import { ToggleSwitch } from "./inputs";
+import ComboBox, { ToggleSwitch } from "./inputs";
 import { urlBase64ToUint8Array } from "../services/encoding-helper";
 const key = process.env.NEXT_PUBLIC_VAPID_KEY;
 
@@ -41,15 +41,30 @@ export default function Navigation(props) {
 
   return (
     <header className="no-select flex px-1 sm:px-3 py-3 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">
-      {/* <header className="relative min-h-14"> */}
-      {/* <nav className="z-[7] fixed w-full flex h-14 px-1 sm:px-2 md:px-4 top-0 card border no-select"> */}
-      {/* <PageHeader pair={pair} /> */}
-      {/* <nav className="z-[7] fixed w-full flex h-14 px-1 sm:px-2 md:px-4 top-0 card border no-select"></nav> */}
-      <div className="flex-auto">
+      <div className="flex-auto min-w-16">
         <strong className="text-2xl font-bold text-emerald-500">€{parseInt(eurBalance)}</strong>
       </div>
-      <ToggleSwitch onChange={handleNotificationSettings} checked={notificationOn} cls="mr-3">
-        <span className="mx-3">Notify me</span>
+
+      <ComboBox items={pairs} link="/trader?pair=" />
+
+      <ToggleSwitch onChange={handleNotificationSettings} checked={notificationOn} size={35} cls="mr-3">
+        <span className="mx-1 w-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            className="pointer-events-none w-full"
+            fill="none"
+            strokeWidth="1.8"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+            />
+          </svg>
+        </span>
       </ToggleSwitch>
 
       <div className="flex items-center items-end">

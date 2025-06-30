@@ -9,19 +9,13 @@ import TimeRangeSelect from "./components/time-range-select.js";
 
 const badgeCls =
   "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
-// const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
+const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function Home() {
   const router = useRouter();
   const state = State();
-  const [orderbyTime, setOrderbyTime] = useState(false);
-  const pairs = Object.keys(state.loadedTraders);
-
-  // const sortedBots = orderbyTime
-  //   ? botsPairs.toSorted((p1, p2) => Date.parse(bots[p1].createTime) - Date.parse(bots[p2].createTime))
-  //   : botsPairs.toSorted((p1, p2) => sum(bots[p2].trades) - sum(bots[p1].trades));
-
-  const catchErr = (er) => alert(er.message || er.error || er);
+  const [orderby, setOrderby] = useState("liquidity");
+  const [sortedPairs, setSortedPairs] = useState([]);
 
   const changeDefaultCapital = async (e) => {
     const newCapital = +e.target.value || 0;
@@ -36,6 +30,23 @@ export default function Home() {
     }
     state.setLoading(false);
   };
+
+  useEffect(() => {
+    const assets = state.loadedTraders;
+    const pairs = Object.keys(state.loadedTraders);
+    if (state.loadedTraders) {
+      if (orderby == "balance") {
+        pairs.sort((a, b) => assets[b].balance - assets[a].balance);
+      } else if (orderby == "return-asc") {
+        pairs.sort((a, b) => sum(assets[a].trades) - sum(assets[b].trades));
+      } else if (orderby == "return-dec") {
+        pairs.sort((a, b) => sum(assets[b].trades) - sum(assets[a].trades));
+      } else if (orderby == "trades") {
+        pairs.sort((a, b) => assets[b].trades.length - assets[a].trades.length);
+      }
+      setSortedPairs(pairs);
+    }
+  }, [state.loadedTraders, orderby]);
 
   useEffect(() => {
     if (!state.user) router.replace("/login");
@@ -66,17 +77,21 @@ export default function Home() {
         </div>
 
         <div className="flex justify-between">
-          <label for="orderby" className="flex items-center m-2 cursor-pointer">
-            <input
-              id="orderby"
-              type="checkbox"
-              value="orderby"
-              name="orderby"
-              className="w-4 h-4"
-              onChange={(e) => setOrderbyTime(e.target.checked)}
-            />
-            <span className="ml-1">Orderby time</span>
+          <label htmlFor="assets-orderby-select" className="flex items-center mx-2 cursor-pointer">
+            Orderby
           </label>
+          <select
+            name="orderby"
+            id="assets-orderby-select"
+            onChange={(e) => setOrderby(e.target.value)}
+            defaultValue={orderby}
+          >
+            <option value="balance">Balance</option>
+            <option value="return-asc">Return-ASC</option>
+            <option value="return-dec">Return-DEC</option>
+            <option value="trades">Trades</option>
+            <option value="liquidity">liquidity</option>
+          </select>
         </div>
       </div>
 
@@ -84,7 +99,7 @@ export default function Home() {
         {state.user &&
           !state.user.loading &&
           !state.loading &&
-          pairs.map((pair) => (
+          sortedPairs.map((pair) => (
             <li className={`w-full lg:w-1/2 2xl:w-1/3 overflow-y-auto rounded-md`} key={pair}>
               <Trader
                 pair={pair}

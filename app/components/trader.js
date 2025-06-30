@@ -109,6 +109,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
 
     // This terminates the connection
     return () => {
+      request(`/api/prices/event/${pair}`, { method: "PATCH" });
       window.removeEventListener(pair, handler);
     };
   }, []);
@@ -116,10 +117,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
   return (
     <div className={`aspect-video no-srl-bar card rounded-md ${borderCls} ${cls}`}>
       <div className="flex items-center justify-between py-1 px-2 border-t-[1px] border-slate-200">
-        <p className="flex gap-1">
-          <span className="">{pair.replace("EUR", "")}</span>
-          <strong>({info.balance || 0})</strong>
-        </p>
+        <span className="">{pair.replace("EUR", "")}</span>
 
         <EditableInput
           id={pair}
@@ -132,7 +130,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
 
         <strong className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</strong>
 
-        <strong className="text-red">{volatility}%</strong>
+        <strong className="text-red">{volatility?.toFixed(1) || 0}%</strong>
 
         {showZoom && !timeRange && (
           <div className="flex items-center">
@@ -142,23 +140,32 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
               onChange={(e) => setPricesTimeRange(+e.target.value)}
               defaultValue={pricesTimeRange}
             >
-              <option value="720">720 hours</option>
-              <option value="1080">1440 hours</option>
+              <option value="720">720 hrs</option>
+              <option value="1080">1440 hrs</option>
             </TimeRangeSelect>
           </div>
         )}
 
-        <button onClick={() => placePosition("buy")} className="text-white rounded-md py-1 px-2 bg-red">
+        <button
+          onClick={() => placePosition("buy")}
+          className="text-white text-sm rounded-md py-0 px-1 bg-red"
+        >
           Buy
         </button>
 
         <button
           onClick={() => placePosition("sell")}
-          className="text-white rounded-md py-1 px-2 bg-amber-500"
+          className="text-white text-sm rounded-md py-0 px-1 bg-amber-500"
         >
           Sell
         </button>
       </div>
+
+      {info.balance && (
+        <div className="flex items-center justify-between py-0 px-2 text-sm">
+          <strong>({info.balance || 0})</strong>
+        </div>
+      )}
 
       <Link href={`/trader?pair=${pair}`} className={`h-full flex flex-col overflow-hidden`}>
         {error ? (
