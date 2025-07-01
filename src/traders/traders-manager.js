@@ -62,16 +62,17 @@ class TradersManager {
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
     const prices = this.state.updateLocalPrices(pair, this.currencies[pair]).slice(-this.range);
     eventEmitter.emit("price", { [pair]: this.currencies[pair] });
-    if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo();
+    if (!this.state.data[pair]) {
+      this.state.data[pair] = new TraderInfo();
+      console.log("Added:", pair);
+    }
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
 
     // const skip = !isNumber(this.state.data[pair].askBidSpread, 0, 1) || prices.at(-1)[3] / 1000000 < 0.5;
-    console.log(pair, this.state.data[pair].askBidSpread, prices.at(-1)[3]);
     if (prices.length >= this.range / 1.1 && isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
-      console.log(pair, calcAveragePrice([prices.at(-1)[1], prices.at(-1)[2]]));
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
       await this.#traders[pair].trade(cpl, prices, eurBalance, cryptoBalance, trades, position);

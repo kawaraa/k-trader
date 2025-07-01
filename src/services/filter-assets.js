@@ -1,7 +1,7 @@
 // test-trading-script is a price-history-analysis-script
 // import { Worker, parentPort, workerData, isMainThread } from "worker_threads";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
-import { calcAveragePrice, calcPercentageDifference } from "../../shared-code/utilities.js";
+import { calcPercentageDifference } from "../../shared-code/utilities.js";
 import LocalState from "./local-state.js";
 const getPath = (filename = "") => `${process.cwd()}/database/prices/${filename}`;
 
@@ -14,7 +14,7 @@ const getPath = (filename = "") => `${process.cwd()}/database/prices/${filename}
   }
 })();
 
-function setAskBidSpread(file) {
+function setAskBidSpread() {
   const files = readdirSync(getPath());
   const state = new LocalState("traders-state");
   const newData = {};
@@ -25,7 +25,6 @@ function setAskBidSpread(file) {
     const prices = JSON.parse(readFileSync(getPath(file), "utf8"));
     const average =
       prices.reduce((total, p) => total + calcPercentageDifference(p[2], p[1]), 0) / prices.length;
-    console.log(pair, average);
     state.data[pair].askBidSpread = +average.toFixed(2);
   }
 
@@ -34,5 +33,5 @@ function setAskBidSpread(file) {
     .toSorted((a, b) => state.data[a].askBidSpread - state.data[b].askBidSpread)
     .forEach((p) => (newData[p] = state.data[p]));
 
-  // state.update(newData);
+  state.update(newData);
 }
