@@ -4,7 +4,7 @@ import notificationProvider from "../providers/notification-provider.js";
 import LocalState from "../services/local-state.js";
 import KrakenExchangeProvider from "../providers/kraken-ex-provider.js";
 import SmartTrader from "./smart-trader.js";
-import { isNumber, toShortDate } from "../../shared-code/utilities.js";
+import { calcAveragePrice, isNumber, toShortDate } from "../../shared-code/utilities.js";
 
 class TradersManager {
   currencies;
@@ -68,10 +68,10 @@ class TradersManager {
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
 
-    const skip = !isNumber(this.state.data[pair].askBidSpread, 0, 1) || prices[3] / 1000000 < 0.5;
-    // console.log(pair, this.state.data[pair].askBidSpread);
-    if (prices.length >= this.range / 1.1 && !skip) {
-      // console.log(pair, prices[3]);
+    // const skip = !isNumber(this.state.data[pair].askBidSpread, 0, 1) || prices.at(-1)[3] / 1000000 < 0.5;
+    console.log(pair, this.state.data[pair].askBidSpread, prices.at(-1)[3]);
+    if (prices.length >= this.range / 1.1 && isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
+      console.log(pair, calcAveragePrice([prices.at(-1)[1], prices.at(-1)[2]]));
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
       await this.#traders[pair].trade(cpl, prices, eurBalance, cryptoBalance, trades, position);
