@@ -9,7 +9,7 @@ import { calcPercentageDifference, request, toShortDate } from "../../shared-cod
 import TimeRangeSelect from "./time-range-select.js";
 
 const getTime = (d) => d.toTimeString().split(" ")[0].substring(0, 5);
-const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
+// const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
 
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
@@ -65,10 +65,10 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
       const labels = [];
 
       prices.forEach((p, i) => {
-        tradePrices.push(normalizeNum(p[0]));
-        askPrices.push(normalizeNum(p[1]));
-        bidPrices.push(normalizeNum(p[2]));
-        volumes.push(parseInt(normalizeNum(p[3]) / 1000));
+        tradePrices.push(p[0]);
+        askPrices.push(p[1]);
+        bidPrices.push(p[2]);
+        volumes.push(parseInt(p[3] / 1000));
         const timeFun = (timeRange || pricesTimeRange) > 24 ? toShortDate : getTime;
         labels.push(`${timeFun(new Date(since + interval * i))}`);
       });
@@ -98,10 +98,10 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
       const price = event.detail;
       const timeFun = (timeRange || pricesTimeRange) > 24 ? toShortDate : getTime;
 
-      setTradePrices((prev) => prev.concat([normalizeNum(price[0])]).slice(-lengthLimit));
-      setAskPrices((prev) => prev.concat([normalizeNum(price[1])]).slice(-lengthLimit));
-      setBidPrices((prev) => prev.concat([normalizeNum(price[2])]).slice(-lengthLimit));
-      setVolumes((prev) => prev.concat([parseInt(normalizeNum(price[3]) / 1000)]).slice(-lengthLimit));
+      setTradePrices((prev) => prev.concat([price[0]]).slice(-lengthLimit));
+      setAskPrices((prev) => prev.concat([price[1]]).slice(-lengthLimit));
+      setBidPrices((prev) => prev.concat([price[2]]).slice(-lengthLimit));
+      setVolumes((prev) => prev.concat([parseInt(price[3] / 1000)]).slice(-lengthLimit));
       setLabels((prev) => prev.concat([`${timeFun(new Date())}`]).slice(-lengthLimit));
     };
 

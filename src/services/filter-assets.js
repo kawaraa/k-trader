@@ -24,13 +24,15 @@ function setAskBidSpread(file) {
     const pair = file.replace(".json", "");
     if (!state.data[pair]) continue;
     const prices = JSON.parse(readFileSync(getPath(file), "utf8"));
-    state.data[pair].askBidSpread = +(
-      prices.reduce((total, p) => total + calcPercentageDifference(p[2], p[1]), 0) / prices.length
-    ).toFixed(2);
+    const average =
+      prices.reduce((total, p) => total + calcPercentageDifference(p[2], p[1]), 0) / prices.length;
+    console.log(pair, average);
+    state.data[pair].askBidSpread = +average.toFixed(2);
   }
 
   Object.keys(state.data)
-    .sort((a, b) => state.data[a].askBidSpread - state.data[b].askBidSpread)
+    .filter((p) => state.data[p].askBidSpread >= 0 && state.data[p].askBidSpread <= 1)
+    .toSorted((a, b) => state.data[a].askBidSpread - state.data[b].askBidSpread)
     .forEach((p) => (newData[p] = state.data[p]));
 
   state.update(newData);

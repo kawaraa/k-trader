@@ -79,12 +79,9 @@ class SmartTrader extends Trader {
         buyCase = "breakout";
       }
     }
-    // Todo: Test this
-    // this.buyCases[1] = volatility > 1.5 && volatility < 2 && dropped < -(volatility / 1.1);
-    // if (this.buyCases[1]) console.log("BUY");
-    // if (this.buyCases[1] && gainLoss >= 1.5) console.log("SELL");
-    // Todo: Test this
-    // this.buyCases[2] = allPricesTrend.trend != uptrend && halfPricesTrend.trend == uptrend && lastMinTrend == "uptrend" && dropped == 0;
+    // Todo: Test this for 6 hrs range and 1% profit
+    // if(volatility > 1.5 && volatility < 2 && dropped < -(volatility / 1.1)) buyCase = drop-1;
+    // if (buyCase == drop-1 && gainLossPercent >= 1.5) sellCase = "take-1-sell"
 
     // Buy
     if (!position && buyCase) {
@@ -122,7 +119,7 @@ class SmartTrader extends Trader {
 
       let sellCase = null;
       if (increasedPercent > 2 && lastMinTrend == "downtrend") sellCase = "take-profit-sell";
-      else if (gainLossPercent < -1 && lastMinTrend == "downtrend") sellCase = "stop-loss-sell";
+      else if (gainLossPercent <= -1 && lastMinTrend == "downtrend") sellCase = "stop-loss-sell";
       else if (loss >= 3 && lastMinTrend == "downtrend") sellCase = "stop-loss-sell";
 
       if (sellCase) {

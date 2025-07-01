@@ -4,7 +4,7 @@ import notificationProvider from "../providers/notification-provider.js";
 import LocalState from "../services/local-state.js";
 import KrakenExchangeProvider from "../providers/kraken-ex-provider.js";
 import SmartTrader from "./smart-trader.js";
-import { toShortDate } from "../../shared-code/utilities.js";
+import { isNumber, toShortDate } from "../../shared-code/utilities.js";
 
 class TradersManager {
   currencies;
@@ -62,12 +62,12 @@ class TradersManager {
   async runTrader(pair, eurBalance, cryptoBalance) {
     const prices = this.state.updateLocalPrices(pair, this.currencies[pair]).slice(-this.range);
     eventEmitter.emit("price", { [pair]: this.currencies[pair] });
-    if (!this.state.data[pair]) this.state.data[pair] = { position: null, trades: [] };
+    if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo();
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
-    if (prices.length >= this.range / 1.1 && this.state.data[pair].askBidSpread < 1) {
+    if (prices.length >= this.range / 1.1 && isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
       await this.#traders[pair].trade(cpl, prices, eurBalance, cryptoBalance, trades, position);
@@ -97,13 +97,13 @@ class TradersManager {
         const title = `BUY Signal for ${pair}`;
         if (notify) {
           notificationProvider.push({ title, body: body + time, url });
-          this.notifyTimer = (60 * 60) / 10;
+          // this.notifyTimer = 60 / 10;
         }
       } else if (event == "BUY") {
         this.state.data[pair].position = info;
         if (notify) {
           notificationProvider.push({ title: `Bought ${pair}`, body: body + time, url });
-          this.notifyTimer = (60 * 60) / 10;
+          // this.notifyTimer = 60 / 10;
         }
       } else if (event == "SELL") {
         this.state.data[pair].position = null;
@@ -111,7 +111,7 @@ class TradersManager {
         const payload = { title: `Sold ${pair}`, body: `${body} Return: ${info.return} ${time}`, url };
         if (notify) {
           notificationProvider.push(payload);
-          this.notifyTimer = (60 * 60) / 10;
+          // this.notifyTimer = 60 / 10;
         }
       }
       this.state.update(this.state.data);
@@ -121,3 +121,13 @@ class TradersManager {
 
 const tradersManager = new TradersManager();
 export default tradersManager;
+
+class TraderInfo {
+  constructor() {
+    this.askBidSpread = 0;
+    this.capital = 0;
+    this.balances = 0;
+    this.position = null;
+    this.trades = [];
+  }
+}

@@ -25,11 +25,11 @@ export function parseNumInLog(str) {
   return str.split(" ").map((item) => parseFloat(item) || item);
 }
 
-export function isNumber(num, min, max) {
-  const N = Number.parseFloat(num);
-  if (Number.isNaN(N)) return false;
-  else if (min && min > N) return false;
-  else if (max && max < N) return false;
+export function isNumber(number, min, max) {
+  const num = parseFloat(number);
+  if (isNaN(num)) return false;
+  else if (!isNaN(min) && min > num) return false;
+  else if (!isNaN(max) && max < num) return false;
   return true;
 }
 export function parseNumbers(data) {
@@ -107,7 +107,7 @@ export function toShortDate(date = new Date()) {
   return date
     .toString()
     .replace(date.getFullYear() + " ", "")
-    .slice(8, 16);
+    .slice(4, 16);
 }
 export function isOlderThan(timestamp, hours) {
   return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;
@@ -126,5 +126,6 @@ export function calcAveragePrice(prices) {
 }
 export function calcPercentageDifference(oldPrice, newPrice) {
   const difference = newPrice - oldPrice;
+  if (difference == 0) return 0;
   return +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2);
 }
