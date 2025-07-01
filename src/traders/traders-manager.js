@@ -62,10 +62,7 @@ class TradersManager {
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
     const prices = this.state.updateLocalPrices(pair, this.currencies[pair]).slice(-this.range);
     eventEmitter.emit("price", { [pair]: this.currencies[pair] });
-    if (!this.state.data[pair]) {
-      this.state.data[pair] = new TraderInfo();
-      console.log("Added:", pair);
-    }
+    if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo();
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
@@ -123,7 +120,7 @@ export default tradersManager;
 
 class TraderInfo {
   constructor() {
-    this.askBidSpread = 0;
+    // this.askBidSpread = 0; // this will be undefined for low liquidity asset
     this.capital = 0;
     this.balances = 0;
     this.position = null;

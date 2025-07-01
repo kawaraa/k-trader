@@ -1,18 +1,7 @@
-// test-trading-script is a price-history-analysis-script
-// import { Worker, parentPort, workerData, isMainThread } from "worker_threads";
-import { readFileSync, existsSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { calcPercentageDifference } from "../../shared-code/utilities.js";
 import LocalState from "./local-state.js";
 const getPath = (filename = "") => `${process.cwd()}/database/prices/${filename}`;
-
-(async () => {
-  try {
-    // const files = readdirSync(getPath());
-    setAskBidSpread();
-  } catch (error) {
-    console.log("Error:", error);
-  }
-})();
 
 function setAskBidSpread() {
   const files = readdirSync(getPath());
@@ -35,3 +24,5 @@ function setAskBidSpread() {
 
   state.update(newData);
 }
+
+setAskBidSpread();
