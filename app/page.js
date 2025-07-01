@@ -37,6 +37,8 @@ export default function Home() {
     if (state.loadedTraders) {
       if (orderby == "balance") {
         pairs.sort((a, b) => assets[b].balance - assets[a].balance);
+      } else if (orderby == "capital") {
+        pairs.sort((a, b) => assets[b].capital - assets[a].capital);
       } else if (orderby == "return-asc") {
         pairs.sort((a, b) => sum(assets[a].trades) - sum(assets[b].trades));
       } else if (orderby == "return-dec") {
@@ -87,6 +89,7 @@ export default function Home() {
             defaultValue={orderby}
           >
             <option value="balance">Balance</option>
+            <option value="capital">Capital</option>
             <option value="return-asc">Return-ASC</option>
             <option value="return-dec">Return-DEC</option>
             <option value="trades">Trades</option>

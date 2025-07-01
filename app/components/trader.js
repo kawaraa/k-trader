@@ -22,7 +22,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
   const [bidPrices, setBidPrices] = useState([]);
   const [volumes, setVolumes] = useState([]);
   const [labels, setLabels] = useState([]);
-  const [pricesTimeRange, setPricesTimeRange] = useState(1080);
+  const [pricesTimeRange, setPricesTimeRange] = useState(6); // 1080 => 45 days
   const totalReturn = info.trades?.reduce((acc, t) => acc + t, 0) || 0;
 
   const volatility = calcPercentageDifference(Math.min(...tradePrices) || 0, Math.max(...tradePrices) || 0);
@@ -68,7 +68,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
         tradePrices.push(p[0]);
         askPrices.push(p[1]);
         bidPrices.push(p[2]);
-        volumes.push(parseInt(p[3] / 1000));
+        volumes.push(+(p[3] / 1000000).toFixed(1));
         const timeFun = (timeRange || pricesTimeRange) > 24 ? toShortDate : getTime;
         labels.push(`${timeFun(new Date(since + interval * i))}`);
       });
@@ -132,7 +132,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
 
         <strong className="text-red">{volatility?.toFixed(1) || 0}%</strong>
 
-        {showZoom && !timeRange && (
+        {showZoom && (
           <div className="flex items-center">
             <TimeRangeSelect
               name="timeRange"

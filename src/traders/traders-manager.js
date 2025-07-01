@@ -67,7 +67,11 @@ class TradersManager {
       this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
-    if (prices.length >= this.range / 1.1 && isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
+
+    const skip = !isNumber(this.state.data[pair].askBidSpread, 0, 1) || prices[3] / 1000000 < 0.5;
+    // console.log(pair, this.state.data[pair].askBidSpread);
+    if (prices.length >= this.range / 1.1 && !skip) {
+      // console.log(pair, prices[3]);
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
       await this.#traders[pair].trade(cpl, prices, eurBalance, cryptoBalance, trades, position);
@@ -106,7 +110,7 @@ class TradersManager {
         if (notify) notificationProvider.push(payload);
       }
 
-      if (notify) this.notifyTimers[pair] = (30 * 60) / 10;
+      if (notify) this.notifyTimers[pair] = (60 * 60) / 10;
 
       this.state.update(this.state.data);
     }
