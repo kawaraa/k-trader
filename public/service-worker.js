@@ -19,7 +19,11 @@ self.addEventListener("activate", async (evt) => {
 // self.addEventListener("fetch", (evt) => evt.respondWith(handleRequest(evt.request)));
 
 self.addEventListener("push", (event) => {
-  const customPayload = { title: "A new position is placed", body: "Open K-trader app!", url: "" };
+  const customPayload = {
+    title: "New notification from K-Trader",
+    body: "Open K-trader app to see it!",
+    url: "/",
+  };
   const payload = event.data?.json() || customPayload;
 
   event.waitUntil(
@@ -28,7 +32,7 @@ self.addEventListener("push", (event) => {
       icon: "/android-chrome-192x192.png",
       // badge: "/icons/badge.png",
       vibrate: [200, 100, 200],
-      data: { url: `${self.location.origin}/${payload.url || customPayload.url}` }, // Optional: URL to open when clicked
+      data: { url: `${self.location.origin}${payload.url || customPayload.url}` }, // Optional: URL to open when clicked
     })
   );
   // new Audio("/bell-notification-sound.mp3").play().catch((e) => console.log(e));

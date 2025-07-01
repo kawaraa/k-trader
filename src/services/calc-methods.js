@@ -97,22 +97,19 @@ export function removeLowsOrHighs(prices, window = 12, percentThreshold = -1, ro
 }
 
 export function normalizePrices(prices) {
-  return prices.map((p) => calcAveragePrice([p[1], p[2]]));
+  // return prices.map((p) => calcAveragePrice([p[1], p[2]]));
+  if (prices.length < 1) return [];
+  const normalizedPrices = [];
 
-  // if (prices.length < 1) return [];
-  // let avgAskBidSpread = calcAveragePrice(prices.map((p) => calcPercentageDifference(p[2], p[1])));
-  // avgAskBidSpread = Math.min(avgAskBidSpread * 2, maxAskBidSpread); // safeAskBidSpread
-  // const normalizedPrices = [];
-
-  // for (let i = 0; i < prices.length; i++) {
-  //   normalizedPrices.push();
-  //   const askBidSpreedPercent = calcPercentageDifference(prices[i][2], prices[i][1]);
-  //   if (askBidSpreedPercent <= avgAskBidSpread) {
-  //   } else if (normalizedPrices.at(-1)) {
-  //     normalizedPrices.push(normalizedPrices.at(-1));
-  //   }
-  // }
-  // return normalizedPrices;
+  for (let i = 0; i < prices.length; i++) {
+    const askBidSpreedPercent = calcPercentageDifference(prices[i][2], prices[i][1]);
+    if (askBidSpreedPercent <= 1) {
+      normalizedPrices.push(calcAveragePrice([prices[i][1], prices[i][2]]));
+    } else if (normalizedPrices.at(-1)) {
+      normalizedPrices.push(normalizedPrices.at(-1));
+    }
+  }
+  return normalizedPrices;
 }
 export function makePricesArray(prices) {
   if (!prices[0]?.askPrice) return prices;

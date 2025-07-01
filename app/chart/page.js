@@ -1,59 +1,44 @@
 "use client";
 import { useState } from "react";
-// import PageHeader from "../components/page-header";
 import ChartCanvas from "../components/chart-canvas";
 import { toShortDate } from "../../shared-code/utilities.js";
 
 export default function CryptoChart() {
   const [prices, setPrices] = useState([]);
-
   const interval = 5 * 60000;
   const since = Date.now() - prices.length * interval;
-
   const labels = prices.map((p, i) => `${toShortDate(new Date(since + interval * i))}`);
 
   return (
     <>
       <main className="flex flex-col h-screen m-0 p-0">
-        {/* <PageHeader pair="Data Chart Viewer">
-          <div className="">
-            <textarea
-              name="prices"
-              id="prices"
-              onChange={(e) => setPrices(JSON.parse(e.target.value))}
-              col="40"
-            ></textarea>
-          </div>
-        </PageHeader> */}
+        <div className="flex">
+          <textarea
+            id="prices"
+            name="prices"
+            onChange={(e) => setPrices(JSON.parse(e.target.value))}
+            col="40"
+            className="flex-1 border-[1px] border-neutral-300 dark:border-neutral-600"
+          ></textarea>
+        </div>
 
-        <label className="flex flex-auto items-center">
-          <input
-            id="smoother"
-            type="range"
-            min="0"
-            max="30"
-            step="1"
-            defaultValue="0"
-            onChange={(e) => setPrices(smoothPrices2(prices))}
-            className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
+        <div className="h-[75vh]">
+          <ChartCanvas
+            type="line"
+            labels={labels}
+            datasets={[
+              {
+                label: "Normalized Price",
+                borderColor: "#008080",
+                fill: false,
+                data: prices,
+                pointStyle: false,
+                borderWidth: 1,
+              },
+            ]}
+            options={{ responsive: true, maintainAspectRatio: false }}
           />
-        </label>
-
-        <ChartCanvas
-          type="line"
-          labels={labels}
-          datasets={[
-            {
-              label: "Normalized Price",
-              borderColor: "#008080",
-              fill: false,
-              data: prices,
-              pointStyle: false,
-              borderWidth: 1,
-            },
-          ]}
-          options={{ responsive: true, maintainAspectRatio: false }}
-        />
+        </div>
       </main>
     </>
   );

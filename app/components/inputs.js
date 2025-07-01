@@ -106,7 +106,7 @@ export default function ComboBox({ items, link, onSelect }) {
 
       {foundItems?.length > 0 && (
         <ul
-          class="absolute mt-1 max-h-60 w-full select-none overflow-auto bg-white rounded-md p-1 shadow-lg ring-1 ring-black ring-opacity-5"
+          class="absolute mt-1 max-h-60 w-full select-none overflow-auto card rounded-md p-1 shadow-lg ring-1 ring-black ring-opacity-5"
           aria-labelledby="combobox-button-:R4q:"
           role="listbox"
           id="combobox-list"

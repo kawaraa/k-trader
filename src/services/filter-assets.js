@@ -9,7 +9,6 @@ const getPath = (filename = "") => `${process.cwd()}/database/prices/${filename}
   try {
     // const files = readdirSync(getPath());
     setAskBidSpread();
-    // console.log(xxx);
   } catch (error) {
     console.log("Error:", error);
   }
@@ -35,5 +34,5 @@ function setAskBidSpread(file) {
     .toSorted((a, b) => state.data[a].askBidSpread - state.data[b].askBidSpread)
     .forEach((p) => (newData[p] = state.data[p]));
 
-  state.update(newData);
+  // state.update(newData);
 }

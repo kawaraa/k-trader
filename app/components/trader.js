@@ -116,7 +116,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
 
   return (
     <div className={`aspect-video no-srl-bar card rounded-md ${borderCls} ${cls}`}>
-      <div className="flex items-center justify-between py-1 px-2 border-t-[1px] border-slate-200">
+      <div className="flex items-center justify-between py-1 px-2">
         <span className="">{pair.replace("EUR", "")}</span>
 
         <EditableInput

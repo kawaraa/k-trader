@@ -8,3 +8,5 @@ export const inputCls =
 // export const btnCls = `relative flex items-center justify-center rounded-full bg-blue-600 p-3 tracking-wide text-white disabled:opacity-60 disabled:cursor-not-allowed`;
 // export const linkCls = "text-[#1677ff] hover:opacity-80 visited:opacity-60";
 // export const disabledLinkCls = "cursor-not-allowed disabled:opacity-60 hover:opacity-60";
+
+// card: bg-gray-200 dark:bg-gray-700

@@ -53,7 +53,7 @@ export function StateProvider({ children }) {
   };
 
   useEffect(() => {
-    // registerServiceWorker();
+    registerServiceWorker();
     fetchData();
   }, []);
 
@@ -119,28 +119,7 @@ export function StateProvider({ children }) {
 
 export const State = () => useContext(StateContext);
 
-const registerServiceWorker = async () => {
-  if ("serviceWorker" in navigator) {
-    return navigator.serviceWorker.getRegistrations().then(async (registrations) => {
-      for (const registration of registrations) {
-        if (
-          registration.active.state == "activated" &&
-          registration.active?.scriptURL?.includes("service-worker.js")
-        ) {
-          continue;
-        }
-        await new Promise((res, rej) => registration.unregister().then(res).catch(rej));
-      }
-
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .then((registration) => console.log("Registration scope: ", registration.scope))
-        .catch((error) => console.log("Web Worker Registration Error: ", error));
-    });
-  }
-};
-
-function registerServiceWorker1(update) {
+const registerServiceWorker = async (update) => {
   // Todo: add this: && !window.location.origin.includes("localhost")
   if ("serviceWorker" in navigator) {
     return navigator.serviceWorker.getRegistrations().then(async (registrations) => {
@@ -161,4 +140,4 @@ function registerServiceWorker1(update) {
         .catch((error) => console.log("Web Worker Registration Error: ", error));
     });
   }
-}
+};
