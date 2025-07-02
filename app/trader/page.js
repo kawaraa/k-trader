@@ -1,16 +1,19 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Trader from "../components/trader";
 import { State } from "../state";
 import { request } from "../../shared-code/utilities";
+import TimeRangeSelect from "../components/time-range-select";
 
 export default function TraderPage({}) {
+  const router = useRouter();
   const params = useSearchParams();
   const { user, setLoading, traders, defaultCapital } = State();
   const logsRef = useRef(null);
-
   const pair = params.get("pair");
+  const timeRange = +params.get("since") || 6;
 
   const fetchLogContent = async (pair) => {
     setLoading(true);
@@ -53,12 +56,26 @@ export default function TraderPage({}) {
 
   return (
     <div className="h-[80vh] sm:h-auto lg:max-w-[90%] mx-auto flex flex-col">
+      <div className="flex items-center justify-around mb-2">
+        <TimeRangeSelect
+          name="timeRange"
+          id="prices-time-range-trader-page"
+          onChange={(e) => router.replace(`/trader/?pair=${pair}&since=${e.target.value}`)}
+          defaultValue={timeRange}
+        >
+          <option value="720">720 hrs</option>
+          <option value="1080">1080 hrs</option>
+          <option value="1440">1440 hrs</option>
+        </TimeRangeSelect>
+      </div>
+
       <div className={`w-full rounded-md`}>
         {user && !user?.loading && (
           <Trader
             pair={pair}
             info={traders[pair] || {}}
             defaultCapital={defaultCapital}
+            timeRange={timeRange}
             showZoom={true}
             cls=""
           />

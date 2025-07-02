@@ -13,7 +13,7 @@ const getTime = (d) => d.toTimeString().split(" ")[0].substring(0, 5);
 
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
-export default function Trader({ pair, info, defaultCapital, cls, timeRange, showZoom }) {
+export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom }) {
   // const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [capital, setCapital] = useState(info.capital || defaultCapital);
@@ -22,11 +22,10 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
   const [bidPrices, setBidPrices] = useState([]);
   const [volumes, setVolumes] = useState([]);
   const [labels, setLabels] = useState([]);
-  const [pricesTimeRange, setPricesTimeRange] = useState(6); // 1080 => 45 days
   const totalReturn = info.trades?.reduce((acc, t) => acc + t, 0) || 0;
 
   const volatility = calcPercentageDifference(Math.min(...tradePrices) || 0, Math.max(...tradePrices) || 0);
-  const lengthLimit = ((timeRange || pricesTimeRange) * 60 * 60) / 10;
+  const lengthLimit = (timeRange * 60 * 60) / 10;
 
   const handleSeCapital = async (e) => {
     const newCapital = +e.target.value || 0;
@@ -55,7 +54,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
   const fetchPrices = async (pair) => {
     try {
       const interval = 10 * 1000;
-      const prices = await request(`/api/prices/${pair}?since=${timeRange || pricesTimeRange}&interval=10`);
+      const prices = await request(`/api/prices/${pair}?since=${timeRange}&interval=10`);
 
       const since = Date.now() - prices.length * interval;
       const tradePrices = [];
@@ -69,7 +68,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
         askPrices.push(p[1]);
         bidPrices.push(p[2]);
         volumes.push(+(p[3] / 1000000).toFixed(1));
-        const timeFun = (timeRange || pricesTimeRange) > 24 ? toShortDate : getTime;
+        const timeFun = timeRange > 24 ? toShortDate : getTime;
         labels.push(`${timeFun(new Date(since + interval * i))}`);
       });
 
@@ -89,14 +88,14 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
 
   useEffect(() => {
     fetchPrices(pair);
-  }, [timeRange, pricesTimeRange]);
+  }, [timeRange]);
 
   useEffect(() => {
     fetchPrices(pair);
 
     const handler = (event) => {
       const price = event.detail;
-      const timeFun = (timeRange || pricesTimeRange) > 24 ? toShortDate : getTime;
+      const timeFun = timeRange > 24 ? toShortDate : getTime;
 
       setTradePrices((prev) => prev.concat([price[0]]).slice(-lengthLimit));
       setAskPrices((prev) => prev.concat([price[1]]).slice(-lengthLimit));
@@ -131,20 +130,6 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange, sho
         <strong className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</strong>
 
         <strong className="text-red">{volatility?.toFixed(1) || 0}%</strong>
-
-        {showZoom && (
-          <div className="flex items-center">
-            <TimeRangeSelect
-              name="timeRange"
-              id="prices-time-range"
-              onChange={(e) => setPricesTimeRange(+e.target.value)}
-              defaultValue={pricesTimeRange}
-            >
-              <option value="720">720 hrs</option>
-              <option value="1080">1440 hrs</option>
-            </TimeRangeSelect>
-          </div>
-        )}
 
         <button
           onClick={() => placePosition("buy")}

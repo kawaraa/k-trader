@@ -2,14 +2,40 @@
 import { State } from "../state";
 import ComboBox, { ToggleSwitch } from "./inputs";
 import { urlBase64ToUint8Array } from "../services/encoding-helper";
+import { useEffect, useState } from "react";
 const key = process.env.NEXT_PUBLIC_VAPID_KEY;
 
 export default function Navigation(props) {
-  const { eurBalance, traders, loadedTraders, notificationOn, setNotificationOn } = State();
+  const { eurBalance, traders, loadedTraders } = State();
+  const [notificationOn, setNotificationOn] = useState();
+  const [pushNotificationSubscription, setPushNotificationSubscription] = useState();
   const pairs = Object.keys(traders);
   const loadedPairs = Object.keys(loadedTraders);
 
   const handleNotificationSettings = async (e) => {
+    try {
+      if (!pushNotificationSubscription) throw new Error("No notification permission is granted");
+      if (!e.target.checked) {
+        await fetch("/api/notification", {
+          method: "POST",
+          body: JSON.stringify(pushNotificationSubscription),
+          headers: { "Content-Type": "application/json" },
+        }).then((res) => res.json());
+        setNotificationOn(true);
+      } else {
+        await fetch(`/api/notification?endpoint=${pushNotificationSubscription.endpoint}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }).then((res) => res.json());
+        setNotificationOn(false);
+      }
+    } catch (error) {
+      alert(error.message);
+      // console.log("Change Notification: ", error);
+    }
+  };
+
+  const checkNotificationPermission = async () => {
     try {
       await Notification.requestPermission();
       const registration = await navigator.serviceWorker.ready;
@@ -17,27 +43,18 @@ export default function Navigation(props) {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(key), // From `web-push generate-vapid-keys`
       });
-
-      if (!e.target.checked) {
-        // console.log("Push subscription:", subscription);
-        // Send subscription to your backend (for testing, log it)
-        await fetch("/api/notification", {
-          method: "POST",
-          body: JSON.stringify(subscription),
-          headers: { "Content-Type": "application/json" },
-        }).then((res) => res.json());
-        setNotificationOn(true);
-      } else {
-        await fetch(`/api/notification?endpoint=${subscription.endpoint}`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-        }).then((res) => res.json());
-        setNotificationOn(false);
-      }
+      setPushNotificationSubscription(subscription);
+      setNotificationOn((await request(`/api/notification?endpoint=${subscription.endpoint}`)).active);
+      // console.log("Push subscription:", subscription);
+      // Send subscription to your backend (for testing, log it)
     } catch (error) {
       console.log("requestPushNotification: ", error);
     }
   };
+
+  useEffect(() => {
+    checkNotificationPermission();
+  }, []);
 
   return (
     <header className="no-select flex px-1 sm:px-3 py-3 border-b-[1px] border-neutral-300 dark:border-neutral-600 items-center justify-between">

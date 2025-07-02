@@ -72,10 +72,10 @@ class KrakenExchangeProvider {
     }
 
     const currencies = await this.publicApi(`/Ticker?pair=${pairs.join(",")}`);
+
     Object.keys(currencies).forEach((pair) => {
       const { a, b, c, v } = currencies[pair];
-      const prices = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
-      currencies[pair] = prices;
+      currencies[pair] = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
     });
 
     delete currencies.TEUR;
@@ -84,7 +84,6 @@ class KrakenExchangeProvider {
 
   async balance() {
     return await this.#privateApi("Balance");
-    // Object.keys(balance).forEach((k) => (balance[k != "ZEUR" ? k : "eur"] = +balance[k]));
   }
 
   async currentPrices(pair) {

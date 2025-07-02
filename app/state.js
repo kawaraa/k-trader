@@ -12,7 +12,6 @@ export function StateProvider({ children }) {
   const [user, setUser] = useState({ loading: true });
   const [eurBalance, setEurBalance] = useState(0);
   const [defaultCapital, setDefaultCapital] = useState(0);
-  const [notificationOn, setNotificationOn] = useState(false);
   const [traders, setTraders] = useState({});
   const [loadedTradersPairs, setLoadedTradersPairs] = useState(defaultLoadedTraders);
   const [pricesTimeRange, setPricesTimeRange] = useState(6);
@@ -32,9 +31,6 @@ export function StateProvider({ children }) {
       setTraders(data.traders);
       if (data.eurBalance) setEurBalance(data.eurBalance);
       if (data.defaultCapital) setDefaultCapital(data.defaultCapital);
-
-      const subscriptions = await request("/api/notification");
-      setNotificationOn(subscriptions.length > 0);
 
       setLoading(false);
     } catch (error) {
@@ -100,8 +96,6 @@ export function StateProvider({ children }) {
         traders,
         loadedTraders,
         loadTraders,
-        notificationOn,
-        setNotificationOn,
         pricesTimeRange,
         setPricesTimeRange,
       }}

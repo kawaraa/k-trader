@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Trader from "./components/trader.js";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { request, dateToString } from "../shared-code/utilities.js";
 import { State } from "./state.js";
 import { EditableInput } from "./components/inputs.js";
@@ -13,9 +13,11 @@ const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function Home() {
   const router = useRouter();
+  const params = useSearchParams();
   const state = State();
   const [orderby, setOrderby] = useState("liquidity");
   const [sortedPairs, setSortedPairs] = useState([]);
+  const timeRange = +params.get("since") || 6;
 
   const changeDefaultCapital = async (e) => {
     const newCapital = +e.target.value || 0;
@@ -73,8 +75,9 @@ export default function Home() {
           <TimeRangeSelect
             name="timeRange"
             id="global-prices-time-range"
-            onChange={(e) => state.setPricesTimeRange(+e.target.value)}
-            defaultValue={state.pricesTimeRange}
+            // onChange={(e) => state.setPricesTimeRange(+e.target.value)}
+            onChange={(e) => router.replace(`/?since=${e.target.value}`)}
+            defaultValue={timeRange}
           />
         </div>
 
@@ -108,7 +111,7 @@ export default function Home() {
                 pair={pair}
                 info={state.loadedTraders[pair]}
                 defaultCapital={state.defaultCapital}
-                timeRange={state.pricesTimeRange}
+                timeRange={timeRange}
                 cls="mb-1 lg:mr-1 xl:mx-1"
               />
             </li>

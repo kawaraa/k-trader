@@ -5,9 +5,12 @@ export default class NotificationController extends Controller {
     super();
   }
 
-  get = async (req, res, next) => {
+  get = async ({ query }, res, next) => {
     try {
-      res.json(this.state.data.notificationSubscriptions.map((sub) => sub.endpoint));
+      const { endpoint } = query;
+      res.json({
+        active: !!this.state.data.notificationSubscriptions.find((sub) => sub.endpoint == endpoint),
+      });
     } catch (error) {
       next(error);
     }
