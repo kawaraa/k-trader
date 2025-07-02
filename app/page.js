@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import Trader from "./components/trader.js";
 import { useRouter, useSearchParams } from "next/navigation";
-import { request, dateToString } from "../shared-code/utilities.js";
+import { request } from "../shared-code/utilities.js";
 import { State } from "./state.js";
-import { EditableInput } from "./components/inputs.js";
+import { CheckInput, EditableInput } from "./components/inputs.js";
 import TimeRangeSelect from "./components/time-range-select.js";
 
 const badgeCls =
@@ -14,7 +14,7 @@ const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 export default function Home() {
   const router = useRouter();
   const params = useSearchParams();
-  const state = State();
+  const { loading, user, traders, loadedTradersPairs, loadTraders, defaultCapital, ...state } = State();
   const [orderby, setOrderby] = useState("liquidity");
   const [sortedPairs, setSortedPairs] = useState([]);
   const timeRange = +params.get("since") || 6;
@@ -33,38 +33,43 @@ export default function Home() {
     state.setLoading(false);
   };
 
+  const handleChange = (e) => {
+    const pairs = Object.keys(traders).filter((p) => traders[p].signal == e.target.value);
+    state.setLoadedTradersPairs(pairs);
+  };
+
   useEffect(() => {
-    const assets = state.loadedTraders;
-    const pairs = Object.keys(state.loadedTraders);
-    if (state.loadedTraders) {
+    const pairs = loadedTradersPairs;
+    if (pairs) {
       if (orderby == "balance") {
-        pairs.sort((a, b) => assets[b].balance - assets[a].balance);
+        pairs.sort((a, b) => traders[b].balance - traders[a].balance);
       } else if (orderby == "capital") {
-        pairs.sort((a, b) => assets[b].capital - assets[a].capital);
+        pairs.sort((a, b) => traders[b].capital - traders[a].capital);
       } else if (orderby == "return-asc") {
-        pairs.sort((a, b) => sum(assets[a].trades) - sum(assets[b].trades));
+        pairs.sort((a, b) => sum(traders[a].trades) - sum(traders[b].trades));
       } else if (orderby == "return-dec") {
-        pairs.sort((a, b) => sum(assets[b].trades) - sum(assets[a].trades));
+        pairs.sort((a, b) => sum(traders[b].trades) - sum(traders[a].trades));
       } else if (orderby == "trades") {
-        pairs.sort((a, b) => assets[b].trades.length - assets[a].trades.length);
+        pairs.sort((a, b) => traders[b].trades.length - traders[a].trades.length);
       }
       setSortedPairs(pairs);
     }
-  }, [state.loadedTraders, orderby]);
+  }, [loadedTradersPairs, orderby]);
 
   useEffect(() => {
-    if (!state.user) router.replace("/login");
-  }, [state.user]);
+    if (!user) router.replace("/login");
+  }, [user]);
 
+  if (!Object.keys(traders)[0]) return null;
   return (
     <>
-      <div className="mb-5 flex justify-between items-center">
+      <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <span className="mr-2">Default Capital: </span>
+          <span className="mr-2">Capital:</span>
           <EditableInput
             id="default-capital-input-id"
             onBlur={changeDefaultCapital}
-            defaultValue={state.defaultCapital}
+            defaultValue={defaultCapital}
             cls="text-orange font-bold text-xl"
           >
             €
@@ -83,7 +88,7 @@ export default function Home() {
 
         <div className="flex justify-between">
           <label htmlFor="assets-orderby-select" className="flex items-center mx-2 cursor-pointer">
-            Orderby
+            Sortby
           </label>
           <select
             name="orderby"
@@ -101,16 +106,32 @@ export default function Home() {
         </div>
       </div>
 
+      <form className="mt-1 mb-5 flex flex-wrap justify-between items-center" onChange={handleChange}>
+        {["dropped-increase", "increase-again", "A-shape", "breakout"].map((signal, i) => (
+          <CheckInput
+            type="radio"
+            id={signal}
+            name="signal"
+            value={signal}
+            cls="m-1 flex-auto w-1/3 md:w-auto rounded-md"
+            labelCLs="rounded-md"
+            key={i}
+          >
+            {signal}
+          </CheckInput>
+        ))}
+      </form>
+
       <ul className="flex flex-wrap no-select mb-8 justify-center">
-        {state.user &&
-          !state.user.loading &&
-          !state.loading &&
+        {user &&
+          !user.loading &&
+          !loading &&
           sortedPairs.map((pair) => (
             <li className={`w-full lg:w-1/2 2xl:w-1/3 overflow-y-auto rounded-md`} key={pair}>
               <Trader
                 pair={pair}
-                info={state.loadedTraders[pair]}
-                defaultCapital={state.defaultCapital}
+                info={traders[pair]}
+                defaultCapital={defaultCapital}
                 timeRange={timeRange}
                 cls="mb-1 lg:mr-1 xl:mx-1"
               />
@@ -120,7 +141,7 @@ export default function Home() {
 
       <div className="relative text-center">
         <button
-          onClick={() => state.loadTraders(6)}
+          onClick={() => loadTraders(6)}
           className="bg-pc inline-flex justify-center py-2 px-3 rounded-md mb-5"
         >
           Load more

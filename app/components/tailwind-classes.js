@@ -1,4 +1,4 @@
-export const cardCls = "bg-white dark:bg-neutral-800";
+export const cardCls = "bg-neutral-100 dark:bg-neutral-800";
 export const borderCls = "border border-neutral-300 dark:border-neutral-600";
 export const btnCls = "bg-pc inline-flex w-full justify-center py-2 rounded-md";
 export const inputCls =

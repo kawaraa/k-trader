@@ -18,6 +18,11 @@
     --text-color: rgb(209, 213, 219); /* #dcd9d9 */
   }
 }
+/* * {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+} */
 a {
   color: "#b485e6";
 }

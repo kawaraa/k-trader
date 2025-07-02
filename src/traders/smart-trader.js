@@ -16,11 +16,13 @@ class SmartTrader extends Trader {
   }
 
   async trade(capital, storedPrices, eurBalance, cryptoBalance, trades, position) {
+    let signal = "unknown";
     const currentPrice = storedPrices.at(-1);
     const avgAskBidSpread = calcAveragePrice(storedPrices.map((p) => calcPct(p[2], p[1])));
     // safeAskBidSpread
     if (calcAveragePrice([currentPrice[2], currentPrice[1]]) > Math.min(avgAskBidSpread * 2, 1)) {
-      return this.dispatch("LOG", `Pause trading due to the low liquidity`);
+      this.dispatch("LOG", `Pause trading due to the low liquidity`);
+      return "paused";
     }
 
     const lastTrade = trades.at(-1);
@@ -68,15 +70,15 @@ class SmartTrader extends Trader {
       lastMinTrend == "uptrend" &&
       (!lastTrade || lastTrade.return > 0 || increaseMore)
     ) {
-      buyCase = "dropped-increase";
+      buyCase = signal = "dropped-increase";
     } else if (lastTrade && lastTrade.return < 0 && droppedFromLastTrade < -1 && lastMinTrend == "uptrend") {
-      buyCase = "increase-again";
+      buyCase = signal = "increase-again";
     } else if (this.AShape && droppedPercent <= -1.5 && lastMinTrend == "uptrend") {
-      buyCase = "A-shape";
+      buyCase = signal = "A-shape";
     } else {
       const sorted = prices.slice(0, prices.length - 18).toSorted((a, b) => a - b);
       if (dropped == 0 && lastMinTrend == "uptrend" && calcPct(sorted.at(-1), current) >= 0) {
-        buyCase = "breakout";
+        buyCase = signal = "breakout";
       }
     }
     // Todo: Test this for 6 hrs range and 1% profit
@@ -85,7 +87,7 @@ class SmartTrader extends Trader {
 
     // Buy
     if (!position && buyCase) {
-      this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
+      // this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
 
       if (capital > 0 && eurBalance >= 1) {
         await this.buy(capital, eurBalance, currentPrice[1]);
@@ -95,7 +97,7 @@ class SmartTrader extends Trader {
       }
 
       // Sell
-    } else {
+    } else if (position && cryptoBalance > 0) {
       const gainLossPercent = calcPct(position.price, prices.at(-1));
       if (gainLossPercent > this.prevGainPercent) this.prevGainPercent = gainLossPercent;
       const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
@@ -109,31 +111,27 @@ class SmartTrader extends Trader {
         }
       }
 
+      this.dispatch(
+        "LOG",
+        `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
+      );
+
       let sellCase = null;
-      if (increasedPercent > 2 && lastMinTrend == "downtrend") sellCase = "take-profit-sell";
-      else if (gainLossPercent <= -1 && lastMinTrend == "downtrend") sellCase = "stop-loss-sell";
-      else if (loss >= 3 && lastMinTrend == "downtrend") sellCase = "stop-loss-sell";
+      if (increasedPercent > 2 && lastMinTrend == "downtrend") sellCase = signal = "take-profit-sell";
+      else if (gainLossPercent <= -1 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
+      else if (loss >= 3 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
 
       if (sellCase) {
-        this.dispatch("SELL_SIGNAL", currentPrice[1], sellCase);
-
-        if (position && cryptoBalance > 0) {
-          this.dispatch(
-            "LOG",
-            `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
-          );
-          const res = await this.sell(position, cryptoBalance, currentPrice[2]);
-          this.AShape = false;
-          this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${sellCase}`);
-        }
-      } else {
-        // this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
+        const res = await this.sell(position, cryptoBalance, currentPrice[2]);
+        this.AShape = false;
+        this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${sellCase}`);
       }
-
-      //
+    } else {
+      // this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
     }
 
     this.dispatch("LOG", "");
+    return signal;
   }
 }
 

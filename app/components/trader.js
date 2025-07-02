@@ -6,7 +6,6 @@ import { EditableInput } from "./inputs";
 import ChartCanvas from "./chart-canvas";
 // import Loader from "./loader";
 import { calcPercentageDifference, request, toShortDate } from "../../shared-code/utilities.js";
-import TimeRangeSelect from "./time-range-select.js";
 
 const getTime = (d) => d.toTimeString().split(" ")[0].substring(0, 5);
 // const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);

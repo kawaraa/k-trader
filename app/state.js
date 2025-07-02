@@ -17,9 +17,6 @@ export function StateProvider({ children }) {
   const [pricesTimeRange, setPricesTimeRange] = useState(6);
   const addMessage = (msg) => setMessages([...messages, msg]);
 
-  const loadedTraders = {};
-  loadedTradersPairs.forEach((pair) => traders[pair] && (loadedTraders[pair] = traders[pair]));
-
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -42,7 +39,7 @@ export function StateProvider({ children }) {
   const loadTraders = (limit = 6) => {
     const pairs = [];
     for (const pair in traders) {
-      if (!loadedTraders[pair]) pairs.push(pair);
+      if (!loadedTradersPairs.includes(pair)) pairs.push(pair);
       if (pairs.length >= limit) break;
     }
     setLoadedTradersPairs(loadedTradersPairs.concat(pairs));
@@ -94,7 +91,8 @@ export function StateProvider({ children }) {
         defaultCapital,
         setDefaultCapital,
         traders,
-        loadedTraders,
+        loadedTradersPairs,
+        setLoadedTradersPairs,
         loadTraders,
         pricesTimeRange,
         setPricesTimeRange,

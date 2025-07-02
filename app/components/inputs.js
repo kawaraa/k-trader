@@ -1,6 +1,7 @@
 "use client";
 // import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { cardCls } from "./tailwind-classes";
 
 export function EditableInput({ children, id, cls, ...p }) {
   const elRef = useRef();
@@ -46,7 +47,24 @@ export function ToggleSwitch({ children, label, size = 40, cls, ...p }) {
   );
 }
 
-export default function ComboBox({ items, link, onSelect }) {
+export function CheckInput({ children, cls, labelCLs, ...p }) {
+  return (
+    <div className={`relative inline-flex justify-center items-center ${cls}`}>
+      <input
+        className={`peer absolute top-0 left-0 w-full h-full appearance-none border-none z-[-1]`}
+        {...p}
+      />
+      <label
+        htmlFor={p.id}
+        className={`flex-auto box-border text-center peer-checked:text-blue peer-checked:border-2 peer-checked:border-blue-500 cursor-pointer cad ${cardCls} ${labelCLs}`}
+      >
+        {children}
+      </label>
+    </div>
+  );
+}
+
+export default function ComboBox({ items, link, onSelect, cls }) {
   const [foundItems, setFoundItems] = useState(items);
 
   const search = (text) => {
@@ -59,7 +77,7 @@ export default function ComboBox({ items, link, onSelect }) {
   // }, [items]);
 
   return (
-    <div className="relative z-1">
+    <div className={`relative z-1 ${cls}`}>
       <label
         htmlFor="combobox-input-id"
         className="relative w-full flex overflow-hidden rounded-lg card shadow-md"
