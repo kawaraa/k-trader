@@ -47,14 +47,14 @@ export default class NotificationController extends Controller {
     try {
       const subscriptions = this.state.data.notificationSubscriptions;
       if (subscriptions.length === 0) return next("400-No subscriptions found");
-      const result = await this.notificationProvider.push({
+      const errors = await this.notificationProvider.push({
         title: "Test Notification from K-trader!",
         body: "Push Notification works fine.",
         url: "/",
       });
 
-      if (result) res.json({ success: true });
-      else res.status(500).json({ message: "Failed to send push: " + err.message });
+      if (!errors) res.json({ success: true });
+      else res.status(500).json({ message: "Failed to send push: " + JSON.stringify(errors) });
     } catch (error) {
       next(error);
     }
