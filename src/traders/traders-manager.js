@@ -111,7 +111,7 @@ class TradersManager {
         if (notify) notificationProvider.push(payload);
       }
 
-      if (notify) this.notifyTimers[pair] = (1 * 60) / 10;
+      if (notify) this.notifyTimers[pair] = (60 * 60) / 10;
 
       this.state.update(this.state.data);
     }
