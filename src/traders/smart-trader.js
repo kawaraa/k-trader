@@ -85,10 +85,7 @@ class SmartTrader extends Trader {
 
     // Buy
     if (!position && buyCase) {
-      if (this.notifiedTimer <= 0) {
-        this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
-        this.notifiedTimer = (1 * 60 * 60) / this.interval;
-      }
+      this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
 
       if (capital > 0 && eurBalance >= 1) {
         await this.buy(capital, eurBalance, currentPrice[1]);
@@ -98,7 +95,7 @@ class SmartTrader extends Trader {
       }
 
       // Sell
-    } else if (position && cryptoBalance > 0) {
+    } else {
       const gainLossPercent = calcPct(position.price, prices.at(-1));
       if (gainLossPercent > this.prevGainPercent) this.prevGainPercent = gainLossPercent;
       const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
@@ -112,25 +109,28 @@ class SmartTrader extends Trader {
         }
       }
 
-      this.dispatch(
-        "LOG",
-        `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
-      );
-
       let sellCase = null;
       if (increasedPercent > 2 && lastMinTrend == "downtrend") sellCase = "take-profit-sell";
       else if (gainLossPercent <= -1 && lastMinTrend == "downtrend") sellCase = "stop-loss-sell";
       else if (loss >= 3 && lastMinTrend == "downtrend") sellCase = "stop-loss-sell";
 
       if (sellCase) {
-        const res = await this.sell(position, cryptoBalance, currentPrice[2]);
-        this.AShape = false;
-        this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${sellCase}`);
+        this.dispatch("SELL_SIGNAL", currentPrice[1], sellCase);
+
+        if (position && cryptoBalance > 0) {
+          this.dispatch(
+            "LOG",
+            `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
+          );
+          const res = await this.sell(position, cryptoBalance, currentPrice[2]);
+          this.AShape = false;
+          this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${sellCase}`);
+        }
+      } else {
+        // this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
       }
 
       //
-    } else {
-      // this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
     }
 
     this.dispatch("LOG", "");

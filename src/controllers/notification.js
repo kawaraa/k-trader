@@ -22,7 +22,6 @@ export default class NotificationController extends Controller {
         this.state.update(this.state.data);
       }
 
-      response.json({ success: true });
       res.json({ success: true });
     } catch (error) {
       next(error);
@@ -35,7 +34,7 @@ export default class NotificationController extends Controller {
       const notSub = this.state.data.notificationSubscriptions.filter((sub) => sub.endpoint != endpoint);
       this.state.data.notificationSubscriptions = notSub;
       this.state.update(this.state.data);
-      response.json({ success: true });
+      res.json({ success: true });
     } catch (error) {
       next(error);
     }

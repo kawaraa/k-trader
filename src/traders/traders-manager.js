@@ -98,6 +98,9 @@ class TradersManager {
       if (event == "BUY_SIGNAL") {
         const title = `BUY Signal for ${pair}`;
         if (notify) notificationProvider.push({ title, body: body + time, url });
+      } else if (event == "SELL_SIGNAL") {
+        const title = `SELL Signal for ${pair}`;
+        if (notify) notificationProvider.push({ title, body: body + time, url });
       } else if (event == "BUY") {
         this.state.data[pair].position = info;
         if (notify) notificationProvider.push({ title: `Bought ${pair}`, body: body + time, url });
@@ -108,7 +111,7 @@ class TradersManager {
         if (notify) notificationProvider.push(payload);
       }
 
-      if (notify) this.notifyTimers[pair] = (60 * 60) / 10;
+      if (notify) this.notifyTimers[pair] = (1 * 60) / 10;
 
       this.state.update(this.state.data);
     }
