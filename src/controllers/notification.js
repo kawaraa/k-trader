@@ -15,7 +15,7 @@ export default class NotificationController extends Controller {
 
   subscribe = async (req, res, next) => {
     try {
-      const data = request.body;
+      const data = req.body;
       const not = this.state.data.notificationSubscriptions.find((sub) => sub.endpoint == data.endpoint);
       if (!not) {
         this.state.data.notificationSubscriptions.push(data);
