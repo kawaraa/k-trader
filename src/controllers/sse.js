@@ -31,6 +31,7 @@ export default class SSEController extends Controller {
       });
 
       const sendEvent = (data) => {
+        if (response.writableEnded || response.destroyed) return; // Cannot send, client is gone
         response.write(`data: ${JSON.stringify(data)}\n\n`); //data and \n\n are REQUIRED
       };
 

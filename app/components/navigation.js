@@ -14,16 +14,16 @@ export default function Navigation(props) {
 
   const handleNotificationSettings = async (e) => {
     try {
-      if (!pushNotificationSubscription) throw new Error("No notification permission is granted");
+      const subscription = await checkNotificationPermission();
       if (!e.target.checked) {
         await fetch("/api/notification", {
           method: "POST",
-          body: JSON.stringify(pushNotificationSubscription),
+          body: JSON.stringify(subscription),
           headers: { "Content-Type": "application/json" },
         }).then((res) => res.json());
         setNotificationOn(true);
       } else {
-        await fetch(`/api/notification?endpoint=${pushNotificationSubscription.endpoint}`, {
+        await fetch(`/api/notification?endpoint=${subscription.endpoint}`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
         }).then((res) => res.json());
@@ -35,25 +35,26 @@ export default function Navigation(props) {
     }
   };
 
-  const checkNotificationPermission = async () => {
+  const checkNotificationPermission = async (check) => {
     try {
+      if (Notification.permission === "granted" && check) return setNotificationOn(true);
       await Notification.requestPermission();
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(key), // From `web-push generate-vapid-keys`
       });
-      setPushNotificationSubscription(subscription);
-      setNotificationOn((await request(`/api/notification?endpoint=${subscription.endpoint}`)).active);
+      return subscription;
       // console.log("Push subscription:", subscription);
       // Send subscription to your backend (for testing, log it)
     } catch (error) {
       console.log("requestPushNotification: ", error);
+      return null;
     }
   };
 
   useEffect(() => {
-    checkNotificationPermission();
+    checkNotificationPermission(true);
   }, []);
 
   return (
@@ -111,3 +112,27 @@ export default function Navigation(props) {
     </header>
   );
 }
+
+// window.addEventListener("click", async function requestPushNotification() {
+//   function urlBase64ToUint8Array(base64String) {
+//     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+//     const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+//     const rawData = atob(base64);
+//     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+//   }
+
+//   const registration = await navigator.serviceWorker.ready;
+//   console.log("A", registration);
+//   let subscription = await registration.pushManager.getSubscription();
+//   console.log("B", subscription);
+
+//   if (!subscription) {
+//     subscription = await registration.pushManager.subscribe({
+//       userVisibleOnly: true,
+//       applicationServerKey: urlBase64ToUint8Array(
+//         "BIgLN0vOoxx9SrLsScyLZfVqwfzSxjaObZY8nn8AjVSgcs9cIK3pRwgOYLrNKQovWT2g-sKolrAa_q84tHYX_VM"
+//       ),
+//     });
+//     console.log("C", subscription);
+//   }
+// });
