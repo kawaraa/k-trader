@@ -15,6 +15,7 @@ export default function Navigation(props) {
   const handleNotificationSettings = async (e) => {
     try {
       const subscription = await checkNotificationPermission();
+      if (!subscription) throw new Error("No notification permission is granted");
       if (!e.target.checked) {
         await fetch("/api/notification", {
           method: "POST",
