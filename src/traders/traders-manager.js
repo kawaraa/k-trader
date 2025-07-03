@@ -5,14 +5,14 @@ import LocalState from "../services/local-state.js";
 import KrakenExchangeProvider from "../providers/kraken-ex-provider.js";
 import SmartTrader from "./smart-trader.js";
 import { isNumber, toShortDate } from "../../shared-code/utilities.js";
-// import { getCryptoTimingSuggestion } from "../services/trend-analysis.js";
+// import { getCryptoTimingSuggestion } from "../../shared-code/indicators.js";
 
 class TradersManager {
   currencies;
   #traders;
   constructor() {
     this.state = new LocalState("traders-state");
-    this.ex = new KrakenExchangeProvider(process.env.KRAKEN_CREDENTIALS, this.state);
+    this.ex = new KrakenExchangeProvider(this.state);
     this.defaultCapital = 0;
     this.interval = 10;
     this.range = parseInt((3 * 60 * 60) / this.interval);
@@ -29,6 +29,7 @@ class TradersManager {
     clearTimeout(this.timeoutID);
   }
   buy(pair) {
+    console.log(this.#traders[pair]);
     return (
       this.#traders[pair] &&
       this.#traders[pair].buy(
