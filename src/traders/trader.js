@@ -7,7 +7,7 @@ export default class Trader {
     this.pair = pair;
     this.interval = +interval;
     this.period = this.interval || 5; // this.period is deleted in only test trading
-    this.testMode = mode != "live";
+    // this.testMode = mode != "live";
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
     this.timeoutID = 0;
