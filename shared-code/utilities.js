@@ -105,9 +105,9 @@ export function dateToString(date = new Date(), seconds) {
 }
 export function toShortDate(date = new Date()) {
   return date
-    .toString()
+    .toUTCString()
     .replace(date.getFullYear() + " ", "")
-    .slice(4, 16);
+    .slice(5, 17);
 }
 export function isOlderThan(timestamp, hours) {
   return (Date.now() - new Date(timestamp || Date.now()).getTime()) / 60000 / 60 > hours;

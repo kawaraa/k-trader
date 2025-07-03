@@ -29,7 +29,6 @@ class TradersManager {
     clearTimeout(this.timeoutID);
   }
   buy(pair) {
-    console.log(this.#traders[pair]);
     return (
       this.#traders[pair] &&
       this.#traders[pair].buy(

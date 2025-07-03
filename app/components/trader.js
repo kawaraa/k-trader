@@ -7,7 +7,7 @@ import ChartCanvas from "./chart-canvas";
 // import Loader from "./loader";
 import { calcPercentageDifference, request, toShortDate } from "../../shared-code/utilities.js";
 
-const getTime = (d) => d.toTimeString().split(" ")[0].substring(0, 5);
+const getTime = (d) => d.toUTCString().split(" ").at(-2).substring(0, 5);
 // const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
 
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
