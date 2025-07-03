@@ -6,6 +6,7 @@ import Trader from "../components/trader";
 import { State } from "../state";
 import { request } from "../../shared-code/utilities";
 import TimeRangeSelect from "../components/time-range-select";
+import TradeTimeSuggestion from "../components/trade-time-suggestion";
 
 export default function TraderPage({}) {
   const router = useRouter();
@@ -67,6 +68,8 @@ export default function TraderPage({}) {
           <option value="1080">1080 hrs</option>
           <option value="1440">1440 hrs</option>
         </TimeRangeSelect>
+
+        <TradeTimeSuggestion cls="flex items-center" />
       </div>
 
       <div className={`w-full rounded-md`}>

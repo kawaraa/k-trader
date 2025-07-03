@@ -6,6 +6,7 @@ import { request } from "../shared-code/utilities.js";
 import { State } from "./state.js";
 import { CheckInput, EditableInput } from "./components/inputs.js";
 import TimeRangeSelect from "./components/time-range-select.js";
+import TradeTimeSuggestion from "./components/trade-time-suggestion.js";
 
 const badgeCls =
   "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
@@ -63,6 +64,8 @@ export default function Home() {
   if (!Object.keys(traders)[0]) return null;
   return (
     <>
+      <TradeTimeSuggestion cls="flex justify-center items-center" />
+
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <span className="mr-2">Capital:</span>

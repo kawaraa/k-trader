@@ -5,6 +5,7 @@ import LocalState from "../services/local-state.js";
 import KrakenExchangeProvider from "../providers/kraken-ex-provider.js";
 import SmartTrader from "./smart-trader.js";
 import { isNumber, toShortDate } from "../../shared-code/utilities.js";
+// import { getCryptoTimingSuggestion } from "../services/trend-analysis.js";
 
 class TradersManager {
   currencies;
@@ -67,7 +68,7 @@ class TradersManager {
       this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
-
+    // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
     // const skip = !isNumber(this.state.data[pair].askBidSpread, 0, 1) || prices.at(-1)[3] / 1000000 < 0.5;
     if (prices.length >= this.range / 1.1 && isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
       const { capital, position, trades } = this.state.data[pair];

@@ -15,7 +15,7 @@ const getTime = (d) => d.toTimeString().split(" ")[0].substring(0, 5);
 export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom }) {
   // const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [capital, setCapital] = useState(info.capital || defaultCapital);
+  const [capital, setCapital] = useState(info.capital || 0);
   const [tradePrices, setTradePrices] = useState([]);
   const [askPrices, setAskPrices] = useState([]);
   const [bidPrices, setBidPrices] = useState([]);
@@ -82,8 +82,8 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   };
 
   useEffect(() => {
-    if (!capital || defaultCapital == 0) setCapital(defaultCapital);
-  }, [defaultCapital]);
+    setCapital(!info.capital && defaultCapital >= 0 ? defaultCapital : info.capital);
+  }, [info.capital, defaultCapital]);
 
   useEffect(() => {
     fetchPrices(pair);
