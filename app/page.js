@@ -34,7 +34,7 @@ export default function Home() {
     state.setLoading(false);
   };
 
-  const handleChange = (e) => {
+  const handleFilterChange = (e) => {
     const pairs = Object.keys(traders).filter((p) => traders[p].signal == e.target.value);
     state.setLoadedTradersPairs(pairs);
   };
@@ -109,7 +109,7 @@ export default function Home() {
         </div>
       </div>
 
-      <form className="mt-1 mb-5 flex flex-wrap justify-between items-center" onChange={handleChange}>
+      <form className="mt-1 mb-5 flex flex-wrap justify-between items-center" onChange={handleFilterChange}>
         {["dropped-increase", "increase-again", "A-shape", "breakout"].map((signal, i) => (
           <CheckInput
             type="radio"

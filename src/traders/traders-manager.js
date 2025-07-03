@@ -40,7 +40,8 @@ class TradersManager {
     );
   }
   sell(pair) {
-    return this.#traders[pair] && this.#traders[pair].sellManually(this.balances[pair]);
+    if (!this.#traders[pair]) throw new Error(`${pair} Trader is not active`);
+    return this.#traders[pair].sellManually(this.balances[pair]);
   }
 
   async run() {

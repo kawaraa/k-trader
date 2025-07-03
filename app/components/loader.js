@@ -1,30 +1,17 @@
 "use client";
 
-export default function Loader({ loading, full }) {
-  const cls = full ? "fixed" : "absolute";
+export default function Loader({ loading, size = "10", screen, cls = "", inCls = "" }) {
+  if (!loading) return null;
+  let borderSize = Math.round(+size / 8);
+  if (borderSize > 6) borderSize = 6;
+  const c = !screen ? cls : "fixed inset-0 z-[10] h-screen m-0 bg-blur";
+
   return (
-    loading && (
+    <div className={`no-select flex justify-center items-center ${c} ${cls}`} role="img" aria-label="loading">
       <div
-        className={`no-select h-screen z-9 ${cls} inset-0 m-0 bg-blur flex justify-center items-center`}
-        role="img"
-        aria-label="loading"
-      >
-        <div className="border-t-[transparent] border-pc rounded-full animate-spin w-16 h-16 border-[6px]"></div>
-      </div>
-    )
+        className={`border-t-[transparent] border-pc rounded-full animate-spin ${inCls}`}
+        style={{ width: `${size}px`, height: `${size}px`, borderWidth: `${borderSize}px` }}
+      ></div>
+    </div>
   );
 }
-
-// export default function Loader({ size = "10", screen, wrapperCls = "", cls = "" }) {
-//   let borderSize = Math.round(+size / 8);
-//   if (borderSize > 7) borderSize = 7;
-//   const c = !screen ? wrapperCls : "z-[10] flex justify-center items-center fixed inset-0 " + wrapperCls;
-//   return (
-//     <div className={`flex justify-center items-center ml-1 ${c}`} role="img" aria-label="loading">
-//       <div
-//         className={`border-t-[transparent] border-bf rounded-full animate-spin ${cls}`}
-//         style={{ width: `${size}px`, height: `${size}px`, borderWidth: `${borderSize}px` }}
-//       ></div>
-//     </div>
-//   );
-// }

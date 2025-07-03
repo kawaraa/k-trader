@@ -6,6 +6,7 @@ import { EditableInput } from "./inputs";
 import ChartCanvas from "./chart-canvas";
 // import Loader from "./loader";
 import { calcPercentageDifference, request, toShortDate } from "../../shared-code/utilities.js";
+import Loader from "./loader.js";
 
 const getTime = (d) => d.toUTCString().split(" ").at(-2).substring(0, 5);
 // const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
@@ -13,7 +14,7 @@ const getTime = (d) => d.toUTCString().split(" ").at(-2).substring(0, 5);
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom }) {
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [capital, setCapital] = useState(info.capital || 0);
   const [tradePrices, setTradePrices] = useState([]);
@@ -29,25 +30,25 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const handleSeCapital = async (e) => {
     const newCapital = +e.target.value || 0;
     if (!confirm(`Are you sure want increase investment capital for ${pair}`)) return;
-    // setLoading(true);
+    setLoading(true);
     try {
       await request(`/api/trader/update/${pair}/${newCapital}`, { method: "PUT" });
       setCapital(newCapital);
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
-    // setLoading(false);
+    setLoading(false);
   };
 
   const placePosition = async (type = "sell") => {
-    // setLoading(true);
     if (!confirm(`Are you sure want to ${type} "${pair}" currency?`)) return;
+    setLoading(true);
     try {
       await request(`/api/trader/${type}/${pair}`, { method: "PATCH" });
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
-    // setLoading(true);
+    setLoading(false);
   };
 
   const fetchPrices = async (pair) => {
@@ -113,7 +114,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   }, []);
 
   return (
-    <div className={`aspect-video no-srl-bar card rounded-md ${borderCls} ${cls}`}>
+    <div className={`relative aspect-video no-srl-bar card rounded-md ${borderCls} ${cls}`}>
       <div className="flex items-center justify-between py-1 px-2">
         <span className="">{pair.replace("EUR", "")}</span>
 
@@ -212,6 +213,8 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
         {/* <Loader loading={loading} /> */}
       </Link>
+
+      <Loader loading={loading} size="40" cls="absolute inset-0 w-ful h-full bg-blur" />
     </div>
   );
 }

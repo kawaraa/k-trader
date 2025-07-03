@@ -102,8 +102,7 @@ export function StateProvider({ children }) {
 
       {children}
 
-      {(user?.loading || loading) && <Loader size="40" wrapperCls="z-9 absolute inset-0 !m-0 bg-blur" />}
-
+      <Loader loading={user?.loading || loading} screen size="60" />
       {/* <Messages messages={messages} setMessages={setMessages} /> */}
     </StateContext.Provider>
   );

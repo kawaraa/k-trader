@@ -11,7 +11,7 @@ import TradeTimeSuggestion from "../components/trade-time-suggestion";
 export default function TraderPage({}) {
   const router = useRouter();
   const params = useSearchParams();
-  const { user, setLoading, traders, defaultCapital } = State();
+  const { loading, setLoading, user, traders, defaultCapital } = State();
   const logsRef = useRef(null);
   const pair = params.get("pair");
   const timeRange = +params.get("since") || 6;
@@ -73,7 +73,7 @@ export default function TraderPage({}) {
       </div>
 
       <div className={`w-full rounded-md`}>
-        {user && !user?.loading && (
+        {user && !user?.loading && !loading && (
           <Trader
             pair={pair}
             info={traders[pair] || {}}

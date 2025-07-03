@@ -87,7 +87,7 @@ class SmartTrader extends Trader {
 
     // Buy
     if (!position && buyCase) {
-      // this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
+      this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
 
       if (capital > 0 && eurBalance >= 1) {
         await this.buy(capital, eurBalance, currentPrice[1]);
