@@ -1,6 +1,17 @@
 // self.importScripts('foo.js', 'bar.js');
-const staticFileCacheName = "static-files-v-0xbcy2ye7y3ubfhwvdtw1tye984it0y45plmlbap";
-const staticFileCachePaths = ["/"];
+const staticFileCacheName = "static-files-v-0xbcy2ye7y3ubfhwvdtw1tye984it0y45plmlba";
+const staticFileCachePaths = [
+  "/offline.html",
+  "/manifest.json",
+  "/favicon-16x16.png",
+  "/favicon-32x32.png",
+  "/favicon.ico",
+  "/desktop-screenshot.png",
+  "/android-chrome-512x512.png",
+  "/android-chrome-192x192.png",
+  "/apple-touch-icon.png",
+  "/login/",
+];
 
 self.addEventListener("install", (evt) => {
   evt.waitUntil(caches.open(staticFileCacheName).then((cache) => cache.addAll(staticFileCachePaths)));
@@ -16,7 +27,7 @@ self.addEventListener("activate", async (evt) => {
   );
 });
 
-// self.addEventListener("fetch", (evt) => evt.respondWith(handleRequest(evt.request)));
+self.addEventListener("fetch", (evt) => evt.respondWith(handleRequest(evt.request)));
 
 self.addEventListener("push", (event) => {
   const customPayload = {
@@ -45,7 +56,7 @@ self.addEventListener("notificationclick", (event) => {
 });
 
 const handleRequest = async (request) => {
-  // console.log("Started Caching: >>> ", navigator.onLine, request.method, request.url);
+  // console.log("Received request:>>>", navigator.onLine, request.method, request.url);
   const networkErrorResponse = Response.error();
   try {
     if (
@@ -68,7 +79,6 @@ const handleRequest = async (request) => {
       const cache = await caches.open(staticFileCacheName);
       await cache.put(request, response.clone()).catch(() => null);
       // Ignore the error in case the responses can not be cached or is not supported in cashing like "POST", "PUT" and responses with 206 status code
-
       return response;
     }
   } catch (error) {

@@ -42,7 +42,7 @@ export default class TestExchangeProvider {
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
   async createOrder(type, b, c, volume) {
-    const [tradePrice, askPrice, bidPrice] = this.allPrices[this.currentPriceIndex - 1];
+    const [tradePrice, askPrice, bidPrice] = this.allPrices[this.currentPriceIndex - 1] || [];
     const newOrder = { id: randomUUID(), type, volume, createdAt: Date.now() };
 
     if (type == "buy") {

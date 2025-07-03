@@ -5,7 +5,7 @@ import { request } from "../../shared-code/utilities.js";
 import { btnCls, inputCls } from "../components/tailwind-classes";
 import { State } from "../state";
 
-export default function Signin() {
+export default function Login() {
   const router = useRouter();
   const { user, setLoading, addMessage } = State();
   const [error, setError] = useState("");

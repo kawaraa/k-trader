@@ -3,77 +3,63 @@ import { Worker, parentPort, workerData, isMainThread } from "worker_threads";
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import TestExchangeProvider from "../providers/test-ex-provider.js";
-// import BasicTrader from "../trader/basic-trader.js";
-import BasicTrader from "../traders/scalp-trader.js";
-// import BasicTrader from "../trader/basic-trader-1.js";
+import SmartTrader from "../traders/smart-trader.js";
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
-const interval = +process.argv[3] || 5; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
-const suffix = +process.argv[4] || "";
+const interval = +process.argv[3] || 10; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 const showLogs = process.argv.includes("log");
 const capital = 100; // Amount in EUR which is the total money that can be used for trading
+const priceLimit = (3 * 60 * 60) / 10;
 
 async function runTradingTest(pair, interval) {
   try {
-    console.log(`Started new trading with ${pair} based on ${interval} mins time interval:`);
+    console.log(`Started new trading with ${pair}`);
 
-    const prices = getPrices(`${pair + suffix}`, interval / 5);
-    const result = await runTest(pair, prices, interval, showLogs);
+    const prices = getPrices(pair);
 
-    const profit = result.balance - capital;
-    // let monthlyProfit = parseInt(profit / result.m);
-    // let monthlyRemain = parseInt(result.crypto / result.m);
-    // console.log(
-    //   `${pair} => €${monthlyProfit} Remain: ${monthlyRemain} (${parseInt(profit)}) =x= [${result.m}*${
-    //     result.transactions
-    //   }]`
-    // );
+    const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, interval);
+    const trader = new SmartTrader(ex, pair, interval);
+    let trades = [];
+    let position = null;
+
+    trader.listener = (p, event, info) => {
+      if (showLogs && event == "LOG") {
+        console.log((info ? pair + " " : "") + (info || ""));
+        // console.log(...parseNumInLog((info ? pair + " " : "") + (info || "")));
+      } else {
+        if (event == "BUY") position = info;
+        if (event == "SELL") {
+          position = null;
+          trades.push(info.return);
+        }
+      }
+    };
+
+    // Start from after 3 hrs
+    let prevCryptoBalance;
+    for (let i = priceLimit; i < prices.length; i++) {
+      await ex.currentPrices();
+      const { eur, crypto } = await ex.balance();
+      prevCryptoBalance = crypto;
+      await trader.trade(capital, prices.slice(i - priceLimit, i), eur, crypto, trades, position);
+      console.log(i, prices.length);
+    }
+
+    trader.sellManually(pair);
+    const profit = ex.balance().eur - capital;
     console.log(
-      `${pair} => €${parseInt(profit)} Remain: ${result.crypto} Transactions: ${result.transactions}`
+      `${pair} => €${parseInt(profit)} Remain: ${prevCryptoBalance} Transactions: ${trades.length}`
     );
   } catch (error) {
     console.log("Error with ", pair, "=>", error);
   }
-
-  console.log(`\n`);
-}
-
-async function runTest(pair, prices, interval, showLogs) {
-  const m = +((prices.length * interval) / 43200).toFixed(1); // 43200 is the number of mins in one month
-  const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, interval);
-  const trader = new BasicTrader(ex, pair, { interval, capital, mode: "live" });
-  delete trader.period;
-
-  trader.listener = (p, event, info) => {
-    if (showLogs && event == "LOG") {
-      console.log((info ? pair + " " : "") + (info || ""));
-      // console.log(...parseNumInLog((info ? pair + " " : "") + (info || "")));
-    } else {
-      if (event == "BALANCE") ex.state.balance = info;
-      if (event == "BUY") ex.state.position = info;
-      if (event == "SELL") {
-        ex.state.position = null;
-        ex.state.trades.push(info);
-      }
-    }
-  };
-
-  // trader.range
-  for (let i = 0; i < prices.length; i++) {
-    await trader.start();
-  }
-
-  const crypto = (await ex.balance()).crypto + 0;
-  if (crypto > 0) await ex.createOrder("sell", "", "", crypto);
-  const balance = +(await ex.balance()).eur.toFixed(2);
-
-  return { balance, crypto, transactions: ex.state.trades.length, m };
 }
 
 function getPrices(pair, skip = 1) {
   const path = `${process.cwd()}/database/prices/${pair}.json`;
   if (!existsSync(path)) return [];
-  return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
+  return JSON.parse(readFileSync(path, "utf8"));
+  // return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
 
   // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
   // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
@@ -102,8 +88,9 @@ const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMainModule && isMainThread) {
   runTradingTest(pair, interval);
 } else if (!isMainThread && workerData) {
-  const [p, prices, interval] = workerData;
-  runTest(p, prices, interval).then((r) => parentPort.postMessage(r));
+  // const [p, prices, interval] = workerData;
+  // runTest(p, prices, interval).then((r) => parentPort.postMessage(r));
+  console.log("Running as Worker");
 }
 
 export default runTradingTest; // Export the runTradingTest function for use as a module

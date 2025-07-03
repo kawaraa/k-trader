@@ -7,7 +7,6 @@ export default class Trader {
     this.pair = pair;
     this.interval = +interval;
     this.period = this.interval || 5; // this.period is deleted in only test trading
-    // this.testMode = mode != "live";
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
     this.timeoutID = 0;
@@ -47,18 +46,13 @@ export default class Trader {
     this.dispatch("BUY", position, buyCase);
   }
 
-  async sell(oldOrder, balance, price, sellCase) {
+  async sell(oldOrder, cryptoBalance, price, sellCase) {
     const orderAge = ((Date.now() - oldOrder.createdAt) / 60000 / 60).toFixed(1);
-    // const volume = balance.crypto - oldOrder.volume < 5 ? balance.crypto : oldOrder.volume;
-    const volume = Math.max(balance.crypto, oldOrder.volume);
+    // const volume = cryptoBalance - oldOrder.volume < 5 ? cryptoBalance : oldOrder.volume;
+    const volume = Math.max(cryptoBalance, oldOrder.volume);
     const cost = volume * price;
     let profit = cost - oldOrder.cost;
-
-    if (!this.testMode) await this.ex.createOrder("sell", "market", this.pair, volume);
-    else {
-      profit -= calculateFee(cost, 0.3);
-      this.position = null;
-    }
+    await this.ex.createOrder("sell", "market", this.pair, volume);
 
     this.dispatch("SELL", { price, return: profit }, sellCase);
     return { profit, age: orderAge };

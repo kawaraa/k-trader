@@ -1,0 +1,76 @@
+<html lang="en">
+  <head>
+    <!-- PAW Support -->
+    <meta charset="utf-8" />
+    <title>K-Trader - offline page</title>
+    <meta name="description" content="Network error page." />
+    <meta name="author" content="ArabLocalMarket" />
+
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121212" />
+    <meta name="color-scheme" content="auto" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google" content="notranslate" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/ico" sizes="48x48" />
+    <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" type="image/png" sizes="180x180" />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/android-chrome-192x192.png" type="image/png" sizes="192x192" />
+    <link rel="icon" href="/android-chrome-512x512.png" type="image/png" sizes="512x512" />
+
+    <style>
+      * {
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol", "Noto Color Emoji";
+        color: #666666;
+      }
+      .back-link {
+        display: block;
+        width: 60px;
+        transform: rotate(90deg);
+      }
+      .back-link > svg {
+        pointer-events: none;
+        width: 100%;
+      }
+
+      /* Dark mode */
+      @media (prefers-color-scheme: dark) {
+        * {
+          background-color: #121212;
+          color: #ffffffbf;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="/" class="back-link">
+      <!-- onclick="window.reload()" -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 17L12 7M12 17L8 13M12 17L16 13" />
+      </svg>
+    </a>
+
+    <div style="text-align: center; margin-top: 10vh">
+      <h3 style="font-size: x-large">Sorry this page is not available offline.</h3>
+      <p>Please check your internet connection then try again.</p>
+      <!-- <div class="h-10"></div>
+      <h3 style="font-size: x-large">عذرا هذه الصفحة غير متوفرة حاليا بدون انترنت</h3>
+      <p>يرجى التحقق من اتصالك بالإنترنت ثم المحاولة مرة أخرى.</p> -->
+    </div>
+  </body>
+</html>

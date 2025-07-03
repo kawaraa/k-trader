@@ -122,7 +122,7 @@ class SmartTrader extends Trader {
       else if (loss >= 3 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
 
       if (sellCase) {
-        const res = await this.sell(position, cryptoBalance, currentPrice[2]);
+        const res = await this.sell(position, cryptoBalance, currentPrice[2], sellCase);
         this.AShape = false;
         this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${sellCase}`);
       }
