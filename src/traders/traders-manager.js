@@ -109,7 +109,8 @@ class TradersManager {
         if (notify) notificationProvider.push({ title: `Bought ${pair}`, body: body + time, url });
       } else if (event == "SELL") {
         this.state.data[pair].position = null;
-        this.state.data[pair].trades.push(info);
+        if (+info > 0) this.state.data[pair].trades.push(info);
+        this.state.data[pair].trades = this.state.data[pair].trades.filter((t) => t); // remove it
         const payload = { title: `Sold ${pair}`, body: `${body} Return: ${info.return} ${time}`, url };
         if (notify) notificationProvider.push(payload);
       }

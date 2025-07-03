@@ -42,10 +42,8 @@ export default class Trader {
     const capital = eurBalance < investmentCapital ? eurBalance : investmentCapital;
     const cost = capital - calculateFee(capital, 0.3);
     const cryptoVolume = +(cost / price).toFixed(8);
-    let position = null;
-
-    if (!this.testMode) position = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
-    else this.position = { price, volume: cryptoVolume, cost, createdAt: Date.now() };
+    const orderId = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
+    const position = { id: orderId, price, volume: cryptoVolume, cost, createdAt: Date.now() };
     this.dispatch("BUY", position, buyCase);
   }
 
