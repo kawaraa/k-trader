@@ -14,8 +14,8 @@ class SmartTrader extends Trader {
     this.losses = [0, 0, 0];
     this.AShape = false;
     this.lastTradePrice = null;
-    this.lasBuySignal = null;
-    this.lasSellSignal = null;
+    this.lasBuySignal = "";
+    this.lasSellSignal = "";
     this.lastMinTrends = [];
   }
 
