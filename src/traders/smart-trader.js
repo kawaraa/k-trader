@@ -14,7 +14,8 @@ class SmartTrader extends Trader {
     this.losses = [0, 0, 0];
     this.AShape = false;
     this.lastTradePrice = null;
-    this.lasSignal = null;
+    this.lasBuySignal = null;
+    this.lasSellSignal = null;
     this.lastMinTrends = [];
   }
 
@@ -24,7 +25,8 @@ class SmartTrader extends Trader {
     const avgAskBidSpread = calcAveragePrice(storedPrices.map((p) => calcPct(p[2], p[1])));
     if (this.pauseTimer > 0) this.pauseTimer -= 1;
     // safeAskBidSpread
-    if (calcAveragePrice([currentPrice[2], currentPrice[1]]) > Math.min(avgAskBidSpread * 2, 1)) {
+
+    if (calcPct(currentPrice[2], currentPrice[1]) > Math.min(Math.max(avgAskBidSpread * 2, 0.2), 1)) {
       this.dispatch("LOG", `Pause trading due to the low liquidity`);
       return "paused";
     }
@@ -49,7 +51,7 @@ class SmartTrader extends Trader {
     // const allPricesTrend = linearRegression(prices);
     // const halfPricesTrend = linearRegression(prices.slice(-parseInt(prices.length / 2)));
     const lastMinTrend = detectPriceDirection(prices.slice(-18), 1);
-    const increaseMore = detectPriceDirection(prices.slice(-18), 1.5);
+    // const increaseMore = detectPriceDirection(prices.slice(-18), 1.5);
     const volumeTrend = detectPriceDirection(volumes, 1);
     // const pattern3 = detectPriceShape(prices.slice(-this.calculateLength(0.75)), vLimit);
     const pattern2 = detectPriceShape(prices, 1.5);
@@ -57,8 +59,8 @@ class SmartTrader extends Trader {
     // const up = prices.at(-2) < prices.at(-1);
     let buyCase = null;
 
-    const log1 = `€${eurBalance.toFixed(2)} - volatility: ${volatility} - Drops: ${droppedPercent}`;
-    const log2 = `Trend: ${lastMinTrend} - Price: ${prices.at(-1)} - volume: ${volumeTrend}`;
+    const log1 = `€${eurBalance.toFixed(2)} - Change: ${volatility} - Drops: ${droppedPercent}`;
+    const log2 = `Trend: ${lastMinTrend} - Price: ${prices.at(-1)} - Volume: ${volumeTrend}`;
     this.dispatch("LOG", `${log1} - ${log2}`);
     // this.dispatch("LOG", JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
 
@@ -69,14 +71,14 @@ class SmartTrader extends Trader {
     3. (lastTrade > 0) this.AShape && droppedPercent <= -1.5 && lastMinTrend == "uptrend";
     */
     if (!this.AShape && pattern2.shape == "A") this.AShape = true;
-    if (droppedPercent <= -3 && this.lasSignal?.includes("breakout")) {
+    if (droppedPercent <= -3 && this.lasSellSignal.includes("breakout")) {
       this.lastMinTrends = [this.lastMinTrends.at(-1), lastMinTrend];
       if (this.lastMinTrends[0] == "uptrend" && this.lastMinTrends[0] == "downtrend") {
-        this.lasSignal = null;
+        this.lasSellSignal = null;
       }
     }
 
-    if (droppedPercent <= -3 && lastMinTrend == "uptrend" && !this.lasSignal?.includes("breakout")) {
+    if (droppedPercent <= -3 && lastMinTrend == "uptrend" && !this.lasSellSignal.includes("breakout")) {
       // && (lastTrade > 0 || increaseMore)
       buyCase = signal = "dropped-increase";
     } else if (lastTrade < 0 && droppedFromLastTrade < -1 && lastMinTrend == "uptrend") {
@@ -89,7 +91,8 @@ class SmartTrader extends Trader {
         volatility < 2 &&
         dropped == 0 &&
         lastMinTrend == "uptrend" &&
-        calcPct(sorted.at(-1), current) >= 0
+        calcPct(sorted.at(-1), current) >= 0 &&
+        !(lastTrade < 0 && this.lasBuySignal == "breakout")
       ) {
         buyCase = signal = "breakout";
       }
@@ -107,7 +110,7 @@ class SmartTrader extends Trader {
         this.dispatch("LOG", `Placed BUY at: ${currentPrice[1]} ${buyCase}`);
         this.prevGainPercent = 0;
         this.losses = [0, 0, 0];
-        this.lasSignal = buyCase;
+        this.lasBuySignal = buyCase;
       }
 
       // Sell
@@ -134,7 +137,7 @@ class SmartTrader extends Trader {
       if (loss >= 3 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
       else if (gainLossPercent <= -1 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
       else if (gainLossPercent > 2 && lastMinTrend == "downtrend") sellCase = signal = "take-profit-sell";
-      else if (this.prevGainPercent > 2 && this.lasSignal == "breakout" && loss > 0.5) {
+      else if (this.prevGainPercent > 2 && this.lasBuySignal == "breakout" && loss > 0.5) {
         sellCase = signal = "take-breakout-profit-sell";
       }
 
@@ -144,9 +147,9 @@ class SmartTrader extends Trader {
         if (gainLossPercent > 2) this.lastTradePrice = currentPrice[2];
         else {
           this.lastTradePrice = null;
-          if ((gainLossPercent < 0) & (this.lastSignal == "breakout")) this.pauseTimer = (6 * 60 * 60) / 10;
+          if ((gainLossPercent < 0) & (this.lasBuySignal == "breakout")) this.pauseTimer = (6 * 60 * 60) / 10;
         }
-        this.lasSignal = sellCase;
+        this.lasSellSignal = sellCase;
         this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${sellCase}`);
       }
     } else {

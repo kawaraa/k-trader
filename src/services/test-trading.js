@@ -45,8 +45,9 @@ async function runTradingTest(pair, interval) {
       await ex.currentPrices();
     }
 
-    trader.sellManually(pair);
-    const profit = ex.balance().eur - capital;
+    await trader.sellManually(pair);
+    const profit = (await ex.balance()).eur - capital;
+
     console.log(
       `${pair} => €${parseInt(profit)} Remain: ${prevCryptoBalance} Transactions: ${trades.length}`
     );

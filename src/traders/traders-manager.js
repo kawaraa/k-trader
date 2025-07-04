@@ -19,6 +19,7 @@ class TradersManager {
     this.balances = {};
     this.currencies = {};
     this.#traders = {};
+    this.autoSell = true;
     this.notifyTimers = {};
   }
 

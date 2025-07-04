@@ -78,10 +78,10 @@ export default function Home() {
   return (
     <>
       <div className="flex items-center justify-between">
-        <TradeTimeSuggestion cls="flex justify-center items-center" />
+        <TradeTimeSuggestion cls="flex justify-center items-center mb-1" />
 
         <ToggleSwitch onChange={handleAutoSell} checked={state.autoSell} size={35} cls="id-978">
-          <span className="mr-3">Pause sell</span>
+          <strong className="mr-3 text-red">Auto sell</strong>
         </ToggleSwitch>
       </div>
 
