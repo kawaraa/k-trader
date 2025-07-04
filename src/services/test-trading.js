@@ -19,6 +19,7 @@ async function runTradingTest(pair, interval) {
 
     const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, interval);
     const trader = new SmartTrader(ex, pair, interval);
+    ex.currentPriceIndex = priceLimit - 1;
     let trades = [];
     let position = null;
 
@@ -30,7 +31,7 @@ async function runTradingTest(pair, interval) {
         if (event == "BUY") position = info;
         if (event == "SELL") {
           position = null;
-          trades.push(info.return);
+          trades.push(info);
         }
       }
     };
@@ -38,11 +39,10 @@ async function runTradingTest(pair, interval) {
     // Start from after 3 hrs
     let prevCryptoBalance;
     for (let i = priceLimit; i < prices.length; i++) {
-      await ex.currentPrices();
       const { eur, crypto } = await ex.balance();
       prevCryptoBalance = crypto;
-      await trader.trade(capital, prices.slice(i - priceLimit, i), eur, crypto, trades, position);
-      console.log(i, prices.length);
+      await trader.trade(capital, prices.slice(i - priceLimit, i), eur, crypto, trades, position, true, true);
+      await ex.currentPrices();
     }
 
     trader.sellManually(pair);

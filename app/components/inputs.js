@@ -56,7 +56,7 @@ export function CheckInput({ children, cls, labelCLs, ...p }) {
       />
       <label
         htmlFor={p.id}
-        className={`flex-auto box-border text-center peer-checked:text-blue peer-checked:border-2 peer-checked:border-blue-500 cursor-pointer cad ${cardCls} ${labelCLs}`}
+        className={`flex-auto box-border text-center peer-checked:text-blue peer-checked:border-2 peer-checked:border-blue-500 cursor-pointer card ${cardCls} ${labelCLs}`}
       >
         {children}
       </label>

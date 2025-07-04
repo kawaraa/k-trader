@@ -1,5 +1,5 @@
 // self.importScripts('foo.js', 'bar.js');
-const staticFileCacheName = "static-files-v-0xbcy2ye7y3ubfhwvdtw1tye984it0y45plmlba";
+const staticFileCacheName = "static-files-v-0xbcy2ye7y3ubfhwvdtw1tye984it0y45plmlb";
 const staticFileCachePaths = [
   "/offline.html",
   "/manifest.json",
@@ -86,6 +86,6 @@ const handleRequest = async (request) => {
     if (request.method == "GET" && (request.mode == "navigate" || !request.url.includes("api"))) {
       return caches.match(staticFileCachePaths[0]); // offline fallback page
     }
-    return networkErrorResponse;
   }
+  return networkErrorResponse;
 };

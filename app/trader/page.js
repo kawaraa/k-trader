@@ -55,6 +55,10 @@ export default function TraderPage({}) {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!user) router.replace("/login");
+  }, [user]);
+
   return (
     <div className="h-[80vh] sm:h-auto lg:max-w-[90%] mx-auto flex flex-col">
       <div className="flex items-center justify-around mb-2">

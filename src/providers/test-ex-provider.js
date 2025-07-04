@@ -23,7 +23,7 @@ export default class TestExchangeProvider {
   async currentPrices() {
     const price = this.allPrices[this.currentPriceIndex] || this.allPrices[this.allPrices.length - 1];
     this.currentPriceIndex += 1;
-    const intervalTime = this.interval * 60000;
+    const intervalTime = this.interval * 1000;
     if (this.position) this.position.createdAt -= intervalTime;
     return price;
   }
@@ -42,23 +42,22 @@ export default class TestExchangeProvider {
     return this.allPrices.slice(offset, this.currentPriceIndex);
   }
   async createOrder(type, b, c, volume) {
-    const [tradePrice, askPrice, bidPrice] = this.allPrices[this.currentPriceIndex - 1] || [];
+    const [tradePrice, askPrice, bidPrice] = this.allPrices[this.currentPriceIndex + 1] || [];
     const newOrder = { id: randomUUID(), type, volume, createdAt: Date.now() };
 
     if (type == "buy") {
-      const cost = volume * askPrice;
       newOrder.price = askPrice;
-      newOrder.cost = cost + calculateFee(cost, 0.3);
-      const remainingBalance = this.currentBalance.eur - newOrder.cost;
-      if (remainingBalance < 0) throw new Error("No enough money");
-      this.currentBalance.eur = remainingBalance;
-      this.currentBalance.crypto = volume;
+      newOrder.cost = volume * askPrice + calculateFee(volume * askPrice, 0.4);
+      const remainingEurBalance = this.currentBalance.eur - newOrder.cost;
+      if (parseInt(remainingEurBalance) < 0) throw new Error("No enough money");
+      this.currentBalance.eur = remainingEurBalance;
+      this.currentBalance.crypto += volume;
       this.position = newOrder;
       return newOrder.id;
     } else {
       const cost = volume * bidPrice;
       newOrder.price = bidPrice;
-      newOrder.cost = cost - calculateFee(cost, 0.3);
+      newOrder.cost = cost - calculateFee(cost, 0.4);
       const remainingCrypto = +(this.currentBalance.crypto - volume).toFixed(8);
       if (remainingCrypto < 0) throw new Error("No enough crypto");
       this.currentBalance.eur += newOrder.cost;

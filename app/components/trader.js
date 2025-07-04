@@ -4,13 +4,11 @@ import Link from "next/link";
 import { borderCls } from "./tailwind-classes";
 import { EditableInput } from "./inputs";
 import ChartCanvas from "./chart-canvas";
-// import Loader from "./loader";
 import { calcPercentageDifference, request, toShortDate } from "../../shared-code/utilities.js";
 import Loader from "./loader.js";
 
 const getTime = (d) => d.toUTCString().split(" ").at(-2).substring(0, 5);
 // const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
-
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom }) {
@@ -23,8 +21,8 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const [volumes, setVolumes] = useState([]);
   const [labels, setLabels] = useState([]);
   const totalReturn = info.trades?.reduce((acc, t) => acc + t, 0) || 0;
+  const volatility = calcPercentageDifference(Math.min(...tradePrices), Math.max(...tradePrices));
 
-  const volatility = calcPercentageDifference(Math.min(...tradePrices) || 0, Math.max(...tradePrices) || 0);
   const lengthLimit = (timeRange * 60 * 60) / 10;
 
   const handleSeCapital = async (e) => {
@@ -129,7 +127,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
         <strong className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</strong>
 
-        <strong className="text-red">{volatility?.toFixed(1) || 0}%</strong>
+        <strong className="text-red">{volatility.toFixed(1)}%</strong>
 
         <button
           onClick={() => placePosition("buy")}
@@ -152,7 +150,11 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
         </div>
       )}
 
-      <Link href={`/trader?pair=${pair}`} className={`h-full flex flex-col overflow-hidden`}>
+      <RenderWrapper
+        Tag={showZoom ? "div" : Link}
+        href={showZoom ? null : `/trader?pair=${pair}`}
+        className={`h-full flex flex-col overflow-hidden`}
+      >
         {error ? (
           <p>{error}</p>
         ) : (
@@ -210,11 +212,13 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
             }}
           />
         )}
-
-        {/* <Loader loading={loading} /> */}
-      </Link>
+      </RenderWrapper>
 
       <Loader loading={loading} size="40" cls="absolute inset-0 w-ful h-full bg-blur" />
     </div>
   );
 }
+
+const RenderWrapper = ({ Tag, children, ...p }) => {
+  return <Tag {...p}>{children}</Tag>;
+};

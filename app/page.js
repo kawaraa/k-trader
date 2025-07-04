@@ -4,7 +4,7 @@ import Trader from "./components/trader.js";
 import { useRouter, useSearchParams } from "next/navigation";
 import { request } from "../shared-code/utilities.js";
 import { State } from "./state.js";
-import { CheckInput, EditableInput } from "./components/inputs.js";
+import { CheckInput, EditableInput, ToggleSwitch } from "./components/inputs.js";
 import TimeRangeSelect from "./components/time-range-select.js";
 import TradeTimeSuggestion from "./components/trade-time-suggestion.js";
 
@@ -28,6 +28,19 @@ export default function Home() {
     try {
       await request(`/api/trader/update/ALL/${newCapital}`, { method: "PUT" });
       state.setDefaultCapital(newCapital);
+    } catch (error) {
+      alert(JSON.stringify(error.message || error.error || error));
+    }
+    state.setLoading(false);
+  };
+
+  const handleAutoSell = async (e) => {
+    if (!confirm(`Are you sure want pause auto selling`)) return;
+    state.setLoading(true);
+    try {
+      const status = e.target.checked ? "on" : "off";
+      await request(`/api/trader/auto-sell/ALL/${status}`, { method: "PUT" });
+      state.setAutoSell(status == "on");
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
@@ -64,7 +77,13 @@ export default function Home() {
   if (!Object.keys(traders)[0]) return null;
   return (
     <>
-      <TradeTimeSuggestion cls="flex justify-center items-center" />
+      <div className="flex items-center justify-between">
+        <TradeTimeSuggestion cls="flex justify-center items-center" />
+
+        <ToggleSwitch onChange={handleAutoSell} checked={state.autoSell} size={35} cls="id-978">
+          <span className="mr-3">Pause sell</span>
+        </ToggleSwitch>
+      </div>
 
       <div className="flex justify-between items-center">
         <div className="flex items-center">

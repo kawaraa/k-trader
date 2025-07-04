@@ -13,17 +13,22 @@ class SmartTrader extends Trader {
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
     this.AShape = false;
+    this.lastTradePrice = null;
+    this.lasSignal = null;
+    this.lastMinTrends = [];
   }
 
-  async trade(capital, storedPrices, eurBalance, cryptoBalance, trades, position) {
+  async trade(capital, storedPrices, eurBalance, cryptoBalance, trades, position, autoSell, testMode) {
     let signal = "unknown";
     const currentPrice = storedPrices.at(-1);
     const avgAskBidSpread = calcAveragePrice(storedPrices.map((p) => calcPct(p[2], p[1])));
+    if (this.pauseTimer > 0) this.pauseTimer -= 1;
     // safeAskBidSpread
     if (calcAveragePrice([currentPrice[2], currentPrice[1]]) > Math.min(avgAskBidSpread * 2, 1)) {
       this.dispatch("LOG", `Pause trading due to the low liquidity`);
       return "paused";
     }
+    if (testMode) console.log(currentPrice);
 
     const lastTrade = trades.at(-1);
     const prices = normalizePrices(storedPrices);
@@ -38,8 +43,8 @@ class SmartTrader extends Trader {
     // const percentFromLowestToCurrent = calcPct(lowest, current);
     const volatility = calcPct(lowest, highest);
     const droppedPercent = calcPct(highest, current);
-    const increasedPercent = calcPct(lowest, current);
-    const droppedFromLastTrade = calcPct(lastTrade?.price || currentPrice[1], currentPrice[1]);
+    // const increasedPercent = calcPct(lowest, current);
+    const droppedFromLastTrade = calcPct(this.lastTradePrice || currentPrice[1], currentPrice[1]);
 
     // const allPricesTrend = linearRegression(prices);
     // const halfPricesTrend = linearRegression(prices.slice(-parseInt(prices.length / 2)));
@@ -59,25 +64,33 @@ class SmartTrader extends Trader {
 
     /*
     Buy conditions
-    1. drops 3 then increase 1 && ((!lastTrade || lastTrade.return > 0) || increase 1.5)
-    2. (lastTrade && lastTrade.return < 0 && drops 1 from lastTrade.price ) && increase 1
-    3. (!lastTrade || lastTrade.return > 0) this.AShape && droppedPercent <= -1.5 && lastMinTrend == "uptrend";
+    1. drops 3 then increase 1 && ((lastTrade > 0) || increase 1.5)
+    2. (lastTrade < 0 && drops 1 from this.lastTradePrice ) && increase 1
+    3. (lastTrade > 0) this.AShape && droppedPercent <= -1.5 && lastMinTrend == "uptrend";
     */
     if (!this.AShape && pattern2.shape == "A") this.AShape = true;
+    if (droppedPercent <= -3 && this.lasSignal?.includes("breakout")) {
+      this.lastMinTrends = [this.lastMinTrends.at(-1), lastMinTrend];
+      if (this.lastMinTrends[0] == "uptrend" && this.lastMinTrends[0] == "downtrend") {
+        this.lasSignal = null;
+      }
+    }
 
-    if (
-      droppedPercent <= -3 &&
-      lastMinTrend == "uptrend" &&
-      (!lastTrade || lastTrade.return > 0 || increaseMore)
-    ) {
+    if (droppedPercent <= -3 && lastMinTrend == "uptrend" && !this.lasSignal?.includes("breakout")) {
+      // && (lastTrade > 0 || increaseMore)
       buyCase = signal = "dropped-increase";
-    } else if (lastTrade && lastTrade.return < 0 && droppedFromLastTrade < -1 && lastMinTrend == "uptrend") {
+    } else if (lastTrade < 0 && droppedFromLastTrade < -1 && lastMinTrend == "uptrend") {
       buyCase = signal = "increase-again";
-    } else if (this.AShape && droppedPercent <= -1.5 && lastMinTrend == "uptrend") {
+    } else if (volatility < 2 && this.AShape && droppedPercent <= -1.5 && lastMinTrend == "uptrend") {
       buyCase = signal = "A-shape";
     } else {
       const sorted = prices.slice(0, prices.length - 18).toSorted((a, b) => a - b);
-      if (dropped == 0 && lastMinTrend == "uptrend" && calcPct(sorted.at(-1), current) >= 0) {
+      if (
+        volatility < 2 &&
+        dropped == 0 &&
+        lastMinTrend == "uptrend" &&
+        calcPct(sorted.at(-1), current) >= 0
+      ) {
         buyCase = signal = "breakout";
       }
     }
@@ -89,11 +102,12 @@ class SmartTrader extends Trader {
     if (!position && buyCase) {
       this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
 
-      if (capital > 0 && eurBalance >= 1) {
+      if (capital > 0 && eurBalance >= 1 && this.pauseTimer <= 0) {
         await this.buy(capital, eurBalance, currentPrice[1]);
         this.dispatch("LOG", `Placed BUY at: ${currentPrice[1]} ${buyCase}`);
         this.prevGainPercent = 0;
         this.losses = [0, 0, 0];
+        this.lasSignal = buyCase;
       }
 
       // Sell
@@ -117,13 +131,22 @@ class SmartTrader extends Trader {
       );
 
       let sellCase = null;
-      if (increasedPercent > 2 && lastMinTrend == "downtrend") sellCase = signal = "take-profit-sell";
+      if (loss >= 3 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
       else if (gainLossPercent <= -1 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
-      else if (loss >= 3 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
+      else if (gainLossPercent > 2 && lastMinTrend == "downtrend") sellCase = signal = "take-profit-sell";
+      else if (this.prevGainPercent > 2 && this.lasSignal == "breakout" && loss > 0.5) {
+        sellCase = signal = "take-breakout-profit-sell";
+      }
 
-      if (sellCase) {
+      if (sellCase && autoSell) {
         const res = await this.sell(position, cryptoBalance, currentPrice[2], sellCase);
         this.AShape = false;
+        if (gainLossPercent > 2) this.lastTradePrice = currentPrice[2];
+        else {
+          this.lastTradePrice = null;
+          if ((gainLossPercent < 0) & (this.lastSignal == "breakout")) this.pauseTimer = (6 * 60 * 60) / 10;
+        }
+        this.lasSignal = sellCase;
         this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${sellCase}`);
       }
     } else {

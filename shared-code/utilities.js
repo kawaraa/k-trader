@@ -127,5 +127,7 @@ export function calcAveragePrice(prices) {
 export function calcPercentageDifference(oldPrice, newPrice) {
   const difference = newPrice - oldPrice;
   if (difference == 0) return 0;
-  return +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2);
+  return (
+    +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2) || 0
+  );
 }

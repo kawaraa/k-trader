@@ -74,7 +74,15 @@ class TradersManager {
     if (prices.length >= this.range / 1.1 && isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
-      const s = await this.#traders[pair].trade(cpl, prices, eurBalance, cryptoBalance, trades, position);
+      const s = await this.#traders[pair].trade(
+        cpl,
+        prices,
+        eurBalance,
+        cryptoBalance,
+        trades,
+        position,
+        this.autoSell
+      );
       this.state.data[pair].signal = s;
     }
   }
@@ -110,7 +118,7 @@ class TradersManager {
       } else if (event == "SELL") {
         this.state.data[pair].position = null;
         if (+info > 0) this.state.data[pair].trades.push(info);
-        const payload = { title: `Sold ${pair}`, body: `${body} Return: ${info.return} ${time}`, url };
+        const payload = { title: `Sold ${pair}`, body: `${body} Return: ${info} ${time}`, url };
         if (notify) notificationProvider.push(payload);
       }
 

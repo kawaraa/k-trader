@@ -38,9 +38,8 @@ export default class Trader {
   }
 
   async buy(investmentCapital, eurBalance, price, buyCase) {
-    const capital = eurBalance < investmentCapital ? eurBalance : investmentCapital;
-    const cost = capital - calculateFee(capital, 0.3);
-    const cryptoVolume = +(cost / price).toFixed(8);
+    const cost = eurBalance < investmentCapital ? eurBalance : investmentCapital;
+    const cryptoVolume = +((cost - calculateFee(cost, 0.4)) / price).toFixed(8);
     const orderId = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
     const position = { id: orderId, price, volume: cryptoVolume, cost, createdAt: Date.now() };
     this.dispatch("BUY", position, buyCase);
@@ -48,13 +47,11 @@ export default class Trader {
 
   async sell(oldOrder, cryptoBalance, price, sellCase) {
     const orderAge = ((Date.now() - oldOrder.createdAt) / 60000 / 60).toFixed(1);
-    // const volume = cryptoBalance - oldOrder.volume < 5 ? cryptoBalance : oldOrder.volume;
-    const volume = Math.max(cryptoBalance, oldOrder.volume);
-    const cost = volume * price;
-    let profit = cost - oldOrder.cost;
-    await this.ex.createOrder("sell", "market", this.pair, volume);
+    const cost = cryptoBalance * price - calculateFee(cryptoBalance * price, 0.4);
+    const profit = cost - oldOrder.cost;
+    await this.ex.createOrder("sell", "market", this.pair, cryptoBalance);
 
-    this.dispatch("SELL", { price, return: profit }, sellCase);
+    this.dispatch("SELL", profit, sellCase);
     return { profit, age: orderAge };
   }
 
