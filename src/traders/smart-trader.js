@@ -74,7 +74,7 @@ class SmartTrader extends Trader {
     if (droppedPercent <= -3 && this.lasSellSignal.includes("breakout")) {
       this.lastMinTrends = [this.lastMinTrends.at(-1), lastMinTrend];
       if (this.lastMinTrends[0] == "uptrend" && this.lastMinTrends[0] == "downtrend") {
-        this.lasSellSignal = null;
+        this.lasSellSignal = "";
       }
     }
 
