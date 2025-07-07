@@ -20,7 +20,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const [bidPrices, setBidPrices] = useState([]);
   const [volumes, setVolumes] = useState([]);
   const [labels, setLabels] = useState([]);
-  const totalReturn = info.trades?.reduce((acc, t) => acc + t, 0) || 0;
+  const totalReturn = parseInt(info.trades?.reduce((acc, t) => acc + t, 0)) || 0;
   const volatility = calcPercentageDifference(Math.min(...tradePrices), Math.max(...tradePrices));
 
   const lengthLimit = (timeRange * 60 * 60) / 10;
@@ -65,7 +65,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
         tradePrices.push(p[0]);
         askPrices.push(p[1]);
         bidPrices.push(p[2]);
-        volumes.push(+(p[3] / 1000000).toFixed(1));
+        volumes.push(+(p[3] / 1000000).toFixed(3));
         const timeFun = timeRange > 24 ? toShortDate : getTime;
         labels.push(`${timeFun(new Date(since + interval * i))}`);
       });
