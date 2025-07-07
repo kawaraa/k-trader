@@ -98,7 +98,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
       setTradePrices((prev) => prev.concat([price[0]]).slice(-lengthLimit));
       setAskPrices((prev) => prev.concat([price[1]]).slice(-lengthLimit));
       setBidPrices((prev) => prev.concat([price[2]]).slice(-lengthLimit));
-      setVolumes((prev) => prev.concat([+parseInt(price[3] / 1000000).toFixed(1)]).slice(-lengthLimit));
+      setVolumes((prev) => prev.concat([+parseInt(price[3] / 1000000).toFixed(3)]).slice(-lengthLimit));
       setLabels((prev) => prev.concat([`${timeFun(new Date())}`]).slice(-lengthLimit));
     };
 
