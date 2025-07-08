@@ -15,7 +15,7 @@ class TradersManager {
     this.ex = new KrakenExchangeProvider(this.state);
     this.defaultCapital = 0;
     this.interval = 10;
-    this.range = parseInt((3 * 60 * 60) / this.interval);
+    this.range = parseInt((4 * 60 * 60) / this.interval);
     this.balances = {};
     this.currencies = {};
     this.#traders = {};
@@ -61,13 +61,13 @@ class TradersManager {
     }
   }
 
-  async runTrader(pair, eurBalance, cryptoBalance) {
+  async runTrader(pair, eur, crypto) {
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
     const prices = this.state.updateLocalPrices(pair, this.currencies[pair]).slice(-this.range);
     eventEmitter.emit("price", { [pair]: this.currencies[pair] });
     if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo();
     if (!this.#traders[pair]) {
-      this.#traders[pair] = new SmartTrader(this.ex, pair, this.interval);
+      this.#traders[pair] = new SmartTrader(this.ex, pair);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
     // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
@@ -75,16 +75,9 @@ class TradersManager {
     if (prices.length >= this.range / 1.1 && isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
-      const s = await this.#traders[pair].trade(
-        cpl,
-        prices,
-        eurBalance,
-        cryptoBalance,
-        trades,
-        position,
-        this.autoSell
-      );
-      this.state.data[pair].signal = s;
+      const res = await this.#traders[pair].trade(cpl, prices, eur, crypto, trades, position, this.autoSell);
+      this.state.data[pair].status = res.status;
+      this.state.data[pair].signal = res.signal;
     }
   }
 
@@ -118,7 +111,7 @@ class TradersManager {
         if (notify) notificationProvider.push({ title: `Bought ${pair}`, body: body + time, url });
       } else if (event == "SELL") {
         this.state.data[pair].position = null;
-        if (+info > 0) this.state.data[pair].trades.push(info);
+        if (+info > 0 || +info < 0) this.state.data[pair].trades.push(info);
         const payload = { title: `Sold ${pair}`, body: `${body} Return: ${info} ${time}`, url };
         if (notify) notificationProvider.push(payload);
       }
