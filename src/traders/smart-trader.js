@@ -12,7 +12,6 @@ class SmartTrader extends Trader {
     this.stop();
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
-    this.AShape = false;
     this.lastTradePrice = null;
     this.lasBuySignal = "";
     this.lasSellSignal = "";
@@ -53,7 +52,7 @@ class SmartTrader extends Trader {
     // const increaseMore = detectPriceDirection(prices.slice(-18), 1.5);
     const volumeTrend = detectPriceDirection(volumes, 1);
     // const pattern3 = detectPriceShape(prices.slice(-this.calculateLength(0.75)), vLimit);
-    const pattern2 = detectPriceShape(prices, 1.5);
+    // const pattern2 = detectPriceShape(prices, 1.5);
     // const dropped = changePercent <= -3;
     // const up = prices.at(-2) < prices.at(-1);
     let buyCase = null;
@@ -61,23 +60,11 @@ class SmartTrader extends Trader {
     const log1 = `€${eurBalance.toFixed(2)} - Change: ${volatility} - Drops: ${changePercent}`;
     const log2 = `Trend: ${lastMinTrend} - Price: ${prices.at(-1)} - Volume: ${volumeTrend}`;
     this.dispatch("LOG", `${log1} - ${log2}`);
-    // this.dispatch("LOG", JSON.stringify(currentPrice).replace(/:/g, ": ").replace(/,/g, ", "));
 
     const finishedBreakout = lastTrade < 1 && this.lasBuySignal == "breakout";
 
-    if (!this.AShape && pattern2.shape == "A") this.AShape = true;
-
-    /*
-    Buy conditions
-    1. drops 3 then increase 1 && ((lastTrade > 0) || increase 1.5)
-    2. (lastTrade < 0 && drops 1 from this.lastTradePrice ) && increase 1
-    3. (lastTrade > 0) this.AShape && changePercent <= -1.5 && lastMinTrend == "uptrend";
-    */
     if (changePercent <= -3 && lastMinTrend == "uptrend" && finishedBreakout) {
-      // && (lastTrade > 0 || increaseMore)
       buyCase = signal = "dropped-increase";
-    } else if (volatility < 2 && this.AShape && changePercent <= -1.5 && lastMinTrend == "uptrend") {
-      buyCase = signal = "A-shape";
     } else {
       const sorted = prices.slice(0, prices.length - 18).toSorted((a, b) => a - b);
       if (
@@ -92,7 +79,6 @@ class SmartTrader extends Trader {
     }
     // Todo: Test this for 6 hrs range and 1% profit
     // if(volatility > 1.5 && volatility < 2 && dropped < -(volatility / 1.1)) buyCase = drop-1;
-    // if (buyCase == drop-1 && gainLossPercent >= 1.5) sellCase = "take-1-sell"
 
     // Buy
     if (!position && buyCase) {
@@ -135,7 +121,6 @@ class SmartTrader extends Trader {
 
       if (sellCase && autoSell) {
         const res = await this.sell(position, cryptoBalance, currentPrice[2], sellCase);
-        this.AShape = false;
         this.lastTradePrice = currentPrice[2];
         this.lasSellSignal = sellCase;
         if (lastTrade < 1 && gainLossPercent < 1) this.pauseTimer = (6 * 60 * 60) / 10;
