@@ -1,16 +1,18 @@
+import { readFileSync } from "node:fs";
 import { appendFile, open, readFile, stat, writeFile } from "node:fs/promises";
 
 // In prod limit Storing prices to 30 days (8640) and in local to 60 days (17280)
 // dataLimit * 5 is the number of mins in 60 days.
 const dataLimit = process.env.NODE_ENV === "production" ? 17280 : 17280;
+const states = {};
 
-export default class LocalState {
+class LocalState {
   #databaseFolder;
   #filePath;
   constructor(filename) {
     this.#databaseFolder = `${process.cwd()}/database/`;
     this.#filePath = `${this.#databaseFolder}${filename}.json`;
-    this.data = this.load();
+    this.data = JSON.parse(readFileSync(this.#filePath, "utf8"));
   }
 
   #getPricesFilePath(pair) {
@@ -19,7 +21,9 @@ export default class LocalState {
 
   async load() {
     try {
-      return JSON.parse(await readFile(this.#filePath, "utf8"));
+      const data = await JSON.parse(await readFile(this.#filePath, "utf8"));
+      this.data = data;
+      return data;
     } catch (error) {
       return {};
     }
@@ -57,4 +61,9 @@ export default class LocalState {
     await file.close();
     return buffer.substring(buffer.indexOf("[")).split(/\r?\n/).map(JSON.parse).slice(-numberOfLines);
   }
+}
+
+export default function getState(filename) {
+  if (states[filename]) return states[filename];
+  return (states[filename] = new LocalState(filename));
 }

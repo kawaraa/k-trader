@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { appendFile, stat, writeFile } from "node:fs/promises";
 import eventEmitter from "../services/event-emitter.js";
 import notificationProvider from "../providers/notification-provider.js";
-import LocalState from "../services/local-state.js";
+import getState from "../services/local-state.js";
 import KrakenExchangeProvider from "../providers/kraken-ex-provider.js";
 import SmartTrader from "./smart-trader.js";
 import { isNumber, toShortDate } from "../../shared-code/utilities.js";
@@ -12,7 +12,7 @@ class TradersManager {
   currencies;
   #traders;
   constructor() {
-    this.state = new LocalState("traders-state");
+    this.state = getState("traders-state");
     this.ex = new KrakenExchangeProvider(this.state);
     this.defaultCapital = 0;
     this.interval = 10;

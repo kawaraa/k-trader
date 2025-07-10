@@ -1,12 +1,12 @@
 import { readdir, readFile, unlink, writeFile } from "fs/promises";
 import { calcPercentageDifference } from "../../shared-code/utilities.js";
-import LocalState from "./local-state.js";
+import getState from "./local-state.js";
 const getPath = (filename = "") => `${process.cwd()}/database/prices/${filename}`;
 
 async function setAskBidSpread() {
   const files = await readdir(getPath());
-  const state = new LocalState("traders-state");
-  const newData = {};
+  const state = getState("traders-state");
+  const newState = {};
 
   for (let filename of files) {
     if (!state.data[filename]) continue; // state.data[filename] = {};
@@ -19,9 +19,9 @@ async function setAskBidSpread() {
   Object.keys(state.data)
     .filter((p) => state.data[p].askBidSpread >= 0 && state.data[p].askBidSpread <= 1)
     .toSorted((a, b) => state.data[a].askBidSpread - state.data[b].askBidSpread)
-    .forEach((p) => (newData[p] = state.data[p]));
+    .forEach((p) => (newState[p] = state.data[p]));
 
-  state.update(newData);
+  state.update(newState);
 }
 setAskBidSpread();
 

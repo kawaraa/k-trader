@@ -9,7 +9,7 @@ export default class TraderController extends Controller {
     try {
       const { state, balances, autoSell } = this.tradersManager;
       const data = { traders: {}, defaultCapital: this.tradersManager.defaultCapital, autoSell };
-      Object.keys(this.tradersManager.state.data).forEach((pair) => {
+      Object.keys(state.data).forEach((pair) => {
         data.traders[pair] = { ...state.data[pair], balance: balances[pair] };
         if (isNaN(data.eurBalance)) data.eurBalance = balances.eur;
       });
