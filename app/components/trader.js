@@ -11,7 +11,7 @@ const getTime = (d) => d.toUTCString().split(" ").at(-2).substring(0, 5);
 // const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
-export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom }) {
+export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom, live }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [capital, setCapital] = useState(info.capital || 0);
@@ -25,7 +25,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
   const lengthLimit = (timeRange * 60 * 60) / 10;
 
-  const handleSeCapital = async (e) => {
+  const handleSetCapital = async (e) => {
     const newCapital = +e.target.value || 0;
     if (!confirm(`Are you sure want increase investment capital for ${pair}`)) return;
     setLoading(true);
@@ -52,7 +52,8 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const fetchPrices = async (pair) => {
     try {
       const interval = 10 * 1000;
-      const prices = await request(`/api/prices/${pair}?since=${timeRange}&interval=10`);
+      const sse = !live ? "" : `&live=true`;
+      const prices = await request(`/api/prices/${pair}?since=${timeRange}&interval=10${sse}`);
 
       const since = Date.now() - prices.length * interval;
       const tradePrices = [];
@@ -118,7 +119,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
         <EditableInput
           id={pair}
-          onBlur={handleSeCapital}
+          onBlur={handleSetCapital}
           defaultValue={capital || 0}
           cls="text-orange flex-shrink-0 font-bold"
         >

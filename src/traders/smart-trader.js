@@ -1,5 +1,5 @@
 import Trader from "./trader.js";
-import { calcAveragePrice, calcPercentageDifference } from "../../shared-code/utilities.js";
+import { calcAveragePrice, calcPercentageDifference, isNumber } from "../../shared-code/utilities.js";
 import { normalizePrices } from "../services/calc-methods.js";
 import { detectPriceDirection, detectPriceShape } from "../services/trend-analysis.js";
 const calcPct = calcPercentageDifference;
@@ -15,6 +15,8 @@ class SmartTrader extends Trader {
     this.lastTradePrice = null;
     this.lasBuySignal = "";
     this.lasSellSignal = "";
+    this.highestPrice = null; // Resistance Price Level
+    this.lowestPrice = null; // Support Price Level
   }
 
   async trade(capital, storedPrices, eurBalance, cryptoBalance, trades, position, autoSell, testMode) {
@@ -61,35 +63,46 @@ class SmartTrader extends Trader {
     const log2 = `Trend: ${lastMinTrend} - Price: ${prices.at(-1)} - Volume: ${volumeTrend}`;
     this.dispatch("LOG", `${log1} - ${log2}`);
 
-    const finishedBreakout = lastTrade < 1 && this.lasBuySignal == "breakout";
-
-    if (changePercent <= -3 && lastMinTrend == "uptrend" && finishedBreakout) {
-      buyCase = signal = "dropped-increase";
-    } else {
-      const sorted = prices.slice(0, prices.length - 18).toSorted((a, b) => a - b);
-      if (
-        volatility < 2 &&
-        changePercent == 0 &&
-        lastMinTrend == "uptrend" &&
-        calcPct(sorted.at(-1), current) >= 0 &&
-        !finishedBreakout
-      ) {
-        buyCase = signal = "breakout";
-      }
-    }
     // Todo: Test this for 6 hrs range and 1% profit
     // if(volatility > 1.5 && volatility < 2 && dropped < -(volatility / 1.1)) buyCase = drop-1;
 
     // Buy
-    if (!position && buyCase) {
-      this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
+    if (!position) {
+      const finishedBreakout = lastTrade < 1 && this.lasBuySignal == "breakout";
 
-      if (capital > 0 && eurBalance >= 1 && this.pauseTimer <= 0) {
+      if (changePercent <= -3 && lastMinTrend == "uptrend" && finishedBreakout) {
+        buyCase = signal = "dropped-increase";
+      } else {
+        const sorted = prices.slice(0, prices.length - 18).toSorted((a, b) => a - b);
+        if (
+          volatility <= 2 &&
+          changePercent == 0 &&
+          lastMinTrend == "uptrend" &&
+          calcPct(sorted.at(-1), current) >= 0 &&
+          !finishedBreakout
+        ) {
+          buyCase = signal = "breakout";
+        }
+      }
+
+      // else if (
+      //   calcPct(this.lowestPrice, this.highestPrice) > 5 &&
+      //   this.lowestPrice > current * 0.97 &&
+      //   detectPriceDirection(prices.slice(-18), 0.5) == "uptrend"
+      // ) {
+      //   // buyCase = signal = "A-shape";
+      // }
+
+      buyCase && this.dispatch("BUY_SIGNAL", currentPrice[1], buyCase);
+
+      if (buyCase && capital > 0 && eurBalance >= 1 && this.pauseTimer <= 0) {
         await this.buy(capital, eurBalance, currentPrice[1]);
         this.dispatch("LOG", `Placed BUY at: ${currentPrice[1]} ${buyCase}`);
         this.prevGainPercent = 0;
         this.losses = [0, 0, 0];
         this.lasBuySignal = buyCase;
+        this.highestPrice = current;
+        this.lowestPrice = current;
       }
 
       // Sell
@@ -115,14 +128,18 @@ class SmartTrader extends Trader {
       let sellCase = null;
       if (gainLossPercent <= -1 && lastMinTrend == "downtrend") sellCase = signal = "stop-loss-sell";
       else if (gainLossPercent > 2 && lastMinTrend == "downtrend") sellCase = signal = "take-profit-sell";
-      else if (this.prevGainPercent > 2 && this.lasBuySignal == "breakout" && loss > 0.5) {
-        sellCase = signal = "take-breakout-profit-sell";
+      else if (gainLossPercent > 4 && this.lasBuySignal == "A-shape" && loss > gainLossPercent / 4) {
+        sellCase = signal = "A-shape-take-profit-sell";
+      } else if (this.prevGainPercent > 2 && this.lasBuySignal == "breakout" && loss > 0.5) {
+        sellCase = signal = "breakout-take-profit-sell";
       }
 
       if (sellCase && autoSell) {
         const res = await this.sell(position, cryptoBalance, currentPrice[2], sellCase);
         this.lastTradePrice = currentPrice[2];
         this.lasSellSignal = sellCase;
+        this.highestPrice = current;
+        this.lowestPrice = current;
         if (lastTrade < 1 && gainLossPercent < 1) this.pauseTimer = (6 * 60 * 60) / 10;
 
         this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${sellCase}`);
@@ -130,6 +147,9 @@ class SmartTrader extends Trader {
     } else {
       // this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
     }
+
+    if (!this.highestPrice || this.highestPrice < current) this.highestPrice = current;
+    if (!this.lowestPrice || this.lowestPrice > current) this.lowestPrice = current;
 
     this.dispatch("LOG", "");
     return { status: this.pauseTimer > 0 ? "paused" : "active", signal };

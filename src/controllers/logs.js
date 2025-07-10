@@ -11,7 +11,7 @@ export default class SSEController extends Controller {
     try {
       const pair = params.pair;
       const filePath = `${process.cwd()}/database/logs/${pair}.log`;
-      if (!this.tradersManager.state.data[pair] || !existsSync(filePath)) return next("404-not found");
+      if (!existsSync(filePath)) return next("404-not found");
       response.sendFile(filePath);
     } catch (error) {
       next(error);

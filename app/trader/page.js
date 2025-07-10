@@ -83,6 +83,7 @@ export default function TraderPage({}) {
             info={traders[pair] || {}}
             defaultCapital={defaultCapital}
             timeRange={timeRange}
+            live={true}
             showZoom={true}
             cls=""
           />

@@ -1,11 +1,11 @@
 import webPush from "web-push"; // npm i web-push
 const { NEXT_PUBLIC_HOST, NEXT_PUBLIC_VAPID_KEY, PRIV_VAPID_KEY, PUSH_NOTIFICATION_CONTACT_IDENTIFIER } =
   process.env;
-import LocalState from "../services/local-state.js";
+import getState from "../services/local-state.js";
 
 class NotificationProvider {
   constructor() {
-    this.state = new LocalState("state");
+    this.state = getState("state");
     this.webPush = webPush;
     // VAPID keys (generate with `web-push generate-vapid-keys`)
     this.webPush.setVapidDetails(

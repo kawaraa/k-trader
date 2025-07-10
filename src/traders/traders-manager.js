@@ -1,7 +1,8 @@
-import { appendFileSync, existsSync, statSync, writeFileSync } from "node:fs";
+import { existsSync } from "node:fs";
+import { appendFile, stat, writeFile } from "node:fs/promises";
 import eventEmitter from "../services/event-emitter.js";
 import notificationProvider from "../providers/notification-provider.js";
-import LocalState from "../services/local-state.js";
+import getState from "../services/local-state.js";
 import KrakenExchangeProvider from "../providers/kraken-ex-provider.js";
 import SmartTrader from "./smart-trader.js";
 import { isNumber, toShortDate } from "../../shared-code/utilities.js";
@@ -11,7 +12,7 @@ class TradersManager {
   currencies;
   #traders;
   constructor() {
-    this.state = new LocalState("traders-state");
+    this.state = getState("traders-state");
     this.ex = new KrakenExchangeProvider(this.state);
     this.defaultCapital = 0;
     this.interval = 10;
@@ -52,8 +53,9 @@ class TradersManager {
       this.currencies = currencies;
       const pairs = Object.keys(currencies);
 
+      pairs.map((pair) => this.state.appendToLocalPrices(pair, this.currencies[pair]));
       await Promise.all(pairs.map((pair) => this.runTrader(pair, this.balances.eur, this.balances[pair])));
-      this.state.update(this.state.data);
+      await this.state.update(this.state.data);
 
       console.log(`========> Started trading ${pairs.length} Cryptocurrencies Assets`);
     } catch (error) {
@@ -63,8 +65,10 @@ class TradersManager {
 
   async runTrader(pair, eur, crypto) {
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
-    const prices = this.state.updateLocalPrices(pair, this.currencies[pair]).slice(-this.range);
+
+    const prices = await this.state.getLocalPrices(pair, this.range);
     eventEmitter.emit("price", { [pair]: this.currencies[pair] });
+
     if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo();
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair);
@@ -81,19 +85,20 @@ class TradersManager {
     }
   }
 
-  updateBotProgress(pair, event, info, tradeCase) {
+  async updateBotProgress(pair, event, info, tradeCase) {
     const filePath = `database/logs/${pair || "traders-manager"}.log`;
 
     if (event == "LOG") {
       if (!info) info = "\n";
       else info = `[${toShortDate()}] ${info}\n`;
 
-      if (!existsSync(filePath)) writeFileSync(filePath, info);
+      if (!existsSync(filePath)) await writeFile(filePath, info);
       else {
         // if file less then 500 KB append logs to file, else, overwrite the old logs
-        const fileSizeInKB = statSync(filePath).size / 1024 / 1024; // Convert size from B to KB to MB
-        fileSizeInKB < 1 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
+        const fileSizeInKB = (await stat(filePath)).size / 1024 / 1024; // Convert size from B to KB to MB
+        fileSizeInKB < 1 ? await appendFile(filePath, info) : await writeFile(filePath, info);
       }
+
       if (info != "\n") eventEmitter.emit(`${pair}-log`, { log: info });
     } else {
       const notify = !(this.notifyTimers[pair] > 0);

@@ -4,6 +4,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import TestExchangeProvider from "../providers/test-ex-provider.js";
 import SmartTrader from "../traders/smart-trader.js";
+// import SmartTrader from "../traders/smart-trader-new.js";
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 10; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
@@ -57,11 +58,14 @@ async function runTradingTest(pair, interval) {
 }
 
 function getPrices(pair, skip = 1) {
-  const path = `${process.cwd()}/database/prices/${pair}.json`;
-  if (!existsSync(path)) return [];
-  return JSON.parse(readFileSync(path, "utf8"));
-  // return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
+  const prices = [];
+  const path = `${process.cwd()}/database/prices/${pair}`;
+  if (!existsSync(path)) return prices;
+  const cb = (line) => line.trim() && prices.push(JSON.parse(line));
+  readFileSync(path, "utf8").split(/\r?\n/).forEach(cb);
+  return prices;
 
+  // return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
   // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
   // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
   // let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);

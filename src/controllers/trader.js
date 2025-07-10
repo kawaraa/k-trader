@@ -9,7 +9,7 @@ export default class TraderController extends Controller {
     try {
       const { state, balances, autoSell } = this.tradersManager;
       const data = { traders: {}, defaultCapital: this.tradersManager.defaultCapital, autoSell };
-      Object.keys(this.tradersManager.state.data).forEach((pair) => {
+      Object.keys(state.data).forEach((pair) => {
         data.traders[pair] = { ...state.data[pair], balance: balances[pair] };
         if (isNaN(data.eurBalance)) data.eurBalance = balances.eur;
       });
@@ -46,7 +46,6 @@ export default class TraderController extends Controller {
     try {
       if (params.pair == "ALL") {
         this.tradersManager.autoSell = params.status == "on";
-        this.tradersManager.state.update(this.tradersManager.state.data);
       } else if (this.tradersManager.state.data[params.pair]) {
         // this.tradersManager.state.data[params.pair].capital = +params.capital || 0;
         // this.tradersManager.state.update(this.tradersManager.state.data);

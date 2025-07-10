@@ -11,13 +11,12 @@ export default class SSEController extends Controller {
     try {
       const clientIP = ip || connection.remoteAddress;
       const pair = params.pair;
-      const filePath = `${process.cwd()}/database/prices/${pair}.json`;
-      if (!this.tradersManager.state.data[pair] || !existsSync(filePath)) return next("404-not found");
-      // No prices data for ${pair} pair
+      const filePath = `${process.cwd()}/database/prices/${pair}`;
+      if (!existsSync(filePath)) return next("404-Not found"); // No prices data for ${pair} pair
       if (!(+query.since && +query.interval)) return res.sendFile(filePath);
-      const length = parseInt((+query.since * 60 * 60) / query.interval);
-      res.json(JSON.parse(readFileSync(filePath, "utf8")).slice(-length));
-      this.eventEmitter.emit(`add-pair`, [clientIP, pair]);
+
+      res.json(await this.state.getLocalPrices(pair, parseInt((+query.since * 60 * 60) / query.interval)));
+      if (query.live) this.eventEmitter.emit(`add-pair`, [clientIP, pair]);
     } catch (error) {
       next(error);
     }
