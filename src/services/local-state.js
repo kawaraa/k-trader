@@ -48,16 +48,13 @@ export default class LocalState {
     }
   }
   async getLocalPrices(pair, numberOfLines = 1440, fromStart) {
-    let CHUNK_SIZE = 1024 * (numberOfLines / 20); // xxKB chunks, approximately 1KB = 20 lines in prices
-    let position = 0;
-
     const file = await open(this.#getPricesFilePath(pair), "r");
-    if (!fromStart) position = Math.max(0, (await file.stat()).size - CHUNK_SIZE);
-    const { buffer } = await file.read({ buffer: Buffer.alloc(CHUNK_SIZE), position, length: CHUNK_SIZE });
+    const size = (await file.stat()).size;
+    const length = Math.min(size, 1024 * (numberOfLines / 20)); // CHUNK_SIZE in KB, approximately 1KB = 20 lines in prices data
+    const position = fromStart ? 0 : Math.max(0, size - length);
 
-    const data = buffer.toString();
+    const buffer = (await file.read({ buffer: Buffer.alloc(length), position, length })).buffer.toString();
     await file.close();
-
-    return data.substring(data.indexOf("[")).split(/\r?\n/).map(JSON.parse).slice(-numberOfLines);
+    return buffer.substring(buffer.indexOf("[")).split(/\r?\n/).map(JSON.parse).slice(-numberOfLines);
   }
 }

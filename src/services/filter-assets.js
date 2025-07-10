@@ -30,6 +30,7 @@ async function reformPricesFiles() {
   const files = await readdir(getPath());
 
   for (let file of files) {
+    if (!file.includes(".json")) continue;
     const data = JSON.parse(await readFile(getPath(file), "utf8")).reduce(
       (acc, p) => acc + `\n${JSON.stringify(p)}`,
       ""
@@ -39,4 +40,4 @@ async function reformPricesFiles() {
     await unlink(getPath(file));
   }
 }
-// reformPricesFiles();
+reformPricesFiles();

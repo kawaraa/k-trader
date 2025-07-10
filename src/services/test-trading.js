@@ -58,11 +58,14 @@ async function runTradingTest(pair, interval) {
 }
 
 function getPrices(pair, skip = 1) {
-  const path = `${process.cwd()}/database/prices/${pair}.json`;
-  if (!existsSync(path)) return [];
-  return JSON.parse(readFileSync(path, "utf8"));
-  // return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
+  const prices = [];
+  const path = `${process.cwd()}/database/prices/${pair}`;
+  if (!existsSync(path)) return prices;
+  const cb = (line) => line.trim() && prices.push(JSON.parse(line));
+  readFileSync(path, "utf8").split(/\r?\n/).forEach(cb);
+  return prices;
 
+  // return JSON.parse(readFileSync(path)).filter((p, index) => index % skip === 0);
   // prices = prices.slice(0, Math.round(prices.length / 2)); // month 1
   // prices = prices.slice(-Math.round(prices.length / 2)); // month 2
   // let prices = require(`${process.cwd()}/database/test-prices/${pair}.json`);
