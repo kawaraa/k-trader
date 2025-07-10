@@ -1,5 +1,4 @@
-import { readFileSync, writeFileSync, statSync } from "node:fs";
-import { makePricesArray } from "./calc-methods.js";
+import { appendFile, open, readFile, stat, writeFile } from "node:fs/promises";
 
 // In prod limit Storing prices to 30 days (8640) and in local to 60 days (17280)
 // dataLimit * 5 is the number of mins in 60 days.
@@ -15,46 +14,50 @@ export default class LocalState {
   }
 
   #getPricesFilePath(pair) {
-    return `${this.#databaseFolder}prices/${pair}.json`;
+    return `${this.#databaseFolder}prices/${pair}`;
   }
 
-  load() {
+  async load() {
     try {
-      return JSON.parse(readFileSync(this.#filePath, "utf8"));
+      return JSON.parse(await readFile(this.#filePath, "utf8"));
     } catch (error) {
       return {};
     }
   }
-
-  update(state) {
-    writeFileSync(this.#filePath, JSON.stringify(state, null, 2));
+  async update(state) {
+    await writeFile(this.#filePath, JSON.stringify(state, null, 2));
     this.data = state;
   }
 
-  getBotConfiguration(pair) {
-    return this.load()[pair] || {};
-  }
-
-  updateBot(pair, data) {
-    const state = this.load();
-    Object.keys(data).forEach((key) => (state[pair][key] = data[key]));
-    this.update(state);
-  }
-
-  getLocalPrices(pair, limit) {
+  async getAllLocalPrices(pair, limit) {
     const filePath = this.#getPricesFilePath(pair);
     try {
-      const data = JSON.parse(readFileSync(filePath, "utf8"));
-      if (statSync(filePath).size / (1024 * 1024) >= 5) data.shift();
-      return makePricesArray(data && data[0] ? data.slice(-limit) : []);
+      const data = JSON.parse(await readFile(filePath, "utf8"));
+      if ((await stat(filePath)).size / (1024 * 1024) >= 5) data.shift();
+      return data && data[0] ? data.slice(-limit) : [];
     } catch (error) {
       return [];
     }
   }
-  updateLocalPrices(pair, prices) {
-    let data = this.getLocalPrices(pair);
-    data.push(prices);
-    writeFileSync(this.#getPricesFilePath(pair), JSON.stringify(data));
-    return data;
+
+  async appendToLocalPrices(pair, price) {
+    try {
+      return appendFile(this.#getPricesFilePath(pair), `\n${JSON.stringify(price)}`);
+    } catch (error) {
+      console.log(pair, "Could not append new price");
+    }
+  }
+  async getLocalPrices(pair, numberOfLines = 1440, fromStart) {
+    let CHUNK_SIZE = 1024 * (numberOfLines / 20); // xxKB chunks, approximately 1KB = 20 lines in prices
+    let position = 0;
+
+    const file = await open(this.#getPricesFilePath(pair), "r");
+    if (!fromStart) position = Math.max(0, (await file.stat()).size - CHUNK_SIZE);
+    const { buffer } = await file.read({ buffer: Buffer.alloc(CHUNK_SIZE), position, length: CHUNK_SIZE });
+
+    const data = buffer.toString();
+    await file.close();
+
+    return data.substring(data.indexOf("[")).split(/\r?\n/).map(JSON.parse).slice(-numberOfLines);
   }
 }

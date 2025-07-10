@@ -111,10 +111,6 @@ export function normalizePrices(prices) {
   }
   return normalizedPrices;
 }
-export function makePricesArray(prices) {
-  if (!prices[0]?.askPrice) return prices;
-  return prices.map((p) => [p.tradePrice, p.askPrice, p.bidPrice]);
-}
 
 export function generateRange(start, end, length) {
   if (length < 2) return length === 1 ? [start] : [];

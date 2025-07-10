@@ -8,13 +8,6 @@ export default class TestExchangeProvider {
     this.currentPriceIndex = 0;
     this.position = null;
     this.interval = interval;
-    // This is custom functions only for running test.
-    this.state = {
-      position: null,
-      trades: [],
-      getBot: (pair) => ({ ...this.state }),
-      updateBot: (pair, data) => Object.keys(data).forEach((k) => (this.state[k] = data[k])),
-    };
   }
 
   async balance() {

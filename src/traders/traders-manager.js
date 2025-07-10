@@ -52,8 +52,9 @@ class TradersManager {
       this.currencies = currencies;
       const pairs = Object.keys(currencies);
 
+      pairs.map((pair) => this.state.appendToLocalPrices(pair, this.currencies[pair]));
       await Promise.all(pairs.map((pair) => this.runTrader(pair, this.balances.eur, this.balances[pair])));
-      this.state.update(this.state.data);
+      await this.state.update(this.state.data);
 
       console.log(`========> Started trading ${pairs.length} Cryptocurrencies Assets`);
     } catch (error) {
@@ -63,8 +64,10 @@ class TradersManager {
 
   async runTrader(pair, eur, crypto) {
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
-    const prices = this.state.updateLocalPrices(pair, this.currencies[pair]).slice(-this.range);
+
+    const prices = await this.state.getLocalPrices(pair, this.range);
     eventEmitter.emit("price", { [pair]: this.currencies[pair] });
+
     if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo();
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair);
