@@ -8,13 +8,12 @@ async function setAskBidSpread() {
   const state = new LocalState("traders-state");
   const newData = {};
 
-  for (let file of files) {
-    const pair = file.replace(".json", "");
-    if (!state.data[pair]) continue;
-    const prices = JSON.parse(await readFile(getPath(file), "utf8"));
+  for (let filename of files) {
+    if (!state.data[filename]) continue; // state.data[filename] = {};
+    const prices = await state.getLocalPrices(filename);
     const average =
       prices.reduce((total, p) => total + calcPercentageDifference(p[2], p[1]), 0) / prices.length;
-    state.data[pair].askBidSpread = +average.toFixed(2);
+    state.data[filename].askBidSpread = +average.toFixed(2);
   }
 
   Object.keys(state.data)
@@ -24,7 +23,7 @@ async function setAskBidSpread() {
 
   state.update(newData);
 }
-// setAskBidSpread();
+setAskBidSpread();
 
 async function reformPricesFiles() {
   const files = await readdir(getPath());
@@ -40,4 +39,4 @@ async function reformPricesFiles() {
     await unlink(getPath(file));
   }
 }
-reformPricesFiles();
+// reformPricesFiles();

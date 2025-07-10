@@ -1,4 +1,5 @@
-import { appendFileSync, existsSync, statSync, writeFileSync } from "node:fs";
+import { existsSync } from "node:fs";
+import { appendFile, stat, writeFile } from "node:fs/promises";
 import eventEmitter from "../services/event-emitter.js";
 import notificationProvider from "../providers/notification-provider.js";
 import LocalState from "../services/local-state.js";
@@ -84,19 +85,20 @@ class TradersManager {
     }
   }
 
-  updateBotProgress(pair, event, info, tradeCase) {
+  async updateBotProgress(pair, event, info, tradeCase) {
     const filePath = `database/logs/${pair || "traders-manager"}.log`;
 
     if (event == "LOG") {
       if (!info) info = "\n";
       else info = `[${toShortDate()}] ${info}\n`;
 
-      if (!existsSync(filePath)) writeFileSync(filePath, info);
+      if (!existsSync(filePath)) await writeFile(filePath, info);
       else {
         // if file less then 500 KB append logs to file, else, overwrite the old logs
-        const fileSizeInKB = statSync(filePath).size / 1024 / 1024; // Convert size from B to KB to MB
-        fileSizeInKB < 1 ? appendFileSync(filePath, info) : writeFileSync(filePath, info);
+        const fileSizeInKB = (await stat(filePath)).size / 1024 / 1024; // Convert size from B to KB to MB
+        fileSizeInKB < 1 ? await appendFile(filePath, info) : await writeFile(filePath, info);
       }
+
       if (info != "\n") eventEmitter.emit(`${pair}-log`, { log: info });
     } else {
       const notify = !(this.notifyTimers[pair] > 0);

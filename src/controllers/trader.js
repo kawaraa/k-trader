@@ -46,7 +46,6 @@ export default class TraderController extends Controller {
     try {
       if (params.pair == "ALL") {
         this.tradersManager.autoSell = params.status == "on";
-        this.tradersManager.state.update(this.tradersManager.state.data);
       } else if (this.tradersManager.state.data[params.pair]) {
         // this.tradersManager.state.data[params.pair].capital = +params.capital || 0;
         // this.tradersManager.state.update(this.tradersManager.state.data);
