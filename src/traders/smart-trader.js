@@ -12,11 +12,10 @@ class SmartTrader extends Trader {
     this.stop();
     this.prevGainPercent = 0;
     this.losses = [0, 0, 0];
-    this.lastTradePrice = null;
     this.buySignal = "";
     this.prevBuySignal = "";
     this.sellSignal = "";
-    this.prevSellSignal = "";
+    // this.prevSellSignal = "";
   }
 
   async trade(capital, storedPrices, eurBalance, cryptoBalance, trades, position, autoSell, testMode) {
@@ -27,7 +26,7 @@ class SmartTrader extends Trader {
     // safeAskBidSpread
 
     if (calcPct(currentPrice[2], currentPrice[1]) > Math.min(Math.max(avgAskBidSpread * 2, 0.2), 1)) {
-      this.dispatch("LOG", `Pause trading due to the low liquidity`);
+      this.dispatch("LOG", `⏸️ Pause trading due to the low liquidity`);
       return { status: "low-liquidity", signal };
     }
 
@@ -43,7 +42,6 @@ class SmartTrader extends Trader {
     const volatility = calcPct(lowest, highest);
     const changePercent = calcPct(highest, current);
     // const increasedPercent = calcPct(lowest, current);
-    // const droppedFromLastTrade = calcPct(this.lastTradePrice || currentPrice[1], currentPrice[1]);
     const [lastMinTrend, index] = detectPriceDirection(prices.slice(-last5min), 1);
     const [volumeTrend] = detectPriceDirection(volumes, 1);
     const trend = this.trackPrice(current);
@@ -89,9 +87,8 @@ class SmartTrader extends Trader {
 
       if (signal != "unknown" && capital > 0 && eurBalance >= 1 && !this.pause) {
         await this.buy(capital, eurBalance, currentPrice[1]);
-        this.dispatch("LOG", `Placed BUY at: ${currentPrice[1]} ${signal}`);
+        this.dispatch("LOG", `💵 Placed BUY at: ${currentPrice[1]} ${signal}`);
         this.prevGainPercent = 0;
-        this.losses = [0, 0, 0];
         this.prevBuySignal = this.buySignal;
         this.buySignal = signal;
       }
@@ -100,20 +97,12 @@ class SmartTrader extends Trader {
     } else if (position && cryptoBalance > 0) {
       const gainLossPercent = calcPct(position.price, prices.at(-1));
       if (gainLossPercent > this.prevGainPercent) this.prevGainPercent = gainLossPercent;
+      if (-gainLossPercent >= this.prevLossPercent) this.prevLossPercent = -gainLossPercent;
       const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
-
-      if (-gainLossPercent >= this.losses[0]) this.losses[0] = -gainLossPercent;
-      else if (this.losses[0]) {
-        if (gainLossPercent > 0) this.losses[1] = this.losses[0];
-        else {
-          const recoveredPercent = +(this.losses[0] - -gainLossPercent).toFixed(2);
-          if (recoveredPercent > this.losses[1]) this.losses[1] = recoveredPercent;
-        }
-      }
 
       this.dispatch(
         "LOG",
-        `Current: ${gainLossPercent}% - Gain: ${this.prevGainPercent}% - Loss: ${this.losses[0]}% - Recovered: ${this.losses[1]}% - DropsAgain: ${this.losses[2]}%`
+        `📊 Current: ${gainLossPercent}% - 💰 Gain: ${this.prevGainPercent}% - 💸 Loss: ${this.prevLossPercent}%`
       );
 
       if (gainLossPercent <= -2 && lastMinTrend == "downtrend") signal = "stop-loss-sell";
@@ -124,15 +113,18 @@ class SmartTrader extends Trader {
 
       if (signal != "unknown" && autoSell) {
         const res = await this.sell(position, cryptoBalance, currentPrice[2], signal);
-        this.lastTradePrice = currentPrice[2];
-        this.prevSellSignal = this.sellSignal;
+        this.prevLossPercent = 0;
+        // this.prevSellSignal = this.sellSignal;
         this.sellSignal = signal;
         if (lastTrade < 1 && gainLossPercent < 1) this.pause = true;
 
-        this.dispatch("LOG", `Placed SELL - Return: ${res.profit} - Held for: ${res.age}hrs - ${signal}`);
+        this.dispatch(
+          "LOG",
+          `💰💸 Placed SELL -> Return: ${res.profit} - Held for: ${res.age}hrs - ${signal}`
+        );
       }
     } else {
-      // this.dispatch("LOG", `Waiting for uptrend signal`); // Log decision
+      // this.dispatch("LOG", `❌ Waiting for uptrend signal`); // Log decision
     }
 
     this.dispatch("LOG", "");

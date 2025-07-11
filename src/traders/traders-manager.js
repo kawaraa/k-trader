@@ -5,7 +5,8 @@ import notificationProvider from "../providers/notification-provider.js";
 import getState from "../services/local-state.js";
 import KrakenExchangeProvider from "../providers/kraken-ex-provider.js";
 import SmartTrader from "./smart-trader.js";
-import { isNumber, toShortDate } from "../../shared-code/utilities.js";
+import { calcPercentageDifference, isNumber, toShortDate } from "../../shared-code/utilities.js";
+import { spawn } from "node:child_process";
 // import { getCryptoTimingSuggestion } from "../../shared-code/indicators.js";
 
 class TradersManager {
@@ -22,7 +23,8 @@ class TradersManager {
     this.#traders = {};
     this.autoSell = true;
     this.notifyTimers = {};
-    // this.cleanTimer = 0
+    this.reducePriceFileTimer = 0;
+    this.updateAskBidSpreadTimer = 0;
   }
 
   start() {
@@ -53,12 +55,16 @@ class TradersManager {
       this.balances = balances;
       this.currencies = currencies;
       const pairs = Object.keys(currencies);
+      console.log(`🚀 Started trading ${pairs.length} Cryptocurrencies`);
 
       pairs.map((pair) => this.state.appendToLocalPrices(pair, this.currencies[pair]));
       await Promise.all(pairs.map((pair) => this.runTrader(pair, this.balances.eur, this.balances[pair])));
       await this.state.update(this.state.data);
 
-      console.log(`========> Started trading ${pairs.length} Cryptocurrencies Assets`);
+      if (this.reducePriceFileTimer > 1) this.reducePriceFileTimer -= 1;
+      else this.deleteOldPrices();
+
+      console.log(`✅ Finished trading ${pairs.length} Cryptocurrencies`);
     } catch (error) {
       this.updateBotProgress(null, "LOG", `Error running traders: ${error}\n`);
     }
@@ -75,9 +81,20 @@ class TradersManager {
     }
 
     // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
+    let prices = null;
+    if (this.updateAskBidSpreadTimer > 1) this.updateAskBidSpreadTimer -= 1;
+    else {
+      prices = await this.state.getLocalPrices(pair, this.range);
+      this.state.data[pair].askBidSpread = +(
+        prices.reduce((acc, p) => acc + calcPercentageDifference(p[2], p[1]), 0) / prices.length
+      ).toFixed(2);
+      this.updateAskBidSpreadTimer = 6000; // 10hr
+    }
+
     if (isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
-      const prices = await this.state.getLocalPrices(pair, this.range);
+      if (!prices) prices = await this.state.getLocalPrices(pair, this.range);
       if (prices.length < this.range / 1.1) return;
+
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
       const res = await this.#traders[pair].trade(cpl, prices, eur, crypto, trades, position, this.autoSell);
@@ -126,6 +143,14 @@ class TradersManager {
 
       this.state.update(this.state.data);
     }
+  }
+
+  deleteOldPrices() {
+    // Linux/macOS (no shell)
+    spawn("find", ["database/prices/", "-type", "f", "-exec", "sed", "-i", "1,600d", "{}", ";"], {
+      stdio: "inherit", // Prints output to parent console
+    });
+    this.reducePriceFileTimer = 600; // 1hr
   }
 }
 
