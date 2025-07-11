@@ -1,3 +1,4 @@
+import { calcPercentageDifference } from "../../shared-code/utilities.js";
 import { calculateFee } from "../services/calc-methods.js";
 
 // Smart trader
@@ -10,8 +11,10 @@ export default class Trader {
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
     this.timeoutID = 0;
+    this.pause = false;
     this.pauseTimer = 0;
     this.notifiedTimer = 0;
+    this.tracker = [[null, null, null]];
 
     // this.strategyRange = +range; // Range in hours "0.5 = have an hour"
     // this.pricePercentChange = +pricePercent; // Percentage Change is the price Percentage Threshold
@@ -32,10 +35,6 @@ export default class Trader {
   }
 
   async run() {} // This is overwritten in derived classes
-
-  calculateLength(hours = 6) {
-    return parseInt((60 * hours) / this.interval);
-  }
 
   async buy(investmentCapital, eurBalance, price, buyCase) {
     const cost = eurBalance < investmentCapital ? eurBalance : investmentCapital;
@@ -61,6 +60,56 @@ export default class Trader {
       this.dispatch("LOG", `Placed SELL - for all assets`);
     }
     this.dispatch("SELL", 0, "manually");
+  }
+
+  calculateLength(hours = 6) {
+    return parseInt((60 * hours) / this.interval);
+  }
+  trackPrice(price) {
+    if (!this.tracker[0][0] || this.tracker[0][0] > price) {
+      this.tracker[0][0] = price; // Support Price Level
+      this.tracker[0][2] = "downtrend";
+    }
+    if (!this.tracker[0][1] || this.tracker[0][1] < price) {
+      this.tracker[0][1] = price; // Resistance Price Level
+      this.tracker[0][2] = "uptrend";
+    }
+
+    const heigh = calcPercentageDifference(this.tracker[0][0], this.tracker[0][1]);
+    const limit = Math.max(Math.min(heigh / 3, 2.5), 1);
+
+    if (heigh >= 2) {
+      let reachedLimit = false;
+      if (this.tracker[0][2] == "uptrend") {
+        reachedLimit = -calcPercentageDifference(this.tracker[0][1], price) >= limit;
+      } else {
+        reachedLimit = calcPercentageDifference(this.tracker[0][0], price) >= limit;
+      }
+
+      if (reachedLimit) {
+        this.tracker.push(this.tracker[0]);
+        this.tracker[0] = [null, null, null];
+        if (this.tracker.length > 5) this.tracker.splice(1, 1);
+      }
+    }
+
+    const prevMove2 = this.tracker.at(-3);
+    const prevMove = this.tracker.at(-2);
+    const lastMove = this.tracker.at(-1);
+
+    if (this.tracker.length > 1 && price > lastMove[1]) return "uptrend";
+    if (this.tracker.length > 1 && lastMove[0] > price) return "downtrend";
+    if (this.tracker.length > 2) {
+      const case2 = prevMove2 && prevMove2[2] == "uptrend" && lastMove[2] == "uptrend";
+      if ((lastMove[2] == "uptrend" && lastMove[1] > prevMove[1]) || case2) {
+        return "uptrend";
+      }
+      if (prevMove[2] == "downtrend" && lastMove[2] == "downtrend" && prevMove[1] > lastMove[1]) {
+        return "downtrend";
+      }
+    }
+
+    return "unknown";
   }
 
   stop() {

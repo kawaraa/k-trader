@@ -64,7 +64,7 @@ class BasicTrader extends Trader {
       prices.slice(prices.length - this.calculateLength(6), prices.length - this.calculateLength(3))
     );
     const last3HrTrend = linearRegression(prices.slice(-this.calculateLength(3)));
-    const lastHrTrend = detectPriceDirection(prices.slice(-this.calculateLength(1.5)), increaseLimit);
+    const [lastHrTrend] = detectPriceDirection(prices.slice(-this.calculateLength(1.5)), increaseLimit);
     const pattern3 = detectPriceShape(prices.slice(-this.calculateLength(0.75)), vLimit);
     const pattern2 = detectPriceShape(prices, 5);
     const pattern1 = detectPriceShape(prices.slice(0, pattern2.index), 3);

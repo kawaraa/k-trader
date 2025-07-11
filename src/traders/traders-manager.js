@@ -22,6 +22,7 @@ class TradersManager {
     this.#traders = {};
     this.autoSell = true;
     this.notifyTimers = {};
+    // this.cleanTimer = 0
   }
 
   start() {
@@ -64,24 +65,24 @@ class TradersManager {
   }
 
   async runTrader(pair, eur, crypto) {
-    if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
-
-    const prices = await this.state.getLocalPrices(pair, this.range);
     eventEmitter.emit("price", { [pair]: this.currencies[pair] });
 
+    if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
     if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo();
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
+
     // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
-    // const skip = !isNumber(this.state.data[pair].askBidSpread, 0, 1) || prices.at(-1)[3] / 1000000 < 0.5;
-    if (prices.length >= this.range / 1.1 && isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
+    if (isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
+      const prices = await this.state.getLocalPrices(pair, this.range);
+      if (prices.length < this.range / 1.1) return;
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !isNaN(capital) ? capital : this.defaultCapital;
       const res = await this.#traders[pair].trade(cpl, prices, eur, crypto, trades, position, this.autoSell);
       this.state.data[pair].status = res.status;
-      this.state.data[pair].signal = res.signal;
+      if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
     }
   }
 

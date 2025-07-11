@@ -23,7 +23,7 @@ async function setAskBidSpread() {
 
   state.update(newState);
 }
-setAskBidSpread();
+// setAskBidSpread();
 
 async function reformPricesFiles() {
   const files = await readdir(getPath());

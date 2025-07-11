@@ -2,18 +2,20 @@
 
 import { calcPercentageDifference } from "../../shared-code/utilities.js";
 
-export function detectPriceDirection(prices, minPercent, percentBetween = 0, mountains = 0) {
+export function detectPriceDirection(prices, minPercent, percentBetween = 0, changes = 0) {
   let price = null;
   let currentPrice = null;
+  let index = 0;
   let up = 0;
   let down = 0;
-  let uptrendCount = 0;
-  let downtrendCount = 0;
+  let highCount = 0;
+  let lowsCount = 0;
   let previousPrice = "";
 
   for (let i = prices.length - 1; i >= 0; i--) {
     if (!currentPrice) currentPrice = prices[i];
     if (!price) price = prices[i];
+    index++;
 
     const percentDifference = calcPercentageDifference(prices[i - 1], currentPrice);
 
@@ -22,21 +24,23 @@ export function detectPriceDirection(prices, minPercent, percentBetween = 0, mou
     }
 
     if (percentDifference > 0) {
-      if (previousPrice == "low") downtrendCount++; // Detected low
+      if (previousPrice == "low") lowsCount++; // Detected low
       previousPrice = "high";
       up += percentDifference;
     } else if (percentDifference < 0) {
-      if (previousPrice == "high") uptrendCount++; // Detected high
+      if (previousPrice == "high") highCount++; // Detected high
       previousPrice = "low";
       down += -percentDifference;
     }
 
+    const changePercent = up - down;
+    if (changePercent >= minPercent && highCount >= changes) return ["uptrend", index];
+    else if (changePercent <= -minPercent && lowsCount >= changes) return ["downtrend", index];
+
     currentPrice = prices[i];
   }
-  const changePercent = up - down;
-  if (changePercent >= minPercent && uptrendCount >= mountains) return "uptrend";
-  else if (changePercent <= -minPercent && downtrendCount >= mountains) return "downtrend";
-  else return "unknown";
+
+  return ["unknown"];
 }
 
 export function detectPriceShape(prices, percentage) {
@@ -68,6 +72,16 @@ export function detectPriceShape(prices, percentage) {
   }
 
   if (result.shape) return result;
+}
+export function detectPriceShapeAndPercent(prices) {
+  let prevResult = {};
+  for (let percent = 1; percent < 10; percent++) {
+    const result = detectPriceShape(prices, percent);
+    if (!result) return prevResult;
+    result.percent = percent;
+    prevResult = result;
+  }
+  return prevResult;
 }
 
 export function findHighestLowestPrice(prices, currentPrice) {

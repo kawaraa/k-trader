@@ -8,8 +8,6 @@ import { CheckInput, EditableInput, ToggleSwitch } from "./components/inputs.js"
 import TimeRangeSelect from "./components/time-range-select.js";
 import TradeTimeSuggestion from "./components/trade-time-suggestion.js";
 
-const badgeCls =
-  "inline-block h-5 min-w-5 px-1 text-sm absolute bottom-6 flex justify-center items-center text-white rounded-full";
 const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function Home() {
@@ -19,6 +17,9 @@ export default function Home() {
   const [orderby, setOrderby] = useState("liquidity");
   const [sortedPairs, setSortedPairs] = useState([]);
   const timeRange = +params.get("since") || 6;
+  // const signals = Object.keys(traders)
+  //   .map((pair) => traders[pair].signal)
+  //   .filter((s) => s);
 
   const changeDefaultCapital = async (e) => {
     const newCapital = +e.target.value || 0;
@@ -131,17 +132,17 @@ export default function Home() {
       </div>
 
       <form className="mt-1 mb-5 flex flex-wrap justify-between items-center" onChange={handleFilterChange}>
-        {["dropped-increase", "breakout", "paused", "active", "low-liquidity"].map((signal, i) => (
+        {["dropped-increase", "breakout", "paused", "active", "low-liquidity"].map((status, i) => (
           <CheckInput
             type="radio"
-            id={signal}
-            name="signal"
-            value={signal}
+            id={status}
+            name="status"
+            value={status}
             cls="m-1 flex-auto w-1/3 md:w-auto rounded-md"
             labelCLs="rounded-md"
             key={i}
           >
-            {signal}
+            {status}
           </CheckInput>
         ))}
       </form>

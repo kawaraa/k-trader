@@ -12,7 +12,12 @@ export function EditableInput({ children, id, cls, ...p }) {
       {children}
       <span className="relative">
         {p.defaultValue}
-        <input ref={elRef} id={id} className="w-full absolute inset-0 appearance-none rounded-md" {...p} />
+        <input
+          ref={elRef}
+          id={id}
+          className="absolute inset-0 appearance-none rounded-md focus:static focus:w-16"
+          {...p}
+        />
       </span>
     </label>
   );
