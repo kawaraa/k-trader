@@ -92,6 +92,8 @@ export default function Home() {
         <div className="flex items-center">
           <span className="mr-2">Capital:</span>
           <EditableInput
+            type="number"
+            min="0"
             id="default-capital-input-id"
             onBlur={changeDefaultCapital}
             defaultValue={defaultCapital}

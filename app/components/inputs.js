@@ -8,14 +8,14 @@ export function EditableInput({ children, id, cls, ...p }) {
   if (elRef.current) elRef.current.value = p.defaultValue;
 
   return (
-    <label htmlFor={id} className={`flex items-center overflow-hidden ${cls}`}>
+    <label htmlFor={id} className={`flex items-center ${cls}`}>
       {children}
       <span className="relative">
         {p.defaultValue}
         <input
           ref={elRef}
           id={id}
-          className="absolute inset-0 appearance-none rounded-md focus:static focus:w-16"
+          className="absolute inset-0 focus:w-16 rounded-md appearance-none [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
           {...p}
         />
       </span>

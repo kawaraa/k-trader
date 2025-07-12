@@ -118,6 +118,8 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
         <span className="">{pair.replace("EUR", "")}</span>
 
         <EditableInput
+          type="number"
+          min="0"
           id={pair}
           onBlur={handleSetCapital}
           defaultValue={capital || 0}
