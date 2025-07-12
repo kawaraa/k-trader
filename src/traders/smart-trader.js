@@ -11,7 +11,7 @@ class SmartTrader extends Trader {
     delete this.period;
     this.stop();
     this.prevGainPercent = 0;
-    this.losses = [0, 0, 0];
+    this.prevLossPercent = 0;
     this.buySignal = "";
     this.prevBuySignal = "";
     this.sellSignal = "";
@@ -88,7 +88,6 @@ class SmartTrader extends Trader {
       if (signal != "unknown" && capital > 0 && eurBalance >= 1 && !this.pause) {
         await this.buy(capital, eurBalance, currentPrice[1]);
         this.dispatch("LOG", `💵 Placed BUY at: ${currentPrice[1]} ${signal}`);
-        this.prevGainPercent = 0;
         this.prevBuySignal = this.buySignal;
         this.buySignal = signal;
       }
@@ -113,6 +112,7 @@ class SmartTrader extends Trader {
 
       if (signal != "unknown" && autoSell) {
         const res = await this.sell(position, cryptoBalance, currentPrice[2], signal);
+        this.prevGainPercent = 0;
         this.prevLossPercent = 0;
         // this.prevSellSignal = this.sellSignal;
         this.sellSignal = signal;
