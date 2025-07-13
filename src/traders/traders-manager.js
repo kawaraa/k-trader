@@ -96,7 +96,7 @@ class TradersManager {
       if (prices.length < this.range / 1.1) return;
 
       const { capital, position, trades } = this.state.data[pair];
-      const cpl = !isNaN(capital) ? capital : this.defaultCapital;
+      const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
       const res = await this.#traders[pair].trade(cpl, prices, eur, crypto, trades, position, this.autoSell);
       this.state.data[pair].status = res.status;
       if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
