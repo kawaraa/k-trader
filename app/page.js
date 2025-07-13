@@ -55,9 +55,9 @@ export default function Home() {
 
   const loadMore = () => {
     const loaded = [];
-    for (const pair in sortedPairs) {
+    for (const pair of sortedPairs) {
       if (!loadedTradersPairs.includes(pair)) loaded.push(pair);
-      if (loaded.length >= limit) break;
+      if (loaded.length >= 6) break;
     }
     state.setLoadedTradersPairs(loadedTradersPairs.concat(loaded));
   };
@@ -82,7 +82,7 @@ export default function Home() {
     setSortedPairs(pairs);
     state.setLoadedTradersPairs(pairs.slice(0, 6));
     state.setLoading(false);
-  }, [filter, orderby]);
+  }, [filter, orderby, traders]);
 
   useEffect(() => {
     if (!user) router.replace("/login");
@@ -93,7 +93,7 @@ export default function Home() {
   return (
     <>
       <div className="flex items-center justify-between">
-        <TradeTimeSuggestion cls="flex justify-center items-center mb-1" />
+        <TradeTimeSuggestion cls="flex justify-center items-center flex-1 mb-1" />
 
         <ToggleSwitch onChange={handleAutoSell} checked={state.autoSell} size={35} cls="id-978">
           <strong className="mr-3 text-red">Auto sell</strong>

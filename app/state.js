@@ -22,7 +22,6 @@ export function StateProvider({ children }) {
     try {
       const user = await request("/api/auth/user");
       setUser(user);
-
       const data = await request("/api/trader");
       setTraders(data.traders);
       if (data.eurBalance) setEurBalance(data.eurBalance);

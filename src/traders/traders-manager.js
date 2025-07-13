@@ -18,7 +18,7 @@ class TradersManager {
     this.defaultCapital = 0;
     this.interval = 10;
     this.range = parseInt((4 * 60 * 60) / this.interval);
-    this.eurBalance = {};
+    this.eurBalance = 0;
     this.#traders = {};
     this.autoSell = true;
     this.notifyTimers = {};
@@ -82,6 +82,7 @@ class TradersManager {
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
 
+    this.state.data[pair].price = price;
     this.state.data[pair].balance = crypto;
 
     // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
