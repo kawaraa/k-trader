@@ -83,7 +83,6 @@ class TradersManager {
     }
 
     this.state.data[pair].balance = crypto;
-    delete this.state.data[pair].balances;
 
     // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
     let prices = null;
