@@ -7,15 +7,16 @@ import { State } from "./state.js";
 import { CheckInput, EditableInput, ToggleSwitch } from "./components/inputs.js";
 import TimeRangeSelect from "./components/time-range-select.js";
 import TradeTimeSuggestion from "./components/trade-time-suggestion.js";
-
+const defaultLoadedTraders = ["XXBTZEUR", "XETHZEUR", "SOLEUR", "PEPEEUR", "XDGEUR", "SUIEUR"];
 const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 
 export default function Home() {
   const router = useRouter();
   const params = useSearchParams();
-  const { loading, user, traders, loadedTradersPairs, loadTraders, defaultCapital, ...state } = State();
-  const [orderby, setOrderby] = useState("liquidity");
+  const { loading, user, traders, loadedTradersPairs, defaultCapital, ...state } = State();
   const [sortedPairs, setSortedPairs] = useState([]);
+  const [filter, setFilter] = useState("");
+  const [orderby, setOrderby] = useState("liquidity");
   const timeRange = +params.get("since") || 6;
   // const signals = Object.keys(traders)
   //   .map((pair) => traders[pair].signal)
@@ -49,32 +50,43 @@ export default function Home() {
   };
 
   const handleFilterChange = (e) => {
-    const pairs = Object.keys(traders).filter(
-      (p) => traders[p].signal == e.target.value || traders[p].status == e.target.value
-    );
-    state.setLoadedTradersPairs(pairs);
+    setFilter(e.target.value);
+  };
+
+  const loadMore = () => {
+    const loaded = [];
+    for (const pair in sortedPairs) {
+      if (!loadedTradersPairs.includes(pair)) loaded.push(pair);
+      if (loaded.length >= limit) break;
+    }
+    state.setLoadedTradersPairs(loadedTradersPairs.concat(loaded));
   };
 
   useEffect(() => {
-    const pairs = loadedTradersPairs;
-    if (pairs) {
-      if (orderby == "balance") {
-        pairs.sort((a, b) => traders[b].balance - traders[a].balance);
-      } else if (orderby == "capital") {
-        pairs.sort((a, b) => traders[b].capital - traders[a].capital);
-      } else if (orderby == "return-asc") {
-        pairs.sort((a, b) => sum(traders[a].trades) - sum(traders[b].trades));
-      } else if (orderby == "return-dec") {
-        pairs.sort((a, b) => sum(traders[b].trades) - sum(traders[a].trades));
-      } else if (orderby == "trades") {
-        pairs.sort((a, b) => traders[b].trades.length - traders[a].trades.length);
-      }
-      setSortedPairs(pairs);
+    state.setLoading(true);
+    let pairs = Object.keys(traders);
+    if (filter) pairs = pairs.filter((p) => traders[p].signal == filter || traders[p].status == filter);
+
+    if (orderby == "balance") {
+      pairs.sort((a, b) => traders[b].balance - traders[a].balance);
+    } else if (orderby == "capital") {
+      pairs.sort((a, b) => traders[b].capital - traders[a].capital);
+    } else if (orderby == "return-asc") {
+      pairs.sort((a, b) => sum(traders[a].trades) - sum(traders[b].trades));
+    } else if (orderby == "return-dec") {
+      pairs.sort((a, b) => sum(traders[b].trades) - sum(traders[a].trades));
+    } else if (orderby == "trades") {
+      pairs.sort((a, b) => traders[b].trades.length - traders[a].trades.length);
     }
-  }, [loadedTradersPairs, orderby]);
+
+    setSortedPairs(pairs);
+    state.setLoadedTradersPairs(pairs.slice(0, 6));
+    state.setLoading(false);
+  }, [filter, orderby]);
 
   useEffect(() => {
     if (!user) router.replace("/login");
+    state.setLoadedTradersPairs(defaultLoadedTraders);
   }, [user]);
 
   if (!Object.keys(traders)[0]) return null;
@@ -153,7 +165,7 @@ export default function Home() {
         {user &&
           !user.loading &&
           !loading &&
-          sortedPairs.map((pair) => (
+          loadedTradersPairs.map((pair) => (
             <li className={`w-full lg:w-1/2 2xl:w-1/3 overflow-y-auto rounded-md`} key={pair}>
               <Trader
                 pair={pair}
@@ -167,10 +179,7 @@ export default function Home() {
       </ul>
 
       <div className="relative text-center">
-        <button
-          onClick={() => loadTraders(6)}
-          className="bg-pc inline-flex justify-center py-2 px-3 rounded-md mb-5"
-        >
+        <button onClick={loadMore} className="bg-pc inline-flex justify-center py-2 px-3 rounded-md mb-5">
           Load more
         </button>
       </div>

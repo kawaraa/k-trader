@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 // import Messages from "./components/messages";
 import Loader from "./components/loader";
 import { request } from "../shared-code/utilities.js";
-const defaultLoadedTraders = ["XXBTZEUR", "XETHZEUR", "SOLEUR", "PEPEEUR", "XDGEUR", "SUIEUR"];
 const StateContext = createContext();
 
 export function StateProvider({ children }) {
@@ -14,7 +13,7 @@ export function StateProvider({ children }) {
   const [defaultCapital, setDefaultCapital] = useState(0);
   const [autoSell, setAutoSell] = useState(false);
   const [traders, setTraders] = useState({});
-  const [loadedTradersPairs, setLoadedTradersPairs] = useState(defaultLoadedTraders);
+  const [loadedTradersPairs, setLoadedTradersPairs] = useState([]);
   const [pricesTimeRange, setPricesTimeRange] = useState(6);
   const addMessage = (msg) => setMessages([...messages, msg]);
 
@@ -35,15 +34,6 @@ export function StateProvider({ children }) {
     }
 
     setLoading(false);
-  };
-
-  const loadTraders = (limit = 6) => {
-    const pairs = [];
-    for (const pair in traders) {
-      if (!loadedTradersPairs.includes(pair)) pairs.push(pair);
-      if (pairs.length >= limit) break;
-    }
-    setLoadedTradersPairs(loadedTradersPairs.concat(pairs));
   };
 
   useEffect(() => {
@@ -96,7 +86,6 @@ export function StateProvider({ children }) {
         traders,
         loadedTradersPairs,
         setLoadedTradersPairs,
-        loadTraders,
         pricesTimeRange,
         setPricesTimeRange,
       }}

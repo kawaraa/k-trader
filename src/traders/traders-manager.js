@@ -18,8 +18,7 @@ class TradersManager {
     this.defaultCapital = 0;
     this.interval = 10;
     this.range = parseInt((4 * 60 * 60) / this.interval);
-    this.balances = {};
-    this.currencies = {};
+    this.eurBalance = {};
     this.#traders = {};
     this.autoSell = true;
     this.notifyTimers = {};
@@ -38,27 +37,30 @@ class TradersManager {
       this.#traders[pair] &&
       this.#traders[pair].buy(
         !isNaN(this.state.data[pair].capital) ? this.state.data[pair].capital : this.defaultCapital,
-        this.balances.eur,
-        this.currencies[pair][1],
+        this.eurBalance,
+        this.state.data[pair].price[1],
         "manually"
       )
     );
   }
   sell(pair) {
     if (!this.#traders[pair]) throw new Error(`${pair} Trader is not active`);
-    return this.#traders[pair].sellManually(this.balances[pair]);
+    return this.#traders[pair].sellManually(this.state.data[pair].balance);
   }
 
   async run() {
     try {
-      const { balances, currencies } = await this.ex.getTradableAssetPrices("EUR");
-      this.balances = balances;
-      this.currencies = currencies;
+      const { eurBalance, currencies } = await this.ex.getTradableAssetPrices("EUR");
+      this.eurBalance = eurBalance;
       const pairs = Object.keys(currencies);
       console.log(`🚀 Started trading ${pairs.length} Cryptocurrencies`);
 
-      pairs.map((pair) => this.state.appendToLocalPrices(pair, this.currencies[pair]));
-      await Promise.all(pairs.map((pair) => this.runTrader(pair, this.balances.eur, this.balances[pair])));
+      pairs.map((pair) => this.state.appendToLocalPrices(pair, currencies[pair].price));
+      await Promise.all(
+        pairs.map((pair) =>
+          this.runTrader(pair, eurBalance, currencies[pair].balance, currencies[pair].price)
+        )
+      );
       await this.state.update(this.state.data);
 
       if (this.reducePriceFileTimer > 1) this.reducePriceFileTimer -= 1;
@@ -70,15 +72,18 @@ class TradersManager {
     }
   }
 
-  async runTrader(pair, eur, crypto) {
-    eventEmitter.emit("price", { [pair]: this.currencies[pair] });
+  async runTrader(pair, eur, crypto, price) {
+    eventEmitter.emit("price", { [pair]: price });
 
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
-    if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo();
+    if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo(crypto);
     if (!this.#traders[pair]) {
       this.#traders[pair] = new SmartTrader(this.ex, pair);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
+
+    this.state.data[pair].balance = crypto;
+    delete this.state.data[pair].balances;
 
     // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
     let prices = null;
@@ -158,10 +163,10 @@ const tradersManager = new TradersManager();
 export default tradersManager;
 
 class TraderInfo {
-  constructor() {
+  constructor(crypto) {
     // this.askBidSpread = 0; // this will be undefined for low liquidity asset
     this.capital = 0;
-    this.balances = 0;
+    this.balance = crypto || 0;
     this.position = null;
     this.trades = [];
   }

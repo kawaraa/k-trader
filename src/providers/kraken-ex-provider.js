@@ -52,34 +52,34 @@ class KrakenExchangeProvider {
     return request(`${this.#apiUrl}/0/public${path}`, options).then(this.#checkError);
   }
   async getTradableAssetPrices(currency = "EUR") {
-    const pairs = [];
-    const balances = {};
     const assets = await this.publicApi(`/AssetPairs`);
-    const assetsBlc = await this.balance();
-    balances.eur = +assetsBlc.ZEUR;
+    const balances = await this.balance();
+    const eurBalance = +balances.ZEUR;
+    const currencies = {};
 
     for (const pair in assets) {
-      const skip = assets[pair].altname.startsWith(currency) || assets[pair].altname.endsWith(currency);
-      if (assets[pair].quote.includes(currency) && skip) {
-        pairs.push(assets[pair].altname);
-        const case1 = assets[pair].base;
-        const case2 = pair.replace("ZEUR", "");
-        const case3 = pair.replace("EUR", "");
-        if (!isNaN(+assetsBlc[case1])) balances[pair] = +assetsBlc[case1];
-        else if (!isNaN(+assetsBlc[case2])) balances[pair] = +assetsBlc[case2];
-        else if (!isNaN(+assetsBlc[case3])) balances[pair] = +assetsBlc[case3];
-      }
+      const altname = assets[pair].altname;
+      if (pair == "ZEUR" || altname.startsWith(currency) || !altname.endsWith(currency)) continue;
+      currencies[pair] = { balance: 0 };
+      const case1 = assets[pair].base;
+      const case2 = pair.replace("ZEUR", "");
+      const case3 = pair.replace("EUR", "");
+      if (!isNaN(+balances[case1])) currencies[pair].balance = +balances[case1];
+      else if (!isNaN(+balances[case2])) currencies[pair].balance = +balances[case2];
+      else if (!isNaN(+balances[case3])) currencies[pair].balance = +balances[case3];
     }
 
-    const currencies = await this.publicApi(`/Ticker?pair=${pairs.join(",")}`);
+    const prices = await this.publicApi(`/Ticker?pair=${Object.keys(currencies).join(",")}`);
+    delete prices.TEUR;
 
-    Object.keys(currencies).forEach((pair) => {
-      const { a, b, c, v } = currencies[pair];
-      currencies[pair] = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
+    Object.keys(prices).forEach((pair) => {
+      if (pair == "ZEUR") return;
+      const { a, b, c, v } = prices[pair];
+      if (!currencies[pair]) currencies[pair] = { balance: 0 };
+      currencies[pair].price = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
     });
 
-    delete currencies.TEUR;
-    return { currencies, balances };
+    return { eurBalance, currencies };
   }
 
   async balance() {
