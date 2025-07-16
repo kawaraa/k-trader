@@ -6,8 +6,8 @@ const calcPct = calcPercentageDifference;
 
 // Smart trader
 class SmartTrader extends Trader {
-  constructor(exProvider, pair, interval) {
-    super(exProvider, pair, interval);
+  constructor(exProvider, pair, interval, tracker) {
+    super(exProvider, pair, interval, tracker);
     delete this.period;
     this.stop();
     this.prevGainPercent = 0;
@@ -128,7 +128,7 @@ class SmartTrader extends Trader {
     }
 
     this.dispatch("LOG", "");
-    return { status: this.pause ? "paused" : "active", signal };
+    return { tracker: this.tracker, status: this.pause ? "paused" : "active", signal };
   }
 }
 

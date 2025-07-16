@@ -83,7 +83,7 @@ class TradersManager {
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
     if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo(crypto);
     if (!this.#traders[pair]) {
-      this.#traders[pair] = new SmartTrader(this.ex, pair);
+      this.#traders[pair] = new SmartTrader(this.ex, pair, null, this.state.data[pair].tracker);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
 
@@ -109,6 +109,7 @@ class TradersManager {
       const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
       const res = await this.#traders[pair].trade(cpl, prices, eur, crypto, trades, position, this.autoSell);
       this.state.data[pair].status = res.status;
+      this.state.data[pair].tracker = res.tracker;
       if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
     }
   }
@@ -174,5 +175,6 @@ class TraderInfo {
     this.balance = crypto || 0;
     this.position = null;
     this.trades = [];
+    this.tracker = [[null, null, null]];
   }
 }

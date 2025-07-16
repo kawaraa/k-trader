@@ -3,7 +3,7 @@ import { calculateFee } from "../services/calc-methods.js";
 
 // Smart trader
 export default class Trader {
-  constructor(exProvider, pair, interval, mode) {
+  constructor(exProvider, pair, interval, tracker, mode) {
     this.ex = exProvider;
     this.pair = pair;
     this.interval = +interval;
@@ -14,7 +14,7 @@ export default class Trader {
     this.pause = false;
     this.pauseTimer = 0;
     this.notifiedTimer = 0;
-    this.tracker = [[null, null, null]];
+    this.tracker = tracker || [[null, null, null]];
 
     // this.strategyRange = +range; // Range in hours "0.5 = have an hour"
     // this.pricePercentChange = +pricePercent; // Percentage Change is the price Percentage Threshold
@@ -63,6 +63,7 @@ export default class Trader {
   }
 
   calculateLength(hours = 6) {
+    if (!this.interval) throw "500-Interval is not set";
     return parseInt((60 * hours) / this.interval);
   }
   trackPrice(price) {
