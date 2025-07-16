@@ -170,7 +170,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
       <RenderWrapper
         Tag={showZoom ? "div" : Link}
-        href={showZoom ? null : `/trader?pair=${pair}`}
+        href={showZoom ? null : `/trader?pair=${pair}&since=48`}
         className={`h-full flex flex-col overflow-hidden`}
       >
         {error ? (
