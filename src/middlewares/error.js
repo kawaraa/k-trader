@@ -2,7 +2,7 @@ import { parseError } from "../../shared-code/utilities.js";
 
 // Express identifies an error-handling middleware by the presence of all four arguments. Without next, it won't be treated as a middleware.
 const errorHandlerMiddleware = (error, req, res, next) => {
-  const clientIP = request.ip || request.connection.remoteAddress;
+  const clientIP = req.ip || req.connection.remoteAddress;
   console.log("errorHandlerMiddleware: ", clientIP, req.url, error);
 
   let statusCode = 500;

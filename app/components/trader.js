@@ -89,7 +89,6 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
       setBidPrices(bidPrices);
       setVolumes(volumes);
       setLabels(labels);
-      setDisabled(info.disabled);
     } catch (error) {
       setError(error.message);
     }
@@ -102,6 +101,10 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   useEffect(() => {
     fetchPrices(pair);
   }, [timeRange]);
+
+  useEffect(() => {
+    setDisabled(info.disabled);
+  }, [info.disabled]);
 
   useEffect(() => {
     fetchPrices(pair);
