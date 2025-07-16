@@ -64,9 +64,16 @@ class LocalState {
     const buffer = (await file.read({ buffer: Buffer.alloc(length), position, length })).buffer.toString();
     await file.close();
 
-    // const cb = (acc, line) => line.trim() && acc.push(JSON.parse(line)) && acc;
-    // .reduce(cb, [])
-    return buffer.substring(buffer.indexOf("[")).trim().split(/\r?\n/).map(JSON.parse).slice(-numberOfLines);
+    const cb = (acc, line) => {
+      try {
+        const jsonLine = JSON.parse(line);
+        acc.push(jsonLine);
+        return acc;
+      } catch (err) {
+        return acc;
+      }
+    };
+    return buffer.substring(buffer.indexOf("[")).trim().split(/\r?\n/).reduce(cb, []).slice(-numberOfLines);
   }
 }
 

@@ -74,6 +74,7 @@ class TradersManager {
       console.log(`✅ Finished trading ${pairs.length} Cryptocurrencies`);
     } catch (error) {
       this.updateBotProgress(null, "LOG", `Error running traders: ${error}\n`);
+      console.error(error);
     }
   }
 
