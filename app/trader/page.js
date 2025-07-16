@@ -34,7 +34,7 @@ export default function TraderPage({}) {
       window.logsEventSource = new EventSource(`/api/sse/${pair}/log`, { withCredentials: true });
       logsEventSource.onopen = () => console.log("SSE connection opened");
       logsEventSource.onerror = (error) => {
-        console.error("Log: SSE connection error:");
+        console.error("Log: SSE connection error:", error);
         logsEventSource.close(); // Close client-side connection
       };
       logsEventSource.onmessage = (e) => {

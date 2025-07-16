@@ -64,8 +64,9 @@ export default function Home() {
 
   useEffect(() => {
     state.setLoading(true);
-    let pairs = Object.keys(traders);
-    if (filter) pairs = pairs.filter((p) => traders[p].signal == filter || traders[p].status == filter);
+    let pairs = Object.keys(traders).filter(
+      (p) => !traders[p].disabled && (!filter || traders[p].signal == filter || traders[p].status == filter)
+    );
 
     if (orderby == "balance") {
       pairs.sort((a, b) => traders[b].balance - traders[a].balance);

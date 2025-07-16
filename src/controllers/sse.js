@@ -43,13 +43,13 @@ export default class SSEController extends Controller {
       this.eventEmitter.on(event, eventHandler);
 
       request.on("error", (error) => {
-        console.log("SSE request error", error);
+        console.error("SSE request error:", error);
         this.eventEmitter.off(event, eventHandler);
         this.#removeEvent(clientIP, event);
         response.end();
       });
       request.on("close", () => {
-        console.log("client disconnect");
+        console.warn("client disconnect");
         this.eventEmitter.off(event, eventHandler);
         this.#removeEvent(clientIP, event);
         response.end();

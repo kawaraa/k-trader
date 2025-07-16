@@ -20,7 +20,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const [bidPrices, setBidPrices] = useState([]);
   const [volumes, setVolumes] = useState([]);
   const [labels, setLabels] = useState([]);
-  const [disabled, setDisabled] = useState(info.disabled || false);
+  const [disabled, setDisabled] = useState(false);
   const totalReturn = parseInt(info.trades?.reduce((acc, t) => acc + t, 0)) || 0;
   const volatility = calcPercentageDifference(Math.min(...tradePrices), Math.max(...tradePrices));
 
@@ -89,6 +89,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
       setBidPrices(bidPrices);
       setVolumes(volumes);
       setLabels(labels);
+      setDisabled(info.disabled);
     } catch (error) {
       setError(error.message);
     }
