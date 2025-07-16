@@ -1,4 +1,5 @@
 import Controller from "./default.js";
+const errMsg = (pair) => `400-Unsupported cryptocurrency pair: ${pair}`;
 
 export default class TraderController extends Controller {
   constructor() {
@@ -14,21 +15,33 @@ export default class TraderController extends Controller {
     }
   };
 
-  update = async ({ params }, res, next) => {
+  enableDisable = async ({ params: { pair } }, res, next) => {
     try {
-      if (params.pair == "ALL") {
-        this.tradersManager.defaultCapital = +params.capital;
-        if (!+params.capital || +params.capital <= 0) {
+      if (!this.tradersManager.state.data[pair]) return next(errMsg(pair));
+      this.tradersManager.state.data[pair].disabled = !this.tradersManager.state.data[pair].disabled;
+
+      this.tradersManager.state.update(this.tradersManager.state.data);
+      res.json({ success: true });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  update = async ({ params: { pair, capital } }, res, next) => {
+    try {
+      if (pair == "ALL") {
+        this.tradersManager.defaultCapital = +capital;
+        if (!+capital || +capital <= 0) {
           for (const pair in this.tradersManager.state.data) {
             this.tradersManager.state.data[pair].capital = 0;
           }
           this.tradersManager.state.update(this.tradersManager.state.data);
         }
-      } else if (this.tradersManager.state.data[params.pair]) {
-        this.tradersManager.state.data[params.pair].capital = +params.capital || 0;
+      } else if (this.tradersManager.state.data[pair]) {
+        this.tradersManager.state.data[pair].capital = +capital || 0;
         this.tradersManager.state.update(this.tradersManager.state.data);
       } else {
-        throw new Error(`Unsupported cryptocurrency pair: ${params.pair}`);
+        return next(errMsg(pair));
       }
       res.json({ success: true });
     } catch (error) {
@@ -36,15 +49,15 @@ export default class TraderController extends Controller {
     }
   };
 
-  autoSell = async ({ params }, res, next) => {
+  autoSell = async ({ params: { pair } }, res, next) => {
     try {
-      if (params.pair == "ALL") {
+      if (pair == "ALL") {
         this.tradersManager.autoSell = params.status == "on";
-      } else if (this.tradersManager.state.data[params.pair]) {
-        // this.tradersManager.state.data[params.pair].capital = +params.capital || 0;
+      } else if (this.tradersManager.state.data[pair]) {
+        // this.tradersManager.state.data[pair].capital = +params.capital || 0;
         // this.tradersManager.state.update(this.tradersManager.state.data);
       } else {
-        throw new Error(`Unsupported cryptocurrency pair: ${params.pair}`);
+        return next(errMsg(pair));
       }
       res.json({ success: true });
     } catch (error) {

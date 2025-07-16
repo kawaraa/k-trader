@@ -20,6 +20,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const [bidPrices, setBidPrices] = useState([]);
   const [volumes, setVolumes] = useState([]);
   const [labels, setLabels] = useState([]);
+  const [disabled, setDisabled] = useState(info.disabled || false);
   const totalReturn = parseInt(info.trades?.reduce((acc, t) => acc + t, 0)) || 0;
   const volatility = calcPercentageDifference(Math.min(...tradePrices), Math.max(...tradePrices));
 
@@ -43,6 +44,18 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
     setLoading(true);
     try {
       await request(`/api/trader/${type}/${pair}`, { method: "PATCH" });
+    } catch (error) {
+      alert(JSON.stringify(error.message || error.error || error));
+    }
+    setLoading(false);
+  };
+
+  const enableDisable = async () => {
+    if (!confirm(`Are you sure want to ${info.disabled ? "enable" : "disable"} "${pair}" currency?`)) return;
+    setLoading(true);
+    try {
+      await request(`/api/trader/enable-disable/${pair}`, { method: "POST" });
+      setDisabled(!disabled);
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
@@ -115,7 +128,9 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   return (
     <div className={`relative aspect-video no-srl-bar card rounded-md ${borderCls} ${cls}`}>
       <div className="flex items-center justify-between py-1 px-2">
-        <span className="">{pair.replace("EUR", "")}</span>
+        <button onClick={enableDisable} className={`rounded-md py-0 px-1 ${disabled && "bg-gray-200"}`}>
+          {pair.replace("EUR", "")}
+        </button>
 
         <EditableInput
           type="number"

@@ -62,7 +62,7 @@ export default function Navigation(props) {
         <strong className="text-2xl font-bold text-emerald-500">€{parseInt(eurBalance)}</strong>
       </div>
 
-      <ComboBox items={pairs} link="/trader?pair=" cls="min-w-12 flex-1" />
+      <ComboBox items={pairs} link="/trader?pair=xxxx&since=48" cls="min-w-12 flex-1" />
 
       <ToggleSwitch onChange={handleNotificationSettings} checked={notificationOn} size={35} cls="mr-3">
         <span className="mx-1 w-3">

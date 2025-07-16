@@ -136,7 +136,7 @@ export default function ComboBox({ items, link, onSelect, cls }) {
         >
           {foundItems.map((item, i) => {
             let Tag = "a";
-            let props = { href: `${link}${item}` };
+            let props = { href: link.replace("xxxx", item) };
             if (!link) {
               Tag = "button";
               props = { name: item, onClick: onSelect };
