@@ -149,7 +149,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
         <strong className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</strong>
 
-        <strong className="text-red">{volatility.toFixed(1)}%</strong>
+        <strong className="">{volatility.toFixed(1)}%</strong>
 
         <button
           onClick={() => placePosition("buy")}
