@@ -49,12 +49,12 @@ export default class TraderController extends Controller {
     }
   };
 
-  autoSell = async ({ params: { pair } }, res, next) => {
+  autoSell = async ({ params: { pair, status } }, res, next) => {
     try {
       if (pair == "ALL") {
-        this.tradersManager.autoSell = params.status == "on";
+        this.tradersManager.autoSell = status == "on";
       } else if (this.tradersManager.state.data[pair]) {
-        // this.tradersManager.state.data[pair].capital = +params.capital || 0;
+        // this.tradersManager.state.data[pair].capital = status == "on";
         // this.tradersManager.state.update(this.tradersManager.state.data);
       } else {
         return next(errMsg(pair));

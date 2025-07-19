@@ -75,7 +75,7 @@ export function detectPriceShape(prices, percentage) {
 }
 export function detectPriceShapeAndPercent(prices) {
   let prevResult = {};
-  for (let percent = 1; percent < 10; percent++) {
+  for (let percent = 1; percent < 10; percent += 0.5) {
     const result = detectPriceShape(prices, percent);
     if (!result) return prevResult;
     result.percent = percent;
