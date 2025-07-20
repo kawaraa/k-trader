@@ -22,7 +22,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const [labels, setLabels] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const totalReturn = parseInt(info.trades?.reduce((acc, t) => acc + t, 0)) || 0;
-  const volatility = calcPercentageDifference(Math.min(...tradePrices), Math.max(...tradePrices));
+  const volatility = getVolatility(tradePrices);
 
   const lengthLimit = (timeRange * 60 * 60) / 10;
 
@@ -97,10 +97,6 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   useEffect(() => {
     setCapital(!info.capital && defaultCapital >= 0 ? defaultCapital : info.capital);
   }, [info.capital, defaultCapital]);
-
-  useEffect(() => {
-    fetchPrices(pair);
-  }, [timeRange]);
 
   useEffect(() => {
     setDisabled(info.disabled);
@@ -243,4 +239,9 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
 const RenderWrapper = ({ Tag, children, ...p }) => {
   return <Tag {...p}>{children}</Tag>;
+};
+
+const getVolatility = (prices) => {
+  const sorted = prices.toSorted((a, b) => a - b);
+  return calcPercentageDifference(sorted[0], sorted.at(-1));
 };

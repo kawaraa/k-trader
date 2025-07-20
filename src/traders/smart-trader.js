@@ -22,13 +22,8 @@ class SmartTrader extends Trader {
     let signal = "unknown";
     const last5min = 18;
     const currentPrice = storedPrices.at(-1);
-    const avgAskBidSpread = calcAveragePrice(storedPrices.map((p) => calcPct(p[2], p[1])));
     // safeAskBidSpread
-
-    if (calcPct(currentPrice[2], currentPrice[1]) > Math.min(Math.max(avgAskBidSpread * 2, 0.2), 1)) {
-      this.dispatch("LOG", `⏸️ Pause trading due to the low liquidity`);
-      return { status: "low-liquidity", signal };
-    }
+    if (calcPct(currentPrice[2], currentPrice[1]) >= 1) return { status: "low-liquidity", signal };
 
     const prevTrade = trades.at(-2);
     const lastTrade = trades.at(-1);
@@ -46,7 +41,7 @@ class SmartTrader extends Trader {
     const [volumeTrend] = detectPriceDirection(volumes, 1);
     const trend = this.trackPrice(current);
 
-    if (testMode) console.log(JSON.stringify(currentPrice), trend, "this.tracker");
+    if (testMode) console.log(JSON.stringify(currentPrice), trend);
     const log1 = `€${eurBalance.toFixed(2)} - Change: ${volatility} - Drops: ${changePercent}`;
     const log2 = `Trend: ${lastMinTrend} - Price: ${prices.at(-1)} - Volume: ${volumeTrend}`;
     this.dispatch("LOG", `${log1} - ${log2}`);

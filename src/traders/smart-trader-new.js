@@ -24,7 +24,7 @@ class SmartTrader extends Trader {
     let signal = "unknown";
     if (this.pauseTimer > 0) this.pauseTimer -= 1;
     // safeAskBidSpread
-    if (calcPct(price[2], price[1]) > 0.9) {
+    if (calcPct(price[2], price[1]) >= 1) {
       this.dispatch("LOG", `Pause trading due to the low liquidity`);
       return { status: "low-liquidity", signal };
     }
