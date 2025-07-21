@@ -15,6 +15,8 @@ export default class Trader {
     this.pauseTimer = 0;
     this.notifiedTimer = 0;
     this.tracker = tracker || [[null, null, null]];
+    this.priceLevel = [];
+    this.changePct = 0;
 
     // this.strategyRange = +range; // Range in hours "0.5 = have an hour"
     // this.pricePercentChange = +pricePercent; // Percentage Change is the price Percentage Threshold
@@ -41,6 +43,7 @@ export default class Trader {
     const cryptoVolume = +((cost - calculateFee(cost, 0.4)) / price).toFixed(8);
     const orderId = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
     const position = { id: orderId, price, volume: cryptoVolume, cost, createdAt: Date.now() };
+    this.buySignal = buyCase;
     this.dispatch("BUY", position, buyCase);
   }
 
@@ -77,7 +80,7 @@ export default class Trader {
     }
 
     const heigh = calcPercentageDifference(this.tracker[0][0], this.tracker[0][1]);
-    const limit = Math.max(Math.min(heigh / 3, 2.5), 1);
+    const limit = Math.max(Math.min(heigh / 4, 2), 1);
 
     if (heigh >= 2) {
       let reachedLimit = false;
@@ -92,6 +95,14 @@ export default class Trader {
         this.tracker[0] = [null, null, null];
         if (this.tracker.length > 5) this.tracker.splice(1, 1);
       }
+
+      const prices = this.tracker
+        .slice(1)
+        .flat()
+        .filter((p) => p && !isNaN(+p));
+      this.priceLevel[0] = Math.min(...prices);
+      this.priceLevel[1] = Math.max(...prices);
+      this.changePct = calcPercentageDifference(this.priceLevel[0], this.priceLevel[1]);
     }
 
     const prevMove2 = this.tracker.at(-3);

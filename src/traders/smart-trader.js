@@ -81,7 +81,7 @@ class SmartTrader extends Trader {
       signal != "unknown" && this.dispatch("BUY_SIGNAL", currentPrice[1], signal);
 
       if (signal != "unknown" && capital > 0 && eurBalance >= 1 && !this.pause) {
-        await this.buy(capital, eurBalance, currentPrice[1]);
+        await this.buy(capital, eurBalance, currentPrice[1], signal);
         this.dispatch("LOG", `💵 Placed BUY at: ${currentPrice[1]} ${signal}`);
         this.prevBuySignal = this.buySignal;
         this.buySignal = signal;
@@ -100,7 +100,7 @@ class SmartTrader extends Trader {
       );
 
       if (gainLossPercent <= -2 && lastMinTrend == "downtrend") signal = "stop-loss-sell";
-      else if (gainLossPercent > 2 && lastMinTrend == "downtrend") signal = "take-profit-sell";
+      else if (gainLossPercent > 3 && lastMinTrend == "downtrend") signal = "take-profit-sell";
       else if (this.buySignal == "breakout" && this.prevGainPercent > 2 && loss > 0.5) {
         signal = "breakout-take-profit-sell";
       }
