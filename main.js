@@ -62,7 +62,7 @@ app.use(express.static(`${__dirname}/out/`)); // SPA behavior: (Serve the index.
 app.use("/*", (req, res, next) => next("NOT_FOUND"));
 app.use(errorHandlerMiddleware);
 
-app.listen(port, (error) => {
+app.listen(port, "127.0.0.1", (error) => {
   if (!error) return console.log(`Server running on http://localhost:${port}`);
   console.log("Failed to start server:", error);
   process.exit(1);
