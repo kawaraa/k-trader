@@ -78,6 +78,10 @@ export default function Home() {
       pairs.sort((a, b) => sum(traders[b].trades) - sum(traders[a].trades));
     } else if (orderby == "trades") {
       pairs.sort((a, b) => traders[b].trades.length - traders[a].trades.length);
+    } else if (orderby == "volume-asc") {
+      pairs.sort((a, b) => traders[a].price[2] - traders[b].price[2]);
+    } else if (orderby == "volume-dec") {
+      pairs.sort((a, b) => traders[b].price[2] - traders[a].price[2]);
     }
 
     setSortedPairs(pairs);
@@ -141,7 +145,9 @@ export default function Home() {
             <option value="return-asc">Return-ASC</option>
             <option value="return-dec">Return-DEC</option>
             <option value="trades">Trades</option>
-            <option value="liquidity">liquidity</option>
+            <option value="volume-asc">Volume-ASC</option>
+            <option value="volume-dec">Volume-DEC</option>
+            <option value="liquidity">Liquidity</option>
           </select>
         </div>
       </div>

@@ -123,7 +123,12 @@ class SmartTrader extends Trader {
     }
 
     this.dispatch("LOG", "");
-    return { tracker: this.tracker, status: this.pause ? "paused" : "active", signal };
+    return {
+      change: this.changePct,
+      status: this.pause ? "paused" : "active",
+      signal,
+      tracker: this.tracker,
+    };
   }
 }
 

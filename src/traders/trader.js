@@ -102,7 +102,8 @@ export default class Trader {
         .filter((p) => p && !isNaN(+p));
       this.priceLevel[0] = Math.min(...prices);
       this.priceLevel[1] = Math.max(...prices);
-      this.changePct = calcPercentageDifference(this.priceLevel[0], this.priceLevel[1]);
+      this.changePct = calcPercentageDifference(this.priceLevel[0], this.priceLevel[1]) || 0;
+      if (prices[0] > prices.at(-1)) this.changePct = -this.changePct;
     }
 
     const prevMove2 = this.tracker.at(-3);
