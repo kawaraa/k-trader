@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   Chart,
@@ -8,6 +10,7 @@ import {
   CategoryScale,
   Tooltip,
 } from "chart.js";
+import { getVolatility } from "../../shared-code/utilities";
 // Register required components (minimal setup for line chart)
 Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip);
 
@@ -23,6 +26,8 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
     labels: labels.slice(leftZoomLevel, rightZoomLevel),
     datasets: datasets.map((ds) => ({ ...ds, data: ds.data.slice(leftZoomLevel, rightZoomLevel) })),
   };
+
+  const volatility = getVolatility(data.datasets[1]?.data).toFixed(1);
 
   useEffect(() => {
     if (chartInstanceRef.current) {
@@ -48,11 +53,10 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
   }, []);
 
   return (
-    <div className="relative h-[inherit]">
-      <canvas ref={chartRef}></canvas>
-
-      {showZoom && (
-        <div className="absolute top-0 right-8 left-8 flex items-center">
+    <div className="relative h-[inherit] pt-4">
+      <canvas ref={chartRef}></canvas>(
+      <div className="absolute top-0 right-1 left-1 flex justify-center items-center">
+        {showZoom && (
           <label className="flex flex-auto items-center">
             <strong>+</strong>
             <input
@@ -67,7 +71,11 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
             />
             <strong>-</strong>
           </label>
-          <div className="w-4"></div>
+        )}
+
+        <strong className="w-20 text-center">{volatility}%</strong>
+
+        {showZoom && (
           <label className="flex flex-auto items-center">
             <strong>-</strong>
             <input
@@ -82,8 +90,9 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
             />
             <strong>+</strong>
           </label>
-        </div>
-      )}
+        )}
+      </div>
+      )
     </div>
   );
 }

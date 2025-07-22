@@ -4,7 +4,7 @@ import Link from "next/link";
 import { borderCls } from "./tailwind-classes";
 import { EditableInput } from "./inputs";
 import ChartCanvas from "./chart-canvas";
-import { calcPercentageDifference, request, toShortDate } from "../../shared-code/utilities.js";
+import { request, toShortDate } from "../../shared-code/utilities.js";
 import Loader from "./loader.js";
 
 const getTime = (d) => d.toUTCString().split(" ").at(-2).substring(0, 5);
@@ -22,7 +22,6 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const [labels, setLabels] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const totalReturn = parseInt(info.trades?.reduce((acc, t) => acc + t, 0)) || 0;
-  const volatility = getVolatility(tradePrices);
 
   const lengthLimit = (timeRange * 60 * 60) / 10;
 
@@ -127,10 +126,16 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
   return (
     <div className={`relative aspect-video no-srl-bar card rounded-md ${borderCls} ${cls}`}>
-      <div className="flex items-center justify-between py-1 px-2">
-        <button onClick={enableDisable} className={`rounded-md py-0 px-1 ${disabled && "bg-gray-200"}`}>
-          {pair.replace("EUR", "")}
-        </button>
+      <div className="flex items-center justify-between py-1 px-2 mb-2">
+        <div className="">
+          <button
+            onClick={enableDisable}
+            className={`rounded-md py-0 px-1 ${!disabled ? "" : "bg-gray-200"}`}
+          >
+            {pair.replace("EUR", "")}
+          </button>
+          <strong className="">{info.balance || 0}</strong>
+        </div>
 
         <EditableInput
           type="number"
@@ -144,8 +149,6 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
         </EditableInput>
 
         <strong className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</strong>
-
-        <strong className="">{volatility.toFixed(1)}%</strong>
 
         <button
           onClick={() => placePosition("buy")}
@@ -161,12 +164,6 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
           Sell
         </button>
       </div>
-
-      {info.balance && (
-        <div className="flex items-center justify-between py-0 px-2 text-sm">
-          <strong>({info.balance || 0})</strong>
-        </div>
-      )}
 
       <RenderWrapper
         Tag={showZoom ? "div" : Link}
@@ -239,9 +236,4 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
 const RenderWrapper = ({ Tag, children, ...p }) => {
   return <Tag {...p}>{children}</Tag>;
-};
-
-const getVolatility = (prices) => {
-  const sorted = prices.toSorted((a, b) => a - b);
-  return calcPercentageDifference(sorted[0], sorted.at(-1));
 };

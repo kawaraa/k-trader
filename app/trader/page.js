@@ -30,6 +30,7 @@ export default function TraderPage({}) {
   useEffect(() => {
     if (user && !user.loading) {
       fetchLogContent(pair);
+
       if (window?.logsEventSource) window.logsEventSource.close();
       window.logsEventSource = new EventSource(`/api/sse/${pair}/log`, { withCredentials: true });
       logsEventSource.onopen = () => console.log("SSE connection opened");

@@ -131,3 +131,9 @@ export function calcPercentageDifference(oldPrice, newPrice) {
     +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2) || 0
   );
 }
+
+export function getVolatility(prices) {
+  if (!Array.isArray(prices)) return 0;
+  const sorted = prices.toSorted((a, b) => a - b);
+  return calcPercentageDifference(sorted[0], sorted.at(-1));
+}
