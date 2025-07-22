@@ -13,7 +13,7 @@ import authRoute from "./src/routes/auth.js";
 import apiRoutes from "./src/routes/api.js";
 import errorHandlerMiddleware from "./src/middlewares/error.js";
 import authMiddleware from "./src/middlewares/auth.js";
-import { RequestRateLimiter } from "k-utilities/network.js";
+import { RequestRateLimiter } from "k-utilities/express-middleware.js";
 import tradersManager from "./src/traders/traders-manager.js";
 
 const port = process.env.PORT || 3000;
