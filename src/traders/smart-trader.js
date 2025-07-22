@@ -124,7 +124,7 @@ class SmartTrader extends Trader {
 
     this.dispatch("LOG", "");
     return {
-      change: this.changePct,
+      change: changePercent,
       status: this.pause ? "paused" : "active",
       signal,
       tracker: this.tracker,
