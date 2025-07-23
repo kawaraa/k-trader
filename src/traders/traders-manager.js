@@ -17,7 +17,7 @@ class TradersManager {
     this.ex = new KrakenExchangeProvider(this.state);
     this.defaultCapital = 0;
     this.interval = 10;
-    this.range = parseInt((4 * 60 * 60) / this.interval);
+    // this.range = parseInt((4 * 60 * 60) / this.interval);
     this.eurBalance = 0;
     this.#traders = {};
     this.autoSell = true;
@@ -92,20 +92,13 @@ class TradersManager {
     this.state.data[pair].balance = crypto;
 
     // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
-    // let prices = null;
     if (this.updateAskBidSpreadTimer > 1) this.updateAskBidSpreadTimer -= 1;
     else {
-      // prices = await this.state.getLocalPrices(pair, this.range);
-      // this.state.data[pair].askBidSpread = +(
-      //   prices.reduce((acc, p) => acc + calcPercentageDifference(p[2], p[1]), 0) / prices.length
-      // ).toFixed(2);
-      // this.updateAskBidSpreadTimer = 6000; // 10hr
+      this.state.data[pair].askBidSpread = +(calcPercentageDifference(price[2], price[1]) / 2).toFixed(2);
+      this.updateAskBidSpreadTimer = 6000; // 10hr
     }
 
     if (isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
-      // if (!prices) prices = await this.state.getLocalPrices(pair, this.range);
-      // if (prices.length < this.range / 1.1) return;
-
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
       const res = await this.#traders[pair].trade(cpl, price, eur, crypto, trades, position, this.autoSell);
