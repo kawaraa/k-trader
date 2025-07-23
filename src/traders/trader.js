@@ -1,13 +1,15 @@
-import { calcPercentageDifference } from "../../shared-code/utilities.js";
+import { calcAveragePrice, calcPercentageDifference } from "../../shared-code/utilities.js";
 import { calculateFee } from "../services/calc-methods.js";
 
 // Smart trader
 export default class Trader {
-  constructor(exProvider, pair, interval, tracker, mode) {
+  constructor(exProvider, pair, interval, tracker, pricesChanges) {
     this.ex = exProvider;
     this.pair = pair;
     this.interval = +interval;
     this.period = this.interval || 5; // this.period is deleted in only test trading
+    this.pricesChanges = pricesChanges || [];
+    this.changeLimit = 4;
     this.rsiPeriod = 14; // Recommended Default is 14
     this.listener = null; // Should be a function
     this.timeoutID = 0;
@@ -69,60 +71,48 @@ export default class Trader {
     if (!this.interval) throw "500-Interval is not set";
     return parseInt((60 * hours) / this.interval);
   }
-  trackPrice(price) {
-    if (!this.tracker[0][0] || this.tracker[0][0] > price) {
-      this.tracker[0][0] = price; // Support Price Level
-      this.tracker[0][2] = "downtrend";
-    }
-    if (!this.tracker[0][1] || this.tracker[0][1] < price) {
-      this.tracker[0][1] = price; // Resistance Price Level
-      this.tracker[0][2] = "uptrend";
-    }
+  trackPrice(price, volume) {
+    if (!this.tracker[0][0] || this.tracker[0][0] > price) this.tracker[0][0] = price; // Support Price Level
+    if (!this.tracker[0][1] || this.tracker[0][1] < price) this.tracker[0][1] = price; // Resistance Price Level
+    this.tracker[0][2] = volume;
 
-    const heigh = calcPercentageDifference(this.tracker[0][0], this.tracker[0][1]);
-    const limit = Math.max(Math.min(heigh / 4, 2), 1);
+    const nearLow = Math.abs(calcPercentageDifference(this.tracker[0][0], price));
+    const nearHigh = Math.abs(calcPercentageDifference(this.tracker[0][1], price));
 
-    if (heigh >= 2) {
-      let reachedLimit = false;
-      if (this.tracker[0][2] == "uptrend") {
-        reachedLimit = -calcPercentageDifference(this.tracker[0][1], price) >= limit;
-      } else {
-        reachedLimit = calcPercentageDifference(this.tracker[0][0], price) >= limit;
-      }
+    if (nearHigh > nearLow) this.tracker[0][3] = "downtrend";
+    if (nearHigh < nearLow) this.tracker[0][3] = "uptrend";
 
-      if (reachedLimit) {
+    const change = calcPercentageDifference(this.tracker[0][0], this.tracker[0][1]);
+
+    if (change > this.changeLimit) {
+      const limit = Math.max(Math.min(change / 3, 2), 1.5);
+
+      if (this.tracker[0][3] == "uptrend" && nearHigh > limit) {
         this.tracker.push(this.tracker[0]);
-        this.tracker[0] = [null, null, null];
-        if (this.tracker.length > 5) this.tracker.splice(1, 1);
+        this.tracker[0] = [price, this.tracker[0][1], volume, "downtrend"];
+      } else if (this.tracker[0][3] == "downtrend" && nearLow > limit) {
+        this.tracker.push(this.tracker[0]);
+        this.tracker[0] = [this.tracker[0][0], price, volume, "uptrend"];
       }
+
+      if (this.tracker.length > 4) this.tracker.splice(1, 1);
 
       const prices = this.tracker
         .slice(1)
-        .flat()
-        .filter((p) => p && !isNaN(+p));
-      this.priceLevel[0] = Math.min(...prices);
-      this.priceLevel[1] = Math.max(...prices);
+        .map((m) => [m[0], m[1]])
+        .flat();
+
+      this.priceLevel[0] = !prices[0] ? price : Math.min(...prices);
+      this.priceLevel[1] = !prices[0] ? price : Math.max(...prices);
+
       this.changePct = calcPercentageDifference(this.priceLevel[0], this.priceLevel[1]) || 0;
-      if (prices[0] > prices.at(-1)) this.changePct = -this.changePct;
+
+      if (this.pricesChanges.at(-1) !== this.changePct) this.pricesChanges.push(this.changePct);
+      if (this.pricesChanges.length > 10) this.pricesChanges.shift();
+      this.changeLimit = Math.max(Math.min(parseInt(calcAveragePrice(this.pricesChanges, 10) / 3), 6), 4);
     }
 
-    const prevMove2 = this.tracker.at(-3);
-    const prevMove = this.tracker.at(-2);
-    const lastMove = this.tracker.at(-1);
-
-    if (this.tracker.length > 1 && price > lastMove[1]) return "uptrend";
-    if (this.tracker.length > 1 && lastMove[0] > price) return "downtrend";
-    if (this.tracker.length > 2) {
-      const case2 = prevMove2 && prevMove2[2] == "uptrend" && lastMove[2] == "uptrend";
-      if ((lastMove[2] == "uptrend" && lastMove[1] > prevMove[1]) || case2) {
-        return "uptrend";
-      }
-      if (prevMove[2] == "downtrend" && lastMove[2] == "downtrend" && prevMove[1] > lastMove[1]) {
-        return "downtrend";
-      }
-    }
-
-    return "unknown";
+    return this.tracker[0].at(-1);
   }
 
   stop() {

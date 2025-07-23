@@ -1,117 +1,112 @@
 import Trader from "./trader.js";
-import { calcAveragePrice, calcPercentageDifference, isNumber } from "../../shared-code/utilities.js";
-import { normalizePrices } from "../services/calc-methods.js";
-import { detectPriceDirection } from "../services/trend-analysis.js";
+import { calcAveragePrice, calcPercentageDifference } from "../../shared-code/utilities.js";
 const calcPct = calcPercentageDifference;
 
 // Smart trader
 class SmartTrader extends Trader {
-  constructor(exProvider, pair, interval, tracker) {
-    super(exProvider, pair, interval, tracker);
+  constructor(exProvider, pair, interval, { tracker, pricesChanges }) {
+    super(exProvider, pair, interval, tracker, pricesChanges);
     delete this.period;
     this.stop();
     this.prevGainPercent = 0;
     this.prevLossPercent = 0;
-    this.buySignal = "";
-    this.prevBuySignal = "";
-    this.sellSignal = "";
-    // this.prevSellSignal = "";
   }
 
-  async trade(capital, storedPrices, eurBalance, cryptoBalance, trades, position, autoSell, testMode) {
+  async trade(capital, currentPrice, eurBalance, cryptoBalance, trades, position, autoSell, testMode) {
     let signal = "unknown";
-    const last5min = 18;
-    const currentPrice = storedPrices.at(-1);
     // safeAskBidSpread
     if (calcPct(currentPrice[2], currentPrice[1]) >= 1) return { status: "low-liquidity", signal };
 
-    const prevTrade = trades.at(-2);
-    const lastTrade = trades.at(-1);
-    const prices = normalizePrices(storedPrices);
-    const volumes = storedPrices.slice(-last5min).map((p) => p[3]);
-    const sortedPrices = prices.toSorted((a, b) => a - b);
-    // const start = prices[0];
-    const lowest = sortedPrices[0];
-    const highest = sortedPrices.at(-1);
-    const current = prices.at(-1);
-    const volatility = calcPct(lowest, highest);
-    const changePercent = calcPct(highest, current);
-    // const increasedPercent = calcPct(lowest, current);
-    const [lastMinTrend, index] = detectPriceDirection(prices.slice(-last5min), 1);
-    const [volumeTrend] = detectPriceDirection(volumes, 1);
-    const trend = this.trackPrice(current);
+    // const prevTrade = trades.at(-2);
+    // const lastTrade = trades.at(-1);
+    const normalizePrice = calcAveragePrice([currentPrice[1], currentPrice[2]]);
+    // const volumes = storedPrices.slice(-last5min).map((p) => p[3]);
+    const trend = this.trackPrice(normalizePrice, currentPrice[3]);
+    const currentMove = this.tracker[0];
+    const move1 = this.tracker.at(-1) || [];
+    const move2 = this.tracker.at(-2) || [];
+    const move3 = this.tracker.at(-3) || [];
 
-    if (testMode) console.log(JSON.stringify(currentPrice), trend);
-    const log1 = `€${eurBalance.toFixed(2)} - Change: ${volatility} - Drops: ${changePercent}`;
-    const log2 = `Trend: ${lastMinTrend} - Price: ${prices.at(-1)} - Volume: ${volumeTrend}`;
+    if (testMode) console.log(JSON.stringify(currentPrice), "\n", trend, this.priceLevel, "\n", this.tracker);
+    const log1 = `€${eurBalance.toFixed(2)} - Change: ${this.changePct}`;
+    const log2 = `Trend: ${currentMove.at(-1)} - Price: ${normalizePrice}`;
     this.dispatch("LOG", `${log1} - ${log2}`);
+
+    if (this.tracker.length >= 3) {
+      const avgChange = calcAveragePrice(this.pricesChanges, 9);
+      const nearSupport = calcPct(this.priceLevel[0], normalizePrice);
+      if (
+        !(this.changePct > 9) &&
+        move2.at(-1) == "uptrend" &&
+        move1.at(-1) == "downtrend" &&
+        currentMove.at(-1) == "uptrend" &&
+        nearSupport < 4
+        // && isNumber(calcPct(currentMove[0], normalizePrice), 1, 1.5)
+      ) {
+        signal = "dropped-increase";
+      }
+      if (
+        nearSupport < 4 &&
+        move2.at(-1) == "downtrend" &&
+        move1.at(-1) == "downtrend" &&
+        calcPct(move2[1], normalizePrice) < -avgChange &&
+        currentMove.at(-1) == "uptrend"
+      ) {
+        signal = "near-support";
+      }
+      if (
+        move2.at(-1) == "downtrend" &&
+        move1.at(-1) == "downtrend" &&
+        calcPct(move2[1], normalizePrice) < -avgChange &&
+        currentMove.at(-1) == "uptrend" &&
+        calcPct(move1[1], normalizePrice) > 0
+      ) {
+        signal = "above-resistance";
+      }
+      if (
+        nearSupport < 4 &&
+        move3.at(-1) == "downtrend" &&
+        move2.at(-1) == "downtrend" &&
+        move1.at(-1) == "uptrend" &&
+        calcPct(move1[1], normalizePrice) <= 2 &&
+        currentMove.at(-1) == "uptrend"
+      ) {
+        signal = "breakout";
+      }
+    }
 
     if (!position) {
       // Buy
 
-      if (!this.pause && lastTrade > 0 && prevTrade > 0 && lastTrade + prevTrade > 6) this.pause = true;
-      if (this.pause) {
-        const breakout = calcPct(prices[0], lowest) == 0 && lastMinTrend == "uptrend";
-
-        if (breakout || (trend == "uptrend" && !(lastTrade + prevTrade > 6))) this.pause = false;
-      }
-
-      const currentMove = this.tracker[0];
-      const lastMove = this.tracker.length > 1 ? this.tracker.at(-1) : [];
-      const recentDowntrend =
-        lastMove[2] == "downtrend" && isNumber(calcPct(lastMove[0], currentMove[0]), -1, 1);
-      const increasedAgain = calcPct(currentMove[0], currentMove[1]) > 1 && currentMove[1] == current;
-
-      if (recentDowntrend && increasedAgain && changePercent <= -2 && lastMinTrend == "uptrend") {
-        signal = "dropped-increase";
-      } else {
-        const newPrices = prices.slice(0, prices.length - index);
-        const highest = newPrices.toSorted((a, b) => a - b).at(-1);
-        if (
-          (volatility <= 3 || (volatility <= 5 && trend == "uptrend")) &&
-          changePercent == 0 &&
-          lastMinTrend == "uptrend" &&
-          calcPct(highest, newPrices.at(-1)) > -0.25 &&
-          !(this.prevBuySignal == "breakout" && lastTrade < 1) // finished Breakout
-        ) {
-          signal = "breakout";
-        }
-      }
-
       signal != "unknown" && this.dispatch("BUY_SIGNAL", currentPrice[1], signal);
 
       if (signal != "unknown" && capital > 0 && eurBalance >= 1 && !this.pause) {
-        await this.buy(capital, eurBalance, currentPrice[1], signal);
+        await this.buy(capital, eurBalance, currentPrice[1]);
         this.dispatch("LOG", `💵 Placed BUY at: ${currentPrice[1]} ${signal}`);
-        this.prevBuySignal = this.buySignal;
-        this.buySignal = signal;
       }
 
       // Sell
     } else if (position && cryptoBalance > 0) {
-      const gainLossPercent = calcPct(position.price, prices.at(-1));
+      const gainLossPercent = calcPct(position.price, normalizePrice);
       if (gainLossPercent > this.prevGainPercent) this.prevGainPercent = gainLossPercent;
       if (-gainLossPercent >= this.prevLossPercent) this.prevLossPercent = -gainLossPercent;
-      const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
+      // const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
 
       this.dispatch(
         "LOG",
         `📊 Current: ${gainLossPercent}% - 💰 Gain: ${this.prevGainPercent}% - 💸 Loss: ${this.prevLossPercent}%`
       );
 
-      if (gainLossPercent <= -2 && lastMinTrend == "downtrend") signal = "stop-loss-sell";
-      else if (gainLossPercent > 3 && lastMinTrend == "downtrend") signal = "take-profit-sell";
-      else if (this.buySignal == "breakout" && this.prevGainPercent > 2 && loss > 0.5) {
-        signal = "breakout-take-profit-sell";
+      if (signal == "unknown") {
+        const profitTarget = Math.max(this.changePct / 1.2, 5);
+        if (gainLossPercent > profitTarget && currentMove.at(-1) == "downtrend") signal = "take-profit-sell";
+        else if (gainLossPercent <= -2) signal = "stop-loss-sell";
       }
 
-      if (signal != "unknown" && autoSell) {
+      if (signal.includes("sell") && autoSell) {
         const res = await this.sell(position, cryptoBalance, currentPrice[2], signal);
         this.prevGainPercent = 0;
         this.prevLossPercent = 0;
-        // this.prevSellSignal = this.sellSignal;
-        this.sellSignal = signal;
-        if (lastTrade < 1 && gainLossPercent < 1) this.pause = true;
 
         this.dispatch(
           "LOG",
@@ -123,12 +118,7 @@ class SmartTrader extends Trader {
     }
 
     this.dispatch("LOG", "");
-    return {
-      change: changePercent,
-      status: this.pause ? "paused" : "active",
-      signal,
-      tracker: this.tracker,
-    };
+    return { tracker: this.tracker, status: this.pause ? "paused" : "active", signal };
   }
 }
 

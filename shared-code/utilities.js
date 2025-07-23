@@ -119,8 +119,11 @@ export function isOlderThan(timestamp, hours) {
 //   else throw new Error(`Unsupported cryptocurrency pair: ${pair}`);
 // }
 
-export function calcAveragePrice(prices) {
-  if (prices.length === 0) throw new Error("Price list cannot be empty.");
+export function calcAveragePrice(prices, defaultValue) {
+  if (prices.length === 0) {
+    if (defaultValue) return defaultValue;
+    throw new Error("Price list cannot be empty.");
+  }
   const total = prices.reduce((sum, price) => sum + price, 0);
   return +(total / prices.length).toFixed(8);
 }

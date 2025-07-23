@@ -84,7 +84,7 @@ class TradersManager {
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
     if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo(crypto);
     if (!this.#traders[pair]) {
-      this.#traders[pair] = new SmartTrader(this.ex, pair, null, this.state.data[pair].tracker);
+      this.#traders[pair] = new SmartTrader(this.ex, pair, null, this.state.data[pair]);
       this.#traders[pair].listener = (...arg) => this.updateBotProgress(...arg);
     }
 
@@ -92,27 +92,28 @@ class TradersManager {
     this.state.data[pair].balance = crypto;
 
     // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
-    let prices = null;
+    // let prices = null;
     if (this.updateAskBidSpreadTimer > 1) this.updateAskBidSpreadTimer -= 1;
     else {
-      prices = await this.state.getLocalPrices(pair, this.range);
-      this.state.data[pair].askBidSpread = +(
-        prices.reduce((acc, p) => acc + calcPercentageDifference(p[2], p[1]), 0) / prices.length
-      ).toFixed(2);
-      this.updateAskBidSpreadTimer = 6000; // 10hr
+      // prices = await this.state.getLocalPrices(pair, this.range);
+      // this.state.data[pair].askBidSpread = +(
+      //   prices.reduce((acc, p) => acc + calcPercentageDifference(p[2], p[1]), 0) / prices.length
+      // ).toFixed(2);
+      // this.updateAskBidSpreadTimer = 6000; // 10hr
     }
 
     if (isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
-      if (!prices) prices = await this.state.getLocalPrices(pair, this.range);
-      if (prices.length < this.range / 1.1) return;
+      // if (!prices) prices = await this.state.getLocalPrices(pair, this.range);
+      // if (prices.length < this.range / 1.1) return;
 
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
-      const res = await this.#traders[pair].trade(cpl, prices, eur, crypto, trades, position, this.autoSell);
+      const res = await this.#traders[pair].trade(cpl, price, eur, crypto, trades, position, this.autoSell);
       if (res.change) this.state.data[pair].change = res.change;
       if (res.status) this.state.data[pair].status = res.status;
       if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
       if (res.tracker) this.state.data[pair].tracker = res.tracker;
+      if (res.pricesChanges) this.state.data[pair].pricesChanges = res.pricesChanges;
     }
   }
 
@@ -178,5 +179,6 @@ class TraderInfo {
     this.position = null;
     this.trades = [];
     this.tracker = [[null, null, null]];
+    this.pricesChanges = [];
   }
 }

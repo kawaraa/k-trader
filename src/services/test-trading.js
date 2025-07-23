@@ -4,13 +4,12 @@ import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import TestExchangeProvider from "../providers/test-ex-provider.js";
 import SmartTrader from "../traders/smart-trader.js";
-// import SmartTrader from "../traders/smart-trader-new.js";
 
 const pair = process.argv[2]; // The currency pair E.g. ETHEUR
 const interval = +process.argv[3] || 10; // from 5 to 11440, time per mins E.g. 11440 would be every 24 hours
 const showLogs = process.argv.includes("log");
 const capital = 100; // Amount in EUR which is the total money that can be used for trading
-const priceLimit = (3 * 60 * 60) / 10;
+// const priceLimit = (3 * 60 * 60) / 10;
 
 async function runTradingTest(pair, interval) {
   try {
@@ -19,8 +18,8 @@ async function runTradingTest(pair, interval) {
     const prices = getPrices(pair);
 
     const ex = new TestExchangeProvider({ eur: capital, crypto: 0 }, prices, interval);
-    const trader = new SmartTrader(ex, pair, interval);
-    ex.currentPriceIndex = priceLimit - 1;
+    const trader = new SmartTrader(ex, pair, interval, {});
+    // ex.currentPriceIndex = priceLimit - 1;
     let trades = [];
     let position = null;
 
@@ -39,10 +38,10 @@ async function runTradingTest(pair, interval) {
 
     // Start from after 3 hrs
     let prevCryptoBalance;
-    for (let i = priceLimit; i < prices.length; i++) {
+    for (let i = 0; i < prices.length; i++) {
       const { eur, crypto } = await ex.balance();
       prevCryptoBalance = crypto;
-      await trader.trade(capital, prices.slice(i - priceLimit, i), eur, crypto, trades, position, true, true);
+      await trader.trade(capital, prices[i], eur, crypto, trades, position, true, true);
       await ex.currentPrices();
     }
 
