@@ -159,7 +159,15 @@ export default function Home() {
       </div>
 
       <form className="mt-1 mb-5 flex flex-wrap justify-between items-center" onChange={handleFilterChange}>
-        {["dropped-increase", "breakout", "paused", "active", "low-liquidity"].map((status, i) => (
+        {[
+          "dropped-increase",
+          "near-support",
+          "above-resistance",
+          "breakout",
+          "paused",
+          "active",
+          "low-liquidity",
+        ].map((status, i) => (
           <CheckInput
             type="radio"
             id={status}
