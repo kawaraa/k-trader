@@ -10,20 +10,16 @@ import Loader from "./loader.js";
 const getTime = (d) => d.toUTCString().split(" ").at(-2).substring(0, 5);
 // const normalizeNum = (num) => (num >= 1 ? num : +`0.${parseInt(num?.toString().replace("0.", ""))}` || 0);
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
+const defaultChartData = { tradePrices: [], askPrices: [], bidPrices: [], volumes: [], labels: [] };
 
 export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom, live }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [capital, setCapital] = useState(info.capital || 0);
-  const [tradePrices, setTradePrices] = useState([]);
-  const [askPrices, setAskPrices] = useState([]);
-  const [bidPrices, setBidPrices] = useState([]);
-  const [volumes, setVolumes] = useState([]);
-  const [labels, setLabels] = useState([]);
+  const [chartData, setChartData] = useState(defaultChartData);
   const [disabled, setDisabled] = useState(false);
   const totalReturn = parseInt(info.trades?.reduce((acc, t) => acc + t, 0)) || 0;
-
-  const lengthLimit = (timeRange * 60 * 60) / 10;
+  // const lengthLimit = (timeRange * 60 * 60) / 10;
 
   const handleSetCapital = async (e) => {
     const newCapital = +e.target.value || 0;
@@ -83,11 +79,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
         labels.push(`${timeFun(new Date(since + interval * i))}`);
       });
 
-      setTradePrices(tradePrices);
-      setAskPrices(askPrices);
-      setBidPrices(bidPrices);
-      setVolumes(volumes);
-      setLabels(labels);
+      setChartData({ tradePrices, askPrices, bidPrices, volumes, labels });
     } catch (error) {
       setError(error.message);
     }
@@ -107,12 +99,20 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
     const handler = (event) => {
       const price = event.detail;
       const timeFun = timeRange > 24 ? toShortDate : getTime;
+      const addItem = (prevItems, newItem) => {
+        const newItems = [...prevItems, newItem];
+        newItems.shift();
+        return newItems;
+      };
 
-      setTradePrices((prev) => prev.concat([price[0]]).slice(-lengthLimit));
-      setAskPrices((prev) => prev.concat([price[1]]).slice(-lengthLimit));
-      setBidPrices((prev) => prev.concat([price[2]]).slice(-lengthLimit));
-      setVolumes((prev) => prev.concat([+(price[3] / 1000000).toFixed(3)]).slice(-lengthLimit));
-      setLabels((prev) => prev.concat([`${timeFun(new Date())}`]).slice(-lengthLimit));
+      setChartData(({ tradePrices, askPrices, bidPrices, volumes, labels }) => {
+        tradePrices = addItem(tradePrices, price[0]);
+        askPrices = addItem(askPrices, price[1]);
+        bidPrices = addItem(bidPrices, price[2]);
+        volumes = addItem(volumes, +(price[3] / 1000000).toFixed(3));
+        labels = addItem(labels, `${timeFun(new Date())}`);
+        return { tradePrices, askPrices, bidPrices, volumes, labels };
+      });
     };
 
     window.addEventListener(pair, handler);
@@ -175,11 +175,11 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
         ) : (
           <ChartCanvas
             showZoom={showZoom}
-            labels={labels}
+            labels={chartData.labels}
             datasets={[
               {
                 label: "Trade Price",
-                data: tradePrices,
+                data: chartData.tradePrices,
                 borderColor: "#008080",
                 fill: false,
                 hidden: true,
@@ -188,7 +188,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
               },
               {
                 label: "Ask Price",
-                data: askPrices,
+                data: chartData.askPrices,
                 borderColor: "#FFA500",
                 fill: false,
                 pointStyle: false,
@@ -199,7 +199,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
               },
               {
                 label: "Bid Price",
-                data: bidPrices,
+                data: chartData.bidPrices,
                 borderColor: "#800080",
                 fill: false,
                 pointStyle: false,
@@ -207,7 +207,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
               },
               {
                 label: "Volumes",
-                data: volumes,
+                data: chartData.volumes,
                 yAxisID: "y1",
                 borderColor: "#3cba9f",
                 fill: false,

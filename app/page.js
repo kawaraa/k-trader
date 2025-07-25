@@ -64,8 +64,9 @@ export default function Home() {
 
   useEffect(() => {
     state.setLoading(true);
+    const doesMatch = (f, t1, t2) => !f || t == "all" || t1 == f || t2 == f;
     let pairs = Object.keys(traders).filter(
-      (p) => !traders[p].disabled && (!filter || traders[p].signal == filter || traders[p].status == filter)
+      (p) => !traders[p].disabled && doesMatch(filter, traders[p].signal, traders[p].status)
     );
 
     if (orderby == "balance") {
@@ -159,27 +160,21 @@ export default function Home() {
       </div>
 
       <form className="mt-1 mb-5 flex flex-wrap justify-between items-center" onChange={handleFilterChange}>
-        {[
-          "dropped-increase",
-          "near-support",
-          "above-resistance",
-          "breakout",
-          "paused",
-          "active",
-          "low-liquidity",
-        ].map((status, i) => (
-          <CheckInput
-            type="radio"
-            id={status}
-            name="status"
-            value={status}
-            cls="m-1 flex-auto w-1/3 md:w-auto rounded-md"
-            labelCLs="rounded-md"
-            key={i}
-          >
-            {status}
-          </CheckInput>
-        ))}
+        {["all", "dropped-increase", "near-support", "above-resistance", "breakout", "low-liquidity"].map(
+          (status, i) => (
+            <CheckInput
+              type="radio"
+              id={status}
+              name="status"
+              value={status}
+              cls="m-1 flex-auto w-1/3 md:w-auto rounded-md"
+              labelCLs="rounded-md"
+              key={i}
+            >
+              {status}
+            </CheckInput>
+          )
+        )}
       </form>
 
       <ul className="flex flex-wrap no-select mb-8 justify-center">

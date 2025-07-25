@@ -80,7 +80,7 @@ class SmartTrader extends Trader {
 
       signal != "unknown" && this.dispatch("BUY_SIGNAL", currentPrice[1], signal);
 
-      if (signal != "unknown" && capital > 0 && eurBalance >= 1 && !this.pause) {
+      if (signal != "unknown" && capital > 0 && eurBalance >= 1) {
         await this.buy(capital, eurBalance, currentPrice[1]);
         this.dispatch("LOG", `💵 Placed BUY at: ${currentPrice[1]} ${signal}`);
       }
@@ -118,7 +118,7 @@ class SmartTrader extends Trader {
     }
 
     this.dispatch("LOG", "");
-    return { tracker: this.tracker, status: this.pause ? "paused" : "active", signal };
+    return { tracker: this.tracker, signal };
   }
 }
 

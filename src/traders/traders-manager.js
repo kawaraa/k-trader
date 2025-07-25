@@ -103,7 +103,8 @@ class TradersManager {
       const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
       const res = await this.#traders[pair].trade(cpl, price, eur, crypto, trades, position, this.autoSell);
       if (res.change) this.state.data[pair].change = res.change;
-      if (res.status) this.state.data[pair].status = res.status;
+      // if (res.status) this.state.data[pair].status = res.status;
+      delete this.state.data[pair].status;
       if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
       if (res.tracker) this.state.data[pair].tracker = res.tracker;
       if (res.pricesChanges) this.state.data[pair].pricesChanges = res.pricesChanges;
