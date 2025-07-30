@@ -64,7 +64,7 @@ export default function Home() {
 
   useEffect(() => {
     state.setLoading(true);
-    const doesMatch = (f, t1, t2) => !f || t == "all" || t1 == f || t2 == f;
+    const doesMatch = (f, t1, t2) => !f || f == "all" || t1 == f || t2 == f;
     let pairs = Object.keys(traders).filter(
       (p) => !traders[p].disabled && doesMatch(filter, traders[p].signal, traders[p].status)
     );
