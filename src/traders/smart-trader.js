@@ -1,5 +1,5 @@
 import Trader from "./trader.js";
-import { calcAveragePrice, calcPercentageDifference } from "../../shared-code/utilities.js";
+import { calcAveragePrice, calcPercentageDifference, isNumber } from "../../shared-code/utilities.js";
 const calcPct = calcPercentageDifference;
 
 // Smart trader
@@ -83,6 +83,8 @@ class SmartTrader extends Trader {
       if (signal != "unknown" && capital > 0 && eurBalance >= 1) {
         await this.buy(capital, eurBalance, currentPrice[1]);
         this.dispatch("LOG", `💵 Placed BUY at: ${currentPrice[1]} ${signal}`);
+        this.prevGainPercent = 0;
+        this.prevLossPercent = 0;
       }
 
       // Sell
@@ -92,15 +94,24 @@ class SmartTrader extends Trader {
       if (-gainLossPercent >= this.prevLossPercent) this.prevLossPercent = -gainLossPercent;
       // const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
 
+      const downtrend = currentMove.at(-1) == "downtrend";
+      const profitTarget = parseInt(Math.max(this.changePct / 1.3, 5));
+
+      // if (gainLossPercent <= -1.5) this.prevGainPercent = 0;
+
       this.dispatch(
         "LOG",
-        `📊 Current: ${gainLossPercent}% - 💰 Gain: ${this.prevGainPercent}% - 💸 Loss: ${this.prevLossPercent}%`
+        `📊 Current: ${gainLossPercent}% - 🎯 target: ${profitTarget} - 💰 Gain: ${this.prevGainPercent}% - 💸 Loss: ${this.prevLossPercent}%`
       );
 
       if (signal == "unknown") {
-        const profitTarget = Math.max(this.changePct / 1.2, 5);
-        if (gainLossPercent > profitTarget && currentMove.at(-1) == "downtrend") signal = "take-profit-sell";
-        else if (gainLossPercent <= -2) signal = "stop-loss-sell";
+        if (this.prevGainPercent > profitTarget && downtrend) {
+          signal = "take-profit-sell";
+        } else if (gainLossPercent <= -2) {
+          signal = "stop-loss-sell";
+        } else if (this.prevLossPercent >= 1.5 && isNumber(this.prevGainPercent, 0, 2) && downtrend) {
+          // signal = "recover-sell";
+        }
       }
 
       if (signal.includes("sell") && autoSell) {

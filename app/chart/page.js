@@ -2,6 +2,7 @@
 import { useState } from "react";
 import ChartCanvas from "../components/chart-canvas";
 import { toShortDate } from "../../shared-code/utilities.js";
+import { borderCls, cardCls } from "../components/tailwind-classes.js";
 
 export default function CryptoChart() {
   const [prices, setPrices] = useState([]);
@@ -10,37 +11,35 @@ export default function CryptoChart() {
   const labels = prices.map((p, i) => `${toShortDate(new Date(since + interval * i))}`);
 
   return (
-    <>
-      <main className="flex flex-col h-screen m-0 p-0">
-        <div className="flex">
-          <textarea
-            id="prices"
-            name="prices"
-            onChange={(e) => setPrices(JSON.parse(e.target.value))}
-            col="40"
-            className="flex-1 border-[1px] border-neutral-300 dark:border-neutral-600"
-          ></textarea>
-        </div>
+    <main className="flex flex-col h-screen m-0 p-0">
+      <div className="flex">
+        <textarea
+          id="prices"
+          name="prices"
+          onChange={(e) => setPrices(JSON.parse(e.target.value))}
+          col="40"
+          className={`flex-1 ${borderCls} ${cardCls}`}
+        ></textarea>
+      </div>
 
-        <div className="h-[75vh]">
-          <ChartCanvas
-            type="line"
-            labels={labels}
-            datasets={[
-              {
-                label: "Normalized Price",
-                borderColor: "#008080",
-                fill: false,
-                data: prices,
-                pointStyle: false,
-                borderWidth: 1,
-              },
-            ]}
-            options={{ responsive: true, maintainAspectRatio: false }}
-          />
-        </div>
-      </main>
-    </>
+      <div className="h-[75vh]">
+        <ChartCanvas
+          type="line"
+          labels={labels}
+          datasets={[
+            {
+              label: "Normalized Price",
+              borderColor: "#008080",
+              fill: false,
+              data: prices,
+              pointStyle: false,
+              borderWidth: 1,
+            },
+          ]}
+          options={{ responsive: true, maintainAspectRatio: false }}
+        />
+      </div>
+    </main>
   );
 }
 

@@ -15,7 +15,7 @@ import { getVolatility } from "../../shared-code/utilities";
 Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip);
 
 // const opn = { animation: { duration: 0 }, hover: { animationDuration: 0 }, responsiveAnimationDuration: 0 };
-export default function ChartCanvas({ labels, datasets, options, showZoom }) {
+export default function ChartCanvas({ labels, datasets, options, showZoom, zoomStep = 90 }) {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
   const [maxLevel, setMaxLevel] = useState(0);
@@ -54,7 +54,7 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
 
   return (
     <div className="relative h-[inherit] pt-4">
-      <canvas ref={chartRef}></canvas>(
+      <canvas ref={chartRef}></canvas>
       <div className="absolute top-0 right-1 left-1 flex justify-center items-center">
         {showZoom && (
           <label className="flex flex-auto items-center">
@@ -64,7 +64,7 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
               type="range"
               min="0"
               max={maxLevel}
-              step="90"
+              step={zoomStep}
               value={leftZoomLevel}
               onChange={(e) => setLeftZoomLevel(Number(e.target.value))}
               className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
@@ -83,7 +83,7 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
               type="range"
               min="0"
               max={maxLevel}
-              step="90"
+              step={zoomStep}
               value={rightZoomLevel}
               onChange={(e) => setRightZoomLevel(Number(e.target.value) + 1)}
               className="flex-auto h-2 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
@@ -92,7 +92,6 @@ export default function ChartCanvas({ labels, datasets, options, showZoom }) {
           </label>
         )}
       </div>
-      )
     </div>
   );
 }
