@@ -1,4 +1,4 @@
-import { calcAveragePrice, calcPercentageDifference } from "../../shared-code/utilities.js";
+import { calcAveragePrice, calcPercentageDifference, isNumber } from "../../shared-code/utilities.js";
 import { calculateFee } from "../services/calc-methods.js";
 
 // Smart trader
@@ -16,9 +16,10 @@ export default class Trader {
     this.pause = false;
     this.pauseTimer = 0;
     this.notifiedTimer = 0;
-    this.tracker = tracker || [[null, null, null]];
+    this.tracker = tracker || [[null, null, null, null]];
     this.priceLevel = [];
     this.changePct = 0;
+    this.volatilityTracker = [[null, null, null]];
 
     // this.strategyRange = +range; // Range in hours "0.5 = have an hour"
     // this.pricePercentChange = +pricePercent; // Percentage Change is the price Percentage Threshold
@@ -71,6 +72,43 @@ export default class Trader {
     if (!this.interval) throw "500-Interval is not set";
     return parseInt((60 * hours) / this.interval);
   }
+
+  trackVolatility(price, min = 0.5, max = 3) {
+    if (!this.volatilityTracker[0][0] || this.volatilityTracker[0][0] > price) {
+      this.volatilityTracker[0][0] = price;
+    }
+    if (!this.volatilityTracker[0][1] || this.volatilityTracker[0][1] < price) {
+      this.volatilityTracker[0][1] = price;
+    }
+
+    const nearLow = Math.abs(calcPercentageDifference(this.volatilityTracker[0][0], price));
+    const nearHigh = Math.abs(calcPercentageDifference(this.volatilityTracker[0][1], price));
+
+    if (nearHigh > nearLow) this.volatilityTracker[0][2] = "downtrend";
+    if (nearHigh < nearLow) this.volatilityTracker[0][2] = "uptrend";
+
+    const change = calcPercentageDifference(this.volatilityTracker[0][0], this.volatilityTracker[0][1]);
+
+    if (change > max) this.volatilityTracker[0] = [null, null, null];
+    else if (isNumber(change, min, max)) {
+      const limit = change / 3;
+      if (this.volatilityTracker[0][2] == "uptrend" && nearHigh > limit) {
+        this.volatilityTracker.push([change, this.volatilityTracker[0][2]]);
+        this.volatilityTracker[0] = [price, this.volatilityTracker[0][1], "downtrend"];
+      } else if (this.volatilityTracker[0][2] == "downtrend" && nearLow > limit) {
+        this.volatilityTracker.push([change, this.volatilityTracker[0][2]]);
+        this.volatilityTracker[0] = [this.volatilityTracker[0][0], price, "uptrend"];
+      }
+
+      if (this.volatilityTracker.length > 5) this.volatilityTracker.splice(1, 1);
+    }
+
+    return +(
+      this.volatilityTracker.slice(1).reduce((t, item) => t + item[0], 0) /
+      (this.volatilityTracker.length - 1)
+    ).toFixed(2);
+  }
+
   trackPrice(price, volume) {
     if (!this.tracker[0][0] || this.tracker[0][0] > price) this.tracker[0][0] = price; // Support Price Level
     if (!this.tracker[0][1] || this.tracker[0][1] < price) this.tracker[0][1] = price; // Resistance Price Level

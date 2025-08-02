@@ -21,6 +21,10 @@ class SmartTrader extends Trader {
     // const lastTrade = trades.at(-1);
     const normalizePrice = calcAveragePrice([currentPrice[1], currentPrice[2]]);
     // const volumes = storedPrices.slice(-last5min).map((p) => p[3]);
+
+    // const volatility = this.trackVolatility(normalizePrice);
+    // console.log("volatility", volatility, this.volatilityTracker);
+
     const trend = this.trackPrice(normalizePrice, currentPrice[3]);
     const currentMove = this.tracker[0];
     const move1 = this.tracker.at(-1) || [];
@@ -40,8 +44,7 @@ class SmartTrader extends Trader {
         move2.at(-1) == "uptrend" &&
         move1.at(-1) == "downtrend" &&
         currentMove.at(-1) == "uptrend" &&
-        nearSupport < 4
-        // && isNumber(calcPct(currentMove[0], normalizePrice), 1, 1.5)
+        calcPct(this.priceLevel[0], currentMove[0]) < 1.5
       ) {
         signal = "dropped-increase";
       }
@@ -85,6 +88,7 @@ class SmartTrader extends Trader {
         this.dispatch("LOG", `💵 Placed BUY at: ${currentPrice[1]} ${signal}`);
         this.prevGainPercent = 0;
         this.prevLossPercent = 0;
+        this.profitTarget = parseInt(Math.max(this.changePct / 1.3, 5));
       }
 
       // Sell
@@ -95,17 +99,16 @@ class SmartTrader extends Trader {
       // const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
 
       const downtrend = currentMove.at(-1) == "downtrend";
-      const profitTarget = parseInt(Math.max(this.changePct / 1.3, 5));
 
       // if (gainLossPercent <= -1.5) this.prevGainPercent = 0;
 
       this.dispatch(
         "LOG",
-        `📊 Current: ${gainLossPercent}% - 🎯 target: ${profitTarget} - 💰 Gain: ${this.prevGainPercent}% - 💸 Loss: ${this.prevLossPercent}%`
+        `📊 Current: ${gainLossPercent}% - 🎯 target: ${this.profitTarget} - 💰 Gain: ${this.prevGainPercent}% - 💸 Loss: ${this.prevLossPercent}%`
       );
 
       if (signal == "unknown") {
-        if (this.prevGainPercent > profitTarget && downtrend) {
+        if (this.prevGainPercent > this.profitTarget && downtrend) {
           signal = "take-profit-sell";
         } else if (gainLossPercent <= -2) {
           signal = "stop-loss-sell";
@@ -129,7 +132,7 @@ class SmartTrader extends Trader {
     }
 
     this.dispatch("LOG", "");
-    return { tracker: this.tracker, signal };
+    return { tracker: this.tracker, signal, pricesChanges: this.pricesChanges };
   }
 }
 
