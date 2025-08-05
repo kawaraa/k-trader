@@ -29,7 +29,7 @@ check_and_install() {
  if which $PROGRAM_NAME > /dev/null 2>&1; then
     echo "$PROGRAM_NAME is already installed!"
   else
-    retry_command 3 apt-get install $PROGRAM_NAME -y
+    retry_command 3 apt install $PROGRAM_NAME -y
     retry_command 3 $INSTALL_COMMAND # Execute additional command
     echo "$PROGRAM_NAME is now installed."
   fi
@@ -47,12 +47,12 @@ else
   #  === Install program if missing === #
 
   # Install Node.js and NPM
-  node -v || curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  node -v || curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
   # curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
   sleep 5
-  retry_command 3 apt-get install nodejs -y
+  retry_command 3 apt install nodejs -y
   sleep 5
-  retry_command 3 apt-get install npm -y
+  retry_command 3 apt install npm -y
   which pm2 > /dev/null 2>&1 || npm install -g pm2@latest
 
   # apt autoremove

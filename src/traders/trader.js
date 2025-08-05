@@ -19,6 +19,7 @@ export default class Trader {
     this.tracker = tracker || [[null, null, null, null]];
     this.priceLevel = [];
     this.changePct = 0;
+    this.profitTarget = 5;
     this.volatilityTracker = [[null, null, null]];
 
     // this.strategyRange = +range; // Range in hours "0.5 = have an hour"
@@ -47,6 +48,7 @@ export default class Trader {
     const orderId = await this.ex.createOrder("buy", "market", this.pair, cryptoVolume);
     const position = { id: orderId, price, volume: cryptoVolume, cost, createdAt: Date.now() };
     this.buySignal = buyCase;
+    this.profitTarget = parseInt(Math.max(this.changePct / 1.3, 5));
     this.dispatch("BUY", position, buyCase);
   }
 
