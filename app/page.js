@@ -87,6 +87,8 @@ export default function Home() {
       pairs.sort((a, b) => (traders[a].change || 0) - (traders[b].change || 0));
     } else if (orderby == "change-dec") {
       pairs.sort((a, b) => (traders[b].change || 0) - (traders[a].change || 0));
+    } else {
+      pairs.sort((a, b) => (traders[b].askBidSpread || 10) - (traders[a].askBidSpread || 10));
     }
 
     setSortedPairs(pairs);
