@@ -50,9 +50,22 @@ class TradersManager {
 
   async run() {
     try {
-      const { eurBalance, currencies } = await this.ex.getTradableAssetPrices("EUR");
+      let loadedCurrencies = {};
+      if (this.updateAskBidSpreadTimer > 1) {
+        for (let pair in this.state.data) {
+          if (!this.state.data[pair].disabled) loadedCurrencies[pair] = { balance: null, price: null };
+        }
+      }
+
+      const { eurBalance, currencies } = await this.ex.getTradableAssetPrices("EUR", loadedCurrencies);
+
+      Object.keys(this.state.data).forEach((p) => {
+        if (!currencies[p] && !this.state.data[p].disabled) delete this.state.data[p];
+      });
+
       this.eurBalance = eurBalance;
       const pairs = Object.keys(currencies);
+
       console.log(`🚀 Started trading ${pairs.length} Cryptocurrencies`);
 
       pairs.map(
@@ -95,7 +108,7 @@ class TradersManager {
     if (this.updateAskBidSpreadTimer > 1) this.updateAskBidSpreadTimer -= 1;
     else {
       this.state.data[pair].askBidSpread = +(calcPercentageDifference(price[2], price[1]) / 2).toFixed(2);
-      this.updateAskBidSpreadTimer = 6000; // 10hr
+      this.updateAskBidSpreadTimer = (60 * 60 * 24) / this.interval;
     }
 
     if (isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
@@ -147,7 +160,7 @@ class TradersManager {
         if (notify) notificationProvider.push(payload);
       }
 
-      if (notify) this.notifyTimers[pair] = (60 * 60) / 10;
+      if (notify) this.notifyTimers[pair] = (60 * 60) / this.interval;
 
       this.state.update(this.state.data);
     }

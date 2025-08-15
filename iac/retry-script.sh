@@ -71,7 +71,12 @@ else
 
   ufw allow 'Nginx HTTP' 
   ufw allow 'Nginx HTTPS'
+  ufw allow ssh
   ufw enable
+
+  # 1. ssh-keygen -t ed25519 -C "your_email@example.com"
+  # 2. Add Deploy key in https://github.com/kawaraa/k-trader/settings/keys 
+  # 3. Clone the repository
 
   # Additional commands for application setup
   rm -f ~/.pm2/logs/*

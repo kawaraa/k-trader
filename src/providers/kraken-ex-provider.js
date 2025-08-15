@@ -51,22 +51,25 @@ class KrakenExchangeProvider {
   publicApi(path, options) {
     return request(`${this.#apiUrl}/0/public${path}`, options).then(this.#checkError);
   }
-  async getTradableAssetPrices(currency = "EUR") {
-    const assets = await this.publicApi(`/AssetPairs`);
+
+  async getTradableAssetPrices(currency = "EUR", currencies = {}) {
     const balances = await this.balance();
     const eurBalance = +balances.ZEUR;
-    const currencies = {};
 
-    for (const pair in assets) {
-      const altname = assets[pair].altname;
-      if (pair == "ZEUR" || altname.startsWith(currency) || !altname.endsWith(currency)) continue;
-      currencies[pair] = { balance: 0 };
-      const case1 = assets[pair].base;
-      const case2 = pair.replace("ZEUR", "");
-      const case3 = pair.replace("EUR", "");
-      if (!isNaN(+balances[case1])) currencies[pair].balance = +balances[case1];
-      else if (!isNaN(+balances[case2])) currencies[pair].balance = +balances[case2];
-      else if (!isNaN(+balances[case3])) currencies[pair].balance = +balances[case3];
+    if (Object.keys(currencies).length == 0) {
+      const assets = await this.publicApi(`/AssetPairs`);
+
+      for (const pair in assets) {
+        const altname = assets[pair].altname;
+        if (pair == "ZEUR" || altname.startsWith(currency) || !altname.endsWith(currency)) continue;
+        currencies[pair] = { balance: 0 };
+        const case1 = assets[pair].base;
+        const case2 = pair.replace("ZEUR", "");
+        const case3 = pair.replace("EUR", "");
+        if (!isNaN(+balances[case1])) currencies[pair].balance = +balances[case1];
+        else if (!isNaN(+balances[case2])) currencies[pair].balance = +balances[case2];
+        else if (!isNaN(+balances[case3])) currencies[pair].balance = +balances[case3];
+      }
     }
 
     const prices = await this.publicApi(`/Ticker?pair=${Object.keys(currencies).join(",")}`);

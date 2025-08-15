@@ -45,6 +45,7 @@ class LocalState {
   }
 
   async appendToLocalPrices(pair, price) {
+    if (!price) return;
     const filePath = this.#getPricesFilePath(pair);
     try {
       const data = `\n${JSON.stringify(price)}`;
