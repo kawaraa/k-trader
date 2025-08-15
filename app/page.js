@@ -28,7 +28,7 @@ export default function Home() {
     if (!confirm(`Are you sure want increase the default investment capital`)) return;
     state.setLoading(true);
     try {
-      await request(`/api/trader/update/ALL/${newCapital}`, { method: "PUT" });
+      await request(`/api/trader/update/capital/ALL/${newCapital}`, { method: "PUT" });
       state.setDefaultCapital(newCapital);
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
@@ -160,21 +160,19 @@ export default function Home() {
       </div>
 
       <form className="mt-1 mb-5 flex flex-wrap justify-between items-center" onChange={handleFilterChange}>
-        {["all", "dropped-increase", "near-support", "above-resistance", "breakout", "low-liquidity"].map(
-          (status, i) => (
-            <CheckInput
-              type="radio"
-              id={status}
-              name="status"
-              value={status}
-              cls="m-1 flex-auto w-1/3 md:w-auto rounded-md"
-              labelCLs="rounded-md"
-              key={i}
-            >
-              {status}
-            </CheckInput>
-          )
-        )}
+        {["all", "buy", "low-liquidity"].map((status, i) => (
+          <CheckInput
+            type="radio"
+            id={status}
+            name="status"
+            value={status}
+            cls="m-1 flex-auto w-1/3 md:w-auto rounded-md"
+            labelCLs="rounded-md"
+            key={i}
+          >
+            {status}
+          </CheckInput>
+        ))}
       </form>
 
       <ul className="flex flex-wrap no-select mb-8 justify-center">

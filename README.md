@@ -1,8 +1,6 @@
 # K Trader
 
-K Trader is a Cryptocurrency Trading Bots Manager
-
-Goal: Dropping and earning at the same time with less remaining
+K Trader is a Cryptocurrency Trading Bots Manager that manage hundreds of bots.
 
 ## Trading fees calculation
 
@@ -16,12 +14,8 @@ Kraken says the fees is up to `0.25%` but they are charging around `0.40%`. this
 
 ## Strategies
 
-1. **on-increase:**
-1. **high-drop:**
-1. **near-low:**
-1. **on-increase-hard:**
-1. **high-drop-hard:**
-1. **near-low-hard:**
+1. **xxx:**
+1. **xxx:**
 
 ## RSI Description
 

@@ -10,7 +10,8 @@ const getSubRoute = (controller) => {
   const router = express.Router();
   router.get("/", controller.get);
   router.post("/enable-disable/:pair", controller.enableDisable);
-  router.put("/update/:pair/:capital", controller.update); // change status / pause / turn on off
+  router.put("/update/capital/:pair/:value", controller.updateCapital); // change status / pause / turn on off
+  router.put("/update/trades/:pair/", controller.resetTrades);
   router.put("/auto-sell/:pair/:status", controller.autoSell);
   router.patch("/:action/:pair/", controller.execute);
   return router;

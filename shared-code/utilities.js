@@ -134,6 +134,10 @@ export function calcPercentageDifference(oldPrice, newPrice) {
     +(newPrice > oldPrice ? (100 * difference) / newPrice : (difference / oldPrice) * 100).toFixed(2) || 0
   );
 }
+export function calcPercentageOfTwoNumbers(num1, num2) {
+  if (num1 == 0 && num2 == 0) return 0;
+  return (Math.min(num1, num2) / Math.max(num1, num2)) * 100;
+}
 
 export function getVolatility(prices) {
   if (!Array.isArray(prices)) return 0;

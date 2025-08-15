@@ -18,16 +18,28 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const [capital, setCapital] = useState(info.capital || 0);
   const [chartData, setChartData] = useState(defaultChartData);
   const [disabled, setDisabled] = useState(false);
-  const totalReturn = parseInt(info.trades?.reduce((acc, t) => acc + t, 0)) || 0;
+  const [totalReturn, setTotalReturn] = useState(0);
   // const lengthLimit = (timeRange * 60 * 60) / 10;
 
   const handleSetCapital = async (e) => {
     const newCapital = +e.target.value || 0;
-    if (!confirm(`Are you sure want increase investment capital for ${pair}`)) return;
+    if (!confirm(`Are you sure want to increase investment capital for ${pair}`)) return;
     setLoading(true);
     try {
-      await request(`/api/trader/update/${pair}/${newCapital}`, { method: "PUT" });
+      await request(`/api/trader/update/capital/${pair}/${newCapital}`, { method: "PUT" });
       setCapital(newCapital);
+    } catch (error) {
+      alert(JSON.stringify(error.message || error.error || error));
+    }
+    setLoading(false);
+  };
+
+  const handleResetTrades = async (e) => {
+    if (!confirm(`Are you sure want to reset trades for ${pair}`)) return;
+    setLoading(true);
+    try {
+      await request(`/api/trader/update/trades/${pair}`, { method: "PUT" });
+      setTotalReturn(0);
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
@@ -87,6 +99,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
 
   useEffect(() => {
     setCapital(!info.capital && defaultCapital >= 0 ? defaultCapital : info.capital);
+    setTotalReturn(parseInt(info.trades?.reduce((acc, t) => acc + t, 0)) || 0);
   }, [info.capital, defaultCapital]);
 
   useEffect(() => {
@@ -148,7 +161,12 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
           €
         </EditableInput>
 
-        <strong className={totalReturn < 0 ? "text-red" : "text-green"}>€{totalReturn}</strong>
+        <strong
+          className={`cursor-pointer ${totalReturn < 0 ? "text-red" : "text-green"}`}
+          onClick={handleResetTrades}
+        >
+          €{totalReturn}
+        </strong>
 
         <button
           onClick={() => placePosition("buy")}

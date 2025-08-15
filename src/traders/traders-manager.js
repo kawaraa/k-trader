@@ -101,12 +101,12 @@ class TradersManager {
     if (isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
       const { capital, position, trades } = this.state.data[pair];
       const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
-      const res = await this.#traders[pair].trade(cpl, price, eur, crypto, trades, position, this.autoSell);
-      if (res.change) this.state.data[pair].change = res.change;
-      // if (res.status) this.state.data[pair].status = res.status;
+      const res = await this.#traders[pair].run(cpl, price, eur, crypto, trades, position, this.autoSell);
+
+      if (res.bigChanges) this.state.data[pair].bigChanges = res.bigChanges;
+      if (res.smallChanges) this.state.data[pair].smallChanges = res.smallChanges;
+      if (res.trend) this.state.data[pair].trend = res.trend;
       if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
-      if (res.tracker) this.state.data[pair].tracker = res.tracker;
-      if (res.pricesChanges) this.state.data[pair].pricesChanges = res.pricesChanges;
     }
   }
 
@@ -130,6 +130,7 @@ class TradersManager {
       const time = ` Time: ${toShortDate()}`;
       const body = `${tradeCase} at price: ${info?.price || info}`;
       const url = `/trader?pair=${pair}`;
+
       if (event == "BUY_SIGNAL") {
         const title = `BUY Signal for ${pair}`;
         if (notify) notificationProvider.push({ title, body: body + time, url });
@@ -171,7 +172,7 @@ class TraderInfo {
     this.balance = crypto || 0;
     this.position = null;
     this.trades = [];
-    this.tracker = [[null, null, null]];
-    this.pricesChanges = [];
+    this.bigChanges = [[null, null, null, null]];
+    this.smallChanges = [[null, null, null, null]];
   }
 }
