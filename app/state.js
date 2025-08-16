@@ -42,29 +42,36 @@ export function StateProvider({ children }) {
 
   useEffect(() => {
     if (user && !user.loading) {
-      if (window?.priceEventSource) window.priceEventSource.close();
-      window.priceEventSource = new EventSource("/api/sse/all/price", { withCredentials: true });
-      window.priceEventSource.onopen = () => console.log("SSE connection opened");
-      window.priceEventSource.onerror = (error) => {
-        console.error("Price: SSE connection error:");
-        window.priceEventSource.close(); // Close client-side connection
-      };
-      window.priceEventSource.onmessage = (e) => {
-        const data = JSON.parse(e.data);
-        const pair = Object.keys(data)[0];
-        window.dispatchEvent(new CustomEvent(pair, { detail: data[pair] }));
+      // if (window?.priceEventSource) window.priceEventSource.close();
+      window.sseRetry = true;
+
+      const connect = () => {
+        window.priceEventSource = new EventSource("/api/sse/all/price", { withCredentials: true });
+        window.priceEventSource.onopen = () => console.log("SSE connection opened");
+        window.priceEventSource.onerror = (error) => {
+          console.error("Price: SSE connection error:");
+          window.priceEventSource.close(); // Close client-side connection
+          if (window.sseRetry) connect();
+        };
+        window.priceEventSource.onmessage = (e) => {
+          const data = JSON.parse(e.data);
+          const pair = Object.keys(data)[0];
+          window.dispatchEvent(new CustomEvent(pair, { detail: data[pair] }));
+        };
       };
 
       const handler = () => {
+        window.sseRetry = false;
         request(`/api/prices/event/all`, { method: "PATCH" });
         window.priceEventSource.close();
       };
+
       window.addEventListener("beforeunload", handler);
 
       // This terminates the connection
       return () => {
         handler();
-        window.addEventListener("beforeunload", handler);
+        window.removeEventListener("beforeunload", handler);
       };
     }
   }, [user]);

@@ -20,7 +20,9 @@ export default class SSEController extends Controller {
       let event = request.params.filename;
 
       if (event == "log") event = `${request.params.pair}-${event}`;
-      this.#addConnection(clientIP, event);
+
+      const error = this.#addConnection(clientIP, event);
+      if (error) return next(error);
 
       response.writeHead(200, {
         "Content-Type": "text/event-stream",
@@ -63,7 +65,7 @@ export default class SSEController extends Controller {
     if (!this.activeConnections.has(clientIP)) this.activeConnections.set(clientIP, new Map());
     const clientEvents = this.activeConnections.get(clientIP);
     if (!clientEvents.has(eventName)) clientEvents.set(eventName);
-    else throw new Error("400-Already listening to " + eventName + " event");
+    else return "400-Already listening to " + eventName + " event";
   }
   #removeEvent(clientIP, eventName) {
     if (eventName == "all") return this.activeConnections.delete(clientIP);

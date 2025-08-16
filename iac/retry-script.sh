@@ -68,8 +68,6 @@ else
   cp ~/iac/nginx/nginx.conf /etc/nginx/nginx.conf
   cp ~/iac/nginx/default-server.conf /etc/nginx/sites-available/default
 
-
-  ufw allow 'Nginx HTTP' 
   ufw allow 'Nginx HTTPS'
   ufw allow ssh
   ufw enable
