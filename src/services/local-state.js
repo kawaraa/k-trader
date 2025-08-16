@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import fs from "node:fs";
 import { appendFile, open, readFile, stat, writeFile } from "node:fs/promises";
 
 // In prod limit Storing prices to 30 days (8640) and in local to 60 days (17280)
@@ -12,7 +12,7 @@ class LocalState {
   constructor(filename) {
     this.#databaseFolder = `${process.cwd()}/database/`;
     this.#filePath = `${this.#databaseFolder}${filename}.json`;
-    this.data = JSON.parse(readFileSync(this.#filePath, "utf8"));
+    this.data = JSON.parse(fs.readFileSync(this.#filePath, "utf8"));
   }
 
   #getPricesFilePath(pair) {
@@ -28,8 +28,8 @@ class LocalState {
       return {};
     }
   }
-  async update(state) {
-    await writeFile(this.#filePath, JSON.stringify(state, null, 2));
+  update(state) {
+    fs.writeFileSync(this.#filePath, JSON.stringify(state, null, 2));
     this.data = state;
   }
 
@@ -49,14 +49,14 @@ class LocalState {
     const filePath = this.#getPricesFilePath(pair);
     try {
       const data = `\n${JSON.stringify(price)}`;
-      if (price) return !existsSync(filePath) ? writeFile(filePath, data) : appendFile(filePath, data);
+      if (price) return !fs.existsSync(filePath) ? writeFile(filePath, data) : appendFile(filePath, data);
     } catch (error) {
       console.log(pair, "Could not append new price");
     }
   }
   async getLocalPrices(pair, numberOfLines = 1440, fromStart) {
     const filePath = this.#getPricesFilePath(pair);
-    if (!existsSync(filePath)) return [];
+    if (!fs.existsSync(filePath)) return [];
     const file = await open(filePath, "r");
     const size = (await file.stat()).size;
     const length = Math.min(size, 1024 * (numberOfLines / 20)); // CHUNK_SIZE in KB, approximately 1KB = 20 lines in prices data
