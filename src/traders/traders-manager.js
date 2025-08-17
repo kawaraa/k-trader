@@ -22,8 +22,6 @@ class TradersManager {
     this.#traders = {};
     this.autoSell = true;
     this.notifyTimers = {};
-    this.reducePriceFileTimer = 0;
-    this.updateAskBidSpreadTimer = 0;
   }
 
   start() {
@@ -51,7 +49,7 @@ class TradersManager {
   async run() {
     try {
       let loadedCurrencies = {};
-      if (this.updateAskBidSpreadTimer > 1) {
+      if (!(new Date().getHours() == 0 && new Date().getMinutes() == 0)) {
         for (let pair in this.state.data) {
           if (!this.state.data[pair].disabled) loadedCurrencies[pair] = { balance: null, price: null };
         }
@@ -80,9 +78,7 @@ class TradersManager {
         )
       );
       await this.state.update(this.state.data);
-
-      if (this.reducePriceFileTimer > 1) this.reducePriceFileTimer -= 1;
-      else this.deleteOldPrices();
+      this.deleteOldPrices();
 
       console.log(`✅ Finished trading ${pairs.length} Cryptocurrencies`);
     } catch (error) {
@@ -104,11 +100,8 @@ class TradersManager {
     this.state.data[pair].price = price;
     this.state.data[pair].balance = crypto;
 
-    // const tradingTimeSuggestion = getCryptoTimingSuggestion(); // Todo: pass this to trade function
-    if (this.updateAskBidSpreadTimer > 1) this.updateAskBidSpreadTimer -= 1;
-    else {
+    if (new Date().getHours() == 0 && new Date().getMinutes() == 0) {
       this.state.data[pair].askBidSpread = +(calcPercentageDifference(price[2], price[1]) / 2).toFixed(2);
-      this.updateAskBidSpreadTimer = (60 * 60 * 24) / this.interval;
     }
 
     if (isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
@@ -167,11 +160,11 @@ class TradersManager {
   }
 
   deleteOldPrices() {
-    // Linux/macOS (no shell)
+    if (new Date().getMinutes() > 0) return; // only the time is Exactly on the Hour
+    // Linux/macOS (no shell) - "1,600d" means Delete lines 1 through 600, which is 1hr
     spawn("find", ["database/prices/", "-type", "f", "-exec", "sed", "-i", "1,600d", "{}", ";"], {
       stdio: "inherit", // Prints output to parent console
     });
-    this.reducePriceFileTimer = 600; // 1hr
   }
 }
 
