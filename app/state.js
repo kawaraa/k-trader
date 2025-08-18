@@ -111,7 +111,7 @@ export const State = () => useContext(StateContext);
 
 const registerServiceWorker = async (update) => {
   if ("serviceWorker" in navigator && !window.location.origin.includes("localhost")) {
-    return navigator.serviceWorker.getRegistrations().then(async (registrations) => {
+    const sw = await navigator.serviceWorker.getRegistrations().then(async (registrations) => {
       for (const registration of registrations) {
         if (
           registration.active.state == "activated" &&
@@ -128,5 +128,12 @@ const registerServiceWorker = async (update) => {
         .then((registration) => console.log("Registration scope: ", registration.scope))
         .catch((error) => console.log("Web Worker Registration Error: ", error));
     });
+
+    navigator.serviceWorker.onmessage = (e) => {
+      if (window.focus) window.focus();
+      if (e.data.action === "playSound") new Audio(e.data.url).play();
+    };
+
+    return sw;
   }
 };

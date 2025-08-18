@@ -164,9 +164,13 @@ class TradersManager {
   deleteOldPrices() {
     if (new Date().getMinutes() > 0) return; // only the time is Exactly on the Hour
     // Linux/macOS (no shell) - "1,600d" means Delete lines 1 through 600, which is 1hr
-    spawn("find", ["database/prices/", "-type", "f", "-exec", "sed", "-i", "1,600d", "{}", ";"], {
-      stdio: "inherit", // Prints output to parent console
-    });
+    spawn(
+      "find",
+      ["database/prices/", "-type", "f", "-size", "+5M", "-exec", "sed", "-i", "1,600d", "{}", ";"],
+      {
+        stdio: "inherit", // Prints output to parent console
+      }
+    );
   }
 }
 

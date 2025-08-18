@@ -1,5 +1,5 @@
 // self.importScripts('foo.js', 'bar.js');
-const staticFileCacheName = "static-files-v-0xbcy2ye7y3ubf";
+const staticFileCacheName = "static-files-v-0xbcy2ye7y3ub";
 const staticFileCachePaths = [
   "/offline.html",
   "/manifest.json",
@@ -10,6 +10,7 @@ const staticFileCachePaths = [
   "/android-chrome-512x512.png",
   "/android-chrome-192x192.png",
   "/apple-touch-icon.png",
+  "/bell-notification-sound.mp3",
   "/login/",
 ];
 
@@ -41,13 +42,19 @@ self.addEventListener("push", (event) => {
     self.registration.showNotification(payload.title, {
       body: payload.body,
       icon: "/android-chrome-192x192.png",
+      sound: "/bell-notification-sound.mp3",
       // badge: "/icons/badge.png",
       vibrate: [200, 100, 200],
       data: { url: `${self.location.origin}${payload.url || customPayload.url}` }, // Optional: URL to open when clicked
     })
   );
-  // new Audio("/bell-notification-sound.mp3").play().catch((e) => console.log(e));
-  // Todo: cache "-sound.mp3" and Keep the sound file small (<100 KB) to avoid performance issues
+
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      const focusedClient = clients.find((client) => client.focused) || clients[0];
+      focusedClient.postMessage({ action: "playSound", url: "/bell-notification-sound.mp3" });
+    })
+  );
 });
 
 self.addEventListener("notificationclick", (event) => {
