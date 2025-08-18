@@ -64,11 +64,16 @@ class KrakenExchangeProvider {
         if (pair == "ZEUR" || altname.startsWith(currency) || !altname.endsWith(currency)) continue;
         currencies[pair] = { balance: 0 };
         const case1 = assets[pair].base;
-        const case2 = pair.replace("ZEUR", "");
-        const case3 = pair.replace("EUR", "");
+        const case2 = pair.replace("ZEUR", "").replace("EUR", "");
+
         if (!isNaN(+balances[case1])) currencies[pair].balance = +balances[case1];
         else if (!isNaN(+balances[case2])) currencies[pair].balance = +balances[case2];
-        else if (!isNaN(+balances[case3])) currencies[pair].balance = +balances[case3];
+      }
+    } else {
+      for (const pair in currencies) {
+        const key = pair.replace("ZEUR", "").replace("EUR", "");
+        if (!isNaN(+balances[key])) currencies[pair].balance = +balances[key];
+        else if (!isNaN(+balances["X" + key])) currencies[pair].balance = +balances["X" + key];
       }
     }
 

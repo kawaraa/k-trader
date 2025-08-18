@@ -66,14 +66,16 @@ class TradersManager {
 
       console.log(`🚀 Started trading ${pairs.length} Cryptocurrencies`);
 
-      pairs.map(
-        (pair) =>
-          !this.state.data[pair]?.disabled && this.state.appendToLocalPrices(pair, currencies[pair].price)
+      await Promise.all(
+        pairs.map(
+          (pair) =>
+            !this.state.data[pair]?.disabled && this.state.appendToLocalPrices(pair, currencies[pair].price)
+        )
       );
       await Promise.all(
         pairs.map(
           (pair) =>
-            !this.state.data[pair]?.disabled &&
+            !this.state.data[pair].disabled &&
             this.runTrader(pair, eurBalance, currencies[pair].balance, currencies[pair].price)
         )
       );

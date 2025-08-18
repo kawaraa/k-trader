@@ -4,6 +4,7 @@ import { parseError } from "../../shared-code/utilities.js";
 const errorHandlerMiddleware = (error, req, res, next) => {
   const clientIP =
     req.headers["x-real-ip"] || req.headers["x-forwarded-for"] || req.ip || req.connection.remoteAddress;
+  console.log(req.headers["x-real-ip"], req.headers["x-forwarded-for"], req.ip, req.connection.remoteAddress);
   console.log("errorHandlerMiddleware: ", clientIP, req.url, error);
 
   let statusCode = 500;
