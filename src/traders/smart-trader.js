@@ -27,7 +27,7 @@ class SmartTrader extends Trader {
     let signal = "unknown";
     const safeAskBidSpread = calcPct(currentPrice[2], currentPrice[1]);
 
-    if (isNumber(safeAskBidSpread, 0, 1)) {
+    if (!isNumber(safeAskBidSpread, 0, 1)) {
       this.dispatch("LOG", `low-liquidity AskBidSPread: ${safeAskBidSpread}`);
       return { signal: "low-liquidity" };
     }
