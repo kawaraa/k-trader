@@ -58,12 +58,14 @@ class SmartTrader extends Trader {
 
       const increasing =
         sMove0[1] > sHigh1[1] * 1.005 && sMove0[0] > sHigh1[0] * 1.005 && normalizePrice > this.prevPrice;
+
       const gradualIncreasing =
         sMove0[0] > sHigh1[0] &&
         sHigh1[0] > sHigh2[0] &&
         sHigh2[0] > sHigh3[0] &&
         (sMove0[1] > sHigh1[1] || sHigh1[1] > sHigh2[1] || sHigh2[1] > sHigh3[1]);
 
+      // Buy cases:
       const case1 =
         bMove1[2] == "up" &&
         bMove0[2] == "down" &&
@@ -131,8 +133,10 @@ class SmartTrader extends Trader {
       );
 
       const gain = bMove0[2] == "up" ? Math.max(this.prevGainPercent, bMove0[3]) : this.prevGainPercent;
+      const down = sHigh2[1] > sHigh1[1] || Math.abs(calcPct(sHigh2[1], sHigh1[1])) <= 0.5;
+      const dropping = loss > 2 || down || (bMove1[2] == "up" && bMove0[2] == "down");
 
-      if (gain >= this.profitTarget && (loss > 2 || bMove1[2] == "up")) signal = "take-profit-sell";
+      if (gain >= this.profitTarget && dropping) signal = "take-profit-sell";
       else if (normalizePrice < this.stopLossPrice * 0.99 && loss > 2) signal = "stop-loss-sell";
 
       if (signal.includes("sell") && autoSell) {
@@ -155,7 +159,7 @@ class SmartTrader extends Trader {
 
   trackPrice(price, volume) {
     // Track Big Changes
-    const minBigChange = 8; // Try 3
+    const minBigChange = 8;
     if (!this.bigChanges[0][0] || this.bigChanges[0][0] > price) this.bigChanges[0][0] = price;
     if (!this.bigChanges[0][1] || this.bigChanges[0][1] < price) this.bigChanges[0][1] = price;
 

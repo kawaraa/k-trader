@@ -8,7 +8,8 @@ const key = process.env.NEXT_PUBLIC_VAPID_KEY;
 export default function Navigation(props) {
   const { eurBalance, traders, loadedTradersPairs } = State();
   const [notificationOn, setNotificationOn] = useState();
-  const pairs = Object.keys(traders);
+  const allPairs = Object.keys(traders);
+  const active = allPairs.filter((p) => !traders[p]?.disabled);
 
   const handleNotificationSettings = async (e) => {
     try {
@@ -62,7 +63,7 @@ export default function Navigation(props) {
         <strong className="text-2xl font-bold text-emerald-500">€{parseInt(eurBalance)}</strong>
       </div>
 
-      <ComboBox items={pairs} link="/trader?pair=xxxx&since=48" cls="min-w-14 flex-1" />
+      <ComboBox items={allPairs} link="/trader?pair=xxxx&since=48" cls="min-w-14 flex-1" />
 
       <ToggleSwitch onChange={handleNotificationSettings} checked={notificationOn} size={35} cls="mr-3">
         <span className="mx-1 w-3">
@@ -86,7 +87,7 @@ export default function Navigation(props) {
 
       <div className="flex items-center items-end">
         <strong>
-          {loadedTradersPairs.length}/<span className="text-green">{pairs.length}</span>
+          {loadedTradersPairs.length}/<span className="text-green">{active.length}</span>/{allPairs.length}
         </strong>
         <span className={`w-6 ml-1 flex rounded-3xl`}>
           <svg

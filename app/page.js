@@ -16,7 +16,7 @@ export default function Home() {
   const { loading, user, traders, loadedTradersPairs, defaultCapital, ...state } = State();
   const [sortedPairs, setSortedPairs] = useState([]);
   const [filter, setFilter] = useState("");
-  const [orderby, setOrderby] = useState("liquidity");
+  const [orderby, setOrderby] = useState("liquidity-asc");
   const timeRange = +params.get("since") || 6;
   // const signals = Object.keys(traders)
   //   .map((pair) => traders[pair].signal)
@@ -66,7 +66,7 @@ export default function Home() {
     state.setLoading(true);
     const doesMatch = (f, t1, t2) => !f || f == "all" || t1 == f || t2 == f;
     let pairs = Object.keys(traders).filter(
-      (p) => !traders[p].disabled && doesMatch(filter, traders[p].signal, traders[p].status)
+      (p) => !traders[p].disabled && doesMatch(filter, traders[p].trend, traders[p].signal)
     );
 
     if (orderby == "balance") {
@@ -84,11 +84,13 @@ export default function Home() {
     } else if (orderby == "volume-dec") {
       pairs.sort((a, b) => traders[b].price[2] - traders[a].price[2]);
     } else if (orderby == "change-asc") {
-      pairs.sort((a, b) => (traders[a].change || 0) - (traders[b].change || 0));
+      pairs.sort((a, b) => traders[a].bigChanges[3] - traders[b].bigChanges[3]);
     } else if (orderby == "change-dec") {
-      pairs.sort((a, b) => (traders[b].change || 0) - (traders[a].change || 0));
-    } else {
-      pairs.sort((a, b) => (traders[b].askBidSpread || 10) - (traders[a].askBidSpread || 10));
+      pairs.sort((a, b) => traders[b].bigChanges[3] - traders[a].bigChanges[3]);
+    } else if (orderby == "liquidity-asc") {
+      pairs.sort((a, b) => traders[a].askBidSpread - traders[b].askBidSpread);
+    } else if (orderby == "liquidity-dec") {
+      pairs.sort((a, b) => traders[b].askBidSpread - traders[a].askBidSpread);
     }
 
     setSortedPairs(pairs);
@@ -156,19 +158,20 @@ export default function Home() {
             <option value="change-dec">change-DEC</option>
             <option value="volume-asc">Volume-ASC</option>
             <option value="volume-dec">Volume-DEC</option>
-            <option value="liquidity">Liquidity</option>
+            <option value="liquidity-asc">Liquidity-ASC</option>
+            <option value="liquidity-dec">Liquidity-DEC</option>
           </select>
         </div>
       </div>
 
-      <form className="mt-1 mb-5 flex flex-wrap justify-between items-center" onChange={handleFilterChange}>
-        {["all", "buy", "low-liquidity"].map((status, i) => (
+      <form className="mt-1 mb-5 flex justify-between items-center" onChange={handleFilterChange}>
+        {["all", "up", "down", "buy"].map((status, i) => (
           <CheckInput
             type="radio"
             id={status}
             name="status"
             value={status}
-            cls="m-1 flex-auto w-1/3 md:w-auto rounded-md"
+            cls="m-1 flex-auto w-1/2 md:w-auto rounded-md"
             labelCLs="rounded-md"
             key={i}
           >
