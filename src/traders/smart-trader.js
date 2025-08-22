@@ -25,8 +25,12 @@ class SmartTrader extends Trader {
     // if (this.pauseTimer > 0) this.pauseTimer -= 1;
     // if (this.notifiedTimer > 0) this.notifiedTimer -= 1;
     let signal = "unknown";
-    // safeAskBidSpread
-    if (calcPct(currentPrice[2], currentPrice[1]) >= 1) return { status: "low-liquidity", signal };
+    const safeAskBidSpread = calcPct(currentPrice[2], currentPrice[1]);
+
+    if (isNumber(safeAskBidSpread, 0, 1)) {
+      this.dispatch("LOG", `low-liquidity AskBidSPread: ${safeAskBidSpread}`);
+      return { signal: "low-liquidity" };
+    }
 
     const normalizePrice = calcAveragePrice([currentPrice[1], currentPrice[2]]);
 
@@ -154,7 +158,13 @@ class SmartTrader extends Trader {
 
     this.prevPrice = normalizePrice;
     this.dispatch("LOG", "");
-    return { bigChanges: this.bigChanges, smallChanges: this.smallChanges, trend: bigChangeTrend, signal };
+    return {
+      safeAskBidSpread,
+      bigChanges: this.bigChanges,
+      smallChanges: this.smallChanges,
+      trend: bigChangeTrend,
+      signal,
+    };
   }
 
   trackPrice(price, volume) {

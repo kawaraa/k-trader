@@ -84,7 +84,7 @@ class KrakenExchangeProvider {
       if (pair == "ZEUR") return;
       const { a, b, c, v } = prices[pair];
       if (!currencies[pair]) currencies[pair] = { balance: 0 };
-      currencies[pair].price = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])];
+      currencies[pair].price = [+c[0], +a[0], +b[0], parseInt(+c[0] * +v[1])]; //[trade,ask,bid,volume]
     });
 
     return { eurBalance, currencies };

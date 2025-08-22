@@ -102,20 +102,15 @@ class TradersManager {
     this.state.data[pair].price = price;
     this.state.data[pair].balance = crypto;
 
-    if (new Date().getHours() == 0 && new Date().getMinutes() == 0) {
-      this.state.data[pair].askBidSpread = +(calcPercentageDifference(price[2], price[1]) / 2).toFixed(2);
-    }
+    const { capital, position, trades } = this.state.data[pair];
+    const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
+    const res = await this.#traders[pair].run(cpl, price, eur, crypto, trades, position, this.autoSell);
 
-    if (isNumber(this.state.data[pair].askBidSpread, 0, 1)) {
-      const { capital, position, trades } = this.state.data[pair];
-      const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
-      const res = await this.#traders[pair].run(cpl, price, eur, crypto, trades, position, this.autoSell);
-
-      if (res.bigChanges) this.state.data[pair].bigChanges = res.bigChanges;
-      if (res.smallChanges) this.state.data[pair].smallChanges = res.smallChanges;
-      if (res.trend) this.state.data[pair].trend = res.trend;
-      if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
-    }
+    if (!isNaN(+res.askBidSpread)) this.state.data[pair].askBidSpread = res.askBidSpread;
+    if (res.bigChanges) this.state.data[pair].bigChanges = res.bigChanges;
+    if (res.smallChanges) this.state.data[pair].smallChanges = res.smallChanges;
+    if (res.trend) this.state.data[pair].trend = res.trend;
+    if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
   }
 
   async updateBotProgress(pair, event, info, tradeCase) {
@@ -179,7 +174,7 @@ export default tradersManager;
 
 class TraderInfo {
   constructor(crypto) {
-    // this.askBidSpread = 0; // this will be undefined for low liquidity asset
+    this.askBidSpread = 0;
     this.capital = 0;
     this.balance = crypto || 0;
     this.position = null;
