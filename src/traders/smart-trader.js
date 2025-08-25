@@ -48,7 +48,7 @@ class SmartTrader extends Trader {
     if (testMode) console.log(JSON.stringify(currentPrice), "\n", this.bigChanges, "\n", this.smallChanges);
     const log1 = `€${eurBalance.toFixed(2)} - Change: ${this.wideChangePct}`;
     const log2 = `Trend: ${sMove0[2]} - Price: ${normalizePrice}`;
-    this.dispatch("LOG", `${log1} - ${log2}`);
+    this.dispatch("LOG", `${log1} - ${log2} - CMD: ${command}`);
 
     if (this.smallChanges.length > 3 && this.bigChanges.length >= 1) {
       const notHigh = calcPct(bMove0[0], normalizePrice) <= 3.5; // missed out
@@ -169,6 +169,7 @@ class SmartTrader extends Trader {
 
     this.prevPrice = normalizePrice;
     this.dispatch("LOG", "");
+
     return {
       safeAskBidSpread,
       bigChanges: this.bigChanges,

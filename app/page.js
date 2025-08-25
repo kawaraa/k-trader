@@ -66,7 +66,10 @@ export default function Home() {
     state.setLoading(true);
     const doesMatch = (f, t1, t2) => !f || f == "all" || t1 == f || t2 == f;
     let pairs = Object.keys(traders).filter(
-      (p) => !traders[p].disabled && doesMatch(filter, traders[p].trend, traders[p].signal)
+      (p) =>
+        !traders[p].disabled &&
+        ((filter == "command" && traders[p].command) ||
+          doesMatch(filter, traders[p].trend, traders[p].signal))
     );
 
     if (orderby == "balance") {
