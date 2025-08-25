@@ -41,7 +41,7 @@ async function runTradingTest(pair, interval) {
     for (let i = 0; i < prices.length; i++) {
       const { eur, crypto } = await ex.balance();
       prevCryptoBalance = crypto;
-      await trader.run(capital, prices[i], eur, crypto, trades, position, true, true);
+      await trader.run(capital, prices[i], eur, crypto, null, position, true, true);
       await ex.currentPrices();
     }
 

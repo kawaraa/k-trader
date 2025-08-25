@@ -21,7 +21,7 @@ class SmartTrader extends Trader {
     this.tightChangePct = 0;
   }
 
-  async run(capital, currentPrice, eurBalance, cryptoBalance, trades, position, autoSell, testMode) {
+  async run(capital, currentPrice, eurBalance, cryptoBalance, command, position, autoSell, testMode) {
     // if (this.pauseTimer > 0) this.pauseTimer -= 1;
     // if (this.notifiedTimer > 0) this.notifiedTimer -= 1;
     let signal = "unknown";
@@ -99,7 +99,12 @@ class SmartTrader extends Trader {
 
       const case4 = bMove3[2] == "down" && bMove2[2] == "down" && bMove1[2] == "down" && notHigh;
 
-      this.dispatch("LOG:", `${case1}-${case2}-${case3}-${case4}`);
+      const case5 =
+        command &&
+        isNumber(sMove0[0], command.buyPrice * 0.995, command.buyPrice * 1.005) &&
+        normalizePrice > this.prevPrice;
+
+      this.dispatch("LOG:", `${case1}-${case2}-${case3}-${case4}-${case5}`);
       // console.log(
       //   calcPct(bMove1[0], bMove0[0]),
       //   calcPct(bMove0[0], normalizePrice),
@@ -108,7 +113,7 @@ class SmartTrader extends Trader {
       //   gradualIncreasing
       // );
 
-      if (case1 || case2 || case3 || case4) signal = "buy";
+      if (case1 || case2 || case3 || case4 || case5) signal = "buy";
     }
 
     if (position && cryptoBalance < 0.00001) this.dispatch("SELL", 0, "via-ex");
@@ -121,6 +126,7 @@ class SmartTrader extends Trader {
         this.prevGainPercent = 0;
         this.prevLossPercent = 0;
         this.stopLossPrice = bMove0[2] == "down" ? bMove0[0] : bMove1[0]; // * 0.99;
+        if (command) this.stopLossPrice = sMove0[0];
         this.profitTarget = parseInt(Math.max(bMove0[3] / 1.2 || 0, 8));
       }
 
@@ -140,13 +146,18 @@ class SmartTrader extends Trader {
       const down = sHigh2[1] > sHigh1[1] || Math.abs(calcPct(sHigh2[1], sHigh1[1])) <= 0.5;
       const dropping = loss > 2 || down || (bMove1[2] == "up" && bMove0[2] == "down");
 
+      const commandSell1 = this.prevGainPercent >= command?.sellPrice && normalizePrice > this.prevPrice;
+      const commandSell2 = normalizePrice < command?.buyPrice * 0.99;
+
       if (gain >= this.profitTarget && dropping) signal = "take-profit-sell";
+      else if (command && (commandSell1 || commandSell2)) signal = "command-sell";
       else if (normalizePrice < this.stopLossPrice * 0.99 && loss > 2) signal = "stop-loss-sell";
 
-      if (signal.includes("sell") && autoSell) {
+      if (signal.includes("sell") && (autoSell || command)) {
         const res = await this.sell(position, cryptoBalance, currentPrice[2], signal);
         this.prevGainPercent = 0;
         this.prevLossPercent = 0;
+        if (gainLossPercent <= 0) command = null;
         this.dispatch(
           "LOG",
           `💰💸 Placed SELL -> Return: ${res.profit} - Held for: ${res.age}hrs - ${signal}`
@@ -164,6 +175,7 @@ class SmartTrader extends Trader {
       smallChanges: this.smallChanges,
       trend: bigChangeTrend,
       signal,
+      command,
     };
   }
 

@@ -67,6 +67,20 @@ export default class TraderController extends Controller {
     }
   };
 
+  setCommand = async ({ params: { pair }, body }, res, next) => {
+    try {
+      if (this.tradersManager.state.data[pair]) {
+        this.tradersManager.state.data[pair].command = body?.buyPrice ? body : null;
+        this.tradersManager.state.update(this.tradersManager.state.data);
+      } else {
+        return next(errMsg(pair));
+      }
+      res.json({ success: true });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   autoSell = async ({ params: { pair, status } }, res, next) => {
     try {
       if (pair == "ALL") {

@@ -84,9 +84,9 @@ export default function Home() {
     } else if (orderby == "volume-dec") {
       pairs.sort((a, b) => traders[b].price[2] - traders[a].price[2]);
     } else if (orderby == "change-asc") {
-      pairs.sort((a, b) => traders[a].bigChanges[3] - traders[b].bigChanges[3]);
+      pairs.sort((a, b) => traders[a].bigChanges[0][3] - traders[b].bigChanges[0][3]);
     } else if (orderby == "change-dec") {
-      pairs.sort((a, b) => traders[b].bigChanges[3] - traders[a].bigChanges[3]);
+      pairs.sort((a, b) => traders[b].bigChanges[0][3] - traders[a].bigChanges[0][3]);
     } else if (orderby == "liquidity-asc") {
       pairs.sort((a, b) => traders[a].askBidSpread - traders[b].askBidSpread);
     } else if (orderby == "liquidity-dec") {
@@ -165,7 +165,7 @@ export default function Home() {
       </div>
 
       <form className="mt-1 mb-5 flex justify-between items-center" onChange={handleFilterChange}>
-        {["all", "up", "down", "buy"].map((status, i) => (
+        {["all", "up", "down", "buy", "command"].map((status, i) => (
           <CheckInput
             type="radio"
             id={status}

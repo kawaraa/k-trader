@@ -19,6 +19,8 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const [chartData, setChartData] = useState(defaultChartData);
   const [disabled, setDisabled] = useState(false);
   const [totalReturn, setTotalReturn] = useState(0);
+  // const [command, setCommand] = useState(info.command);
+
   // const lengthLimit = (timeRange * 60 * 60) / 10;
 
   const handleSetCapital = async (e) => {
@@ -51,6 +53,19 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
     setLoading(true);
     try {
       await request(`/api/trader/${type}/${pair}`, { method: "PATCH" });
+    } catch (error) {
+      alert(JSON.stringify(error.message || error.error || error));
+    }
+    setLoading(false);
+  };
+
+  const handleSetCommand = async () => {
+    const input = prompt(`Please fill in the buyPrice and sellPrice for ${pair}`).trim().split("-");
+    const body = !input[0] ? null : JSON.stringify({ buyPrice: +input[0] || null, sellPrice: +input[1] });
+    const headers = { "Content-Type": "application/json" };
+    setLoading(true);
+    try {
+      await request(`/api/trader/update/command/${pair}`, { method: "PUT", headers, body });
     } catch (error) {
       alert(JSON.stringify(error.message || error.error || error));
     }
@@ -180,6 +195,13 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
           className="text-white text-sm rounded-md py-0 px-1 bg-amber-500"
         >
           Sell
+        </button>
+
+        <button
+          onClick={handleSetCommand}
+          className={`text-white text-sm rounded-md py-0 px-1 ${info.command ? "bg-blue" : "bg-gray-400"}`}
+        >
+          CMD
         </button>
       </div>
 

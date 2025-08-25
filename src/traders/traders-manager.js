@@ -104,15 +104,16 @@ class TradersManager {
     this.state.data[pair].price = price;
     this.state.data[pair].balance = crypto;
 
-    const { capital, position, trades } = this.state.data[pair];
+    const { capital, position, command } = this.state.data[pair];
     const cpl = !+capital && this.defaultCapital >= 0 ? this.defaultCapital : capital;
-    const res = await this.#traders[pair].run(cpl, price, eur, crypto, trades, position, this.autoSell);
+    const res = await this.#traders[pair].run(cpl, price, eur, crypto, command, position, this.autoSell);
 
     if (!isNaN(+res.askBidSpread)) this.state.data[pair].askBidSpread = res.askBidSpread;
     if (res.bigChanges) this.state.data[pair].bigChanges = res.bigChanges;
     if (res.smallChanges) this.state.data[pair].smallChanges = res.smallChanges;
     if (res.trend) this.state.data[pair].trend = res.trend;
     if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
+    this.state.data[pair].command = res.command;
   }
 
   async updateBotProgress(pair, event, info, tradeCase) {
