@@ -1,5 +1,5 @@
 // self.importScripts('foo.js', 'bar.js');
-const staticFileCacheName = "static-files-v-0xbcy2ye7y3u";
+const staticFileCacheName = "static-files-v-0xbcy2ye7y3";
 const staticFileCachePaths = [
   "/offline.html",
   "/manifest.json",

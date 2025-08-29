@@ -38,10 +38,12 @@ async function runTradingTest(pair, interval) {
 
     // Start from after 3 hrs
     let prevCryptoBalance;
+    let cmd = null; // { buyPrice: 0.00000861, sellPrice: 0.0000093 }
+
     for (let i = 0; i < prices.length; i++) {
       const { eur, crypto } = await ex.balance();
       prevCryptoBalance = crypto;
-      await trader.run(capital, prices[i], eur, crypto, null, position, true, true);
+      cmd = (await trader.run(capital, prices[i], eur, crypto, cmd, position, true, true)).command;
       await ex.currentPrices();
     }
 

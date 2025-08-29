@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Trader from "../components/trader";
 import { State } from "../state";
-import { request } from "../../shared-code/utilities";
+import { calcPercentageDifference, request } from "../../shared-code/utilities";
 import TimeRangeSelect from "../components/time-range-select";
 import TradeTimeSuggestion from "../components/trade-time-suggestion";
 
@@ -30,6 +30,7 @@ export default function TraderPage({}) {
   useEffect(() => {
     if (user && !user.loading) {
       fetchLogContent(pair);
+      window.calcPct = calcPercentageDifference;
 
       if (window?.logsEventSource) window.logsEventSource.close();
       window.logsEventSource = new EventSource(`/api/sse/${pair}/log`, { withCredentials: true });
