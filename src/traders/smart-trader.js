@@ -139,10 +139,7 @@ class SmartTrader extends Trader {
       if (-gainLossPercent >= this.prevLossPercent) this.prevLossPercent = -gainLossPercent;
       const loss = +(this.prevGainPercent - gainLossPercent).toFixed(2);
 
-      this.dispatch(
-        "LOG",
-        `📊 Current: ${gainLossPercent}% - 🎯 target: ${this.profitTarget} - 💰 Gain: ${this.prevGainPercent}% - 💸 Loss: ${this.prevLossPercent}%`
-      );
+      logs += `\n📊 Current: ${gainLossPercent}% - 🎯 target: ${this.profitTarget} - 💰 Gain: ${this.prevGainPercent}% - 💸 Loss: ${this.prevLossPercent}%`;
 
       const gain = bMove0[2] == "up" ? Math.max(this.prevGainPercent, bMove0[3]) : this.prevGainPercent;
       const down = sHigh2[1] > sHigh1[1] || Math.abs(calcPct(sHigh2[1], sHigh1[1])) <= 0.5;
@@ -165,10 +162,7 @@ class SmartTrader extends Trader {
         if (gainLossPercent <= 0) command = null;
         if (command) this.pauseTimer = 6 * 30;
 
-        this.dispatch(
-          "LOG",
-          `💰💸 Placed SELL -> Return: ${res.profit} - Held for: ${res.age}hrs - ${signal}`
-        );
+        logs += `\n💰💸 Placed SELL -> Return: ${res.profit} - Held for: ${res.age}hrs - ${signal}`;
       }
     } else {
       logs += `❌ Waiting for uptrend signal`;
