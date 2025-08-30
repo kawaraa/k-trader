@@ -68,19 +68,14 @@ class TradersManager {
       const shouldProcess = (asset) => asset && !asset.disabled;
 
       await Promise.all(
-        pairs.map(
-          (pair) =>
-            shouldProcess(this.state.data[pair]) &&
-            this.state.appendToLocalPrices(pair, currencies[pair].price)
-        )
+        pairs.map((pair) => {
+          if (shouldProcess(this.state.data[pair])) {
+            this.state.appendToLocalPrices(pair, currencies[pair].price);
+            return this.runTrader(pair, eurBalance, currencies[pair].balance, currencies[pair].price);
+          }
+        })
       );
-      await Promise.all(
-        pairs.map(
-          (pair) =>
-            shouldProcess(this.state.data[pair]) &&
-            this.runTrader(pair, eurBalance, currencies[pair].balance, currencies[pair].price)
-        )
-      );
+
       await this.state.update(this.state.data);
       this.deleteOldPrices();
 
@@ -92,8 +87,6 @@ class TradersManager {
   }
 
   async runTrader(pair, eur, crypto, price) {
-    eventEmitter.emit("price", { [pair]: price });
-
     if (this.notifyTimers[pair] > 0) this.notifyTimers[pair] -= 1;
     if (!this.state.data[pair]) this.state.data[pair] = new TraderInfo(crypto);
     if (!this.#traders[pair]) {
@@ -114,6 +107,8 @@ class TradersManager {
     if (res.trend) this.state.data[pair].trend = res.trend;
     if (res.signal != "unknown") this.state.data[pair].signal = res.signal;
     this.state.data[pair].command = res.command;
+
+    eventEmitter.emit(pair, { price, logs: res.logs });
   }
 
   async updateBotProgress(pair, event, info, tradeCase) {

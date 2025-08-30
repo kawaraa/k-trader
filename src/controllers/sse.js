@@ -4,8 +4,8 @@ export default class SSEController extends Controller {
   constructor() {
     super();
     this.activeConnections = new Map();
-    this.eventEmitter.on("add-pair", (x) => this.#addEvent(...x));
-    this.eventEmitter.on("remove-pair", (x) => this.#removeEvent(...x));
+    // this.eventEmitter.on("add-pair", (x) => this.#addEvent(...x));
+    // this.eventEmitter.on("remove-pair", (x) => this.#removeEvent(...x));
 
     // setInterval(() => {
     //   console.log(this.activeConnections);
@@ -14,15 +14,13 @@ export default class SSEController extends Controller {
     // }, 10000);
   }
 
-  get = async (request, response, next) => {
+  listen = async (request, response, next) => {
     try {
       const clientIP = request.ip || request.connection.remoteAddress;
-      let event = request.params.filename;
-
-      if (event == "log") event = `${request.params.pair}-${event}`;
+      const event = request.params.pair;
 
       const error = this.#addConnection(clientIP, event);
-      if (error) return next(error);
+      if (error) throw error;
 
       response.writeHead(200, {
         "Content-Type": "text/event-stream",
@@ -37,25 +35,31 @@ export default class SSEController extends Controller {
         response.write(`data: ${JSON.stringify(data)}\n\n`); //data and \n\n are REQUIRED
       };
 
-      const eventHandler = (data) => {
-        if (data.log) return sendEvent(data);
-        if (this.activeConnections.get(clientIP)?.has(Object.keys(data)[0])) sendEvent(data);
-      };
-
-      this.eventEmitter.on(event, eventHandler);
+      this.eventEmitter.on(event, sendEvent);
 
       request.on("error", (error) => {
         console.error("SSE request error:", error);
-        this.eventEmitter.off(event, eventHandler);
+        this.eventEmitter.off(event, sendEvent);
         this.#removeEvent(clientIP, event);
         response.end();
       });
       request.on("close", () => {
         console.warn("client disconnect");
-        this.eventEmitter.off(event, eventHandler);
+        this.eventEmitter.off(event, sendEvent);
         this.#removeEvent(clientIP, event);
         response.end();
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  removeListener = (request, response, next) => {
+    try {
+      const clientIP = request.ip || request.connection.remoteAddress;
+      this.#removeEvent(clientIP, request.params.pair);
+      response.json({ success: true });
+      console.log(clientIP, request.params);
     } catch (error) {
       next(error);
     }

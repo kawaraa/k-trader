@@ -40,43 +40,6 @@ export function StateProvider({ children }) {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (user && !user.loading) {
-      // if (window?.priceEventSource) window.priceEventSource.close();
-      window.sseRetry = true;
-
-      const connect = (count) => {
-        window.priceEventSource = new EventSource("/api/sse/all/price", { withCredentials: true });
-        window.priceEventSource.onopen = () => console.log("SSE connection opened");
-        window.priceEventSource.onerror = (error) => {
-          console.error("Price: SSE connection error:");
-          window.priceEventSource.close(); // Close client-side connection
-          if (window.sseRetry && count < 24) setTimeout(() => connect(count + 1), 10000);
-        };
-        window.priceEventSource.onmessage = (e) => {
-          const data = JSON.parse(e.data);
-          const pair = Object.keys(data)[0];
-          window.dispatchEvent(new CustomEvent(pair, { detail: data[pair] }));
-        };
-      };
-
-      const handler = () => {
-        window.sseRetry = false;
-        request(`/api/prices/event/all`, { method: "PATCH" });
-        window.priceEventSource.close();
-      };
-
-      window.addEventListener("beforeunload", handler);
-
-      connect(1);
-      // This terminates the connection
-      return () => {
-        handler();
-        window.removeEventListener("beforeunload", handler);
-      };
-    }
-  }, [user]);
-
   return (
     <StateContext.Provider
       value={{

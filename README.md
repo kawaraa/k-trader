@@ -86,3 +86,27 @@ pm2 start npm --name "nextjs-app" -- start
 2. If fulfilled buy orders have fulfilled sell order, calculate the profits and remove these orders from the state
 3. If it's good time to buy, place buy orders with 2 mins expire and store their IDs in the state.
 4. If it's a good time to sell, place sell order with 2 mins expire and store it's ID in state with its buy order ID,
+
+### Eth followers
+
+-
+
+### Opposite Eth followers
+
+- MEUR
+
+### Disabled but but can not be automated
+
+- PERP
+- DENT
+- ZK
+- JITOSOL
+- JTO
+- POWR
+- BIGTIME
+- PHA
+
+### To look into
+
+it's removed but still available on Kraken:
+https://crypto.kawaraa.com/trader/?pair=PERPEUR&since=3

@@ -12,7 +12,7 @@ const getTime = (d) => d.toUTCString().split(" ").at(-2).substring(0, 5);
 // const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
 const defaultChartData = { tradePrices: [], askPrices: [], bidPrices: [], volumes: [], labels: [] };
 
-export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom, live }) {
+export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6, showZoom, priceUpdate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [capital, setCapital] = useState(info.capital || 0);
@@ -87,8 +87,7 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   const fetchPrices = async (pair) => {
     try {
       const interval = 10 * 1000;
-      const sse = !live ? "" : `&live=true`;
-      const prices = await request(`/api/prices/${pair}?since=${timeRange}&interval=10${sse}`);
+      const prices = await request(`/api/prices/${pair}?since=${timeRange}&interval=10`);
 
       const since = Date.now() - prices.length * interval;
       const tradePrices = [];
@@ -122,34 +121,27 @@ export default function Trader({ pair, info, defaultCapital, cls, timeRange = 6,
   }, [info.disabled]);
 
   useEffect(() => {
-    fetchPrices(pair);
+    const timeFun = timeRange > 24 ? toShortDate : getTime;
+    const addItem = (prevItems, newItem) => {
+      const newItems = [...prevItems, newItem];
+      newItems.shift();
+      return newItems;
+    };
 
-    const handler = (event) => {
-      const price = event.detail;
-      const timeFun = timeRange > 24 ? toShortDate : getTime;
-      const addItem = (prevItems, newItem) => {
-        const newItems = [...prevItems, newItem];
-        newItems.shift();
-        return newItems;
-      };
-
+    if (priceUpdate) {
       setChartData(({ tradePrices, askPrices, bidPrices, volumes, labels }) => {
-        tradePrices = addItem(tradePrices, price[0]);
-        askPrices = addItem(askPrices, price[1]);
-        bidPrices = addItem(bidPrices, price[2]);
-        volumes = addItem(volumes, +(price[3] / 1000000).toFixed(3));
+        tradePrices = addItem(tradePrices, priceUpdate[0]);
+        askPrices = addItem(askPrices, priceUpdate[1]);
+        bidPrices = addItem(bidPrices, priceUpdate[2]);
+        volumes = addItem(volumes, +(priceUpdate[3] / 1000000).toFixed(3));
         labels = addItem(labels, `${timeFun(new Date())}`);
         return { tradePrices, askPrices, bidPrices, volumes, labels };
       });
-    };
+    }
+  }, [priceUpdate]);
 
-    window.addEventListener(pair, handler);
-
-    // This terminates the connection
-    return () => {
-      request(`/api/prices/event/${pair}`, { method: "PATCH" });
-      window.removeEventListener(pair, handler);
-    };
+  useEffect(() => {
+    fetchPrices(pair);
   }, []);
 
   return (

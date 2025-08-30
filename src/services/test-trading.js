@@ -24,15 +24,10 @@ async function runTradingTest(pair, interval) {
     let position = null;
 
     trader.listener = (p, event, info) => {
-      if (showLogs && event == "LOG") {
-        console.log((info ? pair + " " : "") + (info || ""));
-        // console.log(...parseNumInLog((info ? pair + " " : "") + (info || "")));
-      } else {
-        if (event == "BUY") position = info;
-        if (event == "SELL") {
-          position = null;
-          trades.push(info);
-        }
+      if (event == "BUY") position = info;
+      if (event == "SELL") {
+        position = null;
+        trades.push(info);
       }
     };
 
@@ -43,7 +38,9 @@ async function runTradingTest(pair, interval) {
     for (let i = 0; i < prices.length; i++) {
       const { eur, crypto } = await ex.balance();
       prevCryptoBalance = crypto;
-      cmd = (await trader.run(capital, prices[i], eur, crypto, cmd, position, true, true)).command;
+      const res = await trader.run(capital, prices[i], eur, crypto, cmd, position, true, true);
+      cmd = res.command;
+      console.log(res.logs);
       await ex.currentPrices();
     }
 

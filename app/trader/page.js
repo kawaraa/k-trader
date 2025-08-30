@@ -13,6 +13,7 @@ export default function TraderPage({}) {
   const params = useSearchParams();
   const { loading, setLoading, user, traders, defaultCapital } = State();
   const logsRef = useRef(null);
+  const [currentPrice, setCurrentPrice] = useState(null);
   const pair = params.get("pair");
   const timeRange = +params.get("since") || 6;
 
@@ -31,28 +32,40 @@ export default function TraderPage({}) {
     if (user && !user.loading) {
       fetchLogContent(pair);
       window.calcPct = calcPercentageDifference;
+      request(`/api/sse/${pair}`, { method: "PATCH" });
 
-      if (window?.logsEventSource) window.logsEventSource.close();
-      window.logsEventSource = new EventSource(`/api/sse/${pair}/log`, { withCredentials: true });
-      logsEventSource.onopen = () => console.log("SSE connection opened");
-      logsEventSource.onerror = (error) => {
-        console.error("Log: SSE connection error:", error);
-        logsEventSource.close(); // Close client-side connection
-      };
-      logsEventSource.onmessage = (e) => {
-        const { log } = JSON.parse(e.data);
-        // const pair = Object.keys(data)[0];
-        logsRef.current.innerText += "\n" + log;
-        logsRef.current?.scroll({ top: logsRef.current?.scrollHeight, behavior: "smooth" });
+      const connect = (count) => {
+        if (window?.traderSse) window.traderSse.close();
+        window.traderSse = new EventSource(`/api/sse/${pair}`, { withCredentials: true });
+        window.traderSse.onopen = () => console.log("SSE connection opened");
+        window.traderSse.onerror = (error) => {
+          console.error("Price: SSE connection error:");
+          window.traderSse.close(); // Close client-side connection
+          if (window.sseRetry && count < 24) setTimeout(() => connect(count + 1), 10000);
+        };
+
+        window.traderSse.onmessage = (e) => {
+          const { price, logs } = JSON.parse(e.data);
+          logsRef.current.innerText += logs;
+          logsRef.current?.scroll({ top: logsRef.current?.scrollHeight, behavior: "smooth" });
+          setCurrentPrice(price);
+          console.log({ price, logs });
+        };
       };
 
-      const handler = () => window.logsEventSource.close();
+      const handler = () => {
+        window.sseRetry = false;
+        request(`/api/sse/${pair}`, { method: "PATCH" });
+        window.traderSse.close();
+      };
+
       window.addEventListener("beforeunload", handler);
 
+      connect(1);
       // This terminates the connection
       return () => {
         handler();
-        window.addEventListener("beforeunload", handler);
+        window.removeEventListener("beforeunload", handler);
       };
     }
   }, [user]);
@@ -85,8 +98,8 @@ export default function TraderPage({}) {
             info={traders[pair] || {}}
             defaultCapital={defaultCapital}
             timeRange={timeRange}
-            live={true}
             showZoom={true}
+            priceUpdate={currentPrice}
             cls=""
           />
         )}

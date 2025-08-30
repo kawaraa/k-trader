@@ -24,12 +24,13 @@ class SmartTrader extends Trader {
   async run(capital, currentPrice, eurBalance, cryptoBalance, command, position, autoSell, testMode) {
     // if (this.pauseTimer > 0) this.pauseTimer -= 1;
     // if (this.notifiedTimer > 0) this.notifiedTimer -= 1;
+    let logs = "\n";
     let signal = "unknown";
     const safeAskBidSpread = calcPct(currentPrice[2], currentPrice[1]);
 
     if (!isNumber(safeAskBidSpread, 0, 1)) {
-      this.dispatch("LOG", `low-liquidity AskBidSPread: ${safeAskBidSpread}`);
-      return { signal: "low-liquidity" };
+      logs += `\nlow-liquidity AskBidSPread: ${safeAskBidSpread}`;
+      return { signal: "low-liquidity", logs };
     }
 
     const normalizePrice = calcAveragePrice([currentPrice[1], currentPrice[2]]);
@@ -46,9 +47,8 @@ class SmartTrader extends Trader {
     const sMove0 = this.smallChanges[0];
 
     if (testMode) console.log(JSON.stringify(currentPrice), "\n", this.bigChanges, "\n", this.smallChanges);
-    const log1 = `€${eurBalance.toFixed(2)} - Change: ${this.wideChangePct}`;
-    const log2 = `Trend: ${sMove0[2]} - Price: ${normalizePrice}`;
-    this.dispatch("LOG", `${log1} - ${log2} - CMD: ${JSON.stringify(command)}`);
+    logs += `\n€${eurBalance.toFixed(2)} - Change: ${this.wideChangePct} - Trend: ${sMove0[2]}`;
+    logs += ` - Price: ${normalizePrice} - CMD: ${JSON.stringify(command)}`;
 
     if (this.smallChanges.length > 3 && this.bigChanges.length >= 1) {
       const notHigh = calcPct(bMove0[0], normalizePrice) <= 3.5; // missed out
@@ -113,7 +113,7 @@ class SmartTrader extends Trader {
 
       if (case1 || case2 || case3 || case4 || case5) {
         signal = "buy";
-        this.dispatch("LOG", `Buy case: ${case1}-${case2}-${case3}-${case4}-${case5}`);
+        logs += `\nBuy case: ${case1}-${case2}-${case3}-${case4}-${case5}`;
       }
     }
 
@@ -123,7 +123,7 @@ class SmartTrader extends Trader {
 
       if (signal != "unknown" && capital > 0 && eurBalance >= 1) {
         await this.buy(capital, eurBalance, currentPrice[1]);
-        this.dispatch("LOG", `💵 Placed BUY at: ${currentPrice[1]} ${signal}`);
+        logs += `\n💵 Placed BUY at: ${currentPrice[1]} ${signal}`;
         this.prevGainPercent = 0;
         this.prevLossPercent = 0;
         this.stopLossPrice = bMove0[2] == "down" ? bMove0[0] : bMove1[0]; // * 0.99;
@@ -168,11 +168,10 @@ class SmartTrader extends Trader {
         );
       }
     } else {
-      // this.dispatch("LOG", `❌ Waiting for uptrend signal`); // Log decision
+      logs += `❌ Waiting for uptrend signal`;
     }
 
     this.prevPrice = normalizePrice;
-    this.dispatch("LOG", "");
 
     return {
       safeAskBidSpread,
@@ -181,6 +180,7 @@ class SmartTrader extends Trader {
       trend: bigChangeTrend,
       signal,
       command,
+      logs,
     };
   }
 
