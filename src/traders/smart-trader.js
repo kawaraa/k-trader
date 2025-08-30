@@ -22,7 +22,7 @@ class SmartTrader extends Trader {
   }
 
   async run(capital, currentPrice, eurBalance, cryptoBalance, command, position, autoSell, testMode) {
-    // if (this.pauseTimer > 0) this.pauseTimer -= 1;
+    if (this.pauseTimer > 0) this.pauseTimer -= 1;
     // if (this.notifiedTimer > 0) this.notifiedTimer -= 1;
     let logs = "\n";
     let signal = "unknown";
@@ -102,7 +102,8 @@ class SmartTrader extends Trader {
       const case5 =
         command &&
         isNumber(normalizePrice, command.buyPrice * 0.997, command.buyPrice * 1.003) &&
-        normalizePrice > this.prevPrice;
+        normalizePrice > this.prevPrice &&
+        this.pauseTimer <= 0;
       // console.log(
       //   calcPct(bMove1[0], bMove0[0]),
       //   calcPct(bMove0[0], normalizePrice),
@@ -162,6 +163,8 @@ class SmartTrader extends Trader {
         this.prevGainPercent = 0;
         this.prevLossPercent = 0;
         if (gainLossPercent <= 0) command = null;
+        if (command) this.pauseTimer = 6 * 30;
+
         this.dispatch(
           "LOG",
           `💰💸 Placed SELL -> Return: ${res.profit} - Held for: ${res.age}hrs - ${signal}`
